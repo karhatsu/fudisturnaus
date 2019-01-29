@@ -4,4 +4,6 @@ Rails.application.routes.draw do
       resources :tournaments, only: [:index]
     end
   end
+
+  root to: 'home#index'
 end

@@ -1,42 +1,25 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { BrowserRouter, Route } from 'react-router-dom'
+import Index from './index'
+import TournamentPage from './tournament_page'
 
 export default class Main extends React.PureComponent {
-  constructor(props) {
-    super(props)
-    this.state = {
-      tournaments: undefined
-    }
-  }
-
   render() {
-    const { tournaments } = this.state
-    if (!tournaments) {
-      return <div>Loading...</div>
-    }
     return (
       <div>
-        {!tournaments.length ? 'Ei turnauksia' : tournaments.map(this.renderTournament)}
+        <Route path="/tournaments/:id" component={TournamentPage} />
+        <Route path="/" exact component={Index} />
       </div>
     )
-  }
-
-  renderTournament = tournament => {
-    const { id, name, location, startDate, endDate } = tournament
-    return <div key={id}>{name}, {location}, {startDate}{startDate !== endDate ? ` - ${endDate}` : ''}</div>
-  }
-
-  componentDidMount() {
-    fetch('/api/v1/tournaments')
-      .then(response => response.json())
-      .then(json => this.setState({ tournaments: json.tournaments }))
-      .catch(console.error);
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
-    <Main/>,
+    <BrowserRouter>
+      <Route path="/" component={Main} />
+    </BrowserRouter>,
     document.getElementById('react-app'),
   )
 })

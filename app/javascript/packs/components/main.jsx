@@ -22,8 +22,8 @@ export default class Main extends React.PureComponent {
   }
 
   renderTournament = tournament => {
-    const { id, name, startDate } = tournament
-    return <div key={id}>{name}, {startDate}</div>
+    const { id, name, location, startDate, endDate } = tournament
+    return <div key={id}>{name}, {location}, {startDate}{startDate !== endDate ? ` - ${endDate}` : ''}</div>
   }
 
   componentDidMount() {

@@ -10,8 +10,31 @@ export default class TournamentPage extends React.PureComponent {
     }).isRequired
   }
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      tournament: undefined
+    }
+  }
+
   render() {
+    const { tournament } = this.state
+    if (!tournament) {
+      return <div>Loading...</div>
+    }
+    const { name } = tournament
+    return (
+      <div>
+        {name}
+      </div>
+    )
+  }
+
+  componentDidMount() {
     const { match: { params: { id } } } = this.props
-    return <div>tournament id: {id}</div>
+    fetch(`/api/v1/tournaments/${id}`)
+      .then(response => response.json())
+      .then(json => this.setState({ tournament: json.tournament }))
+      .catch(console.error);
   }
 }

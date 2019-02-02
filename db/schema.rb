@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_02_173057) do
+ActiveRecord::Schema.define(version: 2019_02_02_173256) do
 
   create_table "age_groups", force: :cascade do |t|
     t.integer "tournament_id", null: false
@@ -32,6 +32,17 @@ ActiveRecord::Schema.define(version: 2019_02_02_173057) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["age_group_id"], name: "index_groups_on_age_group_id"
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.integer "club_id", null: false
+    t.integer "group_id", null: false
+    t.string "name", null: false
+    t.integer "group_stage_number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["club_id"], name: "index_teams_on_club_id"
+    t.index ["group_id"], name: "index_teams_on_group_id"
   end
 
   create_table "tournaments", force: :cascade do |t|

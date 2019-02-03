@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_02_173609) do
+ActiveRecord::Schema.define(version: 2019_02_03_191323) do
 
   create_table "age_groups", force: :cascade do |t|
     t.integer "tournament_id", null: false
@@ -32,6 +32,22 @@ ActiveRecord::Schema.define(version: 2019_02_02_173609) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["tournament_id"], name: "index_fields_on_tournament_id"
+  end
+
+  create_table "group_stage_matches", force: :cascade do |t|
+    t.integer "group_id", null: false
+    t.integer "field_id", null: false
+    t.datetime "start_time", null: false
+    t.integer "home_team_id", null: false
+    t.integer "away_team_id", null: false
+    t.integer "home_goals"
+    t.integer "away_goals"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["away_team_id"], name: "index_group_stage_matches_on_away_team_id"
+    t.index ["field_id"], name: "index_group_stage_matches_on_field_id"
+    t.index ["group_id"], name: "index_group_stage_matches_on_group_id"
+    t.index ["home_team_id"], name: "index_group_stage_matches_on_home_team_id"
   end
 
   create_table "groups", force: :cascade do |t|

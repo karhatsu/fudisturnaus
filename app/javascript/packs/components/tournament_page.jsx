@@ -22,11 +22,49 @@ export default class TournamentPage extends React.PureComponent {
     if (!tournament) {
       return <div>Loading...</div>
     }
-    const { name } = tournament
+    const { name, location, startDate } = tournament
     return (
       <div>
-        {name}
+        <h2>{name} - {location}, {startDate}</h2>
+        <h2>Alkusarjan ottelut</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Aika</th>
+              <th>Kenttä</th>
+              <th>Koti</th>
+              <th>Vieras</th>
+              <th>Tulos</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.findGroupStageMatches(tournament).map(this.renderGroupStageMatch)}
+          </tbody>
+        </table>
       </div>
+    )
+  }
+
+  findGroupStageMatches = () => {
+    const matches = []
+    this.state.tournament.ageGroups.forEach(ageGroup => {
+      ageGroup.groups.forEach(group => {
+        group.groupStageMatches.forEach(match => matches.push(match))
+      })
+    })
+    return matches
+  }
+
+  renderGroupStageMatch = groupStageMatch => {
+    const { id, startTime, field, homeTeam, awayTeam, homeGoals, awayGoals } = groupStageMatch
+    return (
+      <tr key={id}>
+        <td>{startTime}</td>
+        <td>{field.name}</td>
+        <td>{homeTeam.name}</td>
+        <td>{awayTeam.name}</td>
+        <td>{homeGoals} - {awayGoals}</td>
+      </tr>
     )
   }
 
@@ -34,7 +72,7 @@ export default class TournamentPage extends React.PureComponent {
     const { match: { params: { id } } } = this.props
     fetch(`/api/v1/tournaments/${id}`)
       .then(response => response.json())
-      .then(json => this.setState({ tournament: json.tournament }))
+      .then(tournament => this.setState({ tournament }))
       .catch(console.error) // eslint-disable-line no-console
   }
 }

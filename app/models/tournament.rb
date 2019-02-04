@@ -1,4 +1,6 @@
 class Tournament < ApplicationRecord
+  has_many :age_groups
+
   validates :name, presence: true
   validates :start_date, presence: true
   validates :days, numericality: { only_integer: true, greater_than_or_equal_to: 1 }

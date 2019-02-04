@@ -1,6 +1,9 @@
 {
   "name": "fudisturnaus",
   "private": true,
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint app/javascript"
+  },
   "dependencies": {
     "@rails/webpacker": "3.5",
     "babel-preset-react": "^6.24.1",
@@ -12,6 +15,9 @@
     "webpacker-react": "^0.3.2"
   },
   "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.13.0",
+    "eslint-plugin-react": "^7.12.4",
     "webpack-dev-server": "2.11.2"
   }
 }

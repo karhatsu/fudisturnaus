@@ -36,6 +36,6 @@ export default class Main extends React.PureComponent {
     fetch('/api/v1/tournaments')
       .then(response => response.json())
       .then(json => this.setState({ tournaments: json.tournaments }))
-      .catch(console.error);
+      .catch(console.error) // eslint-disable-line no-console
   }
 }

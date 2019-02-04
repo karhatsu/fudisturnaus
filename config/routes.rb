@@ -5,6 +5,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :official do
+    get ':access_key' => 'official#index'
+  end
+
   root to: 'home#index'
   get '*path', to: "home#index"
 end

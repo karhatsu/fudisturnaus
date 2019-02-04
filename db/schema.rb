@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_03_191323) do
+ActiveRecord::Schema.define(version: 2019_02_04_171843) do
 
   create_table "age_groups", force: :cascade do |t|
     t.integer "tournament_id", null: false
@@ -76,6 +76,7 @@ ActiveRecord::Schema.define(version: 2019_02_03_191323) do
     t.string "location", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "access_key"
   end
 
 end

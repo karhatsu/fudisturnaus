@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
-  namespace :api do
+  namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :tournaments, only: [:index, :show]
+      namespace :official do
+        resources :group_stage_matches, only: :update
+      end
     end
   end
 

@@ -16,6 +16,12 @@ class Tournament < ApplicationRecord
     start_date + (days - 1).days
   end
 
+  def group_stage_matches
+    age_groups
+        .flat_map { |ag| ag.groups.flat_map &:group_stage_matches }
+        .sort { |a, b| [a.start_time, a.field.name] <=> [b.start_time, b.field.name] }
+  end
+
   private
 
   def generate_access_key

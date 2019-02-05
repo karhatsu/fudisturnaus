@@ -22,7 +22,7 @@ export default class TournamentPage extends React.PureComponent {
     if (!tournament) {
       return <div>Loading...</div>
     }
-    const { name, location, startDate } = tournament
+    const { name, location, startDate, groupStageMatches } = tournament
     return (
       <div>
         <h2>{name} - {location}, {startDate}</h2>
@@ -38,21 +38,11 @@ export default class TournamentPage extends React.PureComponent {
             </tr>
           </thead>
           <tbody>
-            {this.findGroupStageMatches(tournament).map(this.renderGroupStageMatch)}
+            {groupStageMatches.map(this.renderGroupStageMatch)}
           </tbody>
         </table>
       </div>
     )
-  }
-
-  findGroupStageMatches = () => {
-    const matches = []
-    this.state.tournament.ageGroups.forEach(ageGroup => {
-      ageGroup.groups.forEach(group => {
-        group.groupStageMatches.forEach(match => matches.push(match))
-      })
-    })
-    return matches
   }
 
   renderGroupStageMatch = groupStageMatch => {

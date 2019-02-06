@@ -52,12 +52,15 @@ export default class GroupStageMatch extends React.PureComponent {
           <input type="button" value="Tallenna" onClick={this.saveResult}/>
         </React.Fragment>
       )
+    } else if (!homeGoals) {
+      return <a onClick={this.openResult} href="#">Tulos</a>
     } else {
-      return <a onClick={this.openResult}>{homeGoals} - {awayGoals}</a>
+      return <a onClick={this.openResult} href="#">{homeGoals} - {awayGoals}</a>
     }
   }
 
-  openResult = () => {
+  openResult = (event) => {
+    event.preventDefault()
     this.setState({ resultOpen: true })
   }
 

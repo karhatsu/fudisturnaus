@@ -15,6 +15,7 @@ export default class TournamentPage extends React.PureComponent {
     this.state = {
       filters: {
         ageGroupId: null,
+        fieldId: null,
         groupId: null,
         teamId: null
       },
@@ -27,13 +28,14 @@ export default class TournamentPage extends React.PureComponent {
     if (!tournament) {
       return <div>Loading...</div>
     }
-    const { name, location, startDate, ageGroups, groups, teams, groupStageMatches } = tournament
+    const { name, location, startDate, ageGroups, groups, teams, fields, groupStageMatches } = tournament
     return (
       <div>
         <h2>{name} - {location}, {startDate}</h2>
         {this.renderFilter('ageGroupId', ageGroups, 'Sarja')}
         {this.renderFilter('groupId', groups, 'Lohko')}
         {this.renderFilter('teamId', teams, 'Joukkue')}
+        {this.renderFilter('fieldId', fields, 'Kenttä')}
         <h2>Alkusarjan ottelut</h2>
         <table>
           <thead>
@@ -74,8 +76,9 @@ export default class TournamentPage extends React.PureComponent {
 
   isFilterMatch = groupStageMatch => {
     const { filters } = this.state
-    const { ageGroupId, groupId, homeTeam, awayTeam } = groupStageMatch
+    const { ageGroupId, fieldId, groupId, homeTeam, awayTeam } = groupStageMatch
     return (!filters.ageGroupId || filters.ageGroupId === ageGroupId)
+      && (!filters.fieldId || filters.fieldId === fieldId)
       && (!filters.groupId || filters.groupId === groupId)
       && (!filters.teamId || filters.teamId === homeTeam.id || filters.teamId === awayTeam.id)
   }

@@ -18,6 +18,10 @@ class Tournament < ApplicationRecord
     groups.flat_map {|g| g.teams }.sort { |a, b| a.name <=> b.name }
   end
 
+  def clubs
+    groups.flat_map {|g| g.teams.flat_map(&:club)}.uniq.sort { |a, b| a.name <=> b.name }
+  end
+
   def end_date
     start_date + (days - 1).days
   end

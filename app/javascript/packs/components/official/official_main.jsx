@@ -33,6 +33,7 @@ export default class OfficialMain extends React.PureComponent {
               <th>Koti</th>
               <th>Vieras</th>
               <th>Tulos</th>
+              <th/>
             </tr>
           </thead>
           <tbody>

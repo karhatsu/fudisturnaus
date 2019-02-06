@@ -24,7 +24,7 @@ export default class GroupStageMatch extends React.PureComponent {
   constructor(props) {
     super(props)
     const { match: { homeGoals, awayGoals } } = props
-    this.state = { resultOpen: false, homeGoals, awayGoals }
+    this.state = { resultOpen: false, homeGoals, awayGoals, errors: [] }
   }
 
   render() {
@@ -36,6 +36,7 @@ export default class GroupStageMatch extends React.PureComponent {
         <td>{homeTeam.name}</td>
         <td>{awayTeam.name}</td>
         <td>{this.renderResult()}</td>
+        <td>{this.state.errors.join('. ')}</td>
       </tr>
     )
   }
@@ -85,7 +86,15 @@ export default class GroupStageMatch extends React.PureComponent {
         }
       })
     })
-      .then(() => this.setState({ resultOpen: false }))
-      .catch(console.error) // eslint-disable-line no-console
+      .then(response => {
+        if (response.ok) {
+          this.setState({ resultOpen: false, errors: [] })
+        } else {
+          response.json().then(({ errors }) => {
+            this.setState({ errors })
+          })
+        }
+      })
+      .catch(() => this.setState({ errors: ['Yhteysvirhe, yritä uudestaan'] }))
   }
 }

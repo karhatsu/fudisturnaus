@@ -13,6 +13,9 @@ export default class TournamentPage extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
+      filters: {
+        groupId: null
+      },
       tournament: undefined
     }
   }
@@ -22,10 +25,11 @@ export default class TournamentPage extends React.PureComponent {
     if (!tournament) {
       return <div>Loading...</div>
     }
-    const { name, location, startDate, groupStageMatches } = tournament
+    const { name, location, startDate, groups, groupStageMatches } = tournament
     return (
       <div>
         <h2>{name} - {location}, {startDate}</h2>
+        {this.renderFilter('groupId', groups, 'Lohko')}
         <h2>Alkusarjan ottelut</h2>
         <table>
           <thead>
@@ -45,17 +49,44 @@ export default class TournamentPage extends React.PureComponent {
     )
   }
 
+  renderFilter = (key, items, defaultText) => {
+    return (
+      <select onChange={this.setFilterValue(key)}>
+        <option>{defaultText}</option>
+        {items.map(item => {
+          const { id, name } = item
+          return <option key={id} value={id}>{name}</option>
+        })}
+      </select>
+    )
+  }
+
+  setFilterValue = key => {
+    return event => {
+      const filters = { ...this.state.filters, [key]: parseInt(event.target.value) }
+      this.setState({ filters })
+    }
+  }
+
+  isFilterMatch = groupStageMatch => {
+    const { filters } = this.state
+    const { groupId } = groupStageMatch
+    return !filters.groupId || filters.groupId === groupId
+  }
+
   renderGroupStageMatch = groupStageMatch => {
     const { id, startTime, field, homeTeam, awayTeam, homeGoals, awayGoals } = groupStageMatch
-    return (
-      <tr key={id}>
-        <td>{startTime}</td>
-        <td>{field.name}</td>
-        <td>{homeTeam.name}</td>
-        <td>{awayTeam.name}</td>
-        <td>{homeGoals} - {awayGoals}</td>
-      </tr>
-    )
+    if (this.isFilterMatch(groupStageMatch)) {
+      return (
+        <tr key={id}>
+          <td>{startTime}</td>
+          <td>{field.name}</td>
+          <td>{homeTeam.name}</td>
+          <td>{awayTeam.name}</td>
+          <td>{homeGoals} - {awayGoals}</td>
+        </tr>
+      )
+    }
   }
 
   componentDidMount() {

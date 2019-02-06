@@ -2,6 +2,7 @@ require 'securerandom'
 
 class Tournament < ApplicationRecord
   has_many :age_groups
+  has_many :groups, through: :age_groups
 
   validates :name, presence: true
   validates :start_date, presence: true

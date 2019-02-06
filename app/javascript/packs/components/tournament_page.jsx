@@ -64,5 +64,25 @@ export default class TournamentPage extends React.PureComponent {
       .then(response => response.json())
       .then(tournament => this.setState({ tournament }))
       .catch(console.error) // eslint-disable-line no-console
+    this.subscribeToResultsChannel(id)
+  }
+
+  subscribeToResultsChannel = (tournamentId) => {
+    // eslint-disable-next-line no-undef
+    App.cable.subscriptions.create({
+      channel: 'ResultsChannel',
+      tournament_id: tournamentId
+    }, {
+      received: data => {
+        const tournament = this.state.tournament
+        const groupStageMatches = [...tournament.groupStageMatches]
+        const matchIndex = groupStageMatches.findIndex(match => match.id === data.groupStageMatchId)
+        if (matchIndex !== -1) {
+          const match = { ...groupStageMatches[matchIndex], homeGoals: data.homeGoals, awayGoals: data.awayGoals }
+          groupStageMatches.splice(matchIndex, 1, match)
+          this.setState({ tournament: { ...tournament, groupStageMatches } })
+        }
+      }
+    })
   }
 }

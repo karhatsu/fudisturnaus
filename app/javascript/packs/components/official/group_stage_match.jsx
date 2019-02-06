@@ -46,13 +46,13 @@ export default class GroupStageMatch extends React.PureComponent {
     if (resultOpen) {
       return (
         <React.Fragment>
-          <input type="number" value={homeGoals || ''} onChange={this.setHomeGoals}/>
+          <input type="number" value={homeGoals + ''} onChange={this.setHomeGoals}/>
           <span>-</span>
-          <input type="number" value={awayGoals || ''} onChange={this.setAwayGoals}/>
+          <input type="number" value={awayGoals + ''} onChange={this.setAwayGoals}/>
           <input type="button" value="Tallenna" onClick={this.saveResult}/>
         </React.Fragment>
       )
-    } else if (!homeGoals) {
+    } else if (!homeGoals && homeGoals !== 0) {
       return <a onClick={this.openResult} href="#">Tulos</a>
     } else {
       return <a onClick={this.openResult} href="#">{homeGoals} - {awayGoals}</a>

@@ -58,8 +58,7 @@ export default class GroupStageMatch extends React.PureComponent {
   }
 
   openResult = () => {
-    const { match: { homeGoals, awayGoals } } = this.props
-    this.setState({ resultOpen: true, homeGoals, awayGoals })
+    this.setState({ resultOpen: true })
   }
 
   setHomeGoals = event => {

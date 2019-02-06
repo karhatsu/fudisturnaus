@@ -13,6 +13,10 @@ class Tournament < ApplicationRecord
 
   default_scope { order('start_date DESC') }
 
+  def teams
+    groups.flat_map {|g| g.teams }.sort { |a, b| a.name <=> b.name }
+  end
+
   def end_date
     start_date + (days - 1).days
   end

@@ -19,12 +19,12 @@ export default class GroupStageMatch extends React.PureComponent {
       homeGoals: PropTypes.number,
       awayGoals: PropTypes.number,
     }).isRequired,
+    onSave: PropTypes.func.isRequired
   }
 
   constructor(props) {
     super(props)
-    const { match: { homeGoals, awayGoals } } = props
-    this.state = { resultOpen: false, homeGoals, awayGoals, errors: [] }
+    this.state = { resultOpen: false, errors: [] }
   }
 
   render() {
@@ -42,34 +42,46 @@ export default class GroupStageMatch extends React.PureComponent {
   }
 
   renderResult = () => {
-    const { resultOpen, homeGoals, awayGoals } = this.state
-    if (resultOpen) {
-      return (
-        <React.Fragment>
-          <input type="number" value={homeGoals + ''} onChange={this.setHomeGoals}/>
-          <span>-</span>
-          <input type="number" value={awayGoals + ''} onChange={this.setAwayGoals}/>
-          <input type="button" value="Tallenna" onClick={this.saveResult}/>
-        </React.Fragment>
-      )
-    } else if (!homeGoals && homeGoals !== 0) {
-      return <a onClick={this.openResult} href="#">Tulos</a>
-    } else {
-      return <a onClick={this.openResult} href="#">{homeGoals} - {awayGoals}</a>
+    const { match: { homeGoals, awayGoals } } = this.props
+    if (this.state.resultOpen) {
+      return this.renderForm()
     }
+    const text = homeGoals || homeGoals === 0 ? `${homeGoals} - ${awayGoals}` : 'Tulos'
+    return <a onClick={this.openResult} href="#">{text}</a>
+  }
+
+  renderForm = () => {
+    return (
+      <React.Fragment>
+        {this.renderGoalsField('homeGoals')}
+        <span>-</span>
+        {this.renderGoalsField('awayGoals')}
+        <input type="button" value="Tallenna" onClick={this.saveResult}/>
+        <input type="button" value="X" onClick={this.cancel}/>
+      </React.Fragment>
+    )
+  }
+
+  renderGoalsField = (name) => {
+    const goals = this.state[name]
+    const value = goals || goals === 0 ? goals : ''
+    return <input type="number" value={value} onChange={this.setGoals(name)}/>
   }
 
   openResult = (event) => {
     event.preventDefault()
-    this.setState({ resultOpen: true })
+    const { match: { homeGoals, awayGoals } } = this.props
+    this.setState({ resultOpen: true, homeGoals, awayGoals })
   }
 
-  setHomeGoals = event => {
-    this.setState({ homeGoals: event.target.value })
+  cancel = () => {
+    this.setState({ resultOpen: false, errors: [] })
   }
 
-  setAwayGoals = event => {
-    this.setState({ awayGoals: event.target.value })
+  setGoals = name => {
+    return event => {
+      this.setState({ [name]: parseInt(event.target.value) })
+    }
   }
 
   saveResult = () => {
@@ -90,6 +102,7 @@ export default class GroupStageMatch extends React.PureComponent {
     })
       .then(response => {
         if (response.ok) {
+          this.props.onSave(id, homeGoals, awayGoals)
           this.setState({ resultOpen: false, errors: [] })
         } else {
           response.json().then(({ errors }) => {

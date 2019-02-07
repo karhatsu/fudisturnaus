@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { addResult } from './util/util'
 
 export default class TournamentPage extends React.PureComponent {
   static propTypes = {
@@ -118,13 +119,9 @@ export default class TournamentPage extends React.PureComponent {
     }, {
       received: data => {
         const tournament = this.state.tournament
-        const groupStageMatches = [...tournament.groupStageMatches]
-        const matchIndex = groupStageMatches.findIndex(match => match.id === data.groupStageMatchId)
-        if (matchIndex !== -1) {
-          const match = { ...groupStageMatches[matchIndex], homeGoals: data.homeGoals, awayGoals: data.awayGoals }
-          groupStageMatches.splice(matchIndex, 1, match)
-          this.setState({ tournament: { ...tournament, groupStageMatches } })
-        }
+        const { groupStageMatchId, homeGoals, awayGoals } = data
+        const groupStageMatches = addResult(tournament.groupStageMatches, groupStageMatchId, homeGoals, awayGoals)
+        this.setState({ tournament: { ...tournament, groupStageMatches } })
       }
     })
   }

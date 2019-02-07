@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import GroupStageMatch from './group_stage_match'
+import { addResult } from '../util/util'
 
 export default class OfficialMain extends React.PureComponent {
   static propTypes = {
@@ -46,7 +47,13 @@ export default class OfficialMain extends React.PureComponent {
 
   renderGroupStageMatch = groupStageMatch => {
     const { accessKey } = this.props
-    return <GroupStageMatch key={groupStageMatch.id} accessKey={accessKey} match={groupStageMatch} />
+    return <GroupStageMatch key={groupStageMatch.id} accessKey={accessKey} match={groupStageMatch} onSave={this.onSave} />
+  }
+
+  onSave = (groupStageMatchId, homeGoals, awayGoals) => {
+    const tournament = this.state.tournament
+    const groupStageMatches = addResult(tournament.groupStageMatches, groupStageMatchId, homeGoals, awayGoals)
+    this.setState({ tournament: { ...tournament, groupStageMatches } })
   }
 
   componentDidMount() {

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { format, parseISO } from 'date-fns'
 
 export default class Main extends React.PureComponent {
   constructor(props) {
@@ -10,12 +11,21 @@ export default class Main extends React.PureComponent {
   }
 
   render() {
+    return (
+      <div>
+        <div className="Title">fudisturnaus.com</div>
+        {this.renderContent()}
+      </div>
+    )
+  }
+
+  renderContent() {
     const { tournaments } = this.state
     if (!tournaments) {
       return <div>Loading...</div>
     }
     return (
-      <div>
+      <div className="TournamentLinks">
         {!tournaments.length ? 'Ei turnauksia' : tournaments.map(this.renderTournament)}
       </div>
     )
@@ -24,12 +34,15 @@ export default class Main extends React.PureComponent {
   renderTournament = tournament => {
     const { id, name, location, startDate, endDate } = tournament
     return (
-      <div key={id}>
-        <Link to={`/tournaments/${id}`}>
-          {name}, {location}, {startDate}{startDate !== endDate ? ` - ${endDate}` : ''}
-        </Link>
-      </div>
+      <Link to={`/tournaments/${id}`} key={id} className="TournamentLink">
+        <div className="TournamentLink-tournamentName">{name}</div>
+        <div>{location}, {this.formatDate(startDate)}{startDate !== endDate ? ` - ${this.formatDate(endDate)}` : ''}</div>
+      </Link>
     )
+  }
+
+  formatDate = date => {
+    return format(parseISO(date), 'dd.MM.yyyy')
   }
 
   componentDidMount() {

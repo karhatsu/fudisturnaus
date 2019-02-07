@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { format, parseISO } from 'date-fns'
 import { addResult } from './util/util'
 
 export default class TournamentPage extends React.PureComponent {
@@ -92,7 +93,7 @@ export default class TournamentPage extends React.PureComponent {
     if (this.isFilterMatch(groupStageMatch)) {
       return (
         <tr key={id}>
-          <td>{startTime}</td>
+          <td>{format(parseISO(startTime), 'HH:mm')}</td>
           <td>{field.name}</td>
           <td>{homeTeam.name}</td>
           <td>{awayTeam.name}</td>

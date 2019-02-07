@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { format, parseISO } from 'date-fns'
 
 export default class GroupStageMatch extends React.PureComponent {
   static propTypes = {
@@ -31,7 +32,7 @@ export default class GroupStageMatch extends React.PureComponent {
     const { match: { startTime, field, homeTeam, awayTeam } } = this.props
     return (
       <tr>
-        <td>{startTime}</td>
+        <td>{format(parseISO(startTime), 'HH:mm')}</td>
         <td>{field.name}</td>
         <td>{homeTeam.name}</td>
         <td>{awayTeam.name}</td>

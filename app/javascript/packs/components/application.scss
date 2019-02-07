@@ -10,14 +10,45 @@ body {
   padding: 8px;
 }
 
-select {
-  color: $white;
-}
-
 .Title {
   font-size: 24px;
   font-weight: 600;
   margin-top: 8px;
+}
+
+.SubTitle {
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.FiltersTitle {
+  cursor: pointer;
+  margin-top: 16px;
+
+  .FiltersTitle-arrow {
+    padding-left: 4px;
+  }
+}
+
+.Filters {
+  background-color: $white;
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+}
+
+select.Filter {
+  color: $black;
+  margin: 4px 0;
+}
+
+.Results {
+  margin-top: 16px;
+
+  th, td {
+    padding: 2px 4px 2px 0;
+    text-align: left;
+  }
 }
 
 .TournamentLinks {

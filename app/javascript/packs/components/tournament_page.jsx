@@ -15,6 +15,7 @@ export default class TournamentPage extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
+      filtersOpen: false,
       filters: {
         ageGroupId: null,
         clubId: null,
@@ -31,23 +32,23 @@ export default class TournamentPage extends React.PureComponent {
     if (!tournament) {
       return <div>Loading...</div>
     }
-    const { name, location, startDate, ageGroups, groups, clubs, teams, fields, groupStageMatches } = tournament
+    const { location, startDate, groupStageMatches } = tournament
+    const filtersArrow = this.state.filtersOpen ? '&#x25B2;' : '&#x25BC;'
     return (
       <div>
-        <h2>{name} - {location}, {startDate}</h2>
-        {this.renderFilter('ageGroupId', ageGroups, 'Sarja')}
-        {this.renderFilter('groupId', groups, 'Lohko')}
-        {this.renderFilter('clubId', clubs, 'Seura')}
-        {this.renderFilter('teamId', teams, 'Joukkue')}
-        {this.renderFilter('fieldId', fields, 'Kenttä')}
-        <h2>Alkusarjan ottelut</h2>
-        <table>
+        <div className="Title">{tournament.name}</div>
+        <div className="SubTitle">{location}, {startDate}</div>
+        <div className="FiltersTitle" onClick={this.toggleFilters}>
+          Rajaa otteluita
+          <span className="FiltersTitle-arrow" dangerouslySetInnerHTML={{ __html: filtersArrow }}/>
+        </div>
+        {this.renderFilters()}
+        <table className="Results">
           <thead>
             <tr>
-              <th>Aika</th>
+              <th>Kello</th>
               <th>Kenttä</th>
-              <th>Koti</th>
-              <th>Vieras</th>
+              <th>Ottelu</th>
               <th>Tulos</th>
             </tr>
           </thead>
@@ -59,9 +60,29 @@ export default class TournamentPage extends React.PureComponent {
     )
   }
 
+  toggleFilters = () => {
+    const { filtersOpen } = this.state
+    this.setState({ filtersOpen: !filtersOpen })
+  }
+
+  renderFilters = () => {
+    if (this.state.filtersOpen) {
+      const { tournament: { ageGroups, groups, clubs, teams, fields } } = this.state
+      return (
+        <div className="Filters">
+          {this.renderFilter('ageGroupId', ageGroups, 'Sarja')}
+          {this.renderFilter('groupId', groups, 'Lohko')}
+          {this.renderFilter('clubId', clubs, 'Seura')}
+          {this.renderFilter('teamId', teams, 'Joukkue')}
+          {this.renderFilter('fieldId', fields, 'Kenttä')}
+        </div>
+      )
+    }
+  }
+
   renderFilter = (key, items, defaultText) => {
     return (
-      <select onChange={this.setFilterValue(key)}>
+      <select className="Filter" onChange={this.setFilterValue(key)}>
         <option>{defaultText}</option>
         {items.map(item => {
           const { id, name } = item
@@ -95,12 +116,18 @@ export default class TournamentPage extends React.PureComponent {
         <tr key={id}>
           <td>{format(parseISO(startTime), 'HH:mm')}</td>
           <td>{field.name}</td>
-          <td>{homeTeam.name}</td>
-          <td>{awayTeam.name}</td>
-          <td>{homeGoals} - {awayGoals}</td>
+          <td>{homeTeam.name} - {awayTeam.name}</td>
+          {this.renderResult(homeGoals, awayGoals)}
         </tr>
       )
     }
+  }
+
+  renderResult = (homeGoals, awayGoals) => {
+    if (homeGoals || homeGoals === 0) {
+      return <td>{homeGoals} - {awayGoals}</td>
+    }
+    return <td/>
   }
 
   componentDidMount() {

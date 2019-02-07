@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { format, parseISO } from 'date-fns'
+import { formatTournamentDates } from './util/util'
 
 export default class Main extends React.PureComponent {
   constructor(props) {
@@ -36,7 +37,7 @@ export default class Main extends React.PureComponent {
     return (
       <Link to={`/tournaments/${id}`} key={id} className="TournamentLink">
         <div className="TournamentLink-tournamentName">{name}</div>
-        <div>{location}, {this.formatDate(startDate)}{startDate !== endDate ? ` - ${this.formatDate(endDate)}` : ''}</div>
+        <div>{location}, {formatTournamentDates(startDate, endDate)}</div>
       </Link>
     )
   }

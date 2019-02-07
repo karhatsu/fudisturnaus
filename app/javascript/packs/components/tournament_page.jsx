@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { format, parseISO } from 'date-fns'
-import { addResult } from './util/util'
+import { addResult, formatTournamentDates } from './util/util'
 
 export default class TournamentPage extends React.PureComponent {
   static propTypes = {
@@ -32,12 +32,12 @@ export default class TournamentPage extends React.PureComponent {
     if (!tournament) {
       return <div>Loading...</div>
     }
-    const { location, startDate, groupStageMatches } = tournament
+    const { location, startDate, endDate, groupStageMatches } = tournament
     const filtersArrow = this.state.filtersOpen ? '&#x25B2;' : '&#x25BC;'
     return (
       <div>
         <div className="Title">{tournament.name}</div>
-        <div className="SubTitle">{location}, {startDate}</div>
+        <div className="SubTitle">{location}, {formatTournamentDates(startDate, endDate)}</div>
         <div className="FiltersTitle" onClick={this.toggleFilters}>
           Rajaa otteluita
           <span className="FiltersTitle-arrow" dangerouslySetInnerHTML={{ __html: filtersArrow }}/>

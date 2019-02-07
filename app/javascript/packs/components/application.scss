@@ -1,0 +1,11 @@
+$white: rgba(255, 255, 255, 0.9);
+
+body {
+  background: url("./images/grass.jpg") #5acd3d repeat;
+  color: $white;
+  font-family: 'Muli', sans-serif;
+}
+
+select {
+  color: $white;
+}

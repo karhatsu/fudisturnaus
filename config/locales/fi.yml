@@ -1,0 +1,8 @@
+fi:
+  activerecord:
+    models:
+      group_stage_match: Alkulohkon ottelu
+    attributes:
+      group_stage_match:
+        home_goals: Kotijoukkueen maalit
+        away_goals: Vierasjoukkueen maalit

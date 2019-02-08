@@ -12,39 +12,39 @@ body {
   padding: 8px;
 }
 
-.Title {
+.title {
   font-size: 24px;
   font-weight: 600;
   margin-top: 8px;
 }
 
-.SubTitle {
+.sub-title {
   font-size: 14px;
   margin-top: 4px;
 }
 
-.FiltersTitle {
+.filters-title {
   cursor: pointer;
   margin-top: 16px;
 
-  .FiltersTitle-arrow {
+  .filters-title__arrow {
     padding-left: 4px;
   }
 }
 
-.Filters {
+.filters {
   background-color: $white;
   display: flex;
   flex-direction: column;
   margin-top: 4px;
 }
 
-select.Filter {
+select.filter {
   color: $black;
   margin: 4px 0;
 }
 
-.Results {
+.results {
   margin-top: 16px;
 
   th, td {
@@ -53,13 +53,7 @@ select.Filter {
   }
 }
 
-.Results-official {
-  th, td {
-    padding: 4px 4px 4px 0;
-  }
-}
-
-.GroupStageMatch {
+.group-stage-match {
   background-color: $white;
   color: $black;
   cursor: pointer;
@@ -67,73 +61,73 @@ select.Filter {
   padding: 8px;
   border-radius: 4px;
 
-  .GroupStageMatch-row1 {
+  .group-stage-match__row1 {
     display: flex;
     flex-direction: row;
   }
 
-  .GroupStageMatch-matchInfo {
+  .group-stage-match__matchInfo {
     flex-grow: 1;
   }
 
-  .GroupStageMatch-teams {
+  .group-stage-match__teams {
     font-size: 14px;
     font-weight: 600;
   }
 
-  .GroupStageMatch-startTime {
+  .group-stage-match__startTime {
     margin-top: 4px;
   }
 
-  .GroupStageMatch-result {
+  .group-stage-match__result {
     color: $green;
     font-size: 16px;
     font-weight: 600;
   }
 
-  .GroupStageMatch-noResult {
+  .group-stage-match__noResult {
     color: $red;
   }
 
-  .GroupStageMatch-resultFields {
+  .group-stage-match__resultFields {
     text-align: right;
   }
 
-  .GroupStageMatch-buttons {
+  .group-stage-match__buttons {
     margin-top: 4px;
     text-align: right;
   }
 
-  .GroupStageMatch-button {
+  .group-stage-match__button {
     font-size: 16px;
     padding: 0;
     margin-left: 16px;
   }
 
-  .GroupStageMatch-error {
+  .group-stage-match__error {
     font-weight: 600;
   }
 }
 
-.GoalsField {
+.goals-field {
   font-size: 14px;
   text-align: center;
   width: 20px;
 }
 
-.GoalsSeparator {
+.goals-separator {
   margin: 0 4px;
 }
 
-.Error {
+.error {
   color: $red;
 }
 
-.TournamentLinks {
+.tournament-links {
   margin-top: 16px;
 }
 
-a.TournamentLink {
+a.tournament-link {
   background-color: $white;
   color: $black;
   display: block;
@@ -142,7 +136,7 @@ a.TournamentLink {
   padding: 8px;
   border-radius: 4px;
 
-  .TournamentLink-tournamentName {
+  .tournament-link__tournament-name {
     font-size: 14px;
     font-weight: 600;
   }

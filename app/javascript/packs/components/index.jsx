@@ -14,7 +14,7 @@ export default class Main extends React.PureComponent {
   render() {
     return (
       <div>
-        <div className="Title">fudisturnaus.com</div>
+        <div className="title">fudisturnaus.com</div>
         {this.renderContent()}
       </div>
     )
@@ -26,7 +26,7 @@ export default class Main extends React.PureComponent {
       return <div>Loading...</div>
     }
     return (
-      <div className="TournamentLinks">
+      <div className="tournament-links">
         {!tournaments.length ? 'Ei turnauksia' : tournaments.map(this.renderTournament)}
       </div>
     )
@@ -35,8 +35,8 @@ export default class Main extends React.PureComponent {
   renderTournament = tournament => {
     const { id, name, location, startDate, endDate } = tournament
     return (
-      <Link to={`/tournaments/${id}`} key={id} className="TournamentLink">
-        <div className="TournamentLink-tournamentName">{name}</div>
+      <Link to={`/tournaments/${id}`} key={id} className="tournament-link">
+        <div className="tournament-link__tournament-name">{name}</div>
         <div>{location}, {formatTournamentDates(startDate, endDate)}</div>
       </Link>
     )

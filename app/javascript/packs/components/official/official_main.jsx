@@ -25,8 +25,8 @@ export default class OfficialMain extends React.PureComponent {
     }
     return (
       <div>
-        <div className="Title">{tournament.name}</div>
-        <div className="Results Results-official">
+        <div className="title">{tournament.name}</div>
+        <div className="results">
           {tournament.groupStageMatches.map(this.renderGroupStageMatch)}
         </div>
       </div>

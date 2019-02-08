@@ -36,14 +36,14 @@ export default class TournamentPage extends React.PureComponent {
     const filtersArrow = this.state.filtersOpen ? '&#x25B2;' : '&#x25BC;'
     return (
       <div>
-        <div className="Title">{tournament.name}</div>
-        <div className="SubTitle">{location}, {formatTournamentDates(startDate, endDate)}</div>
-        <div className="FiltersTitle" onClick={this.toggleFilters}>
+        <div className="title">{tournament.name}</div>
+        <div className="sub-title">{location}, {formatTournamentDates(startDate, endDate)}</div>
+        <div className="filters-title" onClick={this.toggleFilters}>
           Rajaa otteluita
-          <span className="FiltersTitle-arrow" dangerouslySetInnerHTML={{ __html: filtersArrow }}/>
+          <span className="filters-title__arrow" dangerouslySetInnerHTML={{ __html: filtersArrow }}/>
         </div>
         {this.renderFilters()}
-        <table className="Results">
+        <table className="results">
           <thead>
             <tr>
               <th>Kello</th>
@@ -69,7 +69,7 @@ export default class TournamentPage extends React.PureComponent {
     if (this.state.filtersOpen) {
       const { tournament: { ageGroups, groups, clubs, teams, fields } } = this.state
       return (
-        <div className="Filters">
+        <div className="filters">
           {this.renderFilter('ageGroupId', ageGroups, 'Sarja')}
           {this.renderFilter('groupId', groups, 'Lohko')}
           {this.renderFilter('clubId', clubs, 'Seura')}
@@ -82,7 +82,7 @@ export default class TournamentPage extends React.PureComponent {
 
   renderFilter = (key, items, defaultText) => {
     return (
-      <select className="Filter" onChange={this.setFilterValue(key)}>
+      <select className="filter" onChange={this.setFilterValue(key)}>
         <option>{defaultText}</option>
         {items.map(item => {
           const { id, name } = item

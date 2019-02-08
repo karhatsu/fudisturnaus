@@ -31,15 +31,15 @@ export default class GroupStageMatch extends React.PureComponent {
   render() {
     const { match: { startTime, field, homeTeam, awayTeam } } = this.props
     return (
-      <div className="GroupStageMatch" onClick={this.openForm}>
-        <div className="GroupStageMatch-row1">
-          <div className="GroupStageMatch-matchInfo">
-            <div className="GroupStageMatch-teams">{homeTeam.name} - {awayTeam.name}</div>
-            <div className="GroupStageMatch-startTime">{format(parseISO(startTime), 'HH:mm')}, {field.name}</div>
+      <div className="group-stage-match" onClick={this.openForm}>
+        <div className="group-stage-match__row1">
+          <div className="group-stage-match__matchInfo">
+            <div className="group-stage-match__teams">{homeTeam.name} - {awayTeam.name}</div>
+            <div className="group-stage-match__startTime">{format(parseISO(startTime), 'HH:mm')}, {field.name}</div>
           </div>
-          <div className="GroupStageMatch-result">{this.renderResult()}</div>
+          <div className="group-stage-match__result">{this.renderResult()}</div>
         </div>
-        {this.state.errors.length > 0 && <div className="Error GroupStageMatch-error">{this.state.errors.join('. ')}.</div>}
+        {this.state.errors.length > 0 && <div className="error group-stage-match__error">{this.state.errors.join('. ')}.</div>}
       </div>
     )
   }
@@ -52,20 +52,20 @@ export default class GroupStageMatch extends React.PureComponent {
     if (homeGoals || homeGoals === 0) {
       return <span>{homeGoals} - {awayGoals}</span>
     }
-    return <span className="GroupStageMatch-noResult">Tulos</span>
+    return <span className="group-stage-match__noResult">Tulos</span>
   }
 
   renderForm = () => {
     return (
       <div>
-        <div className="GroupStageMatch-resultFields">
+        <div className="group-stage-match__resultFields">
           {this.renderGoalsField('homeGoals')}
-          <span className="GoalsSeparator">-</span>
+          <span className="goals-separator">-</span>
           {this.renderGoalsField('awayGoals')}
         </div>
-        <div className="GroupStageMatch-buttons">
-          <input type="button" value="&#x2705;" onClick={this.saveResult} className="GroupStageMatch-button"/>
-          <input type="button" value="&#x274C;" onClick={this.cancel} className="GroupStageMatch-button"/>
+        <div className="group-stage-match__buttons">
+          <input type="button" value="&#x2705;" onClick={this.saveResult} className="group-stage-match__button"/>
+          <input type="button" value="&#x274C;" onClick={this.cancel} className="group-stage-match__button"/>
         </div>
       </div>
     )
@@ -74,7 +74,7 @@ export default class GroupStageMatch extends React.PureComponent {
   renderGoalsField = (name) => {
     const goals = this.state[name]
     const value = goals || goals === 0 ? goals : ''
-    return <input type="number" value={value} onChange={this.setGoals(name)} className="GoalsField"/>
+    return <input type="number" value={value} onChange={this.setGoals(name)} className="goals-field"/>
   }
 
   openForm = () => {

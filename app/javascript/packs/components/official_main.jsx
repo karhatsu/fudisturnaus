@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
-import Loading from '../loading'
+import Loading from './loading'
 import GroupStageMatch from './group_stage_match'
-import { addResult } from '../util/util'
-import '../styles/application.scss'
+import { addResult } from './util/util'
+import './styles/application.scss'
 
 export default class OfficialMain extends React.PureComponent {
   static propTypes = {

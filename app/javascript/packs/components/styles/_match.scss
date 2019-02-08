@@ -1,12 +1,9 @@
 @import 'variables';
+@import 'shared';
 
 .group-stage-match {
-  background-color: $white;
-  color: $black;
+  @extend %white-box;
   cursor: pointer;
-  margin-top: 8px;
-  padding: 8px;
-  border-radius: 4px;
 
   .group-stage-match__row1 {
     display: flex;

@@ -1,17 +1,14 @@
 @import 'variables';
+@import 'shared';
 
 .tournament-links {
   margin-top: 16px;
 }
 
 a.tournament-link {
-  background-color: $white;
-  color: $black;
+  @extend %white-box;
   display: block;
-  margin-top: 8px;
   text-decoration: none;
-  padding: 8px;
-  border-radius: 4px;
 
   .tournament-link__tournament-name {
     font-size: 14px;

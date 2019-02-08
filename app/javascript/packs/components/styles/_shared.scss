@@ -1,0 +1,9 @@
+@import 'variables';
+
+%white-box {
+  background-color: $white;
+  border-radius: 4px;
+  color: $black;
+  margin-top: 8px;
+  padding: 8px;
+}

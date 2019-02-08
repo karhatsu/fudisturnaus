@@ -15,3 +15,7 @@ a.tournament-link {
     font-weight: 600;
   }
 }
+
+a.tournament-link:active {
+  @extend %white-box-active;
+}

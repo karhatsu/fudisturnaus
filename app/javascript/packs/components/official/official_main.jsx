@@ -25,23 +25,10 @@ export default class OfficialMain extends React.PureComponent {
     }
     return (
       <div>
-        <h2>{tournament.name}</h2>
-        <h3>Alkusarjan ottelut</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Aika</th>
-              <th>Kenttä</th>
-              <th>Koti</th>
-              <th>Vieras</th>
-              <th>Tulos</th>
-              <th/>
-            </tr>
-          </thead>
-          <tbody>
-            {tournament.groupStageMatches.map(this.renderGroupStageMatch)}
-          </tbody>
-        </table>
+        <div className="Title">{tournament.name}</div>
+        <div className="Results Results-official">
+          {tournament.groupStageMatches.map(this.renderGroupStageMatch)}
+        </div>
       </div>
     )
   }

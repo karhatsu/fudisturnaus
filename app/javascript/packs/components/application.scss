@@ -1,5 +1,7 @@
 $white: rgba(255, 255, 255, 0.9);
 $black: rgba(0, 0, 0, 0.8);
+$green: rgba(0, 128, 0, 0.8);
+$red: rgba(255, 0, 0, 0.9);
 
 body {
   background: url("./images/grass.jpg") #5acd3d repeat;
@@ -51,6 +53,82 @@ select.Filter {
   }
 }
 
+.Results-official {
+  th, td {
+    padding: 4px 4px 4px 0;
+  }
+}
+
+.GroupStageMatch {
+  background-color: $white;
+  color: $black;
+  cursor: pointer;
+  margin-top: 8px;
+  padding: 8px;
+  border-radius: 4px;
+
+  .GroupStageMatch-row1 {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .GroupStageMatch-matchInfo {
+    flex-grow: 1;
+  }
+
+  .GroupStageMatch-teams {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .GroupStageMatch-startTime {
+    margin-top: 4px;
+  }
+
+  .GroupStageMatch-result {
+    color: $green;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .GroupStageMatch-noResult {
+    color: $red;
+  }
+
+  .GroupStageMatch-resultFields {
+    text-align: right;
+  }
+
+  .GroupStageMatch-buttons {
+    margin-top: 4px;
+    text-align: right;
+  }
+
+  .GroupStageMatch-button {
+    font-size: 16px;
+    padding: 0;
+    margin-left: 16px;
+  }
+
+  .GroupStageMatch-error {
+    font-weight: 600;
+  }
+}
+
+.GoalsField {
+  font-size: 14px;
+  text-align: center;
+  width: 20px;
+}
+
+.GoalsSeparator {
+  margin: 0 4px;
+}
+
+.Error {
+  color: $red;
+}
+
 .TournamentLinks {
   margin-top: 16px;
 }
@@ -62,7 +140,7 @@ a.TournamentLink {
   margin-top: 8px;
   text-decoration: none;
   padding: 8px;
-  border-right: 4px;
+  border-radius: 4px;
 
   .TournamentLink-tournamentName {
     font-size: 14px;

@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { format, parseISO } from 'date-fns'
+
+import Loading from './loading'
 import { addResult, formatTournamentDates } from './util/util'
 
 export default class TournamentPage extends React.PureComponent {
@@ -29,14 +31,20 @@ export default class TournamentPage extends React.PureComponent {
 
   render() {
     const { tournament } = this.state
-    if (!tournament) {
-      return <div>Loading...</div>
-    }
+    return (
+      <div>
+        <div className="title">{tournament ? tournament.name : 'fudisturnaus.com'}</div>
+        {tournament ? this.renderContent() : <Loading/>}
+      </div>
+    )
+  }
+
+  renderContent() {
+    const { tournament } = this.state
     const { location, startDate, endDate, groupStageMatches } = tournament
     const filtersArrow = this.state.filtersOpen ? '&#x25B2;' : '&#x25BC;'
     return (
       <div>
-        <div className="title">{tournament.name}</div>
         <div className="sub-title">{location}, {formatTournamentDates(startDate, endDate)}</div>
         <div className="filters-title" onClick={this.toggleFilters}>
           Rajaa otteluita

@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
+import Loading from '../loading'
 import GroupStageMatch from './group_stage_match'
 import { addResult } from '../util/util'
 import '../styles/application.scss'
@@ -20,12 +21,18 @@ export default class OfficialMain extends React.PureComponent {
 
   render() {
     const { tournament } = this.state
-    if (!tournament) {
-      return <div>Loading...</div>
-    }
     return (
       <div>
-        <div className="title">{tournament.name}</div>
+        <div className="title">{tournament ? tournament.name : 'fudisturnaus.com'}</div>
+        {tournament ? this.renderContent() : <Loading/>}
+      </div>
+    )
+  }
+
+  renderContent() {
+    const { tournament } = this.state
+    return (
+      <div>
         <div className="results">
           {tournament.groupStageMatches.map(this.renderGroupStageMatch)}
         </div>

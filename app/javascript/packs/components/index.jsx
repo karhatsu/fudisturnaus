@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { format, parseISO } from 'date-fns'
+
+import Loading from './loading'
 import { formatTournamentDates } from './util/util'
 
 export default class Main extends React.PureComponent {
@@ -23,7 +25,7 @@ export default class Main extends React.PureComponent {
   renderContent() {
     const { tournaments } = this.state
     if (!tournaments) {
-      return <div>Loading...</div>
+      return <Loading/>
     }
     return (
       <div className="tournament-links">

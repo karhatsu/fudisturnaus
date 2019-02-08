@@ -3,7 +3,10 @@
 
 .group-stage-match {
   @extend %white-box;
-  cursor: pointer;
+
+  .group-stage-match--editable {
+    cursor: pointer;
+  }
 
   .group-stage-match__row1 {
     display: flex;
@@ -53,7 +56,7 @@
   }
 }
 
-.group-stage-match:active {
+.group-stage-match--editable:active {
   @extend %white-box-active;
 }
 

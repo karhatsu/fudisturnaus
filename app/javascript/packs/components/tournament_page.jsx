@@ -4,6 +4,7 @@ import { format, parseISO } from 'date-fns'
 
 import Loading from './loading'
 import { addResult, formatTournamentDates } from './util/util'
+import GroupStageMatch from './group_stage_match'
 
 export default class TournamentPage extends React.PureComponent {
   static propTypes = {
@@ -51,19 +52,9 @@ export default class TournamentPage extends React.PureComponent {
           <span className="filters-title__arrow" dangerouslySetInnerHTML={{ __html: filtersArrow }}/>
         </div>
         {this.renderFilters()}
-        <table className="results">
-          <thead>
-            <tr>
-              <th>Kello</th>
-              <th>Kenttä</th>
-              <th>Ottelu</th>
-              <th>Tulos</th>
-            </tr>
-          </thead>
-          <tbody>
-            {groupStageMatches.map(this.renderGroupStageMatch)}
-          </tbody>
-        </table>
+        <div className="results">
+          {groupStageMatches.map(this.renderGroupStageMatch)}
+        </div>
       </div>
     )
   }
@@ -118,24 +109,9 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   renderGroupStageMatch = groupStageMatch => {
-    const { id, startTime, field, homeTeam, awayTeam, homeGoals, awayGoals } = groupStageMatch
     if (this.isFilterMatch(groupStageMatch)) {
-      return (
-        <tr key={id}>
-          <td>{format(parseISO(startTime), 'HH:mm')}</td>
-          <td>{field.name}</td>
-          <td>{homeTeam.name} - {awayTeam.name}</td>
-          {this.renderResult(homeGoals, awayGoals)}
-        </tr>
-      )
+      return <GroupStageMatch key={groupStageMatch.id} editable={false} match={groupStageMatch}/>
     }
-  }
-
-  renderResult = (homeGoals, awayGoals) => {
-    if (homeGoals || homeGoals === 0) {
-      return <td>{homeGoals} - {awayGoals}</td>
-    }
-    return <td/>
   }
 
   componentDidMount() {

@@ -42,7 +42,13 @@ export default class OfficialMain extends React.PureComponent {
 
   renderGroupStageMatch = groupStageMatch => {
     const { accessKey } = this.props
-    return <GroupStageMatch key={groupStageMatch.id} accessKey={accessKey} match={groupStageMatch} onSave={this.onSave} />
+    return <GroupStageMatch
+      key={groupStageMatch.id}
+      accessKey={accessKey}
+      editable={true}
+      match={groupStageMatch}
+      onSave={this.onSave}
+    />
   }
 
   onSave = (groupStageMatchId, homeGoals, awayGoals) => {

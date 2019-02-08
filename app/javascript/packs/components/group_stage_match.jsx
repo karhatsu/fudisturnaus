@@ -4,7 +4,8 @@ import { format, parseISO } from 'date-fns'
 
 export default class GroupStageMatch extends React.PureComponent {
   static propTypes = {
-    accessKey: PropTypes.string.isRequired,
+    accessKey: PropTypes.string,
+    editable: PropTypes.bool.isRequired,
     match: PropTypes.shape({
       id: PropTypes.number.isRequired,
       startTime: PropTypes.string.isRequired,
@@ -20,7 +21,7 @@ export default class GroupStageMatch extends React.PureComponent {
       homeGoals: PropTypes.number,
       awayGoals: PropTypes.number,
     }).isRequired,
-    onSave: PropTypes.func.isRequired
+    onSave: PropTypes.func
   }
 
   constructor(props) {
@@ -29,9 +30,13 @@ export default class GroupStageMatch extends React.PureComponent {
   }
 
   render() {
-    const { match: { startTime, field, homeTeam, awayTeam } } = this.props
+    const { editable, match: { startTime, field, homeTeam, awayTeam } } = this.props
+    const rootClasses = ['group-stage-match']
+    if (editable) {
+      rootClasses.push('group-stage-match--editable')
+    }
     return (
-      <div className="group-stage-match" onClick={this.openForm}>
+      <div className={rootClasses.join(' ')} onClick={this.openForm}>
         <div className="group-stage-match__row1">
           <div className="group-stage-match__matchInfo">
             <div className="group-stage-match__teams">{homeTeam.name} - {awayTeam.name}</div>
@@ -78,7 +83,7 @@ export default class GroupStageMatch extends React.PureComponent {
   }
 
   openForm = () => {
-    if (!this.state.formOpen) {
+    if (this.props.editable && !this.state.formOpen) {
       const {match: {homeGoals, awayGoals}} = this.props
       this.setState({formOpen: true, homeGoals, awayGoals})
     }

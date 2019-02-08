@@ -1,0 +1,20 @@
+@import 'variables';
+
+.tournament-links {
+  margin-top: 16px;
+}
+
+a.tournament-link {
+  background-color: $white;
+  color: $black;
+  display: block;
+  margin-top: 8px;
+  text-decoration: none;
+  padding: 8px;
+  border-radius: 4px;
+
+  .tournament-link__tournament-name {
+    font-size: 14px;
+    font-weight: 600;
+  }
+}

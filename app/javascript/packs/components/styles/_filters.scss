@@ -1,0 +1,22 @@
+@import 'variables';
+
+.filters-title {
+  cursor: pointer;
+  margin-top: 16px;
+
+  .filters-title__arrow {
+    padding-left: 4px;
+  }
+}
+
+.filters {
+  background-color: $white;
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+}
+
+select.filter {
+  color: $black;
+  margin: 4px 0;
+}

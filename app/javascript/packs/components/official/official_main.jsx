@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import GroupStageMatch from './group_stage_match'
 import { addResult } from '../util/util'
-import '../application.scss'
+import '../styles/application.scss'
 
 export default class OfficialMain extends React.PureComponent {
   static propTypes = {

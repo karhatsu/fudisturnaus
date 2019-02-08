@@ -1,0 +1,13 @@
+@import 'common';
+@import 'filters';
+@import 'index';
+@import 'match';
+
+.results {
+  margin-top: 16px;
+
+  th, td {
+    padding: 2px 4px 2px 0;
+    text-align: left;
+  }
+}

@@ -8,6 +8,7 @@ class GroupStageMatch < ApplicationRecord
   validates :away_goals, numericality: { only_integer: true, greater_than_or_equal_to: 0, allow_nil: true }
   validate :verify_both_goals
 
+  delegate :age_group, to: :group
   delegate :age_group_id, to: :group
 
   def tournament_id

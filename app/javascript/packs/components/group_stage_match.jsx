@@ -20,6 +20,12 @@ export default class GroupStageMatch extends React.PureComponent {
       }).isRequired,
       homeGoals: PropTypes.number,
       awayGoals: PropTypes.number,
+      ageGroup: PropTypes.shape({
+        name: PropTypes.string.isRequired
+      }).isRequired,
+      group: PropTypes.shape({
+        name: PropTypes.string.isRequired
+      }).isRequired,
     }).isRequired,
     onSave: PropTypes.func
   }
@@ -30,7 +36,7 @@ export default class GroupStageMatch extends React.PureComponent {
   }
 
   render() {
-    const { editable, match: { startTime, field, homeTeam, awayTeam } } = this.props
+    const { editable, match: { startTime, field, homeTeam, awayTeam, ageGroup, group } } = this.props
     const rootClasses = ['group-stage-match']
     if (editable) {
       rootClasses.push('group-stage-match--editable')
@@ -40,7 +46,9 @@ export default class GroupStageMatch extends React.PureComponent {
         <div className="group-stage-match__row1">
           <div className="group-stage-match__matchInfo">
             <div className="group-stage-match__teams">{homeTeam.name} - {awayTeam.name}</div>
-            <div className="group-stage-match__startTime">{format(parseISO(startTime), 'HH:mm')}, {field.name}</div>
+            <div className="group-stage-match__startTime">
+              {format(parseISO(startTime), 'HH:mm')}, {field.name}, {ageGroup.name}, {group.name}
+            </div>
           </div>
           <div className="group-stage-match__result">{this.renderResult()}</div>
         </div>

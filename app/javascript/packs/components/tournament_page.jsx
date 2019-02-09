@@ -65,20 +65,22 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   renderFilters = () => {
-    if (this.state.filtersOpen) {
-      const { tournament: { ageGroups, groups, clubs, teams, fields } } = this.state
-      return (
-        <div className="filters">
-          <div className="row">
-            {this.renderFilter('ageGroupId', ageGroups, 'Sarja')}
-            {this.renderFilter('groupId', groups, 'Lohko')}
-            {this.renderFilter('clubId', clubs, 'Seura')}
-            {this.renderFilter('teamId', teams, 'Joukkue')}
-            {this.renderFilter('fieldId', fields, 'Kenttä')}
-          </div>
-        </div>
-      )
+    const { tournament: { ageGroups, groups, clubs, teams, fields } } = this.state
+    const classes = ['filters']
+    if (!this.state.filtersOpen) {
+      classes.push('filters--closed')
     }
+    return (
+      <div className={classes.join(' ')}>
+        <div className="row">
+          {this.renderFilter('ageGroupId', ageGroups, 'Sarja')}
+          {this.renderFilter('groupId', groups, 'Lohko')}
+          {this.renderFilter('clubId', clubs, 'Seura')}
+          {this.renderFilter('teamId', teams, 'Joukkue')}
+          {this.renderFilter('fieldId', fields, 'Kenttä')}
+        </div>
+      </div>
+    )
   }
 
   renderFilter = (key, items, defaultText) => {

@@ -66,11 +66,13 @@ export default class TournamentPage extends React.PureComponent {
       const { tournament: { ageGroups, groups, clubs, teams, fields } } = this.state
       return (
         <div className="filters">
-          {this.renderFilter('ageGroupId', ageGroups, 'Sarja')}
-          {this.renderFilter('groupId', groups, 'Lohko')}
-          {this.renderFilter('clubId', clubs, 'Seura')}
-          {this.renderFilter('teamId', teams, 'Joukkue')}
-          {this.renderFilter('fieldId', fields, 'Kenttä')}
+          <div className="row">
+            {this.renderFilter('ageGroupId', ageGroups, 'Sarja')}
+            {this.renderFilter('groupId', groups, 'Lohko')}
+            {this.renderFilter('clubId', clubs, 'Seura')}
+            {this.renderFilter('teamId', teams, 'Joukkue')}
+            {this.renderFilter('fieldId', fields, 'Kenttä')}
+          </div>
         </div>
       )
     }
@@ -79,13 +81,15 @@ export default class TournamentPage extends React.PureComponent {
   renderFilter = (key, items, defaultText) => {
     if (items.length > 1) {
       return (
-        <select className="filter" onChange={this.setFilterValue(key)}>
-          <option>{defaultText}</option>
-          {items.map(item => {
-            const {id, name} = item
-            return <option key={id} value={id}>{name}</option>
-          })}
-        </select>
+        <div className="col-xs-6 col-sm-4 col-md-2">
+          <select className="filter" onChange={this.setFilterValue(key)}>
+            <option>{defaultText}</option>
+            {items.map(item => {
+              const {id, name} = item
+              return <option key={id} value={id}>{name}</option>
+            })}
+          </select>
+        </div>
       )
     }
   }

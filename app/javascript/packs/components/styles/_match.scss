@@ -64,6 +64,10 @@
   }
 }
 
+.group-stage-match--editable {
+  cursor: pointer;
+}
+
 .group-stage-match--editable:active {
   @extend %white-box-active;
 }

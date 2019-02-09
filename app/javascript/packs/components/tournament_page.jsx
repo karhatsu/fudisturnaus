@@ -1,10 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { format, parseISO } from 'date-fns'
 
 import Loading from './loading'
+import GroupStageMatches from './group_stage_matches'
 import { addResult, formatTournamentDates } from './util/util'
-import GroupStageMatch from './group_stage_match'
 
 export default class TournamentPage extends React.PureComponent {
   static propTypes = {
@@ -52,9 +51,7 @@ export default class TournamentPage extends React.PureComponent {
           <span className="filters-title__arrow" dangerouslySetInnerHTML={{ __html: filtersArrow }}/>
         </div>
         {this.renderFilters()}
-        <div className="results">
-          {groupStageMatches.map(this.renderGroupStageMatch)}
-        </div>
+        <GroupStageMatches groupStageMatches={groupStageMatches.filter(this.isFilterMatch)}/>
       </div>
     )
   }
@@ -108,12 +105,6 @@ export default class TournamentPage extends React.PureComponent {
       && (!filters.groupId || filters.groupId === groupId)
       && (!filters.clubId || filters.clubId === homeTeam.clubId || filters.clubId === awayTeam.clubId)
       && (!filters.teamId || filters.teamId === homeTeam.id || filters.teamId === awayTeam.id)
-  }
-
-  renderGroupStageMatch = groupStageMatch => {
-    if (this.isFilterMatch(groupStageMatch)) {
-      return <GroupStageMatch key={groupStageMatch.id} editable={false} match={groupStageMatch}/>
-    }
   }
 
   componentDidMount() {

@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import Loading from './loading'
-import GroupStageMatch from './group_stage_match'
+import GroupStageMatches from './group_stage_matches'
 import { addResult } from './util/util'
 import './styles/application.scss'
 
@@ -31,22 +31,10 @@ export default class OfficialMain extends React.PureComponent {
 
   renderContent() {
     const { tournament } = this.state
-    return (
-      <div>
-        <div className="results">
-          {tournament.groupStageMatches.map(this.renderGroupStageMatch)}
-        </div>
-      </div>
-    )
-  }
-
-  renderGroupStageMatch = groupStageMatch => {
-    const { accessKey } = this.props
-    return <GroupStageMatch
-      key={groupStageMatch.id}
-      accessKey={accessKey}
+    return <GroupStageMatches
+      accessKey={this.props.accessKey}
       editable={true}
-      match={groupStageMatch}
+      groupStageMatches={tournament.groupStageMatches}
       onSave={this.onSave}
     />
   }

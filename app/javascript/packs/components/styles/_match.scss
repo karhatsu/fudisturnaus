@@ -1,6 +1,14 @@
 @import 'variables';
 @import 'shared';
 
+.group-stage-matches {
+  margin-top: 16px;
+}
+
+.match-time-row {
+  margin-top: 16px;
+}
+
 .group-stage-match {
   @extend %white-box;
 

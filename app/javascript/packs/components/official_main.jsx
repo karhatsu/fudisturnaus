@@ -1,9 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
-import Loading from './loading'
-import GroupStageMatches from './group_stage_matches'
-import { addResult } from './util/util'
+import TournamentPage from './tournament_page'
 import './styles/application.scss'
 
 export default class OfficialMain extends React.PureComponent {
@@ -20,29 +18,8 @@ export default class OfficialMain extends React.PureComponent {
   }
 
   render() {
-    const { tournament } = this.state
-    return (
-      <div>
-        <div className="title">{tournament ? tournament.name : 'fudisturnaus.com'}</div>
-        {tournament ? this.renderContent() : <Loading/>}
-      </div>
-    )
-  }
-
-  renderContent() {
-    const { tournament } = this.state
-    return <GroupStageMatches
-      accessKey={this.props.accessKey}
-      editable={true}
-      groupStageMatches={tournament.groupStageMatches}
-      onSave={this.onSave}
-    />
-  }
-
-  onSave = (groupStageMatchId, homeGoals, awayGoals) => {
-    const tournament = this.state.tournament
-    const groupStageMatches = addResult(tournament.groupStageMatches, groupStageMatchId, homeGoals, awayGoals)
-    this.setState({ tournament: { ...tournament, groupStageMatches } })
+    const { accessKey, tournamentId } = this.props
+    return <TournamentPage officialAccessKey={accessKey} tournamentId={tournamentId}/>
   }
 
   componentDidMount() {

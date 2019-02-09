@@ -7,11 +7,8 @@ import { addResult, formatTournamentDates } from './util/util'
 
 export default class TournamentPage extends React.PureComponent {
   static propTypes = {
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        id: PropTypes.string.isRequired
-      }).isRequired
-    }).isRequired
+    officialAccessKey: PropTypes.string,
+    tournamentId: PropTypes.number.isRequired,
   }
 
   constructor(props) {
@@ -40,6 +37,7 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   renderContent() {
+    const { officialAccessKey } = this.props
     const { tournament } = this.state
     const { location, startDate, endDate, groupStageMatches } = tournament
     const filtersArrow = this.state.filtersOpen ? '&#x25B2;' : '&#x25BC;'
@@ -51,7 +49,12 @@ export default class TournamentPage extends React.PureComponent {
           <span className="filters-title__arrow" dangerouslySetInnerHTML={{ __html: filtersArrow }}/>
         </div>
         {this.renderFilters()}
-        <GroupStageMatches groupStageMatches={groupStageMatches.filter(this.isFilterMatch)}/>
+        <GroupStageMatches
+          accessKey={officialAccessKey}
+          editable={!!officialAccessKey}
+          groupStageMatches={groupStageMatches.filter(this.isFilterMatch)}
+          onSave={this.onSave}
+        />
       </div>
     )
   }
@@ -111,13 +114,21 @@ export default class TournamentPage extends React.PureComponent {
       && (!filters.teamId || filters.teamId === homeTeam.id || filters.teamId === awayTeam.id)
   }
 
+  onSave = (groupStageMatchId, homeGoals, awayGoals) => {
+    const tournament = this.state.tournament
+    const groupStageMatches = addResult(tournament.groupStageMatches, groupStageMatchId, homeGoals, awayGoals)
+    this.setState({ tournament: { ...tournament, groupStageMatches } })
+  }
+
   componentDidMount() {
-    const { match: { params: { id } } } = this.props
-    fetch(`/api/v1/tournaments/${id}`)
+    const { officialAccessKey, tournamentId } = this.props
+    fetch(`/api/v1/tournaments/${tournamentId}`)
       .then(response => response.json())
       .then(tournament => this.setState({ tournament }))
       .catch(console.error) // eslint-disable-line no-console
-    this.subscribeToResultsChannel(id)
+    if (!officialAccessKey) {
+      this.subscribeToResultsChannel(tournamentId)
+    }
   }
 
   subscribeToResultsChannel = (tournamentId) => {

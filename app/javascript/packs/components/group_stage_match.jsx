@@ -50,14 +50,15 @@ export default class GroupStageMatch extends React.PureComponent {
   }
 
   renderResult = () => {
-    const { match: { homeGoals, awayGoals } } = this.props
+    const { editable, match: { homeGoals, awayGoals } } = this.props
     if (this.state.formOpen) {
       return this.renderForm()
     }
     if (homeGoals || homeGoals === 0) {
       return <span>{homeGoals} - {awayGoals}</span>
+    } else if (editable) {
+      return <span className="group-stage-match__noResult">Tulos</span>
     }
-    return <span className="group-stage-match__noResult">Tulos</span>
   }
 
   renderForm = () => {

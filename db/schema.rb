@@ -12,8 +12,11 @@
 
 ActiveRecord::Schema.define(version: 2019_02_04_171843) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "age_groups", force: :cascade do |t|
-    t.integer "tournament_id", null: false
+    t.bigint "tournament_id", null: false
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -27,7 +30,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_171843) do
   end
 
   create_table "fields", force: :cascade do |t|
-    t.integer "tournament_id", null: false
+    t.bigint "tournament_id", null: false
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -35,11 +38,11 @@ ActiveRecord::Schema.define(version: 2019_02_04_171843) do
   end
 
   create_table "group_stage_matches", force: :cascade do |t|
-    t.integer "group_id", null: false
-    t.integer "field_id", null: false
+    t.bigint "group_id", null: false
+    t.bigint "field_id", null: false
     t.datetime "start_time", null: false
-    t.integer "home_team_id", null: false
-    t.integer "away_team_id", null: false
+    t.bigint "home_team_id", null: false
+    t.bigint "away_team_id", null: false
     t.integer "home_goals"
     t.integer "away_goals"
     t.datetime "created_at", null: false
@@ -51,7 +54,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_171843) do
   end
 
   create_table "groups", force: :cascade do |t|
-    t.integer "age_group_id", null: false
+    t.bigint "age_group_id", null: false
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -59,8 +62,8 @@ ActiveRecord::Schema.define(version: 2019_02_04_171843) do
   end
 
   create_table "teams", force: :cascade do |t|
-    t.integer "club_id", null: false
-    t.integer "group_id", null: false
+    t.bigint "club_id", null: false
+    t.bigint "group_id", null: false
     t.string "name", null: false
     t.integer "group_stage_number"
     t.datetime "created_at", null: false
@@ -79,4 +82,13 @@ ActiveRecord::Schema.define(version: 2019_02_04_171843) do
     t.string "access_key"
   end
 
+  add_foreign_key "age_groups", "tournaments"
+  add_foreign_key "fields", "tournaments"
+  add_foreign_key "group_stage_matches", "fields"
+  add_foreign_key "group_stage_matches", "groups"
+  add_foreign_key "group_stage_matches", "teams", column: "away_team_id"
+  add_foreign_key "group_stage_matches", "teams", column: "home_team_id"
+  add_foreign_key "groups", "age_groups"
+  add_foreign_key "teams", "clubs"
+  add_foreign_key "teams", "groups"
 end

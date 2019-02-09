@@ -14,6 +14,8 @@ Rails.application.routes.draw do
     get ':access_key' => 'official#index'
   end
 
+  resources :tournaments, only: :show
+
   root to: 'home#index'
   get '*path', to: "home#index"
 end

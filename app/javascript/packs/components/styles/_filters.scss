@@ -16,6 +16,8 @@
 
 .filters {
   @extend %white-box;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .filters--closed {
@@ -28,5 +30,5 @@
 
 select.filter {
   color: $black;
-  margin: 4px 0;
+  margin: 4px 8px;
 }

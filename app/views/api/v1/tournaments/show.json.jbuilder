@@ -12,6 +12,6 @@ end
 
 json.age_groups @tournament.age_groups, :id, :name
 json.groups @tournament.groups, :id, :name
-json.teams @tournament.teams, :id, :name
+json.teams @tournament.teams, :id, :name, :club_id
 json.clubs @tournament.clubs, :id, :name
 json.fields @tournament.fields, :id, :name

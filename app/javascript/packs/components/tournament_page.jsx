@@ -39,7 +39,7 @@ export default class TournamentPage extends React.PureComponent {
   renderContent() {
     const { officialAccessKey } = this.props
     const { tournament } = this.state
-    const { location, startDate, endDate, groupStageMatches } = tournament
+    const { location, startDate, endDate, groupStageMatches, fields } = tournament
     const filtersArrow = this.state.filtersOpen ? '&#x25B2;' : '&#x25BC;'
     return (
       <div>
@@ -52,6 +52,7 @@ export default class TournamentPage extends React.PureComponent {
         <GroupStageMatches
           accessKey={officialAccessKey}
           editable={!!officialAccessKey}
+          fieldsCount={fields.length}
           groupStageMatches={groupStageMatches.filter(this.isFilterMatch)}
           onSave={this.onSave}
         />

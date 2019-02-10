@@ -55,6 +55,8 @@ export default class TournamentPage extends React.PureComponent {
           fieldsCount={fields.length}
           groupStageMatches={groupStageMatches.filter(this.isFilterMatch)}
           onSave={this.onSave}
+          selectedClubId={this.state.filters.clubId}
+          selectedTeamId={this.state.filters.teamId}
         />
       </div>
     )

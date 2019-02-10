@@ -9,6 +9,8 @@ export default class GroupStageMatches extends React.PureComponent {
     fieldsCount: PropTypes.number.isRequired,
     groupStageMatches: PropTypes.array.isRequired,
     onSave: PropTypes.func,
+    selectedClubId: PropTypes.number,
+    selectedTeamId: PropTypes.number,
   }
 
   static defaultProps = {
@@ -48,6 +50,8 @@ export default class GroupStageMatches extends React.PureComponent {
           editable={this.props.editable}
           match={groupStageMatch}
           onSave={this.props.onSave}
+          selectedClubId={this.props.selectedClubId}
+          selectedTeamId={this.props.selectedTeamId}
         />
       </div>
     )

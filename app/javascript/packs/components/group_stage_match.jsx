@@ -27,7 +27,9 @@ export default class GroupStageMatch extends React.PureComponent {
         name: PropTypes.string.isRequired
       }).isRequired,
     }).isRequired,
-    onSave: PropTypes.func
+    onSave: PropTypes.func,
+    selectedClubId: PropTypes.number,
+    selectedTeamId: PropTypes.number,
   }
 
   constructor(props) {
@@ -45,7 +47,11 @@ export default class GroupStageMatch extends React.PureComponent {
       <div className={rootClasses.join(' ')} onClick={this.openForm}>
         <div className="group-stage-match__row1">
           <div className="group-stage-match__matchInfo">
-            <div className="group-stage-match__teams">{homeTeam.name} - {awayTeam.name}</div>
+            <div className="group-stage-match__teams">
+              {this.renderTeam(homeTeam)}
+              <span className="group-stage-match__teams-separator">-</span>
+              {this.renderTeam(awayTeam)}
+            </div>
             <div className="group-stage-match__startTime">
               {format(parseISO(startTime), 'HH:mm')}, {field.name}, {ageGroup.name}, {group.name}
             </div>
@@ -55,6 +61,15 @@ export default class GroupStageMatch extends React.PureComponent {
         {this.state.errors.length > 0 && <div className="error group-stage-match__error">{this.state.errors.join('. ')}.</div>}
       </div>
     )
+  }
+
+  renderTeam = team => {
+    const { selectedClubId, selectedTeamId } = this.props
+    const classes = ['group-stage-match__team-name']
+    if (team.id === selectedTeamId || team.clubId === selectedClubId) {
+      classes.push('group-stage-match__team-name--selected')
+    }
+    return <span className={classes.join(' ')}>{team.name}</span>
   }
 
   renderResult = () => {

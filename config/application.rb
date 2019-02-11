@@ -6,7 +6,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-DOMAIN = 'fudisturnaus.herokuapp.com'
+DOMAIN = 'fudisturnaus.com'
 
 module Fudisturnaus
   class Application < Rails::Application

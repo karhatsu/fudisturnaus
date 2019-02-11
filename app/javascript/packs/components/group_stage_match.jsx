@@ -47,13 +47,13 @@ export default class GroupStageMatch extends React.PureComponent {
       <div className={rootClasses.join(' ')} onClick={this.openForm}>
         <div className="group-stage-match__row1">
           <div className="group-stage-match__matchInfo">
+            <div>
+              <span className="group-stage-match__startTime">{format(parseISO(startTime), 'HH:mm')}</span> {field.name}, {ageGroup.name}, {group.name}
+            </div>
             <div className="group-stage-match__teams">
               {this.renderTeam(homeTeam)}
               <span className="group-stage-match__teams-separator">-</span>
               {this.renderTeam(awayTeam)}
-            </div>
-            <div className="group-stage-match__startTime">
-              {format(parseISO(startTime), 'HH:mm')}, {field.name}, {ageGroup.name}, {group.name}
             </div>
           </div>
           <div className="group-stage-match__result">{this.renderResult()}</div>

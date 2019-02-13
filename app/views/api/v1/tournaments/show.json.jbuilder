@@ -11,7 +11,10 @@ json.group_stage_matches @tournament.group_stage_matches do |group_stage_match|
 end
 
 json.age_groups @tournament.age_groups, :id, :name
-json.groups @tournament.groups, :id, :name, :age_group_id
+json.groups @tournament.groups do |group|
+  json.(group, :id, :name, :age_group_id)
+  json.results group.results, :team_name, :matches, :wins, :draws, :losses, :goals_for, :goals_against, :points
+end
 json.teams @tournament.teams, :id, :name, :club_id
 json.clubs @tournament.clubs, :id, :name
 json.fields @tournament.fields, :id, :name

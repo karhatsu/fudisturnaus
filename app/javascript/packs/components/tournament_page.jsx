@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import Loading from './loading'
 import GroupStageMatches from './group_stage_matches'
+import GroupResults from './group_results'
 import { addResult, formatTournamentDates } from './util/util'
 
 export default class TournamentPage extends React.PureComponent {
@@ -39,7 +40,7 @@ export default class TournamentPage extends React.PureComponent {
   renderContent() {
     const { officialAccessKey } = this.props
     const { tournament } = this.state
-    const { location, startDate, endDate, groupStageMatches, fields } = tournament
+    const { location, startDate, endDate, groupStageMatches, fields, groups } = tournament
     const filtersArrow = this.state.filtersOpen ? '&#x25B2;' : '&#x25BC;'
     return (
       <div>
@@ -58,6 +59,7 @@ export default class TournamentPage extends React.PureComponent {
           selectedClubId={this.state.filters.clubId}
           selectedTeamId={this.state.filters.teamId}
         />
+        <div className="group-results row">{groups.map(group => <GroupResults group={group} groupsCount={groups.length} key={group.id}/>)}</div>
       </div>
     )
   }

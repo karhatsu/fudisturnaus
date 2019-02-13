@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import GroupStageMatch from './group_stage_match'
+import {resolveColStyles} from './util/util'
 
 export default class GroupStageMatches extends React.PureComponent {
   static propTypes = {
@@ -44,7 +45,7 @@ export default class GroupStageMatches extends React.PureComponent {
 
   renderGroupStageMatch = groupStageMatch => {
     return (
-      <div className={this.resolveColStyles()} key={groupStageMatch.id}>
+      <div className={resolveColStyles(this.props.fieldsCount)} key={groupStageMatch.id}>
         <GroupStageMatch
           accessKey={this.props.accessKey}
           editable={this.props.editable}
@@ -55,20 +56,5 @@ export default class GroupStageMatches extends React.PureComponent {
         />
       </div>
     )
-  }
-
-  resolveColStyles = () => {
-    const { fieldsCount } = this.props
-    if (fieldsCount === 1) {
-      return 'col-xs-12'
-    } else if (fieldsCount === 2) {
-      return 'col-xs-12 col-sm-6'
-    } else if (fieldsCount === 3) {
-      return 'col-xs-12 col-sm-6 col-md-4'
-    } else if (fieldsCount % 2 === 0) {
-      return 'col-xs-12 col-sm-6 col-lg-3'
-    } else {
-      return 'col-xs-12 col-sm-6 col-md-4'
-    }
   }
 }

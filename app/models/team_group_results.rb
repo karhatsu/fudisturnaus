@@ -9,12 +9,21 @@ class TeamGroupResults
     @goals_for = 0
     @goals_against = 0
     @points = 0
+    @team = team
     team.group_stage_home_matches.each do |match|
       handle_match match.home_goals, match.away_goals
     end
     team.group_stage_away_matches.each do |match|
       handle_match match.away_goals, match.home_goals
     end
+  end
+
+  def team_name
+    @team.name
+  end
+
+  def goals_difference
+    @goals_for - @goals_against
   end
 
   private

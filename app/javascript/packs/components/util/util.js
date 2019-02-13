@@ -21,3 +21,17 @@ export function formatTournamentDates(startDate, endDate) {
 export function formatDate(date) {
   return format(parseISO(date), 'dd.MM.yyyy')
 }
+
+export function resolveColStyles(count) {
+  if (count === 1) {
+    return 'col-xs-12'
+  } else if (count === 2) {
+    return 'col-xs-12 col-sm-6'
+  } else if (count === 3) {
+    return 'col-xs-12 col-sm-6 col-md-4'
+  } else if (count % 2 === 0) {
+    return 'col-xs-12 col-sm-6 col-lg-3'
+  } else {
+    return 'col-xs-12 col-sm-6 col-md-4'
+  }
+}

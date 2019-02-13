@@ -1,0 +1,20 @@
+.group-results {
+  margin-top: 32px;
+}
+
+.group-results__group {
+  @extend %white-box;
+
+  th {
+    font-weight: 600;
+  }
+
+  th, td {
+    padding: 2px 4px;
+    text-align: center;
+  }
+
+  th:first-child, td:first-child {
+    text-align: left;
+  }
+}

@@ -55,7 +55,7 @@ export default class GroupResults extends React.PureComponent {
 
   renderGroupResultRow = teamGroupResults => {
     return (
-      <tr key={teamGroupResults.teamName}>
+      <tr key={teamGroupResults.teamName} className={this.resolveTeamClasses(teamGroupResults)}>
         <td>{teamGroupResults.teamName}</td>
         <td>{teamGroupResults.matches}</td>
         <td>{teamGroupResults.wins}</td>
@@ -65,5 +65,11 @@ export default class GroupResults extends React.PureComponent {
         <td>{teamGroupResults.points}</td>
       </tr>
     )
+  }
+
+  resolveTeamClasses = teamGroupResults => {
+    const { filters } = this.props
+    const filteredTeam = teamGroupResults.clubId === filters.clubId || teamGroupResults.teamId === filters.teamId
+    return filteredTeam ? 'group-results__team--active' : ''
   }
 }

@@ -22,6 +22,14 @@ class TeamGroupResults
     @team.name
   end
 
+  def team_id
+    @team.id
+  end
+
+  def club_id
+    @team.club_id
+  end
+
   def goals_difference
     @goals_for - @goals_against
   end

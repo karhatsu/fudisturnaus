@@ -14,6 +14,9 @@ json.age_groups @tournament.age_groups, :id, :name
 json.groups @tournament.groups do |group|
   json.(group, :id, :name, :age_group_id)
   json.results group.results, :team_name, :matches, :wins, :draws, :losses, :goals_for, :goals_against, :points
+  json.teams group.teams do |team|
+    json.(team, :id, :club_id)
+  end
 end
 json.teams @tournament.teams, :id, :name, :club_id
 json.clubs @tournament.clubs, :id, :name

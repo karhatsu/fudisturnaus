@@ -59,7 +59,7 @@ export default class TournamentPage extends React.PureComponent {
           selectedClubId={this.state.filters.clubId}
           selectedTeamId={this.state.filters.teamId}
         />
-        <div className="group-results row">{groups.map(group => <GroupResults group={group} groupsCount={groups.length} key={group.id}/>)}</div>
+        <div className="group-results row">{groups.map(this.renderGroup)}</div>
       </div>
     )
   }
@@ -121,6 +121,11 @@ export default class TournamentPage extends React.PureComponent {
     const tournament = this.state.tournament
     const groupStageMatches = addResult(tournament.groupStageMatches, groupStageMatchId, homeGoals, awayGoals)
     this.setState({ tournament: { ...tournament, groupStageMatches } })
+  }
+
+  renderGroup = group => {
+    const { filters, tournament: { groups } } = this.state
+    return <GroupResults filters={filters} group={group} groupsCount={groups.length} key={group.id}/>
   }
 
   componentDidMount() {

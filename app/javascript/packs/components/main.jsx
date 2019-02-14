@@ -19,6 +19,9 @@ export default class Main extends React.PureComponent {
 
 class TournamentPageWrapper extends React.PureComponent {
   static propTypes = {
+    location: PropTypes.shape({
+      search: PropTypes.string,
+    }).isRequired,
     match: PropTypes.shape({
       params: PropTypes.shape({
         id: PropTypes.string.isRequired
@@ -27,8 +30,8 @@ class TournamentPageWrapper extends React.PureComponent {
   }
 
   render() {
-    const { match: { params: { id } } } = this.props
-    return <TournamentPage tournamentId={parseInt(id)}/>
+    const { location: { search }, match: { params: { id } } } = this.props
+    return <TournamentPage tournamentId={parseInt(id)} showGroupTables={search === '?t=1'}/>
   }
 }
 

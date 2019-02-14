@@ -9,6 +9,7 @@ import { addResult, formatTournamentDates } from './util/util'
 export default class TournamentPage extends React.PureComponent {
   static propTypes = {
     officialAccessKey: PropTypes.string,
+    showGroupTables: PropTypes.bool,
     tournamentId: PropTypes.number.isRequired,
   }
 
@@ -38,10 +39,10 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   renderContent() {
-    const { officialAccessKey } = this.props
-    const { tournament } = this.state
+    const { officialAccessKey, showGroupTables } = this.props
+    const { filters, filtersOpen, tournament } = this.state
     const { location, startDate, endDate, groupStageMatches, fields, groups } = tournament
-    const filtersArrow = this.state.filtersOpen ? '&#x25B2;' : '&#x25BC;'
+    const filtersArrow = filtersOpen ? '&#x25B2;' : '&#x25BC;'
     return (
       <div>
         <div className="sub-title">{location}, {formatTournamentDates(startDate, endDate)}</div>
@@ -56,10 +57,10 @@ export default class TournamentPage extends React.PureComponent {
           fieldsCount={fields.length}
           groupStageMatches={groupStageMatches.filter(this.isFilterMatch)}
           onSave={this.onSave}
-          selectedClubId={this.state.filters.clubId}
-          selectedTeamId={this.state.filters.teamId}
+          selectedClubId={filters.clubId}
+          selectedTeamId={filters.teamId}
         />
-        <div className="group-results row">{groups.map(this.renderGroup)}</div>
+        {showGroupTables && <div className="group-results row">{groups.map(this.renderGroup)}</div>}
       </div>
     )
   }
@@ -121,6 +122,10 @@ export default class TournamentPage extends React.PureComponent {
     const tournament = this.state.tournament
     const groupStageMatches = addResult(tournament.groupStageMatches, groupStageMatchId, homeGoals, awayGoals)
     this.setState({ tournament: { ...tournament, groupStageMatches } })
+  }
+
+  showGroupResults = () => {
+    return true
   }
 
   renderGroup = group => {

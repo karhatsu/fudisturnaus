@@ -22,11 +22,26 @@ class Api::V1::Official::GroupStageMatchesController < Api::V1::Official::Offici
   end
 
   def broadcast_result
+    group_results = @match.group.results
     ActionCable.server.broadcast(
         "results#{@tournament.id}",
         groupStageMatchId: @match.id,
         homeGoals: @match.home_goals,
-        awayGoals: @match.away_goals
+        awayGoals: @match.away_goals,
+        groupId: @match.group_id,
+        groupResults: group_results.map do |result|
+          {
+              teamName: result.team_name,
+              teamId: result.team_id,
+              matches: result.matches,
+              wins: result.wins,
+              draws: result.draws,
+              losses: result.losses,
+              goalsFor: result.goals_for,
+              goalsAgainst: result.goals_against,
+              points: result.points
+          }
+        end
     )
   end
 end

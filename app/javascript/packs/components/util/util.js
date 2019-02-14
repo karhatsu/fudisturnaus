@@ -10,6 +10,16 @@ export function addResult(matches, matchId, homeGoals, awayGoals) {
   return matchesWithResult
 }
 
+export function updateGroupResults(groups, groupId, groupResults) {
+  const updatedGroups = [...groups]
+  const groupIndex = updatedGroups.findIndex(group => group.id === groupId)
+  if (groupIndex !== -1) {
+    const group = { ...updatedGroups[groupIndex], results: groupResults }
+    updatedGroups.splice(groupIndex, 1, group)
+  }
+  return updatedGroups
+}
+
 export function formatTournamentDates(startDate, endDate) {
   const dates = [formatDate(startDate)]
   if (startDate !== endDate) {

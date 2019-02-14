@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Loading from './loading'
 import GroupStageMatches from './group_stage_matches'
 import GroupResults from './group_results'
-import { addResult, formatTournamentDates } from './util/util'
+import {addResult, formatTournamentDates, updateGroupResults} from './util/util'
 
 export default class TournamentPage extends React.PureComponent {
   static propTypes = {
@@ -152,9 +152,10 @@ export default class TournamentPage extends React.PureComponent {
     }, {
       received: data => {
         const tournament = this.state.tournament
-        const { groupStageMatchId, homeGoals, awayGoals } = data
+        const { groupStageMatchId, homeGoals, awayGoals, groupId, groupResults } = data
         const groupStageMatches = addResult(tournament.groupStageMatches, groupStageMatchId, homeGoals, awayGoals)
-        this.setState({ tournament: { ...tournament, groupStageMatches } })
+        const groups = updateGroupResults(tournament.groups, groupId, groupResults)
+        this.setState({ tournament: { ...tournament, groupStageMatches, groups } })
       }
     })
   }

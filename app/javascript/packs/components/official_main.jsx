@@ -10,24 +10,9 @@ export default class OfficialMain extends React.PureComponent {
     tournamentId: PropTypes.number.isRequired,
   }
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      tournament: undefined,
-    }
-  }
-
   render() {
     const { accessKey, tournamentId } = this.props
     return <TournamentPage officialAccessKey={accessKey} tournamentId={tournamentId}/>
-  }
-
-  componentDidMount() {
-    const { tournamentId } = this.props
-    fetch(`/api/v1/tournaments/${tournamentId}`)
-      .then(response => response.json())
-      .then(tournament => this.setState({ tournament }))
-      .catch(console.error) // eslint-disable-line no-console
   }
 }
 

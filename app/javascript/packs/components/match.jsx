@@ -49,7 +49,10 @@ export default class Match extends React.PureComponent {
         <div className="match__row1">
           <div className="match__matchInfo">
             {this.renderMatchInfo(startTime, field, ageGroup, group)}
-            {this.renderTeams(homeTeam, awayTeam, title)}
+            <div className="match__teams">
+              {this.renderPlayoffMatchTitle(homeTeam, awayTeam, title)}
+              {this.renderTeams(homeTeam, awayTeam)}
+            </div>
           </div>
           <div className="match__result">{this.renderResult()}</div>
         </div>
@@ -67,20 +70,27 @@ export default class Match extends React.PureComponent {
     )
   }
 
-  renderTeams = (homeTeam, awayTeam, title) => {
-    if (homeTeam && awayTeam) {
+  renderPlayoffMatchTitle = (homeTeam, awayTeam, title) => {
+    if (title) {
+      const text = homeTeam || awayTeam ? `${title}:` : title
+      return <span className="match__playoff-title">{text}</span>
+    }
+  }
+
+  renderTeams = (homeTeam, awayTeam) => {
+    if (homeTeam || awayTeam) {
       return (
-        <div className="match__teams">
+        <React.Fragment>
           {this.renderTeam(homeTeam)}
           <span className="match__teams-separator">-</span>
           {this.renderTeam(awayTeam)}
-        </div>
+        </React.Fragment>
       )
     }
-    return <div className="match__teams">{title}</div>
   }
 
   renderTeam = team => {
+    if (!team) return <span className="match__team-name">?</span>
     const { selectedClubId, selectedTeamId } = this.props
     const classes = ['match__team-name']
     if (team.id === selectedTeamId || team.clubId === selectedClubId) {

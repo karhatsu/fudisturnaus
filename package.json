@@ -2,7 +2,7 @@
   "name": "fudisturnaus",
   "private": true,
   "scripts": {
-    "lint": "./node_modules/.bin/eslint app/javascript"
+    "lint": "./node_modules/.bin/eslint app/javascript --ext jsx"
   },
   "dependencies": {
     "@rails/webpacker": "3.5",

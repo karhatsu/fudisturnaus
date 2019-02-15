@@ -124,10 +124,6 @@ export default class TournamentPage extends React.PureComponent {
     this.setState({ tournament: { ...tournament, groupStageMatches } })
   }
 
-  showGroupResults = () => {
-    return true
-  }
-
   renderGroup = group => {
     const { filters, tournament: { groups } } = this.state
     return <GroupResults filters={filters} group={group} groupsCount={groups.length} key={group.id}/>

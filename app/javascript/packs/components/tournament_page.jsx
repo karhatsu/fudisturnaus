@@ -22,9 +22,9 @@ export default class TournamentPage extends React.PureComponent {
         clubId: null,
         fieldId: null,
         groupId: null,
-        teamId: null
+        teamId: null,
       },
-      tournament: undefined
+      tournament: undefined,
     }
   }
 
@@ -148,7 +148,7 @@ export default class TournamentPage extends React.PureComponent {
     // eslint-disable-next-line no-undef
     App.cable.subscriptions.create({
       channel: 'ResultsChannel',
-      tournament_id: tournamentId
+      tournament_id: tournamentId,
     }, {
       received: data => {
         const tournament = this.state.tournament
@@ -156,7 +156,7 @@ export default class TournamentPage extends React.PureComponent {
         const groupStageMatches = addResult(tournament.groupStageMatches, groupStageMatchId, homeGoals, awayGoals)
         const groups = updateGroupResults(tournament.groups, groupId, groupResults)
         this.setState({ tournament: { ...tournament, groupStageMatches, groups } })
-      }
+      },
     })
   }
 }

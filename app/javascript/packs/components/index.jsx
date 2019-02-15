@@ -9,7 +9,7 @@ export default class Main extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      tournaments: undefined
+      tournaments: undefined,
     }
   }
 

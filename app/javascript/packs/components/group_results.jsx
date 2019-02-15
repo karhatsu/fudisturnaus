@@ -7,7 +7,7 @@ export default class GroupResults extends React.PureComponent {
     filters: PropTypes.object.isRequired,
     group: PropTypes.shape({
       results: PropTypes.arrayOf(PropTypes.shape({
-        teamName: PropTypes.string.isRequired
+        teamName: PropTypes.string.isRequired,
       })).isRequired,
     }).isRequired,
     groupsCount: PropTypes.number.isRequired,

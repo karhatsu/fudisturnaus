@@ -15,7 +15,7 @@ export default class GroupStageMatches extends React.PureComponent {
   }
 
   static defaultProps = {
-    editable: false
+    editable: false,
   }
 
   render() {

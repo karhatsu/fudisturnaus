@@ -34,7 +34,11 @@
         "semi": [
             "error",
             "never"
-        ]
+        ],
+        "comma-dangle": ["warn", {
+            "objects": "always-multiline",
+            "functions": "ignore"
+        }]
     },
     "settings": {
         "react": {

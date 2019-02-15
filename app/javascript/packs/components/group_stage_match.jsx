@@ -10,21 +10,21 @@ export default class GroupStageMatch extends React.PureComponent {
       id: PropTypes.number.isRequired,
       startTime: PropTypes.string.isRequired,
       field: PropTypes.shape({
-        name: PropTypes.string.isRequired
+        name: PropTypes.string.isRequired,
       }).isRequired,
       homeTeam: PropTypes.shape({
-        name: PropTypes.string.isRequired
+        name: PropTypes.string.isRequired,
       }).isRequired,
       awayTeam: PropTypes.shape({
-        name: PropTypes.string.isRequired
+        name: PropTypes.string.isRequired,
       }).isRequired,
       homeGoals: PropTypes.number,
       awayGoals: PropTypes.number,
       ageGroup: PropTypes.shape({
-        name: PropTypes.string.isRequired
+        name: PropTypes.string.isRequired,
       }).isRequired,
       group: PropTypes.shape({
-        name: PropTypes.string.isRequired
+        name: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired,
     onSave: PropTypes.func,
@@ -130,14 +130,14 @@ export default class GroupStageMatch extends React.PureComponent {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'X-Access-Key': accessKey
+        'X-Access-Key': accessKey,
       },
       body: JSON.stringify({
         group_stage_match: {
           home_goals: homeGoals,
-          away_goals: awayGoals
-        }
-      })
+          away_goals: awayGoals,
+        },
+      }),
     })
       .then(response => {
         if (response.ok) {

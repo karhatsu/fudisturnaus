@@ -7,13 +7,13 @@ import './styles/application.scss'
 export default class OfficialMain extends React.PureComponent {
   static propTypes = {
     accessKey: PropTypes.string.isRequired,
-    tournamentId: PropTypes.number.isRequired
+    tournamentId: PropTypes.number.isRequired,
   }
 
   constructor(props) {
     super(props)
     this.state = {
-      tournament: undefined
+      tournament: undefined,
     }
   }
 

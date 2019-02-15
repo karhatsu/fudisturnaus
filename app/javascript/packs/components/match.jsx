@@ -61,7 +61,7 @@ export default class Match extends React.PureComponent {
   renderMatchInfo = (startTime, field, ageGroup, group) => {
     return (
       <div>
-        <span className="match__startTime">{format(parseISO(startTime), 'HH:mm')}</span>
+        <span className="match__start-time">{format(parseISO(startTime), 'HH:mm')}</span>
         {field.name}, {ageGroup.name}{group ? `, ${group.name}` : ''}
       </div>
     )
@@ -97,14 +97,14 @@ export default class Match extends React.PureComponent {
     if (homeGoals || homeGoals === 0) {
       return <span>{homeGoals} - {awayGoals}</span>
     } else if (editable) {
-      return <span className="match__noResult">Tulos</span>
+      return <span className="match__no-result">Tulos</span>
     }
   }
 
   renderForm = () => {
     return (
       <div>
-        <div className="match__resultFields">
+        <div className="match__result-fields">
           {this.renderGoalsField('homeGoals')}
           <span className="goals-separator">-</span>
           {this.renderGoalsField('awayGoals')}

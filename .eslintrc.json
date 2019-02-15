@@ -38,7 +38,9 @@
         "comma-dangle": ["warn", {
             "objects": "always-multiline",
             "functions": "ignore"
-        }]
+        }],
+        "no-trailing-spaces": 1,
+        "max-len": [1, { "code": 150 }]
     },
     "settings": {
         "react": {

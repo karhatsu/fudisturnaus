@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_04_171843) do
+ActiveRecord::Schema.define(version: 2019_02_15_080327) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,32 @@ ActiveRecord::Schema.define(version: 2019_02_04_171843) do
     t.index ["age_group_id"], name: "index_groups_on_age_group_id"
   end
 
+  create_table "playoff_matches", force: :cascade do |t|
+    t.bigint "age_group_id", null: false
+    t.bigint "field_id", null: false
+    t.string "home_team_origin_type", null: false
+    t.bigint "home_team_origin_id", null: false
+    t.string "away_team_origin_type", null: false
+    t.bigint "away_team_origin_id", null: false
+    t.integer "home_team_origin_rule", null: false
+    t.integer "away_team_origin_rule", null: false
+    t.bigint "home_team_id"
+    t.bigint "away_team_id"
+    t.datetime "start_time", null: false
+    t.string "title", null: false
+    t.integer "home_goals"
+    t.integer "away_goals"
+    t.boolean "penalties", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["age_group_id"], name: "index_playoff_matches_on_age_group_id"
+    t.index ["away_team_id"], name: "index_playoff_matches_on_away_team_id"
+    t.index ["away_team_origin_type", "away_team_origin_id"], name: "index_playoff_matches_on_away_team_origin"
+    t.index ["field_id"], name: "index_playoff_matches_on_field_id"
+    t.index ["home_team_id"], name: "index_playoff_matches_on_home_team_id"
+    t.index ["home_team_origin_type", "home_team_origin_id"], name: "index_playoff_matches_on_home_team_origin"
+  end
+
   create_table "teams", force: :cascade do |t|
     t.bigint "club_id", null: false
     t.bigint "group_id", null: false
@@ -89,6 +115,9 @@ ActiveRecord::Schema.define(version: 2019_02_04_171843) do
   add_foreign_key "group_stage_matches", "teams", column: "away_team_id"
   add_foreign_key "group_stage_matches", "teams", column: "home_team_id"
   add_foreign_key "groups", "age_groups"
+  add_foreign_key "playoff_matches", "fields"
+  add_foreign_key "playoff_matches", "teams", column: "away_team_id"
+  add_foreign_key "playoff_matches", "teams", column: "home_team_id"
   add_foreign_key "teams", "clubs"
   add_foreign_key "teams", "groups"
 end

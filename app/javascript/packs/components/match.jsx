@@ -40,20 +40,20 @@ export default class Match extends React.PureComponent {
 
   render() {
     const { editable, match: { startTime, field, homeTeam, awayTeam, title, ageGroup, group } } = this.props
-    const rootClasses = ['group-stage-match']
+    const rootClasses = ['match']
     if (editable) {
-      rootClasses.push('group-stage-match--editable')
+      rootClasses.push('match--editable')
     }
     return (
       <div className={rootClasses.join(' ')} onClick={this.openForm}>
-        <div className="group-stage-match__row1">
-          <div className="group-stage-match__matchInfo">
+        <div className="match__row1">
+          <div className="match__matchInfo">
             {this.renderMatchInfo(startTime, field, ageGroup, group)}
             {this.renderTeams(homeTeam, awayTeam, title)}
           </div>
-          <div className="group-stage-match__result">{this.renderResult()}</div>
+          <div className="match__result">{this.renderResult()}</div>
         </div>
-        {this.state.errors.length > 0 && <div className="error group-stage-match__error">{this.state.errors.join('. ')}.</div>}
+        {this.state.errors.length > 0 && <div className="error match__error">{this.state.errors.join('. ')}.</div>}
       </div>
     )
   }
@@ -61,7 +61,7 @@ export default class Match extends React.PureComponent {
   renderMatchInfo = (startTime, field, ageGroup, group) => {
     return (
       <div>
-        <span className="group-stage-match__startTime">{format(parseISO(startTime), 'HH:mm')}</span>
+        <span className="match__startTime">{format(parseISO(startTime), 'HH:mm')}</span>
         {field.name}, {ageGroup.name}{group ? `, ${group.name}` : ''}
       </div>
     )
@@ -70,21 +70,21 @@ export default class Match extends React.PureComponent {
   renderTeams = (homeTeam, awayTeam, title) => {
     if (homeTeam && awayTeam) {
       return (
-        <div className="group-stage-match__teams">
+        <div className="match__teams">
           {this.renderTeam(homeTeam)}
-          <span className="group-stage-match__teams-separator">-</span>
+          <span className="match__teams-separator">-</span>
           {this.renderTeam(awayTeam)}
         </div>
       )
     }
-    return <div className="group-stage-match__teams">{title}</div>
+    return <div className="match__teams">{title}</div>
   }
 
   renderTeam = team => {
     const { selectedClubId, selectedTeamId } = this.props
-    const classes = ['group-stage-match__team-name']
+    const classes = ['match__team-name']
     if (team.id === selectedTeamId || team.clubId === selectedClubId) {
-      classes.push('group-stage-match__team-name--selected')
+      classes.push('match__team-name--selected')
     }
     return <span className={classes.join(' ')}>{team.name}</span>
   }
@@ -97,21 +97,21 @@ export default class Match extends React.PureComponent {
     if (homeGoals || homeGoals === 0) {
       return <span>{homeGoals} - {awayGoals}</span>
     } else if (editable) {
-      return <span className="group-stage-match__noResult">Tulos</span>
+      return <span className="match__noResult">Tulos</span>
     }
   }
 
   renderForm = () => {
     return (
       <div>
-        <div className="group-stage-match__resultFields">
+        <div className="match__resultFields">
           {this.renderGoalsField('homeGoals')}
           <span className="goals-separator">-</span>
           {this.renderGoalsField('awayGoals')}
         </div>
-        <div className="group-stage-match__buttons">
-          <input type="button" value="&#x2705;" onClick={this.saveResult} className="group-stage-match__button"/>
-          <input type="button" value="&#x274C;" onClick={this.cancel} className="group-stage-match__button"/>
+        <div className="match__buttons">
+          <input type="button" value="&#x2705;" onClick={this.saveResult} className="match__button"/>
+          <input type="button" value="&#x274C;" onClick={this.cancel} className="match__button"/>
         </div>
       </div>
     )

@@ -1,7 +1,7 @@
 @import 'variables';
 @import 'shared';
 
-.group-stage-matches {
+.matches {
   margin-top: 16px;
 }
 
@@ -9,43 +9,43 @@
   margin-top: 16px;
 }
 
-.group-stage-match {
+.match {
   @extend %white-box;
 
-  .group-stage-match--editable {
+  .match--editable {
     cursor: pointer;
   }
 
-  .group-stage-match__row1 {
+  .match__row1 {
     display: flex;
     flex-direction: row;
   }
 
-  .group-stage-match__matchInfo {
+  .match__matchInfo {
     flex-grow: 1;
   }
 
-  .group-stage-match__teams {
+  .match__teams {
     font-size: 16px;
     font-weight: 600;
     margin-top: 4px;
   }
 
-  .group-stage-match__teams-separator {
+  .match__teams-separator {
     margin: 0 4px;
   }
 
-  .group-stage-match__team-name--selected {
+  .match__team-name--selected {
     color: $green;
   }
 
-  .group-stage-match__startTime {
+  .match__startTime {
     color: $green;
     font-weight: 600;
     margin-right: 4px;
   }
 
-  .group-stage-match__result {
+  .match__result {
     color: $green;
     font-size: 16px;
     font-weight: 600;
@@ -55,20 +55,20 @@
     white-space: nowrap;
   }
 
-  .group-stage-match__noResult {
+  .match__noResult {
     color: $red;
   }
 
-  .group-stage-match__resultFields {
+  .match__resultFields {
     text-align: right;
   }
 
-  .group-stage-match__buttons {
+  .match__buttons {
     margin-top: 4px;
     text-align: right;
   }
 
-  .group-stage-match__button {
+  .match__button {
     background-color: transparent;
     border: none;
     cursor: pointer;
@@ -78,16 +78,16 @@
     outline: none;
   }
 
-  .group-stage-match__error {
+  .match__error {
     font-weight: 600;
   }
 }
 
-.group-stage-match--editable {
+.match--editable {
   cursor: pointer;
 }
 
-.group-stage-match--editable:active {
+.match--editable:active {
   @extend %white-box-active;
 }
 

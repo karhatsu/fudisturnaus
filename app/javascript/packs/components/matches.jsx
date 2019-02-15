@@ -21,7 +21,7 @@ export default class Matches extends React.PureComponent {
   render() {
     const matchesByDate = this.groupByDate()
     return (
-      <div className="group-stage-matches">
+      <div className="matches">
         {Object.keys(matchesByDate).map(date => this.renderDate(matchesByDate, date))}
       </div>
     )

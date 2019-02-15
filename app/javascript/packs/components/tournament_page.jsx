@@ -58,9 +58,10 @@ export default class TournamentPage extends React.PureComponent {
           <span className="filters-title__arrow" dangerouslySetInnerHTML={{ __html: filtersArrow }}/>
         </div>
         {this.renderFilters()}
-        {this.renderMatches(groupStageMatches)}
+        {this.renderMatches(groupStageMatches, 'Alkulohkojen ottelut', playoffMatches.length)}
+        {showGroupTables && <div className="result-section-title">Sarjataulukot</div>}
         {showGroupTables && <div className="group-results row">{groups.map(this.renderGroup)}</div>}
-        {this.renderMatches(playoffMatches)}
+        {this.renderMatches(playoffMatches, 'Jatko-ottelut', playoffMatches.length)}
       </div>
     )
   }
@@ -108,19 +109,22 @@ export default class TournamentPage extends React.PureComponent {
     }
   }
 
-  renderMatches = matches => {
+  renderMatches = (matches, title, showTitle) => {
     const { officialAccessKey } = this.props
     const { filters, tournament: { fields } } = this.state
     return (
-      <Matches
-        accessKey={officialAccessKey}
-        editable={!!officialAccessKey}
-        fieldsCount={fields.length}
-        matches={matches.filter(this.isFilterMatch)}
-        onSave={this.onSave}
-        selectedClubId={filters.clubId}
-        selectedTeamId={filters.teamId}
-      />
+      <div>
+        {showTitle && <div className="result-section-title">{title}</div>}
+        <Matches
+          accessKey={officialAccessKey}
+          editable={!!officialAccessKey}
+          fieldsCount={fields.length}
+          matches={matches.filter(this.isFilterMatch)}
+          onSave={this.onSave}
+          selectedClubId={filters.clubId}
+          selectedTeamId={filters.teamId}
+        />
+      </div>
     )
   }
 

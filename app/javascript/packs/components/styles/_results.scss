@@ -1,8 +1,14 @@
 @import 'variables';
 @import 'shared';
 
-.group-results {
+.result-section-title {
+  font-size: 18px;
+  font-weight: 600;
   margin-top: 32px;
+}
+
+.group-results {
+  margin-top: 16px;
 }
 
 .group-results__group {

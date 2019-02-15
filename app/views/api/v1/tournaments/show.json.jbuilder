@@ -10,6 +10,19 @@ json.group_stage_matches @tournament.group_stage_matches do |group_stage_match|
   json.away_team group_stage_match.away_team, :id, :name, :club_id
 end
 
+json.playoff_matches @tournament.playoff_matches do |playoff_match|
+  json.(playoff_match, :id, :age_group_id, :field_id, :title, :start_time, :home_goals, :away_goals)
+
+  json.age_group playoff_match.age_group, :name
+  json.field playoff_match.field, :name
+  if playoff_match.home_team
+    json.home_team playoff_match.home_team, :id, :name, :club_id
+  end
+  if playoff_match.away_team
+    json.away_team playoff_match.away_team, :id, :name, :club_id
+  end
+end
+
 json.age_groups @tournament.age_groups, :id, :name
 json.groups @tournament.groups do |group|
   json.(group, :id, :name, :age_group_id)

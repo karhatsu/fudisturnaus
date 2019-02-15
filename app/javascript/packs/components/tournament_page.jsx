@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import Loading from './loading'
-import GroupStageMatches from './group_stage_matches'
+import Matches from './matches'
 import GroupResults from './group_results'
 import {addResult, formatTournamentDates, updateGroupResults} from './util/util'
 
@@ -40,15 +40,15 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   renderContent() {
-    const { error, filters, filtersOpen, tournament } = this.state
+    const { error, filtersOpen, tournament } = this.state
     if (error) {
       return <div className="message message--error">Virhe haettaessa turnauksen tietoja. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.</div>
     }
     if (!tournament) {
       return <Loading/>
     }
-    const { officialAccessKey, showGroupTables } = this.props
-    const { location, startDate, endDate, groupStageMatches, fields, groups } = tournament
+    const { showGroupTables } = this.props
+    const { location, startDate, endDate, groupStageMatches, groups, playoffMatches } = tournament
     const filtersArrow = filtersOpen ? '&#x25B2;' : '&#x25BC;'
     return (
       <div>
@@ -58,16 +58,9 @@ export default class TournamentPage extends React.PureComponent {
           <span className="filters-title__arrow" dangerouslySetInnerHTML={{ __html: filtersArrow }}/>
         </div>
         {this.renderFilters()}
-        <GroupStageMatches
-          accessKey={officialAccessKey}
-          editable={!!officialAccessKey}
-          fieldsCount={fields.length}
-          groupStageMatches={groupStageMatches.filter(this.isFilterMatch)}
-          onSave={this.onSave}
-          selectedClubId={filters.clubId}
-          selectedTeamId={filters.teamId}
-        />
+        {this.renderMatches(groupStageMatches)}
         {showGroupTables && <div className="group-results row">{groups.map(this.renderGroup)}</div>}
+        {this.renderMatches(playoffMatches)}
       </div>
     )
   }
@@ -115,14 +108,30 @@ export default class TournamentPage extends React.PureComponent {
     }
   }
 
-  isFilterMatch = groupStageMatch => {
+  renderMatches = matches => {
+    const { officialAccessKey } = this.props
+    const { filters, tournament: { fields } } = this.state
+    return (
+      <Matches
+        accessKey={officialAccessKey}
+        editable={!!officialAccessKey}
+        fieldsCount={fields.length}
+        matches={matches.filter(this.isFilterMatch)}
+        onSave={this.onSave}
+        selectedClubId={filters.clubId}
+        selectedTeamId={filters.teamId}
+      />
+    )
+  }
+
+  isFilterMatch = match => {
     const { filters } = this.state
-    const { ageGroupId, fieldId, groupId, homeTeam, awayTeam } = groupStageMatch
+    const { ageGroupId, fieldId, groupId, homeTeam, awayTeam } = match
     return (!filters.ageGroupId || filters.ageGroupId === ageGroupId)
       && (!filters.fieldId || filters.fieldId === fieldId)
       && (!filters.groupId || filters.groupId === groupId)
-      && (!filters.clubId || filters.clubId === homeTeam.clubId || filters.clubId === awayTeam.clubId)
-      && (!filters.teamId || filters.teamId === homeTeam.id || filters.teamId === awayTeam.id)
+      && (!filters.clubId || (homeTeam && filters.clubId === homeTeam.clubId) || (awayTeam && filters.clubId === awayTeam.clubId))
+      && (!filters.teamId || (homeTeam && filters.teamId === homeTeam.id) || (awayTeam && filters.teamId === awayTeam.id))
   }
 
   onSave = (groupStageMatchId, homeGoals, awayGoals) => {

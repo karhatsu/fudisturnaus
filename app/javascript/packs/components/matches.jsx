@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import GroupStageMatch from './group_stage_match'
+import Match from './match'
 import {resolveColStyles} from './util/util'
 
-export default class GroupStageMatches extends React.PureComponent {
+export default class Matches extends React.PureComponent {
   static propTypes = {
     accessKey: PropTypes.string,
     editable: PropTypes.bool,
     fieldsCount: PropTypes.number.isRequired,
-    groupStageMatches: PropTypes.array.isRequired,
+    matches: PropTypes.array.isRequired,
     onSave: PropTypes.func,
     selectedClubId: PropTypes.number,
     selectedTeamId: PropTypes.number,
@@ -28,7 +28,7 @@ export default class GroupStageMatches extends React.PureComponent {
   }
 
   groupByDate = () => {
-    return this.props.groupStageMatches.reduce((matches, match) => {
+    return this.props.matches.reduce((matches, match) => {
       matches[match.startTime] = matches[match.startTime] || []
       matches[match.startTime].push(match)
       return matches
@@ -38,18 +38,18 @@ export default class GroupStageMatches extends React.PureComponent {
   renderDate = (matchesByDate, date) => {
     return (
       <div className="row match-time-row" key={date}>
-        {matchesByDate[date].map(this.renderGroupStageMatch)}
+        {matchesByDate[date].map(this.renderMatch)}
       </div>
     )
   }
 
-  renderGroupStageMatch = groupStageMatch => {
+  renderMatch = match => {
     return (
-      <div className={resolveColStyles(this.props.fieldsCount)} key={groupStageMatch.id}>
-        <GroupStageMatch
+      <div className={resolveColStyles(this.props.fieldsCount)} key={match.id}>
+        <Match
           accessKey={this.props.accessKey}
           editable={this.props.editable}
-          match={groupStageMatch}
+          match={match}
           onSave={this.props.onSave}
           selectedClubId={this.props.selectedClubId}
           selectedTeamId={this.props.selectedTeamId}

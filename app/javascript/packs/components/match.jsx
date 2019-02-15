@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { format, parseISO } from 'date-fns'
 
-export default class GroupStageMatch extends React.PureComponent {
+export default class Match extends React.PureComponent {
   static propTypes = {
     accessKey: PropTypes.string,
     editable: PropTypes.bool.isRequired,
@@ -12,12 +12,13 @@ export default class GroupStageMatch extends React.PureComponent {
       field: PropTypes.shape({
         name: PropTypes.string.isRequired,
       }).isRequired,
+      title: PropTypes.string,
       homeTeam: PropTypes.shape({
         name: PropTypes.string.isRequired,
-      }).isRequired,
+      }),
       awayTeam: PropTypes.shape({
         name: PropTypes.string.isRequired,
-      }).isRequired,
+      }),
       homeGoals: PropTypes.number,
       awayGoals: PropTypes.number,
       ageGroup: PropTypes.shape({
@@ -25,7 +26,7 @@ export default class GroupStageMatch extends React.PureComponent {
       }).isRequired,
       group: PropTypes.shape({
         name: PropTypes.string.isRequired,
-      }).isRequired,
+      }),
     }).isRequired,
     onSave: PropTypes.func,
     selectedClubId: PropTypes.number,
@@ -38,7 +39,7 @@ export default class GroupStageMatch extends React.PureComponent {
   }
 
   render() {
-    const { editable, match: { startTime, field, homeTeam, awayTeam, ageGroup, group } } = this.props
+    const { editable, match: { startTime, field, homeTeam, awayTeam, title, ageGroup, group } } = this.props
     const rootClasses = ['group-stage-match']
     if (editable) {
       rootClasses.push('group-stage-match--editable')
@@ -47,20 +48,36 @@ export default class GroupStageMatch extends React.PureComponent {
       <div className={rootClasses.join(' ')} onClick={this.openForm}>
         <div className="group-stage-match__row1">
           <div className="group-stage-match__matchInfo">
-            <div>
-              <span className="group-stage-match__startTime">{format(parseISO(startTime), 'HH:mm')}</span> {field.name}, {ageGroup.name}, {group.name}
-            </div>
-            <div className="group-stage-match__teams">
-              {this.renderTeam(homeTeam)}
-              <span className="group-stage-match__teams-separator">-</span>
-              {this.renderTeam(awayTeam)}
-            </div>
+            {this.renderMatchInfo(startTime, field, ageGroup, group)}
+            {this.renderTeams(homeTeam, awayTeam, title)}
           </div>
           <div className="group-stage-match__result">{this.renderResult()}</div>
         </div>
         {this.state.errors.length > 0 && <div className="error group-stage-match__error">{this.state.errors.join('. ')}.</div>}
       </div>
     )
+  }
+
+  renderMatchInfo = (startTime, field, ageGroup, group) => {
+    return (
+      <div>
+        <span className="group-stage-match__startTime">{format(parseISO(startTime), 'HH:mm')}</span>
+        {field.name}, {ageGroup.name}{group ? `, ${group.name}` : ''}
+      </div>
+    )
+  }
+
+  renderTeams = (homeTeam, awayTeam, title) => {
+    if (homeTeam && awayTeam) {
+      return (
+        <div className="group-stage-match__teams">
+          {this.renderTeam(homeTeam)}
+          <span className="group-stage-match__teams-separator">-</span>
+          {this.renderTeam(awayTeam)}
+        </div>
+      )
+    }
+    return <div className="group-stage-match__teams">{title}</div>
   }
 
   renderTeam = team => {

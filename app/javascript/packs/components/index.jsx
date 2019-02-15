@@ -9,6 +9,7 @@ export default class Main extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
+      error: false,
       tournaments: undefined,
     }
   }
@@ -23,7 +24,10 @@ export default class Main extends React.PureComponent {
   }
 
   renderContent() {
-    const { tournaments } = this.state
+    const { error, tournaments } = this.state
+    if (error) {
+      return <div className="message message--error">Virhe haettaessa turnauksia. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.</div>
+    }
     if (!tournaments) {
       return <Loading/>
     }
@@ -52,6 +56,9 @@ export default class Main extends React.PureComponent {
     fetch('/api/v1/tournaments')
       .then(response => response.json())
       .then(json => this.setState({ tournaments: json.tournaments }))
-      .catch(console.error) // eslint-disable-line no-console
+      .catch(err => {
+        console.error(err) // eslint-disable-line no-console
+        this.setState({ error: true })
+      })
   }
 }

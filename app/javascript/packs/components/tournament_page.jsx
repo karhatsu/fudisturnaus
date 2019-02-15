@@ -16,6 +16,7 @@ export default class TournamentPage extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
+      error: false,
       filtersOpen: false,
       filters: {
         ageGroupId: null,
@@ -33,14 +34,20 @@ export default class TournamentPage extends React.PureComponent {
     return (
       <div>
         <div className="title">{tournament ? tournament.name : 'fudisturnaus.com'}</div>
-        {tournament ? this.renderContent() : <Loading/>}
+        {this.renderContent()}
       </div>
     )
   }
 
   renderContent() {
+    const { error, filters, filtersOpen, tournament } = this.state
+    if (error) {
+      return <div className="message message--error">Virhe haettaessa turnauksen tietoja. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.</div>
+    }
+    if (!tournament) {
+      return <Loading/>
+    }
     const { officialAccessKey, showGroupTables } = this.props
-    const { filters, filtersOpen, tournament } = this.state
     const { location, startDate, endDate, groupStageMatches, fields, groups } = tournament
     const filtersArrow = filtersOpen ? '&#x25B2;' : '&#x25BC;'
     return (
@@ -134,7 +141,10 @@ export default class TournamentPage extends React.PureComponent {
     fetch(`/api/v1/tournaments/${tournamentId}`)
       .then(response => response.json())
       .then(tournament => this.setState({ tournament }))
-      .catch(console.error) // eslint-disable-line no-console
+      .catch(err => {
+        console.error(err) // eslint-disable-line no-console
+        this.setState({ error: true })
+      })
     if (!officialAccessKey) {
       this.subscribeToResultsChannel(tournamentId)
     }

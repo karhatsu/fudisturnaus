@@ -20,6 +20,18 @@ export function updateGroupResults(groups, groupId, groupResults) {
   return updatedGroups
 }
 
+export function updatePlayoffMatches(originalPlayoffMatches, newPlayoffMatches) {
+  const playoffMatches = [...originalPlayoffMatches]
+  newPlayoffMatches.forEach(playoffMatch => {
+    const matchIndex = playoffMatches.findIndex(match => match.id === playoffMatch.id)
+    if (matchIndex !== -1) {
+      const newMatch = { ...playoffMatches[matchIndex], ...playoffMatch }
+      playoffMatches.splice(matchIndex, 1, newMatch)
+    }
+  })
+  return playoffMatches
+}
+
 export function formatTournamentDates(startDate, endDate) {
   const dates = [formatDate(startDate)]
   if (startDate !== endDate) {

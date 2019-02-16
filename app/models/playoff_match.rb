@@ -14,9 +14,39 @@ class PlayoffMatch < ApplicationRecord
   validate :draw_not_allowed
   validate :teams_are_required
 
-  after_save :populate_next_round_playoff_matches
-
   delegate :tournament_id, to: :age_group
+
+  def populate_next_round_playoff_matches
+    changed_matches = []
+    if home_goals && away_goals
+      home_won = home_goals > away_goals
+
+      next_round_playoff_matches_as_home_team.each do |match|
+        if match.home_team_origin_rule == NextRoundPlayoffMatch::RULE_WINNER
+          match.home_team = home_won ? home_team : away_team
+          match.save!
+          changed_matches << match
+        elsif match.home_team_origin_rule == NextRoundPlayoffMatch::RULE_LOSER
+          match.home_team = home_won ? away_team : home_team
+          match.save!
+          changed_matches << match
+        end
+      end
+
+      next_round_playoff_matches_as_away_team.each do |match|
+        if match.away_team_origin_rule == NextRoundPlayoffMatch::RULE_WINNER
+          match.away_team = home_won ? home_team : away_team
+          match.save!
+          changed_matches << match
+        elsif match.away_team_origin_rule == NextRoundPlayoffMatch::RULE_LOSER
+          match.away_team = home_won ? away_team : home_team
+          match.save!
+          changed_matches << match
+        end
+      end
+    end
+    changed_matches
+  end
 
   private
 
@@ -27,32 +57,6 @@ class PlayoffMatch < ApplicationRecord
   def teams_are_required
     if (home_goals || away_goals) && (!home_team_id || !away_team_id)
       errors.add :base, 'Tulosta ei voi tallentaa, koska joukkueita ei ole asetettu'
-    end
-  end
-
-  def populate_next_round_playoff_matches
-    if home_goals && away_goals
-      home_won = home_goals > away_goals
-
-      next_round_playoff_matches_as_home_team.each do |match|
-        if match.home_team_origin_rule == NextRoundPlayoffMatch::RULE_WINNER
-          match.home_team = home_won ? home_team : away_team
-          match.save!
-        elsif match.home_team_origin_rule == NextRoundPlayoffMatch::RULE_LOSER
-          match.home_team = home_won ? away_team : home_team
-          match.save!
-        end
-      end
-
-      next_round_playoff_matches_as_away_team.each do |match|
-        if match.away_team_origin_rule == NextRoundPlayoffMatch::RULE_WINNER
-          match.away_team = home_won ? home_team : away_team
-          match.save!
-        elsif match.away_team_origin_rule == NextRoundPlayoffMatch::RULE_LOSER
-          match.away_team = home_won ? away_team : home_team
-          match.save!
-        end
-      end
     end
   end
 end

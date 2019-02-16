@@ -3,8 +3,9 @@ class Api::V1::Official::PlayoffResultsController < Api::V1::Official::OfficialB
 
   def update
     if @match.update match_params
+      playoff_matches = @match.populate_next_round_playoff_matches
       render status: 200, json: @match.to_json
-      broadcast_result
+      broadcast_result playoff_matches
     else
       render status: 400, json: { errors: @match.errors.full_messages }
     end
@@ -22,14 +23,29 @@ class Api::V1::Official::PlayoffResultsController < Api::V1::Official::OfficialB
     params.require(:match).permit(:home_goals, :away_goals, :penalties)
   end
 
-  def broadcast_result
+  def broadcast_result(playoff_matches)
     ActionCable.server.broadcast(
         "results#{@tournament.id}",
         matchId: @match.id,
         type: 'PlayoffMatch',
         homeGoals: @match.home_goals,
         awayGoals: @match.away_goals,
-        penalties: @match.penalties
+        penalties: @match.penalties,
+        playoffMatches: playoff_matches.map do |match|
+          {
+              id: match.id,
+              homeTeam: match.home_team ? {
+                  id: match.home_team.id,
+                  name: match.home_team.name,
+                  clubId: match.home_team.club_id
+              } : nil,
+              awayTeam: match.away_team ? {
+                  id: match.away_team.id,
+                  name: match.away_team.name,
+                  clubId: match.away_team.club_id
+              } : nil
+          }
+        end
     )
   end
 end

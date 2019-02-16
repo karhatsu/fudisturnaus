@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Loading from './loading'
 import Matches from './matches'
 import GroupResults from './group_results'
-import {addResult, formatTournamentDates, updateGroupResults} from './util/util'
+import {addResult, formatTournamentDates, updateGroupResults, updatePlayoffMatches} from './util/util'
 import {matchTypes} from './util/enums'
 
 export default class TournamentPage extends React.PureComponent {
@@ -165,12 +165,14 @@ export default class TournamentPage extends React.PureComponent {
         const tournament = this.state.tournament
         const { matchId, type, homeGoals, awayGoals, penalties, groupId, groupResults } = data
         if (type === matchTypes.playoff) {
-          const playoffMatches = addResult(tournament.playoffMatches, matchId, homeGoals, awayGoals, penalties)
+          let playoffMatches = addResult(tournament.playoffMatches, matchId, homeGoals, awayGoals, penalties)
+          playoffMatches = updatePlayoffMatches(playoffMatches, data.playoffMatches)
           this.setState({ tournament: { ...tournament, playoffMatches } })
         } else {
           const groupStageMatches = addResult(tournament.groupStageMatches, matchId, homeGoals, awayGoals)
           const groups = updateGroupResults(tournament.groups, groupId, groupResults)
-          this.setState({ tournament: { ...tournament, groupStageMatches, groups } })
+          const playoffMatches = updatePlayoffMatches(tournament.playoffMatches, data.playoffMatches)
+          this.setState({ tournament: { ...tournament, groupStageMatches, groups, playoffMatches } })
         }
       },
     })

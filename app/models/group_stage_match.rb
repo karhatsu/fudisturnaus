@@ -5,8 +5,6 @@ class GroupStageMatch < ApplicationRecord
   belongs_to :home_team, class_name: 'Team'
   belongs_to :away_team, class_name: 'Team'
 
-  after_save :populate_first_round_playoff_matches
-
   delegate :age_group, to: :group
   delegate :age_group_id, to: :group
 
@@ -15,6 +13,7 @@ class GroupStageMatch < ApplicationRecord
   end
 
   def populate_first_round_playoff_matches
-    group.populate_first_round_playoff_matches if home_goals && away_goals && group.results_in_all_matches?
+    return group.populate_first_round_playoff_matches if home_goals && away_goals && group.results_in_all_matches?
+    []
   end
 end

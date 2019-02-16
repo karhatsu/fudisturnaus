@@ -18,14 +18,18 @@ class Group < ApplicationRecord
   end
 
   def populate_first_round_playoff_matches
+    changed_matches = []
     group_results = results
     first_round_playoff_matches_as_home_team.each do |match|
       match.home_team_id = group_results[match.home_team_origin_rule - 1].team_id
       match.save!
+      changed_matches << match
     end
     first_round_playoff_matches_as_away_team.each do |match|
       match.away_team_id = group_results[match.away_team_origin_rule - 1].team_id
       match.save!
+      changed_matches << match
     end
+    changed_matches
   end
 end

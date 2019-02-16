@@ -11,12 +11,17 @@ class PlayoffMatch < ApplicationRecord
   has_many :next_round_playoff_matches_as_away_team, as: :away_team_origin, class_name: 'NextRoundPlayoffMatch'
 
   validates :title, presence: true
+  validate :draw_not_allowed
 
   after_save :populate_next_round_playoff_matches
 
   delegate :tournament_id, to: :age_group
 
   private
+
+  def draw_not_allowed
+    errors.add :base, 'Jatko-ottelu ei voi päättyä tasan' if home_goals && away_goals && home_goals == away_goals
+  end
 
   def populate_next_round_playoff_matches
     if home_goals && away_goals

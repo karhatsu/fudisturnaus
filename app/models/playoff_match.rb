@@ -12,6 +12,7 @@ class PlayoffMatch < ApplicationRecord
 
   validates :title, presence: true
   validate :draw_not_allowed
+  validate :teams_are_required
 
   after_save :populate_next_round_playoff_matches
 
@@ -21,6 +22,12 @@ class PlayoffMatch < ApplicationRecord
 
   def draw_not_allowed
     errors.add :base, 'Jatko-ottelu ei voi päättyä tasan' if home_goals && away_goals && home_goals == away_goals
+  end
+
+  def teams_are_required
+    if (home_goals || away_goals) && (!home_team_id || !away_team_id)
+      errors.add :base, 'Tulosta ei voi tallentaa, koska joukkueita ei ole asetettu'
+    end
   end
 
   def populate_next_round_playoff_matches

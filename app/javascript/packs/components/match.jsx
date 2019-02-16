@@ -100,13 +100,13 @@ export default class Match extends React.PureComponent {
   }
 
   renderResult = () => {
-    const { editable, match: { homeGoals, awayGoals } } = this.props
+    const { editable, match: { homeTeam, awayTeam, homeGoals, awayGoals } } = this.props
     if (this.state.formOpen) {
       return this.renderForm()
     }
     if (homeGoals || homeGoals === 0) {
       return <span>{homeGoals} - {awayGoals}</span>
-    } else if (editable) {
+    } else if (editable && homeTeam && awayTeam) {
       return <span className="match__no-result">Tulos</span>
     }
   }
@@ -134,8 +134,8 @@ export default class Match extends React.PureComponent {
   }
 
   openForm = () => {
-    if (this.props.editable && !this.state.formOpen) {
-      const {match: {homeGoals, awayGoals}} = this.props
+    const {editable, match: {homeTeam, awayTeam, homeGoals, awayGoals}} = this.props
+    if (editable && !this.state.formOpen && homeTeam && awayTeam) {
       this.setState({formOpen: true, homeGoals, awayGoals})
     }
   }

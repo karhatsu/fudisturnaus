@@ -6,6 +6,8 @@ Rails.application.routes.draw do
       resources :tournaments, only: [:index, :show]
       namespace :official do
         resources :matches, only: :update
+        put 'group_stage_results/:match_id' => 'group_stage_results#update'
+        put 'playoff_results/:match_id' => 'playoff_results#update'
       end
     end
   end

@@ -171,14 +171,14 @@ export default class Match extends React.PureComponent {
   saveResult = () => {
     const { accessKey, match: { id, type } } = this.props
     const { homeGoals, awayGoals, penalties } = this.state
-    fetch(`/api/v1/official/matches/${id}`, {
+    const typePath = type === matchTypes.playoff ? 'playoff_results' : 'group_stage_results'
+    fetch(`/api/v1/official/${typePath}/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         'X-Access-Key': accessKey,
       },
       body: JSON.stringify({
-        type,
         match: {
           home_goals: homeGoals,
           away_goals: awayGoals,

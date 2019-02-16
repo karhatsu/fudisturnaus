@@ -6,3 +6,6 @@ fi:
       group_stage_match:
         home_goals: Kotijoukkueen maalit
         away_goals: Vierasjoukkueen maalit
+      playoff_match:
+        home_goals: Kotijoukkueen maalit
+        away_goals: Vierasjoukkueen maalit

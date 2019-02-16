@@ -35,7 +35,7 @@
     margin-top: 4px;
   }
 
-  .match__teams-separator {
+  .match__teams-separator, .match__goals-separator {
     margin: 0 4px;
   }
 
@@ -67,6 +67,20 @@
     text-align: right;
   }
 
+  .match__goals-field {
+    font-size: 14px;
+    text-align: center;
+    width: 20px;
+
+    @media only screen and (min-width: 48em) {
+      width: 24px;
+    }
+
+    @media only screen and (min-width: 64em) {
+      width: 32px;
+    }
+  }
+
   .match__buttons {
     margin-top: 4px;
     text-align: right;
@@ -93,14 +107,4 @@
 
 .match--editable:active {
   @extend %white-box-active;
-}
-
-.goals-field {
-  font-size: 14px;
-  text-align: center;
-  width: 20px;
-}
-
-.goals-separator {
-  margin: 0 4px;
 }

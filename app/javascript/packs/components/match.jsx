@@ -116,7 +116,7 @@ export default class Match extends React.PureComponent {
       <div>
         <div className="match__result-fields">
           {this.renderGoalsField('homeGoals')}
-          <span className="goals-separator">-</span>
+          <span className="match__goals-separator">-</span>
           {this.renderGoalsField('awayGoals')}
         </div>
         <div className="match__buttons">
@@ -130,7 +130,7 @@ export default class Match extends React.PureComponent {
   renderGoalsField = (name) => {
     const goals = this.state[name]
     const value = goals || goals === 0 ? goals : ''
-    return <input type="number" value={value} onChange={this.setGoals(name)} className="goals-field"/>
+    return <input type="number" value={value} onChange={this.setGoals(name)} className="match__goals-field"/>
   }
 
   openForm = () => {

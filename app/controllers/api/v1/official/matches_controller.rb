@@ -19,7 +19,7 @@ class Api::V1::Official::MatchesController < Api::V1::Official::OfficialBaseCont
   end
 
   def match_params
-    params.require(:match).permit(:home_goals, :away_goals)
+    params.require(:match).permit(:home_goals, :away_goals, :penalties)
   end
 
   def broadcast_result
@@ -29,7 +29,8 @@ class Api::V1::Official::MatchesController < Api::V1::Official::OfficialBaseCont
           matchId: @match.id,
           type: params[:type],
           homeGoals: @match.home_goals,
-          awayGoals: @match.away_goals
+          awayGoals: @match.away_goals,
+          penalties: @match.penalties
       )
     else
       group_results = @match.group.results

@@ -1,10 +1,10 @@
 import { format, parseISO } from 'date-fns'
 
-export function addResult(matches, matchId, homeGoals, awayGoals) {
+export function addResult(matches, matchId, homeGoals, awayGoals, penalties) {
   const matchesWithResult = [...matches]
   const matchIndex = matchesWithResult.findIndex(match => match.id === matchId)
   if (matchIndex !== -1) {
-    const match = { ...matchesWithResult[matchIndex], homeGoals, awayGoals }
+    const match = { ...matchesWithResult[matchIndex], homeGoals, awayGoals, penalties }
     matchesWithResult.splice(matchIndex, 1, match)
   }
   return matchesWithResult

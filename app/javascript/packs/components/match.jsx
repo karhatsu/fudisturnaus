@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { format, parseISO } from 'date-fns'
+import {matchTypes} from './util/enums'
 
 export default class Match extends React.PureComponent {
   static propTypes = {
@@ -8,6 +9,7 @@ export default class Match extends React.PureComponent {
     editable: PropTypes.bool.isRequired,
     match: PropTypes.shape({
       id: PropTypes.number.isRequired,
+      type: PropTypes.string.isRequired,
       startTime: PropTypes.string.isRequired,
       field: PropTypes.shape({
         name: PropTypes.string.isRequired,
@@ -21,6 +23,7 @@ export default class Match extends React.PureComponent {
       }),
       homeGoals: PropTypes.number,
       awayGoals: PropTypes.number,
+      penalties: PropTypes.bool,
       ageGroup: PropTypes.shape({
         name: PropTypes.string.isRequired,
       }).isRequired,
@@ -100,12 +103,12 @@ export default class Match extends React.PureComponent {
   }
 
   renderResult = () => {
-    const { editable, match: { homeTeam, awayTeam, homeGoals, awayGoals } } = this.props
+    const { editable, match: { homeTeam, awayTeam, homeGoals, awayGoals, penalties } } = this.props
     if (this.state.formOpen) {
       return this.renderForm()
     }
     if (homeGoals || homeGoals === 0) {
-      return <span>{homeGoals} - {awayGoals}</span>
+      return <span>{homeGoals} - {awayGoals}{penalties ? ' rp' : ''}</span>
     } else if (editable && homeTeam && awayTeam) {
       return <span className="match__no-result">Tulos</span>
     }
@@ -119,6 +122,7 @@ export default class Match extends React.PureComponent {
           <span className="match__goals-separator">-</span>
           {this.renderGoalsField('awayGoals')}
         </div>
+        {this.renderPenaltiesField()}
         <div className="match__buttons">
           <input type="button" value="&#x2705;" onClick={this.saveResult} className="match__button"/>
           <input type="button" value="&#x274C;" onClick={this.cancel} className="match__button"/>
@@ -133,10 +137,20 @@ export default class Match extends React.PureComponent {
     return <input type="number" value={value} onChange={this.setGoals(name)} className="match__goals-field"/>
   }
 
+  renderPenaltiesField = () => {
+    if (this.props.match.type === matchTypes.playoff) {
+      return (
+        <div className="match__penalties">
+          <input type="checkbox" value={true} checked={this.state.penalties} onChange={this.setPenalties}/> rp
+        </div>
+      )
+    }
+  }
+
   openForm = () => {
-    const {editable, match: {homeTeam, awayTeam, homeGoals, awayGoals}} = this.props
+    const {editable, match: {homeTeam, awayTeam, homeGoals, awayGoals, penalties}} = this.props
     if (editable && !this.state.formOpen && homeTeam && awayTeam) {
-      this.setState({formOpen: true, homeGoals, awayGoals})
+      this.setState({formOpen: true, homeGoals, awayGoals, penalties})
     }
   }
 
@@ -150,9 +164,13 @@ export default class Match extends React.PureComponent {
     }
   }
 
+  setPenalties = event => {
+    this.setState({ penalties: event.target.checked })
+  }
+
   saveResult = () => {
     const { accessKey, match: { id, type } } = this.props
-    const { homeGoals, awayGoals } = this.state
+    const { homeGoals, awayGoals, penalties } = this.state
     fetch(`/api/v1/official/matches/${id}`, {
       method: 'PUT',
       headers: {
@@ -164,12 +182,13 @@ export default class Match extends React.PureComponent {
         match: {
           home_goals: homeGoals,
           away_goals: awayGoals,
+          penalties,
         },
       }),
     })
       .then(response => {
         if (response.ok) {
-          this.props.onSave(id, type, homeGoals, awayGoals)
+          this.props.onSave(id, type, homeGoals, awayGoals, penalties)
           this.setState({ formOpen: false, errors: [] })
         } else {
           response.json().then(({ errors }) => {

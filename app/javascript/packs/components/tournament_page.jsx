@@ -139,10 +139,10 @@ export default class TournamentPage extends React.PureComponent {
       && (!filters.teamId || (homeTeam && filters.teamId === homeTeam.id) || (awayTeam && filters.teamId === awayTeam.id))
   }
 
-  onSave = (matchId, type, homeGoals, awayGoals) => {
+  onSave = (matchId, type, homeGoals, awayGoals, penalties) => {
     const tournament = this.state.tournament
     if (type === matchTypes.playoff) {
-      const playoffMatches = addResult(tournament.playoffMatches, matchId, homeGoals, awayGoals)
+      const playoffMatches = addResult(tournament.playoffMatches, matchId, homeGoals, awayGoals, penalties)
       this.setState({tournament: {...tournament, playoffMatches}})
     } else {
       const groupStageMatches = addResult(tournament.groupStageMatches, matchId, homeGoals, awayGoals)
@@ -177,9 +177,9 @@ export default class TournamentPage extends React.PureComponent {
     }, {
       received: data => {
         const tournament = this.state.tournament
-        const { matchId, type, homeGoals, awayGoals, groupId, groupResults } = data
+        const { matchId, type, homeGoals, awayGoals, penalties, groupId, groupResults } = data
         if (type === matchTypes.playoff) {
-          const playoffMatches = addResult(tournament.playoffMatches, matchId, homeGoals, awayGoals)
+          const playoffMatches = addResult(tournament.playoffMatches, matchId, homeGoals, awayGoals, penalties)
           this.setState({ tournament: { ...tournament, playoffMatches } })
         } else {
           const groupStageMatches = addResult(tournament.groupStageMatches, matchId, homeGoals, awayGoals)

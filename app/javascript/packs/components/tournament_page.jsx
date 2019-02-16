@@ -49,8 +49,10 @@ export default class TournamentPage extends React.PureComponent {
       return <Loading/>
     }
     const { showGroupTables } = this.props
-    const { location, startDate, endDate, groupStageMatches, groups, playoffMatches } = tournament
+    const { location, startDate, endDate, groups, playoffMatches } = tournament
     const filtersArrow = filtersOpen ? '&#x25B2;' : '&#x25BC;'
+    const groupStageMatches = tournament.groupStageMatches.filter(this.isFilterMatch)
+    const filteredPlayoffMatches = playoffMatches.filter(this.isFilterMatch)
     return (
       <div>
         <div className="sub-title">{location}, {formatTournamentDates(startDate, endDate)}</div>
@@ -62,7 +64,7 @@ export default class TournamentPage extends React.PureComponent {
         {this.renderMatches(groupStageMatches, 'Alkulohkojen ottelut', playoffMatches.length)}
         {showGroupTables && <div className="result-section-title">Sarjataulukot</div>}
         {showGroupTables && <div className="group-results row">{groups.map(this.renderGroup)}</div>}
-        {this.renderMatches(playoffMatches, 'Jatko-ottelut', playoffMatches.length)}
+        {this.renderMatches(filteredPlayoffMatches, 'Jatko-ottelut', filteredPlayoffMatches.length)}
       </div>
     )
   }
@@ -115,12 +117,12 @@ export default class TournamentPage extends React.PureComponent {
     const { filters, tournament: { fields } } = this.state
     return (
       <div>
-        {showTitle && <div className="result-section-title">{title}</div>}
+        {showTitle ? <div className="result-section-title">{title}</div> : ''}
         <Matches
           accessKey={officialAccessKey}
           editable={!!officialAccessKey}
           fieldsCount={fields.length}
-          matches={matches.filter(this.isFilterMatch)}
+          matches={matches}
           selectedClubId={filters.clubId}
           selectedTeamId={filters.teamId}
         />

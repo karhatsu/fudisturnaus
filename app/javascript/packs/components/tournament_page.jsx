@@ -5,6 +5,7 @@ import Loading from './loading'
 import Matches from './matches'
 import GroupResults from './group_results'
 import {addResult, formatTournamentDates, updateGroupResults} from './util/util'
+import {matchTypes} from './util/enums'
 
 export default class TournamentPage extends React.PureComponent {
   static propTypes = {
@@ -138,10 +139,15 @@ export default class TournamentPage extends React.PureComponent {
       && (!filters.teamId || (homeTeam && filters.teamId === homeTeam.id) || (awayTeam && filters.teamId === awayTeam.id))
   }
 
-  onSave = (groupStageMatchId, homeGoals, awayGoals) => {
+  onSave = (matchId, type, homeGoals, awayGoals) => {
     const tournament = this.state.tournament
-    const groupStageMatches = addResult(tournament.groupStageMatches, groupStageMatchId, homeGoals, awayGoals)
-    this.setState({ tournament: { ...tournament, groupStageMatches } })
+    if (type === matchTypes.playoff) {
+      const playoffMatches = addResult(tournament.playoffMatches, matchId, homeGoals, awayGoals)
+      this.setState({tournament: {...tournament, playoffMatches}})
+    } else {
+      const groupStageMatches = addResult(tournament.groupStageMatches, matchId, homeGoals, awayGoals)
+      this.setState({tournament: {...tournament, groupStageMatches}})
+    }
   }
 
   renderGroup = group => {
@@ -171,10 +177,15 @@ export default class TournamentPage extends React.PureComponent {
     }, {
       received: data => {
         const tournament = this.state.tournament
-        const { groupStageMatchId, homeGoals, awayGoals, groupId, groupResults } = data
-        const groupStageMatches = addResult(tournament.groupStageMatches, groupStageMatchId, homeGoals, awayGoals)
-        const groups = updateGroupResults(tournament.groups, groupId, groupResults)
-        this.setState({ tournament: { ...tournament, groupStageMatches, groups } })
+        const { matchId, type, homeGoals, awayGoals, groupId, groupResults } = data
+        if (type === matchTypes.playoff) {
+          const playoffMatches = addResult(tournament.playoffMatches, matchId, homeGoals, awayGoals)
+          this.setState({ tournament: { ...tournament, playoffMatches } })
+        } else {
+          const groupStageMatches = addResult(tournament.groupStageMatches, matchId, homeGoals, awayGoals)
+          const groups = updateGroupResults(tournament.groups, groupId, groupResults)
+          this.setState({ tournament: { ...tournament, groupStageMatches, groups } })
+        }
       },
     })
   }

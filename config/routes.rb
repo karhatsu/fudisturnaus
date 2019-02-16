@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :tournaments, only: [:index, :show]
       namespace :official do
-        resources :group_stage_matches, only: :update
+        resources :matches, only: :update
       end
     end
   end

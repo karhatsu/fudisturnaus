@@ -151,16 +151,17 @@ export default class Match extends React.PureComponent {
   }
 
   saveResult = () => {
-    const { accessKey, match: { id } } = this.props
+    const { accessKey, match: { id, type } } = this.props
     const { homeGoals, awayGoals } = this.state
-    fetch(`/api/v1/official/group_stage_matches/${id}`, {
+    fetch(`/api/v1/official/matches/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         'X-Access-Key': accessKey,
       },
       body: JSON.stringify({
-        group_stage_match: {
+        type,
+        match: {
           home_goals: homeGoals,
           away_goals: awayGoals,
         },
@@ -168,7 +169,7 @@ export default class Match extends React.PureComponent {
     })
       .then(response => {
         if (response.ok) {
-          this.props.onSave(id, homeGoals, awayGoals)
+          this.props.onSave(id, type, homeGoals, awayGoals)
           this.setState({ formOpen: false, errors: [] })
         } else {
           response.json().then(({ errors }) => {

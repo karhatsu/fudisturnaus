@@ -4,8 +4,8 @@ module Match
   included do
     belongs_to :field
 
-    validates :home_goals, numericality: { only_integer: true, greater_than_or_equal_to: 0, allow_nil: true }
-    validates :away_goals, numericality: { only_integer: true, greater_than_or_equal_to: 0, allow_nil: true }
+    validates :home_goals, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than: 50, allow_nil: true }
+    validates :away_goals, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than: 50, allow_nil: true }
     validate :verify_both_goals
 
     private

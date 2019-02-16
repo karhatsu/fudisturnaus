@@ -15,6 +15,6 @@ class GroupStageMatch < ApplicationRecord
   end
 
   def populate_first_round_playoff_matches
-    group.populate_first_round_playoff_matches if group.results_in_all_matches?
+    group.populate_first_round_playoff_matches if home_goals && away_goals && group.results_in_all_matches?
   end
 end

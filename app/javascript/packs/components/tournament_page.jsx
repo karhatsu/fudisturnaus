@@ -121,7 +121,6 @@ export default class TournamentPage extends React.PureComponent {
           editable={!!officialAccessKey}
           fieldsCount={fields.length}
           matches={matches.filter(this.isFilterMatch)}
-          onSave={this.onSave}
           selectedClubId={filters.clubId}
           selectedTeamId={filters.teamId}
         />
@@ -139,24 +138,13 @@ export default class TournamentPage extends React.PureComponent {
       && (!filters.teamId || (homeTeam && filters.teamId === homeTeam.id) || (awayTeam && filters.teamId === awayTeam.id))
   }
 
-  onSave = (matchId, type, homeGoals, awayGoals, penalties) => {
-    const tournament = this.state.tournament
-    if (type === matchTypes.playoff) {
-      const playoffMatches = addResult(tournament.playoffMatches, matchId, homeGoals, awayGoals, penalties)
-      this.setState({tournament: {...tournament, playoffMatches}})
-    } else {
-      const groupStageMatches = addResult(tournament.groupStageMatches, matchId, homeGoals, awayGoals)
-      this.setState({tournament: {...tournament, groupStageMatches}})
-    }
-  }
-
   renderGroup = group => {
     const { filters, tournament: { groups } } = this.state
     return <GroupResults filters={filters} group={group} groupsCount={groups.length} key={group.id}/>
   }
 
   componentDidMount() {
-    const { officialAccessKey, tournamentId } = this.props
+    const { tournamentId } = this.props
     fetch(`/api/v1/tournaments/${tournamentId}`)
       .then(response => response.json())
       .then(tournament => this.setState({ tournament }))
@@ -164,9 +152,7 @@ export default class TournamentPage extends React.PureComponent {
         console.error(err) // eslint-disable-line no-console
         this.setState({ error: true })
       })
-    if (!officialAccessKey) {
-      this.subscribeToResultsChannel(tournamentId)
-    }
+    this.subscribeToResultsChannel(tournamentId)
   }
 
   subscribeToResultsChannel = (tournamentId) => {

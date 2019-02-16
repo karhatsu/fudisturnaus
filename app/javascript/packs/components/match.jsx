@@ -31,7 +31,6 @@ export default class Match extends React.PureComponent {
         name: PropTypes.string.isRequired,
       }),
     }).isRequired,
-    onSave: PropTypes.func,
     selectedClubId: PropTypes.number,
     selectedTeamId: PropTypes.number,
   }
@@ -188,7 +187,6 @@ export default class Match extends React.PureComponent {
     })
       .then(response => {
         if (response.ok) {
-          this.props.onSave(id, type, homeGoals, awayGoals, penalties)
           this.setState({ formOpen: false, errors: [] })
         } else {
           response.json().then(({ errors }) => {

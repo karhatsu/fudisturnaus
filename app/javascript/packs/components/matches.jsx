@@ -9,7 +9,6 @@ export default class Matches extends React.PureComponent {
     editable: PropTypes.bool,
     fieldsCount: PropTypes.number.isRequired,
     matches: PropTypes.array.isRequired,
-    onSave: PropTypes.func,
     selectedClubId: PropTypes.number,
     selectedTeamId: PropTypes.number,
   }
@@ -50,7 +49,6 @@ export default class Matches extends React.PureComponent {
           accessKey={this.props.accessKey}
           editable={this.props.editable}
           match={match}
-          onSave={this.props.onSave}
           selectedClubId={this.props.selectedClubId}
           selectedTeamId={this.props.selectedTeamId}
         />

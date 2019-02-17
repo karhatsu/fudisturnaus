@@ -146,18 +146,36 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   componentDidMount() {
+    this.fetchTournamentData()
+    this.subscribeToResultsChannel()
+    document.addEventListener('visibilitychange', this.handleVisibilityChange)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('visibilitychange', this.handleVisibilityChange)
+  }
+
+  handleVisibilityChange = () => {
+    if (document.visibilityState === 'visible') {
+      this.fetchTournamentData()
+    }
+  }
+
+  fetchTournamentData = () => {
     const { tournamentId } = this.props
     fetch(`/api/v1/tournaments/${tournamentId}`)
       .then(response => response.json())
       .then(tournament => this.setState({ tournament }))
       .catch(err => {
         console.error(err) // eslint-disable-line no-console
-        this.setState({ error: true })
+        if (!this.state.tournament) {
+          this.setState({error: true})
+        }
       })
-    this.subscribeToResultsChannel(tournamentId)
   }
 
-  subscribeToResultsChannel = (tournamentId) => {
+  subscribeToResultsChannel = () => {
+    const { tournamentId } = this.props
     // eslint-disable-next-line no-undef
     App.cable.subscriptions.create({
       channel: 'ResultsChannel',

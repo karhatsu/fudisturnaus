@@ -48,6 +48,9 @@ export default class TournamentPage extends React.PureComponent {
       return <Loading/>
     }
     const { location, startDate, endDate, playoffMatches } = tournament
+    if (!tournament.groupStageMatches.length) {
+      return <div className="message message--error">Turnauksen otteluohjelmaa ei ole vielä julkistettu</div>
+    }
     const filtersArrow = filtersOpen ? '&#x25B2;' : '&#x25BC;'
     const groupStageMatches = tournament.groupStageMatches.filter(this.isFilterMatch)
     const filteredPlayoffMatches = playoffMatches.filter(this.isFilterMatch)

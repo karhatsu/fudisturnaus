@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { format, parseISO } from 'date-fns'
-import {matchTypes} from './util/enums'
+import { matchTypes } from './util/enums'
 
 export default class Match extends React.PureComponent {
   static propTypes = {
@@ -147,9 +147,9 @@ export default class Match extends React.PureComponent {
   }
 
   openForm = () => {
-    const {editable, match: {homeTeam, awayTeam, homeGoals, awayGoals, penalties}} = this.props
+    const { editable, match: { homeTeam, awayTeam, homeGoals, awayGoals, penalties } } = this.props
     if (editable && !this.state.formOpen && homeTeam && awayTeam) {
-      this.setState({formOpen: true, homeGoals, awayGoals, penalties})
+      this.setState({ formOpen: true, homeGoals, awayGoals, penalties })
     }
   }
 

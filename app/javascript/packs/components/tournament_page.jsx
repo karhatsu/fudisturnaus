@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 import Loading from './loading'
 import Matches from './matches'
 import GroupResults from './group_results'
-import {addResult, formatTournamentDates, updateGroupResults, updatePlayoffMatches} from './util/util'
-import {matchTypes} from './util/enums'
+import { addResult, formatTournamentDates, updateGroupResults, updatePlayoffMatches } from './util/util'
+import { matchTypes } from './util/enums'
 
 export default class TournamentPage extends React.PureComponent {
   static propTypes = {
@@ -94,7 +94,7 @@ export default class TournamentPage extends React.PureComponent {
         <select className="filter" onChange={this.setFilterValue(key)}>
           <option>{defaultText}</option>
           {items.map(item => {
-            const {id, name} = item
+            const { id, name } = item
             return <option key={id} value={id}>{name}</option>
           })}
         </select>
@@ -189,7 +189,7 @@ export default class TournamentPage extends React.PureComponent {
       .catch(err => {
         console.error(err) // eslint-disable-line no-console
         if (!this.state.tournament) {
-          this.setState({error: true})
+          this.setState({ error: true })
         }
       })
   }

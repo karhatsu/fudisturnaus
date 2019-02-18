@@ -6,6 +6,9 @@ export default class GroupResults extends React.PureComponent {
   static propTypes = {
     filters: PropTypes.object.isRequired,
     group: PropTypes.shape({
+      ageGroup: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+      }).isRequired,
       results: PropTypes.arrayOf(PropTypes.shape({
         teamName: PropTypes.string.isRequired,
       })).isRequired,
@@ -14,7 +17,7 @@ export default class GroupResults extends React.PureComponent {
   }
 
   render() {
-    const { group: { name, results }, groupsCount } = this.props
+    const { group: { ageGroup, name, results }, groupsCount } = this.props
     if (!results.length) {
       return null
     }
@@ -24,7 +27,7 @@ export default class GroupResults extends React.PureComponent {
           <table>
             <thead>
               <tr>
-                <th colSpan={7}>{name}</th>
+                <th colSpan={7}>{ageGroup.name} {name}</th>
               </tr>
               <tr>
                 <th>Joukkue</th>

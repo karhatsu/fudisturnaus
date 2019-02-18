@@ -10,7 +10,6 @@ import {matchTypes} from './util/enums'
 export default class TournamentPage extends React.PureComponent {
   static propTypes = {
     officialAccessKey: PropTypes.string,
-    showGroupTables: PropTypes.bool,
     tournamentId: PropTypes.number.isRequired,
   }
 
@@ -48,8 +47,7 @@ export default class TournamentPage extends React.PureComponent {
     if (!tournament) {
       return <Loading/>
     }
-    const { showGroupTables } = this.props
-    const { location, startDate, endDate, groups, playoffMatches } = tournament
+    const { location, startDate, endDate, playoffMatches } = tournament
     const filtersArrow = filtersOpen ? '&#x25B2;' : '&#x25BC;'
     const groupStageMatches = tournament.groupStageMatches.filter(this.isFilterMatch)
     const filteredPlayoffMatches = playoffMatches.filter(this.isFilterMatch)
@@ -62,8 +60,7 @@ export default class TournamentPage extends React.PureComponent {
         </div>
         {this.renderFilters()}
         {this.renderMatches(groupStageMatches, 'Alkulohkojen ottelut', playoffMatches.length)}
-        {showGroupTables && <div className="result-section-title">Sarjataulukot</div>}
-        {showGroupTables && <div className="group-results row">{groups.map(this.renderGroup)}</div>}
+        {this.renderGroupTables()}
         {this.renderMatches(filteredPlayoffMatches, 'Jatko-ottelut', filteredPlayoffMatches.length)}
       </div>
     )
@@ -140,9 +137,32 @@ export default class TournamentPage extends React.PureComponent {
       && (!filters.teamId || (homeTeam && filters.teamId === homeTeam.id) || (awayTeam && filters.teamId === awayTeam.id))
   }
 
+  renderGroupTables = () => {
+    const { tournament: { calculateGroupTables, groups } } = this.state
+    const filteredGroups = groups.filter(this.isFilterGroup)
+    if (calculateGroupTables && filteredGroups.length) {
+      return (
+        <React.Fragment>
+          <div className="result-section-title">Sarjataulukot</div>
+          <div className="group-results row">{filteredGroups.map(this.renderGroup)}</div>
+        </React.Fragment>
+      )
+    }
+  }
+
   renderGroup = group => {
     const { filters, tournament: { groups } } = this.state
     return <GroupResults filters={filters} group={group} groupsCount={groups.length} key={group.id}/>
+  }
+
+  isFilterGroup = group => {
+    const { filters } = this.state
+    const { ageGroupId, id: groupId, teams, results } = group
+    return results.length
+      && (!filters.ageGroupId || filters.ageGroupId === ageGroupId)
+      && (!filters.groupId || filters.groupId === groupId)
+      && (!filters.clubId || teams.findIndex(team => team.clubId === filters.clubId) !== -1)
+      && (!filters.teamId || teams.findIndex(team => team.id === filters.teamId) !== -1)
   }
 
   componentDidMount() {

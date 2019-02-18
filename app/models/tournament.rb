@@ -26,6 +26,10 @@ class Tournament < ApplicationRecord
     start_date + (days - 1).days
   end
 
+  def calculate_group_tables
+    age_groups.any?(&:calculate_group_tables?)
+  end
+
   def group_stage_matches
     age_groups
         .flat_map { |ag| ag.groups.flat_map &:group_stage_matches }

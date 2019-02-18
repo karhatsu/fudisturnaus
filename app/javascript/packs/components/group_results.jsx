@@ -15,7 +15,7 @@ export default class GroupResults extends React.PureComponent {
 
   render() {
     const { group: { name, results }, groupsCount } = this.props
-    if (!results.length || !this.isFilterGroup()) {
+    if (!results.length) {
       return null
     }
     return (
@@ -43,14 +43,6 @@ export default class GroupResults extends React.PureComponent {
         </div>
       </div>
     )
-  }
-
-  isFilterGroup = () => {
-    const { filters, group: { ageGroupId, id: groupId, teams } } = this.props
-    return (!filters.ageGroupId || filters.ageGroupId === ageGroupId)
-      && (!filters.groupId || filters.groupId === groupId)
-      && (!filters.clubId || teams.findIndex(team => team.clubId === filters.clubId) !== -1)
-      && (!filters.teamId || teams.findIndex(team => team.id === filters.teamId) !== -1)
   }
 
   renderGroupResultRow = teamGroupResults => {

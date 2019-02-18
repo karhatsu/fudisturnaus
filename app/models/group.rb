@@ -8,6 +8,7 @@ class Group < ApplicationRecord
   validates :name, presence: true
 
   def results
+    return [] unless age_group.calculate_group_tables?
     teams.map(&:group_results).sort do |a, b|
       [b.points, b.goals_difference, b.goals_for, a.team_name] <=> [a.points, a.goals_difference, a.goals_for, b.team_name]
     end

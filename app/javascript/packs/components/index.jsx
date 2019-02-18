@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { format, parseISO } from 'date-fns'
+import { endOfDay, format, isBefore, isSameDay, parseISO } from 'date-fns'
 
 import Loading from './loading'
 import { formatTournamentDates } from './util/util'
@@ -27,15 +27,32 @@ export default class Main extends React.PureComponent {
     const { error, tournaments } = this.state
     if (error) {
       return <div className="message message--error">Virhe haettaessa turnauksia. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.</div>
-    }
-    if (!tournaments) {
+    } else if (!tournaments) {
       return <Loading/>
+    } else if (!tournaments.length) {
+      return <div className="message message--error">Ei turnauksia</div>
     }
+    const upcomingTournaments = tournaments.filter(t => isBefore(new Date(), parseISO(t.startDate)))
+    const currentTournaments = tournaments.filter(t => isSameDay(parseISO(t.startDate), new Date()) || isSameDay(parseISO(t.endDate), new Date()))
+    const pastTournaments = tournaments.filter(t => isBefore(endOfDay(parseISO(t.endDate)), new Date()))
     return (
       <div className="tournament-links">
-        {!tournaments.length ? 'Ei turnauksia' : tournaments.map(this.renderTournament)}
+        {this.renderTournaments(currentTournaments, 'Turnaukset tänään')}
+        {this.renderTournaments(upcomingTournaments, 'Tulevat turnaukset')}
+        {this.renderTournaments(pastTournaments, 'Päättyneet turnaukset')}
       </div>
     )
+  }
+
+  renderTournaments = (tournaments, title) => {
+    if (tournaments.length) {
+      return (
+        <React.Fragment>
+          <div className="index__subtitle">{title}</div>
+          {tournaments.map(this.renderTournament)}
+        </React.Fragment>
+      )
+    }
   }
 
   renderTournament = tournament => {

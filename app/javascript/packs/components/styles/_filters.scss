@@ -1,31 +1,10 @@
 @import 'variables';
 @import 'shared';
 
-.filters-title {
-  cursor: pointer;
-  margin-top: 16px;
-
-  @media only screen and (min-width: 48em) {
-    display: none;
-  }
-
-  .filters-title__arrow {
-    padding-left: 4px;
-  }
-}
-
 .filters {
   @extend %white-box;
   display: flex;
   flex-wrap: wrap;
-}
-
-.filters--closed {
-  display: none;
-
-  @media only screen and (min-width: 48em) {
-    display: block;
-  }
 }
 
 select.filter {

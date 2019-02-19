@@ -18,7 +18,6 @@ export default class TournamentPage extends React.PureComponent {
     super(props)
     this.state = {
       error: false,
-      filtersOpen: false,
       filters: {
         ageGroupId: null,
         clubId: null,
@@ -52,7 +51,7 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   renderContent() {
-    const { error, filtersOpen, tournament } = this.state
+    const { error, tournament } = this.state
     if (error) {
       return <div className="message message--error">Virhe haettaessa turnauksen tietoja. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.</div>
     }
@@ -63,16 +62,11 @@ export default class TournamentPage extends React.PureComponent {
     if (!tournament.groupStageMatches.length) {
       return <div className="message message--error">Turnauksen otteluohjelmaa ei ole vielä julkistettu</div>
     }
-    const filtersArrow = filtersOpen ? '&#x25B2;' : '&#x25BC;'
     const groupStageMatches = tournament.groupStageMatches.filter(this.isFilterMatch)
     const filteredPlayoffMatches = playoffMatches.filter(this.isFilterMatch)
     return (
       <div>
         <div className="sub-title">{location}, {formatTournamentDates(startDate, endDate)}</div>
-        <div className="filters-title" onClick={this.toggleFilters}>
-          Rajaa otteluita
-          <span className="filters-title__arrow" dangerouslySetInnerHTML={{ __html: filtersArrow }}/>
-        </div>
         {this.renderFilters()}
         {this.renderMatches(groupStageMatches, 'Alkulohkojen ottelut', playoffMatches.length)}
         {this.renderGroupTables()}
@@ -81,19 +75,10 @@ export default class TournamentPage extends React.PureComponent {
     )
   }
 
-  toggleFilters = () => {
-    const { filtersOpen } = this.state
-    this.setState({ filtersOpen: !filtersOpen })
-  }
-
   renderFilters = () => {
     const { filters: { ageGroupId: filterAgeGroupId, clubId: filterClubId }, tournament: { ageGroups, groups, clubs, teams, fields } } = this.state
-    const classes = ['filters']
-    if (!this.state.filtersOpen) {
-      classes.push('filters--closed')
-    }
     return (
-      <div className={classes.join(' ')}>
+      <div className="filters">
         {this.renderFilter('ageGroupId', ageGroups, 'Sarja')}
         {this.renderFilter('groupId', groups.filter(group => !filterAgeGroupId || group.ageGroupId === filterAgeGroupId), 'Lohko')}
         {this.renderFilter('clubId', clubs, 'Seura')}

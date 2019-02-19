@@ -23,6 +23,11 @@ body {
 .sub-title {
   font-size: 14px;
   margin-top: 4px;
+
+  a.sub-title__location {
+    color: $white;
+    text-decoration: underline;
+  }
 }
 
 .loading {

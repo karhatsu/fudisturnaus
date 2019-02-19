@@ -58,21 +58,31 @@ export default class TournamentPage extends React.PureComponent {
     if (!tournament) {
       return <Loading/>
     }
-    const { location, startDate, endDate, playoffMatches } = tournament
     if (!tournament.groupStageMatches.length) {
       return <div className="message message--error">Turnauksen otteluohjelmaa ei ole vielä julkistettu</div>
     }
     const groupStageMatches = tournament.groupStageMatches.filter(this.isFilterMatch)
-    const filteredPlayoffMatches = playoffMatches.filter(this.isFilterMatch)
+    const filteredPlayoffMatches = tournament.playoffMatches.filter(this.isFilterMatch)
     return (
       <div>
-        <div className="sub-title">{location}, {formatTournamentDates(startDate, endDate)}</div>
+        {this.renderSubTitle()}
         {this.renderFilters()}
-        {this.renderMatches(groupStageMatches, 'Alkulohkojen ottelut', playoffMatches.length)}
+        {this.renderMatches(groupStageMatches, 'Alkulohkojen ottelut', tournament.playoffMatches.length)}
         {this.renderGroupTables()}
         {this.renderMatches(filteredPlayoffMatches, 'Jatko-ottelut', filteredPlayoffMatches.length)}
       </div>
     )
+  }
+
+  renderSubTitle = () => {
+    const { tournament: { startDate, endDate } } = this.state
+    return <div className="sub-title">{this.renderLocation()}, {formatTournamentDates(startDate, endDate)}</div>
+  }
+
+  renderLocation = () => {
+    const { tournament: { address, location } } = this.state
+    const googleMapsUrl = address ? `https://www.google.com/maps/place/${address.split(' ').join('+')}` : undefined
+    return googleMapsUrl ? <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="sub-title__location">{location}</a> : location
   }
 
   renderFilters = () => {

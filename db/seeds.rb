@@ -5,8 +5,8 @@ hjk = Club.create! name: 'HJK'
 honka = Club.create! name: 'Honka'
 lps = Club.create! name: 'LPS'
 
-Tournament.create! name: 'Futsal Cup 2019', start_date: '2019-03-30', days: 1, location: 'Myllypuro'
-t = Tournament.create! name: 'Fudis Cup 2019', start_date: '2019-05-12', days: 2, location: 'Itä-Helsinki'
+Tournament.create! name: 'Futsal Cup 2019', start_date: '2019-03-30', days: 1, location: 'Myllypuro', address: 'Alakiventie 2, 00920 Helsinki'
+t = Tournament.create! name: 'Fudis Cup 2019', start_date: '2019-05-12', days: 2, location: 'Itä-Helsinki', address: 'Tanhuantie 4-6, 00940 Helsinki'
 
 f1 = Field.create! tournament: t, name: 'Kenttä 1'
 f2 = Field.create! tournament: t, name: 'Kenttä 2'

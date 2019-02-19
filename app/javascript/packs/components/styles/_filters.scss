@@ -2,7 +2,7 @@
 @import 'shared';
 
 .filters {
-  @extend %white-box;
+  @include white-box();
   display: flex;
   flex-wrap: wrap;
 }

@@ -12,7 +12,7 @@
 }
 
 .group-results__group {
-  @extend %white-box;
+  @include white-box();
 
   th {
     font-weight: 600;

@@ -1,6 +1,6 @@
 @import 'variables';
 
-%white-box {
+@mixin white-box() {
   background-color: $white;
   border-radius: 4px;
   color: $black;
@@ -8,6 +8,6 @@
   padding: 8px;
 }
 
-%white-box-active {
+@mixin white-box-active() {
   background-color: $white-60;
 }

@@ -10,7 +10,7 @@
 }
 
 .match {
-  @extend %white-box;
+  @include white-box();
 
   .match--editable {
     cursor: pointer;
@@ -110,5 +110,5 @@
 }
 
 .match--editable:active {
-  @extend %white-box-active;
+  @include white-box-active();
 }

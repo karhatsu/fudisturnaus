@@ -12,7 +12,7 @@
 }
 
 a.tournament-link {
-  @extend %white-box;
+  @include white-box();
   display: block;
   text-decoration: none;
 
@@ -23,5 +23,5 @@ a.tournament-link {
 }
 
 a.tournament-link:active {
-  @extend %white-box-active;
+  @include white-box-active();
 }

@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 import Loading from './loading'
 import Matches from './matches'
@@ -33,10 +34,21 @@ export default class TournamentPage extends React.PureComponent {
     const { tournament } = this.state
     return (
       <div>
-        <div className="title">{tournament ? tournament.name : 'fudisturnaus.com'}</div>
+        <div className="title">
+          {this.renderEmoji()}
+          <span>{tournament ? tournament.name : 'fudisturnaus.com'}</span>
+        </div>
         {this.renderContent()}
       </div>
     )
+  }
+
+  renderEmoji() {
+    if (this.props.officialAccessKey) {
+      return <span className="title__emoji">⚽</span>
+    } else {
+      return <Link to="/" className="title__emoji">⚽</Link>
+    }
   }
 
   renderContent() {

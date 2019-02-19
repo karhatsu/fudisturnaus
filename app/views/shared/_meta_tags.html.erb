@@ -1,5 +1,5 @@
 <% title = defined?(@tournament) ? "#{@tournament.name} - #{DOMAIN}" : DOMAIN %>
-<title><%= title %><%= official ? ' - TOIMITSIJAN SIVU' : '' %></title>
+<title>⚽️<%= title %><%= official ? ' - TOIMITSIJAN SIVU' : '' %></title>
 <% description = defined?(@tournament) ? "#{@tournament.name}, #{@tournament.location}, #{@tournament.start_date.strftime('%d.%m.%y')}" : 'Turnaussivusto jalkapalloturnausten otteluohjelmia varten' %>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <meta name="description" content="<%= description %>">

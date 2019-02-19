@@ -13,6 +13,11 @@ body {
   font-size: 24px;
   font-weight: 600;
   margin-top: 8px;
+
+  .title__emoji {
+    text-decoration: none;
+    padding-right: 8px;
+  }
 }
 
 .sub-title {

@@ -17,7 +17,10 @@ export default class Main extends React.PureComponent {
   render() {
     return (
       <div>
-        <div className="title">fudisturnaus.com</div>
+        <div className="title">
+          <span className="title__emoji">⚽</span>
+          fudisturnaus.com
+        </div>
         {this.renderContent()}
       </div>
     )

@@ -6,6 +6,7 @@
   color: $black;
   margin-top: $marginTop;
   padding: 8px;
+  -webkit-tap-highlight-color: transparent;
 
   @if $clickable == true {
     cursor: pointer;

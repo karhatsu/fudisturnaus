@@ -5,8 +5,7 @@ import { Link } from 'react-router-dom'
 import Loading from './loading'
 import Matches from './matches'
 import GroupResults from './group_results'
-import { addResult, formatTournamentDates, updateGroupResults, updatePlayoffMatches } from './util/util'
-import { matchTypes } from './util/enums'
+import { buildTournamentFromSocketData, formatTournamentDates } from './util/util'
 
 export default class TournamentPage extends React.PureComponent {
   static propTypes = {
@@ -212,18 +211,8 @@ export default class TournamentPage extends React.PureComponent {
       tournament_id: tournamentId,
     }, {
       received: data => {
-        const tournament = this.state.tournament
-        const { matchId, type, homeGoals, awayGoals, penalties, groupId, groupResults } = data
-        if (type === matchTypes.playoff) {
-          let playoffMatches = addResult(tournament.playoffMatches, matchId, homeGoals, awayGoals, penalties)
-          playoffMatches = updatePlayoffMatches(playoffMatches, data.playoffMatches)
-          this.setState({ tournament: { ...tournament, playoffMatches } })
-        } else {
-          const groupStageMatches = addResult(tournament.groupStageMatches, matchId, homeGoals, awayGoals)
-          const groups = updateGroupResults(tournament.groups, groupId, groupResults)
-          const playoffMatches = updatePlayoffMatches(tournament.playoffMatches, data.playoffMatches)
-          this.setState({ tournament: { ...tournament, groupStageMatches, groups, playoffMatches } })
-        }
+        const tournament = buildTournamentFromSocketData(this.state.tournament, data)
+        this.setState({ tournament })
       },
     })
   }

@@ -27,11 +27,12 @@ class Api::V1::Official::GroupStageResultsController < Api::V1::Official::Offici
     group_results = @match.group.results
     ActionCable.server.broadcast(
         "results#{@tournament.id}",
-        matchId: @match.id,
-        type: 'GroupStageMatch',
-        homeGoals: @match.home_goals,
-        awayGoals: @match.away_goals,
         groupId: @match.group_id,
+        groupStageMatch: {
+            id: @match.id,
+            homeGoals: @match.home_goals,
+            awayGoals: @match.away_goals,
+        },
         groupResults: group_results.map do |result|
           {
               teamName: result.team_name,
@@ -45,7 +46,7 @@ class Api::V1::Official::GroupStageResultsController < Api::V1::Official::Offici
               points: result.points
           }
         end,
-        playoffMatches: playoff_matches.map do |match|
+        resolvedPlayoffMatches: playoff_matches.map do |match|
           {
               id: match.id,
               homeTeam: match.home_team ? {

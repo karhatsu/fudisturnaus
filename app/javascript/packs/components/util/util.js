@@ -1,6 +1,25 @@
 import { format, parseISO } from 'date-fns'
 
-export function addResult(matches, matchId, homeGoals, awayGoals, penalties) {
+export function buildTournamentFromSocketData(oldTournament, data) {
+  const { groupId, groupStageMatch, playoffMatch, groupResults, resolvedPlayoffMatches } = data
+  const tournament = { ...oldTournament }
+  if (groupStageMatch) {
+    const { id, homeGoals, awayGoals } = groupStageMatch
+    tournament.groupStageMatches = updateMatchResult(tournament.groupStageMatches, id, homeGoals, awayGoals)
+  } else if (playoffMatch) {
+    const { id, homeGoals, awayGoals, penalties } = playoffMatch
+    tournament.playoffMatches = updateMatchResult(tournament.playoffMatches, id, homeGoals, awayGoals, penalties)
+  }
+  if (groupResults) {
+    tournament.groups = updateGroupResults(tournament.groups, groupId, groupResults)
+  }
+  if (resolvedPlayoffMatches) {
+    tournament.playoffMatches = updatePlayoffMatches(tournament.playoffMatches, resolvedPlayoffMatches)
+  }
+  return tournament
+}
+
+function updateMatchResult(matches, matchId, homeGoals, awayGoals, penalties) {
   const matchesWithResult = [...matches]
   const matchIndex = matchesWithResult.findIndex(match => match.id === matchId)
   if (matchIndex !== -1) {
@@ -10,7 +29,7 @@ export function addResult(matches, matchId, homeGoals, awayGoals, penalties) {
   return matchesWithResult
 }
 
-export function updateGroupResults(groups, groupId, groupResults) {
+function updateGroupResults(groups, groupId, groupResults) {
   const updatedGroups = [...groups]
   const groupIndex = updatedGroups.findIndex(group => group.id === groupId)
   if (groupIndex !== -1) {
@@ -20,7 +39,7 @@ export function updateGroupResults(groups, groupId, groupResults) {
   return updatedGroups
 }
 
-export function updatePlayoffMatches(originalPlayoffMatches, newPlayoffMatches) {
+function updatePlayoffMatches(originalPlayoffMatches, newPlayoffMatches) {
   const playoffMatches = [...originalPlayoffMatches]
   newPlayoffMatches.forEach(playoffMatch => {
     const matchIndex = playoffMatches.findIndex(match => match.id === playoffMatch.id)

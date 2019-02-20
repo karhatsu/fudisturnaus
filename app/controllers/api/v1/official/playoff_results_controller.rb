@@ -26,12 +26,13 @@ class Api::V1::Official::PlayoffResultsController < Api::V1::Official::OfficialB
   def broadcast_result(playoff_matches)
     ActionCable.server.broadcast(
         "results#{@tournament.id}",
-        matchId: @match.id,
-        type: 'PlayoffMatch',
-        homeGoals: @match.home_goals,
-        awayGoals: @match.away_goals,
-        penalties: @match.penalties,
-        playoffMatches: playoff_matches.map do |match|
+        playoffMatch: {
+            id: @match.id,
+            homeGoals: @match.home_goals,
+            awayGoals: @match.away_goals,
+            penalties: @match.penalties,
+        },
+        resolvedPlayoffMatches: playoff_matches.map do |match|
           {
               id: match.id,
               homeTeam: match.home_team ? {

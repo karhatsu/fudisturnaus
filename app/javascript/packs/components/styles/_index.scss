@@ -12,7 +12,7 @@
 }
 
 a.tournament-link {
-  @include white-box();
+  @include white-box(true);
   display: block;
   text-decoration: none;
 
@@ -20,8 +20,4 @@ a.tournament-link {
     font-size: 14px;
     font-weight: 600;
   }
-}
-
-a.tournament-link:active {
-  @include white-box-active();
 }

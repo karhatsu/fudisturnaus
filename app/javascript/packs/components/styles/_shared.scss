@@ -1,13 +1,17 @@
 @import 'variables';
 
-@mixin white-box($marginTop: 8px) {
+@mixin white-box($clickable: false, $marginTop: 8px) {
   background-color: $white;
   border-radius: 4px;
   color: $black;
   margin-top: $marginTop;
   padding: 8px;
-}
 
-@mixin white-box-active() {
-  background-color: $white-60;
+  @if $clickable == true {
+    cursor: pointer;
+
+    &:active {
+      background-color: $white-60;
+    }
+  }
 }

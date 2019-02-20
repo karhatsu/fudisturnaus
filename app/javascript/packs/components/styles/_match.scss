@@ -10,7 +10,7 @@
 }
 
 .match {
-  @include white-box();
+  @include white-box(false);
 
   .match--editable {
     cursor: pointer;
@@ -106,9 +106,5 @@
 }
 
 .match--editable {
-  cursor: pointer;
-}
-
-.match--editable:active {
-  @include white-box-active();
+  @include white-box(true);
 }

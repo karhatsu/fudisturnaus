@@ -35,9 +35,9 @@ export default class Main extends React.PureComponent {
     } else if (!tournaments.length) {
       return <div className="message message--error">Ei turnauksia</div>
     }
-    const upcomingTournaments = tournaments.filter(t => isBefore(new Date(), parseISO(t.startDate)))
-    const currentTournaments = tournaments.filter(t => isSameDay(parseISO(t.startDate), new Date()) || isSameDay(parseISO(t.endDate), new Date()))
-    const pastTournaments = tournaments.filter(t => isBefore(endOfDay(parseISO(t.endDate)), new Date()))
+    const upcomingTournaments = this.findUpcomingTournaments(tournaments)
+    const currentTournaments = this.findCurrentTournaments(tournaments)
+    const pastTournaments = this.findPastTournaments(tournaments)
     return (
       <div className="tournament-links">
         {this.renderTournaments(currentTournaments, 'Turnaukset tänään')}
@@ -45,6 +45,18 @@ export default class Main extends React.PureComponent {
         {this.renderTournaments(pastTournaments, 'Päättyneet turnaukset')}
       </div>
     )
+  }
+
+  findUpcomingTournaments = tournaments => {
+    return tournaments.filter(t => isBefore(new Date(), parseISO(t.startDate))).sort((a, b) => parseISO(a.startDate) - parseISO(b.startDate))
+  }
+
+  findCurrentTournaments = tournaments => {
+    return tournaments.filter(t => isSameDay(parseISO(t.startDate), new Date()) || isSameDay(parseISO(t.endDate), new Date()))
+  }
+
+  findPastTournaments = tournaments => {
+    return tournaments.filter(t => isBefore(endOfDay(parseISO(t.endDate)), new Date()))
   }
 
   renderTournaments = (tournaments, title) => {

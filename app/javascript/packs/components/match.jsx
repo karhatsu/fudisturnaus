@@ -191,7 +191,7 @@ export default class Match extends React.PureComponent {
         } else {
           response.json().then(({ errors }) => {
             this.setState({ errors })
-          })
+          }).catch(() => this.setState({ errors: ['Odottamaton virhe, yritä uudestaan. Jos ongelma ei poistu, ota yhteys palvelun ylläpitoon.'] }))
         }
       })
       .catch(() => this.setState({ errors: ['Yhteysvirhe, yritä uudestaan'] }))

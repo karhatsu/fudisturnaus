@@ -9,27 +9,6 @@ body {
   padding: 8px;
 }
 
-.title {
-  font-size: 24px;
-  font-weight: 600;
-  margin-top: 8px;
-
-  .title__emoji {
-    text-decoration: none;
-    padding-right: 8px;
-  }
-}
-
-.sub-title {
-  font-size: 14px;
-  margin-top: 4px;
-
-  a.sub-title__location {
-    color: $white;
-    text-decoration: underline;
-  }
-}
-
 .loading {
   margin-top: 16px;
 }

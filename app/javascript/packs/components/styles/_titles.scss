@@ -1,0 +1,38 @@
+@import 'variables';
+
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform:rotate(360deg);
+  }
+}
+
+.title {
+  font-size: 24px;
+  line-height: 24px;
+  margin-top: 8px;
+
+  .title__emoji {
+    text-decoration: none;
+    position: absolute;
+  }
+
+  .title__emoji--loading {
+    animation: spin 2s linear infinite;
+  }
+
+  .title__text {
+    font-weight: 600;
+    padding-left: 32px;
+  }
+}
+
+.sub-title {
+  font-size: 14px;
+  margin-top: 4px;
+
+  a.sub-title__location {
+    color: $white;
+    text-decoration: underline;
+  }
+}

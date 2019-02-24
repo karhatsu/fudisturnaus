@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 
 import Loading from './loading'
 import Matches from './matches'
 import GroupResults from './group_results'
 import { buildTournamentFromSocketData, formatTournamentDates } from './util/util'
+import Title from './title'
 
 export default class TournamentPage extends React.PureComponent {
   static propTypes = {
@@ -29,24 +29,15 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   render() {
-    const { tournament } = this.state
+    const { error, tournament } = this.state
+    const iconLink = this.props.officialAccessKey ? null : '/'
+    const title = tournament ? tournament.name : 'fudisturnaus.com'
     return (
       <div>
-        <div className="title">
-          {this.renderEmoji()}
-          <span>{tournament ? tournament.name : 'fudisturnaus.com'}</span>
-        </div>
+        <Title iconLink={iconLink} loading={!tournament && !error} text={title}/>
         {this.renderContent()}
       </div>
     )
-  }
-
-  renderEmoji() {
-    if (this.props.officialAccessKey) {
-      return <span className="title__emoji">⚽</span>
-    } else {
-      return <Link to="/" className="title__emoji">⚽</Link>
-    }
   }
 
   renderContent() {

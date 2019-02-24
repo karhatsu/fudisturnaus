@@ -4,6 +4,7 @@ import { endOfDay, format, isBefore, isSameDay, parseISO } from 'date-fns'
 
 import Loading from './loading'
 import { formatTournamentDates } from './util/util'
+import Title from './title'
 
 export default class Main extends React.PureComponent {
   constructor(props) {
@@ -15,12 +16,10 @@ export default class Main extends React.PureComponent {
   }
 
   render() {
+    const { error, tournaments } = this.state
     return (
       <div>
-        <div className="title">
-          <span className="title__emoji">⚽</span>
-          fudisturnaus.com
-        </div>
+        <Title loading={!error && !tournaments} text="fudisturnaus.com"/>
         {this.renderContent()}
       </div>
     )

@@ -35,6 +35,7 @@ export default class TournamentPage extends React.PureComponent {
     return (
       <div>
         <Title iconLink={iconLink} loading={!tournament && !error} text={title}/>
+        {this.renderSubTitle()}
         {this.renderContent()}
       </div>
     )
@@ -55,7 +56,6 @@ export default class TournamentPage extends React.PureComponent {
     const filteredPlayoffMatches = tournament.playoffMatches.filter(this.isFilterMatch)
     return (
       <div>
-        {this.renderSubTitle()}
         {this.renderFilters()}
         {this.renderMatches(groupStageMatches, 'Alkulohkojen ottelut', tournament.playoffMatches.length)}
         {this.renderGroupTables()}
@@ -65,8 +65,11 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   renderSubTitle = () => {
-    const { tournament: { startDate, endDate } } = this.state
-    return <div className="sub-title">{this.renderLocation()}, {formatTournamentDates(startDate, endDate)}</div>
+    const { tournament } = this.state
+    if (tournament) {
+      const { startDate, endDate } = tournament
+      return <div className="sub-title">{this.renderLocation()}, {formatTournamentDates(startDate, endDate)}</div>
+    }
   }
 
   renderLocation = () => {

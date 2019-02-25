@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= render partial: 'shared/meta_tags', locals: { official: false } %>
+
+    <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css" >
+
+    <%= javascript_include_tag 'application' %>
+    <%= javascript_pack_tag 'admin' %>
+    <%= stylesheet_pack_tag 'application' %>
+  </head>
+
+  <body>
+    <%= yield %>
+    <%= render 'shared/footer' %>
+  </body>
+</html>

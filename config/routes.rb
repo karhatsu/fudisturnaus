@@ -16,6 +16,10 @@ Rails.application.routes.draw do
     get ':access_key' => 'official#index'
   end
 
+  namespace :admin do
+    root to: 'admin#index'
+  end
+
   resources :tournaments, only: :show
 
   root to: 'home#index'

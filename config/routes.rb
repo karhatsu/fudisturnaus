@@ -9,6 +9,9 @@ Rails.application.routes.draw do
         put 'group_stage_results/:match_id' => 'group_stage_results#update'
         put 'playoff_results/:match_id' => 'playoff_results#update'
       end
+      namespace :admin do
+        resources :admin_sessions, only: :create
+      end
     end
   end
 

@@ -1,0 +1,32 @@
+$inputHeight: 16px;
+
+.field, .submit-button {
+  line-height: $inputHeight;
+  margin-top: 8px;
+}
+
+.field {
+  .label {
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+
+  input {
+    height: $inputHeight;
+    padding: 8px;
+    margin-top: 8px;
+    width: 200px;
+  }
+}
+
+.submit-button {
+  margin-top: $inputHeight;
+
+  input {
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    padding: 8px 16px;
+  }
+}

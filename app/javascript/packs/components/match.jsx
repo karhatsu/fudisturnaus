@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { format, parseISO } from 'date-fns'
 import { matchTypes } from './util/enums'
+import { saveResult } from './api-client'
 
 export default class Match extends React.PureComponent {
   static propTypes = {
@@ -170,30 +171,12 @@ export default class Match extends React.PureComponent {
   saveResult = () => {
     const { accessKey, match: { id, type } } = this.props
     const { homeGoals, awayGoals, penalties } = this.state
-    const typePath = type === matchTypes.playoff ? 'playoff_results' : 'group_stage_results'
-    fetch(`/api/v1/official/${typePath}/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Access-Key': accessKey,
-      },
-      body: JSON.stringify({
-        match: {
-          home_goals: homeGoals,
-          away_goals: awayGoals,
-          penalties,
-        },
-      }),
+    saveResult(accessKey, type, id, homeGoals, awayGoals, penalties, (errors) => {
+      if (errors) {
+        this.setState({ errors })
+      } else {
+        this.setState({ formOpen: false, errors: [] })
+      }
     })
-      .then(response => {
-        if (response.ok) {
-          this.setState({ formOpen: false, errors: [] })
-        } else {
-          response.json().then(({ errors }) => {
-            this.setState({ errors })
-          }).catch(() => this.setState({ errors: ['Odottamaton virhe, yritä uudestaan. Jos ongelma ei poistu, ota yhteys palvelun ylläpitoon.'] }))
-        }
-      })
-      .catch(() => this.setState({ errors: ['Yhteysvirhe, yritä uudestaan'] }))
   }
 }

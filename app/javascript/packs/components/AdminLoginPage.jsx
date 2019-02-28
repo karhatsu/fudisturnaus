@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { loginToAdmin } from './api-client'
 
 export default class AdminLoginPage extends React.PureComponent {
   static propTypes = {
@@ -61,24 +62,12 @@ export default class AdminLoginPage extends React.PureComponent {
   submit = () => {
     const { username, password } = this.state
     if (username && password) {
-      fetch('/api/v1/admin/admin_sessions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      }).then(response => {
-        if (response.ok) {
-          response.json().then(data => {
-            console.log(data)
-            this.props.onSuccessfulLogin(data.sessionKey)
-          })
-        } else if (response.status === 401) {
-          this.setState({ error: 'Virheelliset tunnukset' })
+      loginToAdmin(username, password, (error, sessionKey) => {
+        if (error) {
+          this.setState({ error })
         } else {
-          this.setState({ error: 'Odottamaton virhe' })
+          this.props.onSuccessfulLogin(sessionKey)
         }
-      }).catch(err => {
-        console.error(err)// eslint-disable-line no-console
-        this.setState({ error: 'Yhteysvirhe' })
       })
     }
   }

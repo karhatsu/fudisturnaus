@@ -6,6 +6,7 @@ import Matches from './matches'
 import GroupResults from './group_results'
 import { buildTournamentFromSocketData, formatTournamentDates } from './util/util'
 import Title from './title'
+import { fetchTournament } from './api-client'
 
 export default class TournamentPage extends React.PureComponent {
   static propTypes = {
@@ -186,15 +187,13 @@ export default class TournamentPage extends React.PureComponent {
 
   fetchTournamentData = () => {
     const { tournamentId } = this.props
-    fetch(`/api/v1/tournaments/${tournamentId}`)
-      .then(response => response.json())
-      .then(tournament => this.setState({ tournament }))
-      .catch(err => {
-        console.error(err) // eslint-disable-line no-console
-        if (!this.state.tournament) {
-          this.setState({ error: true })
-        }
-      })
+    fetchTournament(tournamentId, (err, tournament) => {
+      if (tournament) {
+        this.setState({ tournament })
+      } else if (err && !this.state.tournament) {
+        this.setState({ error: true })
+      }
+    })
   }
 
   subscribeToResultsChannel = () => {

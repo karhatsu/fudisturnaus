@@ -4,6 +4,7 @@ import { endOfDay, format, isBefore, isSameDay, parseISO } from 'date-fns'
 import Loading from './loading'
 import Title from './title'
 import TournamentLinkBox from './tournament_link_box'
+import { fetchTournaments } from './api-client'
 
 export default class Main extends React.PureComponent {
   constructor(props) {
@@ -74,12 +75,12 @@ export default class Main extends React.PureComponent {
   }
 
   componentDidMount() {
-    fetch('/api/v1/tournaments')
-      .then(response => response.json())
-      .then(json => this.setState({ tournaments: json.tournaments }))
-      .catch(err => {
-        console.error(err) // eslint-disable-line no-console
+    fetchTournaments((err, tournaments) => {
+      if (err) {
         this.setState({ error: true })
-      })
+      } else {
+        this.setState({ tournaments })
+      }
+    })
   }
 }

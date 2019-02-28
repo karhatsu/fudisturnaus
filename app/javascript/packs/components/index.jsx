@@ -1,10 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { endOfDay, format, isBefore, isSameDay, parseISO } from 'date-fns'
 
 import Loading from './loading'
-import { formatTournamentDates } from './util/util'
 import Title from './title'
+import TournamentLinkBox from './tournament_link_box'
 
 export default class Main extends React.PureComponent {
   constructor(props) {
@@ -70,17 +69,8 @@ export default class Main extends React.PureComponent {
   }
 
   renderTournament = tournament => {
-    const { id, name, location, startDate, endDate } = tournament
-    return (
-      <Link to={`/tournaments/${id}`} key={id} className="tournament-link">
-        <div className="tournament-link__tournament-name">{name}</div>
-        <div>{location}, {formatTournamentDates(startDate, endDate)}</div>
-      </Link>
-    )
-  }
-
-  formatDate = date => {
-    return format(parseISO(date), 'dd.MM.yyyy')
+    const { id } = tournament
+    return <TournamentLinkBox key={id} to={`/tournaments/${id}`} tournament={tournament}/>
   }
 
   componentDidMount() {

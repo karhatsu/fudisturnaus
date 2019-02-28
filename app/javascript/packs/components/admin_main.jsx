@@ -1,7 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
+
 import Title from './title'
 import AdminLoginPage from './AdminLoginPage'
+import AdminIndex from './admin/index'
 
 export default class AdminMain extends React.PureComponent {
   static propTypes = {
@@ -25,7 +28,11 @@ export default class AdminMain extends React.PureComponent {
 
   renderContent() {
     if (this.state.sessionKey) {
-      return <div>TODO</div>
+      return (
+        <Switch>
+          <Route path="/admin" component={AdminIndex} exact />
+        </Switch>
+      )
     } else {
       return <AdminLoginPage onSuccessfulLogin={this.onSuccessfulLogin}/>
     }
@@ -38,7 +45,9 @@ export default class AdminMain extends React.PureComponent {
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
-    <AdminMain/>,
+    <BrowserRouter>
+      <Route path="/admin" component={AdminMain} />
+    </BrowserRouter>,
     document.getElementById('admin-app'),
   )
 })

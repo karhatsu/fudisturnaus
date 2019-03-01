@@ -2,9 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
-import Title from './title'
 import AdminLoginPage from './AdminLoginPage'
 import AdminIndex from './admin/index'
+import AdminTournamentPage from './admin/tournament_page'
+import PropTypes from 'prop-types'
 
 export default class AdminMain extends React.PureComponent {
   static propTypes = {
@@ -20,7 +21,6 @@ export default class AdminMain extends React.PureComponent {
   render() {
     return (
       <div>
-        <Title text="fudisturnaus.com - ADMIN" loading={false}/>
         {this.renderContent()}
       </div>
     )
@@ -30,6 +30,7 @@ export default class AdminMain extends React.PureComponent {
     if (this.state.sessionKey) {
       return (
         <Switch>
+          <Route path="/admin/tournaments/:id" component={AdminTournamentPageWrapper} />
           <Route path="/admin" component={AdminIndex} exact />
         </Switch>
       )
@@ -40,6 +41,21 @@ export default class AdminMain extends React.PureComponent {
 
   onSuccessfulLogin = sessionKey => {
     this.setState({ sessionKey })
+  }
+}
+
+class AdminTournamentPageWrapper extends React.PureComponent {
+  static propTypes = {
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
+  }
+
+  render() {
+    const { match: { params: { id } } } = this.props
+    return <AdminTournamentPage tournamentId={parseInt(id)}/>
   }
 }
 

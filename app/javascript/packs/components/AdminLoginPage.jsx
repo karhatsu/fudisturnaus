@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { loginToAdmin } from './api-client'
+import Title from './title'
 
 export default class AdminLoginPage extends React.PureComponent {
   static propTypes = {
@@ -19,6 +20,7 @@ export default class AdminLoginPage extends React.PureComponent {
   render() {
     return (
       <div>
+        <Title text="fudisturnaus.com" loading={false}/>
         {this.renderError()}
         {this.renderField('Käyttäjätunnus', 'username', 'text')}
         {this.renderField('Salasana', 'password', 'password')}

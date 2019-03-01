@@ -62,7 +62,7 @@ export default class Main extends React.PureComponent {
     if (tournaments.length) {
       return (
         <React.Fragment>
-          <div className="index__subtitle">{title}</div>
+          <div className="title-2">{title}</div>
           {tournaments.map(this.renderTournament)}
         </React.Fragment>
       )

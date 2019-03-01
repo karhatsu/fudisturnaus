@@ -23,7 +23,7 @@ export default class AdminTournamentPage extends React.PureComponent {
     return (
       <div>
         <Title loading={!tournament && !error} text={`ADMIN - ${title}`}/>
-        <div>TODO</div>
+        <div className="title-2">Kentät</div>
       </div>
     )
   }

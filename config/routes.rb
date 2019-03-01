@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     root to: 'admin#index'
+    get '*path', to: "admin#index"
   end
 
   resources :tournaments, only: :show

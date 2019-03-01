@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
-import AdminLoginPage from './AdminLoginPage'
+import AdminLoginPage from './admin/login_page'
 import AdminIndex from './admin/index'
 import AdminTournamentPage from './admin/tournament_page'
 import PropTypes from 'prop-types'

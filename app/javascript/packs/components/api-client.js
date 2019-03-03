@@ -37,14 +37,8 @@ export function saveResult(accessKey, type, matchId, homeGoals, awayGoals, penal
       },
     }),
   }).then(response => {
-    if (response.ok) {
-      callback(null, true)
-    } else {
-      response.json().then(({ errors }) => {
-        callback(errors)
-      }).catch(() => callback(['Odottamaton virhe, yritä uudestaan. Jos ongelma ei poistu, ota yhteys palvelun ylläpitoon.']))
-    }
-  }).catch(() => callback(['Yhteysvirhe, yritä uudestaan']))
+    handleSaveResponse(response, callback)
+  }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
 export function loginToAdmin(username, password, callback) {
@@ -62,8 +56,32 @@ export function loginToAdmin(username, password, callback) {
     } else {
       callback('Odottamaton virhe')
     }
-  }).catch(err => {
-    console.error(err)// eslint-disable-line no-console
-    callback('Yhteysvirhe')
-  })
+  }).catch(() => handleConnectionErrorOnSave(callback))
+}
+
+export function updateField(adminSessionKey, id, name, callback) {
+  fetch(`/api/v1/admin/fields/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Session-Key': adminSessionKey,
+    },
+    body: JSON.stringify({ field: { name } }),
+  }).then(response => {
+    handleSaveResponse(response, callback)
+  }).catch(() => handleConnectionErrorOnSave(callback))
+}
+
+function handleSaveResponse(response, callback) {
+  if (response.ok) {
+    callback(null, true)
+  } else {
+    response.json().then(({ errors }) => {
+      callback(errors)
+    }).catch(() => callback(['Odottamaton virhe, yritä uudestaan. Jos ongelma ei poistu, ota yhteys palvelun ylläpitoon.']))
+  }
+}
+
+function handleConnectionErrorOnSave(callback) {
+  callback(['Yhteysvirhe, yritä uudestaan'])
 }

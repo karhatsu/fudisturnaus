@@ -27,10 +27,7 @@ export function saveResult(accessKey, type, matchId, homeGoals, awayGoals, penal
   const typePath = type === matchTypes.playoff ? 'playoff_results' : 'group_stage_results'
   fetch(`/api/v1/official/${typePath}/${matchId}`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Access-Key': accessKey,
-    },
+    headers: officialHeaders(accessKey),
     body: JSON.stringify({
       match: {
         home_goals: homeGoals,
@@ -66,10 +63,7 @@ export function saveField(adminSessionKey, tournamentId, id, name, callback) {
   const method = id ? 'PATCH' : 'POST'
   fetch(url, {
     method,
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Session-Key': adminSessionKey,
-    },
+    headers: adminHeaders(adminSessionKey),
     body: JSON.stringify({ field: { name } }),
   }).then(response => {
     handleSaveResponse(response, callback)
@@ -79,10 +73,7 @@ export function saveField(adminSessionKey, tournamentId, id, name, callback) {
 export function deleteField(adminSessionKey, tournamentId, id, callback) {
   fetch(`/api/v1/admin/tournaments/${tournamentId}/fields/${id}`, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Session-Key': adminSessionKey,
-    },
+    headers: adminHeaders(adminSessionKey),
   }).then(response => {
     handleSaveResponse(response, callback)
   }).catch(() => handleConnectionErrorOnSave(callback))
@@ -102,4 +93,18 @@ function handleSaveResponse(response, callback) {
 
 function handleConnectionErrorOnSave(callback) {
   callback(['Yhteysvirhe, yritä uudestaan'])
+}
+
+function officialHeaders(accessKey) {
+  return {
+    'Content-Type': 'application/json',
+    'X-Access-Key': accessKey,
+  }
+}
+
+function adminHeaders(adminSessionKey) {
+  return {
+    'Content-Type': 'application/json',
+    'X-Session-Key': adminSessionKey,
+  }
 }

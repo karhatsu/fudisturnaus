@@ -38,7 +38,7 @@ export default class AdminTournamentPage extends React.PureComponent {
     return (
       <div>
         <div className="title-2">Kentät</div>
-        {this.renderFields()}
+        <div className="admin-tournament-page__section">{this.renderFields()}</div>
       </div>
     )
   }

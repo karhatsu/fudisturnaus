@@ -22,20 +22,31 @@ export default class Field extends React.PureComponent {
   }
 
   render() {
+    return (
+      <div className="field">
+        {this.state.formOpen && this.renderForm()}
+        {!this.state.formOpen && this.renderName()}
+      </div>
+    )
+  }
+
+  renderName() {
     const { field: { name } } = this.props
-    if (this.state.formOpen) {
-      return this.renderForm()
-    }
-    return <div onClick={this.editField}>{name}</div>
+    return <div className="field__name" onClick={this.editField}>{name}</div>
   }
 
   renderForm() {
     return (
       <div>
         {this.state.errors.length > 0 && <div className="error match__error">{this.state.errors.join('. ')}.</div>}
-        <div className="row">
-          <input type="text" onChange={this.changeName} value={this.state.name} placeholder="Kentän nimi"/>
-          <input type="submit" value="Tallenna" onClick={this.submit}/>
+        <div className="field__form">
+          <div className="form-field">
+            <input type="text" onChange={this.changeName} value={this.state.name} placeholder="Kentän nimi"/>
+          </div>
+          <div className="submit-button">
+            <input type="submit" value="Tallenna" onClick={this.submit}/>
+            <input type="button" value="Peruuta" onClick={this.cancel}/>
+          </div>
         </div>
       </div>
     )
@@ -61,5 +72,9 @@ export default class Field extends React.PureComponent {
         onSuccessfulSave({ id, name })
       }
     })
+  }
+
+  cancel = () => {
+    this.setState({ formOpen: false })
   }
 }

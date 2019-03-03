@@ -19,7 +19,7 @@ export default class AdminLoginPage extends React.PureComponent {
 
   render() {
     return (
-      <div>
+      <div className="form form--vertical">
         <Title text="fudisturnaus.com" loading={false}/>
         {this.renderError()}
         {this.renderField('Käyttäjätunnus', 'username', 'text')}
@@ -38,7 +38,7 @@ export default class AdminLoginPage extends React.PureComponent {
 
   renderField(label, field, type) {
     return (
-      <div className="row field">
+      <div className="row form-field">
         <div className="col-xs-12 col-sm-2 label">{label}</div>
         <div className="col-xs-12 col-sm-10"><input type={type} value={this.state[field]} onChange={this.setValue(field)}/></div>
       </div>

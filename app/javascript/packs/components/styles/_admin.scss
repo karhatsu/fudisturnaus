@@ -1,0 +1,23 @@
+@import 'shared';
+
+.admin-tournament-page__section {
+  @include white-box();
+}
+
+.field {
+  margin: 8px;
+
+  .field__name {
+    cursor: pointer;
+  }
+
+  .field__form {
+    input {
+      margin-right: 8px;
+    }
+
+    .form-field, .submit-button {
+      display: inline-block;
+    }
+  }
+}

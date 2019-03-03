@@ -38,7 +38,10 @@ export default class AdminTournamentPage extends React.PureComponent {
     return (
       <div>
         <div className="title-2">Kentät</div>
-        <div className="admin-tournament-page__section">{this.renderFields()}</div>
+        <div className="admin-tournament-page__section">
+          {this.renderFields()}
+          <Field onSuccessfulSave={this.onSuccessfulFieldSave} sessionKey={this.props.sessionKey} tournamentId={this.getTournamentId()}/>
+        </div>
       </div>
     )
   }
@@ -48,8 +51,7 @@ export default class AdminTournamentPage extends React.PureComponent {
   }
 
   fetchTournamentData = () => {
-    const { match: { params: { id } } } = this.props
-    fetchTournament(id, (err, tournament) => {
+    fetchTournament(this.getTournamentId(), (err, tournament) => {
       if (tournament) {
         this.setState({ tournament })
       } else if (err && !this.state.tournament) {
@@ -61,7 +63,13 @@ export default class AdminTournamentPage extends React.PureComponent {
   renderFields() {
     const { tournament: { fields } } = this.state
     return fields.map(field => {
-      return <Field key={field.id} field={field} onSuccessfulSave={this.onSuccessfulFieldSave} sessionKey={this.props.sessionKey}/>
+      return <Field
+        key={field.id}
+        field={field}
+        onSuccessfulSave={this.onSuccessfulFieldSave}
+        sessionKey={this.props.sessionKey}
+        tournamentId={this.getTournamentId()}
+      />
     })
   }
 
@@ -69,7 +77,15 @@ export default class AdminTournamentPage extends React.PureComponent {
     const { id, name } = data
     const fields = [...this.state.tournament.fields]
     const fieldIndex = fields.findIndex(field => field.id === id)
-    fields[fieldIndex] = { ...fields[fieldIndex], name }
+    if (fieldIndex !== -1) {
+      fields[fieldIndex] = { ...fields[fieldIndex], name }
+    } else {
+      fields.push({ id, name })
+    }
     this.setState({ tournament: { ...this.state.tournament, fields } })
+  }
+
+  getTournamentId = () => {
+    return parseInt(this.props.match.params.id)
   }
 }

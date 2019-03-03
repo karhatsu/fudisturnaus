@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { updateField } from '../api-client'
+import { saveField } from '../api-client'
 
 export default class Field extends React.PureComponent {
   static propTypes = {
@@ -10,6 +10,7 @@ export default class Field extends React.PureComponent {
     }),
     onSuccessfulSave: PropTypes.func.isRequired,
     sessionKey: PropTypes.string.isRequired,
+    tournamentId: PropTypes.number.isRequired,
   }
 
   constructor(props) {
@@ -31,8 +32,8 @@ export default class Field extends React.PureComponent {
   }
 
   renderName() {
-    const { field: { name } } = this.props
-    return <div className="field__name" onClick={this.editField}>{name}</div>
+    const { field } = this.props
+    return <div className="field__name" onClick={this.editField}>{field ? field.name : 'Lisää uusi kenttä'}</div>
   }
 
   renderForm() {
@@ -53,8 +54,8 @@ export default class Field extends React.PureComponent {
   }
 
   editField = () => {
-    const { field: { name } } = this.props
-    this.setState({ formOpen: true, name })
+    const { field } = this.props
+    this.setState({ formOpen: true, name: field ? field.name : '' })
   }
 
   changeName = event => {
@@ -62,19 +63,19 @@ export default class Field extends React.PureComponent {
   }
 
   submit = () => {
-    const { field: { id }, onSuccessfulSave, sessionKey } = this.props
+    const { field, onSuccessfulSave, sessionKey, tournamentId } = this.props
     const { name } = this.state
-    updateField(sessionKey, id, name, (errors) => {
+    saveField(sessionKey, tournamentId, field ? field.id : undefined, name, (errors, data) => {
       if (errors) {
         this.setState({ errors })
       } else {
         this.setState({ formOpen: false, errors: [] })
-        onSuccessfulSave({ id, name })
+        onSuccessfulSave({ id: data.id, name })
       }
     })
   }
 
   cancel = () => {
-    this.setState({ formOpen: false })
+    this.setState({ formOpen: false, errors: [] })
   }
 }

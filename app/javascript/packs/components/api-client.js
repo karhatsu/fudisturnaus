@@ -1,5 +1,7 @@
 import { matchTypes } from './util/enums'
 
+const unexpectedErrorMsg = 'Odottamaton virhe, yritä uudestaan. Jos ongelma ei poistu, ota yhteys palvelun ylläpitoon.'
+
 export function fetchTournaments(callback) {
   fetch('/api/v1/tournaments')
     .then(response => response.json())
@@ -59,9 +61,11 @@ export function loginToAdmin(username, password, callback) {
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
-export function updateField(adminSessionKey, id, name, callback) {
-  fetch(`/api/v1/admin/fields/${id}`, {
-    method: 'PATCH',
+export function saveField(adminSessionKey, tournamentId, id, name, callback) {
+  const url = `/api/v1/admin/tournaments/${tournamentId}/fields` + (id ? `/${id}` : '')
+  const method = id ? 'PATCH' : 'POST'
+  fetch(url, {
+    method,
     headers: {
       'Content-Type': 'application/json',
       'X-Session-Key': adminSessionKey,
@@ -74,11 +78,13 @@ export function updateField(adminSessionKey, id, name, callback) {
 
 function handleSaveResponse(response, callback) {
   if (response.ok) {
-    callback(null, true)
+    response.json().then(data => {
+      callback(null, data)
+    }).catch(() => callback([unexpectedErrorMsg]))
   } else {
     response.json().then(({ errors }) => {
       callback(errors)
-    }).catch(() => callback(['Odottamaton virhe, yritä uudestaan. Jos ongelma ei poistu, ota yhteys palvelun ylläpitoon.']))
+    }).catch(() => callback([unexpectedErrorMsg]))
   }
 }
 

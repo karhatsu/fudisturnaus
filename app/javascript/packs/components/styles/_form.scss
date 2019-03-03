@@ -33,6 +33,10 @@ $inputHeight: 16px;
   .button--primary {
     border: 1px solid $green;
   }
+
+  .button--danger {
+    border: 1px solid $red;
+  }
 }
 
 .form--vertical {

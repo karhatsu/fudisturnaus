@@ -76,6 +76,18 @@ export function saveField(adminSessionKey, tournamentId, id, name, callback) {
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
+export function deleteField(adminSessionKey, tournamentId, id, callback) {
+  fetch(`/api/v1/admin/tournaments/${tournamentId}/fields/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Session-Key': adminSessionKey,
+    },
+  }).then(response => {
+    handleSaveResponse(response, callback)
+  }).catch(() => handleConnectionErrorOnSave(callback))
+}
+
 function handleSaveResponse(response, callback) {
   if (response.ok) {
     response.json().then(data => {

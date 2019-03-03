@@ -18,6 +18,15 @@ class Api::V1::Admin::FieldsController < Api::V1::Admin::AdminBaseController
     end
   end
 
+  def destroy
+    field = Field.find params[:id]
+    if field.destroy
+      render status: 200, json: { id: field.id }
+    else
+      render status: 400, json: { errors: field.errors.full_messages }
+    end
+  end
+
   private
 
   def field_params

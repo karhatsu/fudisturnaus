@@ -40,7 +40,7 @@ export default class AdminTournamentPage extends React.PureComponent {
         <div className="title-2">Kentät</div>
         <div className="admin-tournament-page__section">
           {this.renderFields()}
-          <Field onSuccessfulSave={this.onSuccessfulFieldSave} sessionKey={this.props.sessionKey} tournamentId={this.getTournamentId()}/>
+          <Field onFieldSave={this.onFieldSave} sessionKey={this.props.sessionKey} tournamentId={this.getTournamentId()}/>
         </div>
       </div>
     )
@@ -66,14 +66,22 @@ export default class AdminTournamentPage extends React.PureComponent {
       return <Field
         key={field.id}
         field={field}
-        onSuccessfulSave={this.onSuccessfulFieldSave}
+        onFieldDelete={this.onFieldDelete}
+        onFieldSave={this.onFieldSave}
         sessionKey={this.props.sessionKey}
         tournamentId={this.getTournamentId()}
       />
     })
   }
 
-  onSuccessfulFieldSave = data => {
+  onFieldDelete = id => {
+    const fields = [...this.state.tournament.fields]
+    const fieldIndex = fields.findIndex(field => field.id === id)
+    fields.splice(fieldIndex, 1)
+    this.setState({ tournament: { ...this.state.tournament, fields } })
+  }
+
+  onFieldSave = data => {
     const { id, name } = data
     const fields = [...this.state.tournament.fields]
     const fieldIndex = fields.findIndex(field => field.id === id)

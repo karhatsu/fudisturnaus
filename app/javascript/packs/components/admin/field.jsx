@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { saveField } from '../api-client'
+import { deleteField, saveField } from '../api-client'
 
 export default class Field extends React.PureComponent {
   static propTypes = {
@@ -8,7 +8,8 @@ export default class Field extends React.PureComponent {
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
     }),
-    onSuccessfulSave: PropTypes.func.isRequired,
+    onFieldDelete: PropTypes.func,
+    onFieldSave: PropTypes.func.isRequired,
     sessionKey: PropTypes.string.isRequired,
     tournamentId: PropTypes.number.isRequired,
   }
@@ -47,6 +48,7 @@ export default class Field extends React.PureComponent {
           <div className="submit-button">
             <input type="submit" value="Tallenna" onClick={this.submit} className="button--primary"/>
             <input type="button" value="Peruuta" onClick={this.cancel}/>
+            {!!this.props.field && <input type="button" value="Poista" onClick={this.delete} className="button--danger"/>}
           </div>
         </div>
       </div>
@@ -63,19 +65,31 @@ export default class Field extends React.PureComponent {
   }
 
   submit = () => {
-    const { field, onSuccessfulSave, sessionKey, tournamentId } = this.props
+    const { field, onFieldSave, sessionKey, tournamentId } = this.props
     const { name } = this.state
     saveField(sessionKey, tournamentId, field ? field.id : undefined, name, (errors, data) => {
       if (errors) {
         this.setState({ errors })
       } else {
         this.setState({ formOpen: false, errors: [] })
-        onSuccessfulSave({ id: data.id, name })
+        onFieldSave({ id: data.id, name })
       }
     })
   }
 
   cancel = () => {
     this.setState({ formOpen: false, errors: [] })
+  }
+
+  delete = () => {
+    const { field: { id }, onFieldDelete, sessionKey, tournamentId } = this.props
+    deleteField(sessionKey, tournamentId, id, (errors) => {
+      if (errors) {
+        this.setState({ errors })
+      } else {
+        this.setState({ formOpen: false, errors: [] })
+        onFieldDelete(id)
+      }
+    })
   }
 }

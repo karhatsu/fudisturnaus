@@ -79,6 +79,27 @@ export function deleteField(adminSessionKey, tournamentId, id, callback) {
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
+export function saveAgeGroup(adminSessionKey, tournamentId, id, name, callback) {
+  const url = `/api/v1/admin/tournaments/${tournamentId}/age_groups` + (id ? `/${id}` : '')
+  const method = id ? 'PATCH' : 'POST'
+  fetch(url, {
+    method,
+    headers: adminHeaders(adminSessionKey),
+    body: JSON.stringify({ age_group: { name } }),
+  }).then(response => {
+    handleSaveResponse(response, callback)
+  }).catch(() => handleConnectionErrorOnSave(callback))
+}
+
+export function deleteAgeGroup(adminSessionKey, tournamentId, id, callback) {
+  fetch(`/api/v1/admin/tournaments/${tournamentId}/age_groups/${id}`, {
+    method: 'DELETE',
+    headers: adminHeaders(adminSessionKey),
+  }).then(response => {
+    handleSaveResponse(response, callback)
+  }).catch(() => handleConnectionErrorOnSave(callback))
+}
+
 function handleSaveResponse(response, callback) {
   if (response.ok) {
     response.json().then(data => {

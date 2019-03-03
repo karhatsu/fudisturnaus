@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       namespace :admin do
         resources :admin_sessions, only: :create
         resources :tournaments, only: [] do
+          resources :age_groups, only: [:create, :update, :destroy]
           resources :fields, only: [:create, :update, :destroy]
         end
       end

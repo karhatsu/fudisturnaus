@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { fetchTournament } from '../api-client'
 import Title from '../title'
+import AgeGroup from './age_group'
 import Field from './field'
 
 export default class AdminTournamentPage extends React.PureComponent {
@@ -35,12 +36,19 @@ export default class AdminTournamentPage extends React.PureComponent {
 
   renderContent() {
     if (!this.state.tournament) return null
+    const { sessionKey } = this.props
+    const tournamentId = this.getTournamentId()
     return (
       <div>
         <div className="title-2">Kentät</div>
         <div className="admin-tournament-page__section">
           {this.renderFields()}
-          <Field onFieldSave={this.onFieldSave} sessionKey={this.props.sessionKey} tournamentId={this.getTournamentId()}/>
+          <Field onFieldSave={this.onFieldSave} sessionKey={sessionKey} tournamentId={tournamentId}/>
+        </div>
+        <div className="title-2">Ikäryhmät</div>
+        <div className="admin-tournament-page__section">
+          {this.renderAgeGroups()}
+          <AgeGroup onAgeGroupSave={this.onAgeGroupSave} sessionKey={sessionKey} tournamentId={tournamentId}/>
         </div>
       </div>
     )
@@ -91,6 +99,39 @@ export default class AdminTournamentPage extends React.PureComponent {
       fields.push({ id, name })
     }
     this.setState({ tournament: { ...this.state.tournament, fields } })
+  }
+
+  renderAgeGroups() {
+    const { tournament: { ageGroups } } = this.state
+    return ageGroups.map(ageGroup => {
+      return <AgeGroup
+        key={ageGroup.id}
+        ageGroup={ageGroup}
+        onAgeGroupDelete={this.onAgeGroupDelete}
+        onAgeGroupSave={this.onAgeGroupSave}
+        sessionKey={this.props.sessionKey}
+        tournamentId={this.getTournamentId()}
+      />
+    })
+  }
+
+  onAgeGroupDelete = id => {
+    const ageGroups = [...this.state.tournament.ageGroups]
+    const ageGroupIndex = ageGroups.findIndex(ageGroup => ageGroup.id === id)
+    ageGroups.splice(ageGroupIndex, 1)
+    this.setState({ tournament: { ...this.state.tournament, ageGroups } })
+  }
+
+  onAgeGroupSave = data => {
+    const { id, name } = data
+    const ageGroups = [...this.state.tournament.ageGroups]
+    const ageGroupIndex = ageGroups.findIndex(ageGroup => ageGroup.id === id)
+    if (ageGroupIndex !== -1) {
+      ageGroups[ageGroupIndex] = { ...ageGroups[ageGroupIndex], name }
+    } else {
+      ageGroups.push({ id, name })
+    }
+    this.setState({ tournament: { ...this.state.tournament, ageGroups } })
   }
 
   getTournamentId = () => {

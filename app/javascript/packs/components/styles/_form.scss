@@ -1,4 +1,9 @@
+@import 'shared';
 $inputHeight: 16px;
+
+.login-form {
+  @include white-box();
+}
 
 .form-field, .submit-button {
   line-height: $inputHeight;
@@ -23,6 +28,10 @@ $inputHeight: 16px;
     border-radius: 2px;
     cursor: pointer;
     padding: 8px 16px;
+  }
+
+  .button--primary {
+    border: 1px solid $green;
   }
 }
 

@@ -21,10 +21,12 @@ export default class AdminLoginPage extends React.PureComponent {
     return (
       <div className="form form--vertical">
         <Title text="fudisturnaus.com" loading={false}/>
-        {this.renderError()}
-        {this.renderField('Käyttäjätunnus', 'username', 'text')}
-        {this.renderField('Salasana', 'password', 'password')}
-        {this.renderSubmitButton()}
+        <div className="login-form">
+          {this.renderError()}
+          {this.renderField('Käyttäjätunnus', 'username', 'text')}
+          {this.renderField('Salasana', 'password', 'password')}
+          {this.renderSubmitButton()}
+        </div>
       </div>
     )
   }
@@ -49,7 +51,7 @@ export default class AdminLoginPage extends React.PureComponent {
     return (
       <div className="row submit-button">
         <div className="col-xs-12">
-          <input type="submit" value="Kirjaudu sisään" onClick={this.submit}/>
+          <input type="submit" value="Kirjaudu sisään" onClick={this.submit} className="button--primary"/>
         </div>
       </div>
     )

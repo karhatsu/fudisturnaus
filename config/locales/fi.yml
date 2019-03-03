@@ -3,6 +3,8 @@ fi:
     models:
       group_stage_match: Alkulohkon ottelu
     attributes:
+      field:
+        name: Kentän nimi
       group_stage_match:
         home_goals: Kotijoukkueen maalit
         away_goals: Vierasjoukkueen maalit

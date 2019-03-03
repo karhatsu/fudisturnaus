@@ -1,5 +1,5 @@
 import React from 'react'
-import { endOfDay, format, isBefore, isSameDay, parseISO } from 'date-fns'
+import { endOfDay, isBefore, isSameDay, parseISO } from 'date-fns'
 
 import Loading from './loading'
 import Title from './title'

@@ -46,9 +46,9 @@ export default class Field extends React.PureComponent {
             <input type="text" onChange={this.changeName} value={this.state.name} placeholder="Kentän nimi"/>
           </div>
           <div className="submit-button">
-            <input type="submit" value="Tallenna" onClick={this.submit} className="button--primary"/>
-            <input type="button" value="Peruuta" onClick={this.cancel}/>
-            {!!this.props.field && <input type="button" value="Poista" onClick={this.delete} className="button--danger"/>}
+            <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary"/>
+            <input type="button" value="Peruuta" onClick={this.cancel} className="button"/>
+            {!!this.props.field && <input type="button" value="Poista" onClick={this.delete} className="button button--danger"/>}
           </div>
         </div>
       </div>

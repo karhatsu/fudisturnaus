@@ -51,7 +51,7 @@ export default class AdminLoginPage extends React.PureComponent {
     return (
       <div className="row submit-button">
         <div className="col-xs-12">
-          <input type="submit" value="Kirjaudu sisään" onClick={this.submit} className="button--primary"/>
+          <input type="submit" value="Kirjaudu sisään" onClick={this.submit} className="button button--primary"/>
         </div>
       </div>
     )

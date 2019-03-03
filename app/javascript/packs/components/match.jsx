@@ -59,7 +59,7 @@ export default class Match extends React.PureComponent {
           </div>
           <div className="match__result">{this.renderResult()}</div>
         </div>
-        {this.state.errors.length > 0 && <div className="error match__error">{this.state.errors.join('. ')}.</div>}
+        {this.state.errors.length > 0 && <div className="form-error">{this.state.errors.join('. ')}.</div>}
       </div>
     )
   }

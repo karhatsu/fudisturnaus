@@ -40,7 +40,7 @@ export default class Field extends React.PureComponent {
   renderForm() {
     return (
       <div>
-        {this.state.errors.length > 0 && <div className="error match__error">{this.state.errors.join('. ')}.</div>}
+        {this.state.errors.length > 0 && <div className="form-error">{this.state.errors.join('. ')}.</div>}
         <div className="field__form">
           <div className="form-field">
             <input type="text" onChange={this.changeName} value={this.state.name} placeholder="Kentän nimi"/>

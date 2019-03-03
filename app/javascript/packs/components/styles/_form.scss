@@ -56,3 +56,8 @@ $inputHeight: 16px;
     margin-top: $inputHeight;
   }
 }
+
+.form-error {
+  color: $red;
+  font-weight: 600;
+}

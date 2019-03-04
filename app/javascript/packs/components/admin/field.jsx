@@ -43,7 +43,7 @@ export default class Field extends React.PureComponent {
         {this.state.errors.length > 0 && <div className="form-error">{this.state.errors.join('. ')}.</div>}
         <div className="field__form">
           <div className="form-field">
-            <input type="text" onChange={this.changeName} value={this.state.name} placeholder="Kentän nimi"/>
+            <input type="text" onChange={this.changeName} value={this.state.name} placeholder="Esim. Kenttä 1"/>
           </div>
           <div className="submit-button">
             <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary"/>

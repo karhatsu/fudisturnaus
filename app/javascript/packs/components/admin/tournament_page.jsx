@@ -13,7 +13,6 @@ export default class AdminTournamentPage extends React.PureComponent {
         id: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired,
-    sessionKey: PropTypes.string.isRequired,
   }
 
   constructor(props) {
@@ -38,23 +37,22 @@ export default class AdminTournamentPage extends React.PureComponent {
   renderContent() {
     const { tournament } = this.state
     if (!tournament) return null
-    const { sessionKey } = this.props
     const tournamentId = this.getTournamentId()
     return (
       <div>
         <div className="title-2">Perustiedot</div>
         <div className="admin-tournament-page__section">
-          <TournamentFields onSave={this.onSave} sessionKey={sessionKey} tournament={tournament}/>
+          <TournamentFields onSave={this.onSave} tournament={tournament}/>
         </div>
         <div className="title-2">Kentät</div>
         <div className="admin-tournament-page__section">
           {this.renderFields()}
-          <Field onFieldSave={this.onFieldSave} sessionKey={sessionKey} tournamentId={tournamentId}/>
+          <Field onFieldSave={this.onFieldSave} tournamentId={tournamentId}/>
         </div>
         <div className="title-2">Ikäryhmät</div>
         <div className="admin-tournament-page__section">
           {this.renderAgeGroups()}
-          <AgeGroup onAgeGroupSave={this.onAgeGroupSave} sessionKey={sessionKey} tournamentId={tournamentId}/>
+          <AgeGroup onAgeGroupSave={this.onAgeGroupSave} tournamentId={tournamentId}/>
         </div>
       </div>
     )
@@ -87,7 +85,6 @@ export default class AdminTournamentPage extends React.PureComponent {
         field={field}
         onFieldDelete={this.onFieldDelete}
         onFieldSave={this.onFieldSave}
-        sessionKey={this.props.sessionKey}
         tournamentId={this.getTournamentId()}
       />
     })
@@ -120,7 +117,6 @@ export default class AdminTournamentPage extends React.PureComponent {
         ageGroup={ageGroup}
         onAgeGroupDelete={this.onAgeGroupDelete}
         onAgeGroupSave={this.onAgeGroupSave}
-        sessionKey={this.props.sessionKey}
         tournamentId={this.getTournamentId()}
       />
     })

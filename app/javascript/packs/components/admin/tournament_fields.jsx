@@ -2,11 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { formatTournamentDates } from '../util/util'
 import { saveTournament } from '../api-client'
+import AdminSessionKeyContext from './session_key_context'
 
 export default class TournamentFields extends React.PureComponent {
   static propTypes = {
     onSave: PropTypes.func.isRequired,
-    sessionKey: PropTypes.string.isRequired,
     tournament: PropTypes.shape({
       name: PropTypes.string.isRequired,
       location: PropTypes.string.isRequired,
@@ -16,6 +16,8 @@ export default class TournamentFields extends React.PureComponent {
       days: PropTypes.number.isRequired,
     }).isRequired,
   }
+
+  static contextType = AdminSessionKeyContext
 
   constructor(props) {
     super(props)
@@ -104,8 +106,8 @@ export default class TournamentFields extends React.PureComponent {
   }
 
   submit = () => {
-    const { onSave, sessionKey, tournament: { id } } = this.props
-    saveTournament(sessionKey, id, this.state.form, (errors, data) => {
+    const { onSave, tournament: { id } } = this.props
+    saveTournament(this.context, id, this.state.form, (errors, data) => {
       if (errors) {
         this.setState({ errors })
       } else {

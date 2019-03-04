@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { deleteAgeGroup, saveAgeGroup } from '../api-client'
+import AdminSessionKeyContext from './session_key_context'
 
 export default class AgeGroup extends React.PureComponent {
   static propTypes = {
@@ -10,9 +11,10 @@ export default class AgeGroup extends React.PureComponent {
     }),
     onAgeGroupDelete: PropTypes.func,
     onAgeGroupSave: PropTypes.func.isRequired,
-    sessionKey: PropTypes.string.isRequired,
     tournamentId: PropTypes.number.isRequired,
   }
+
+  static contextType = AdminSessionKeyContext
 
   constructor(props) {
     super(props)
@@ -65,9 +67,9 @@ export default class AgeGroup extends React.PureComponent {
   }
 
   submit = () => {
-    const { ageGroup, onAgeGroupSave, sessionKey, tournamentId } = this.props
+    const { ageGroup, onAgeGroupSave, tournamentId } = this.props
     const { name } = this.state
-    saveAgeGroup(sessionKey, tournamentId, ageGroup ? ageGroup.id : undefined, name, (errors, data) => {
+    saveAgeGroup(this.context, tournamentId, ageGroup ? ageGroup.id : undefined, name, (errors, data) => {
       if (errors) {
         this.setState({ errors })
       } else {
@@ -82,8 +84,8 @@ export default class AgeGroup extends React.PureComponent {
   }
 
   delete = () => {
-    const { ageGroup: { id }, onAgeGroupDelete, sessionKey, tournamentId } = this.props
-    deleteAgeGroup(sessionKey, tournamentId, id, (errors) => {
+    const { ageGroup: { id }, onAgeGroupDelete, tournamentId } = this.props
+    deleteAgeGroup(this.context, tournamentId, id, (errors) => {
       if (errors) {
         this.setState({ errors })
       } else {

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { deleteField, saveField } from '../api-client'
+import AdminSessionKeyContext from './session_key_context'
 
 export default class Field extends React.PureComponent {
   static propTypes = {
@@ -10,9 +11,10 @@ export default class Field extends React.PureComponent {
     }),
     onFieldDelete: PropTypes.func,
     onFieldSave: PropTypes.func.isRequired,
-    sessionKey: PropTypes.string.isRequired,
     tournamentId: PropTypes.number.isRequired,
   }
+
+  static contextType = AdminSessionKeyContext
 
   constructor(props) {
     super(props)
@@ -65,9 +67,9 @@ export default class Field extends React.PureComponent {
   }
 
   submit = () => {
-    const { field, onFieldSave, sessionKey, tournamentId } = this.props
+    const { field, onFieldSave, tournamentId } = this.props
     const { name } = this.state
-    saveField(sessionKey, tournamentId, field ? field.id : undefined, name, (errors, data) => {
+    saveField(this.context, tournamentId, field ? field.id : undefined, name, (errors, data) => {
       if (errors) {
         this.setState({ errors })
       } else {
@@ -82,8 +84,8 @@ export default class Field extends React.PureComponent {
   }
 
   delete = () => {
-    const { field: { id }, onFieldDelete, sessionKey, tournamentId } = this.props
-    deleteField(sessionKey, tournamentId, id, (errors) => {
+    const { field: { id }, onFieldDelete, tournamentId } = this.props
+    deleteField(this.context, tournamentId, id, (errors) => {
       if (errors) {
         this.setState({ errors })
       } else {

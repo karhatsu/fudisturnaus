@@ -57,6 +57,12 @@ $inputHeight: 16px;
   }
 }
 
+.form--horizontal {
+  .form-field, .submit-button {
+    display: inline-block;
+  }
+}
+
 .form-error {
   color: $red;
   font-weight: 600;

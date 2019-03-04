@@ -25,7 +25,7 @@ export default class AgeGroup extends React.PureComponent {
 
   render() {
     return (
-      <div className="field">
+      <div className="admin-item">
         {this.state.formOpen && this.renderForm()}
         {!this.state.formOpen && this.renderName()}
       </div>
@@ -34,14 +34,14 @@ export default class AgeGroup extends React.PureComponent {
 
   renderName() {
     const { ageGroup } = this.props
-    return <div className="field__name" onClick={this.editAgeGroup}>{ageGroup ? ageGroup.name : 'Lisää uusi ikäryhmä'}</div>
+    return <div className="admin-item__title" onClick={this.editAgeGroup}>{ageGroup ? ageGroup.name : 'Lisää uusi ikäryhmä'}</div>
   }
 
   renderForm() {
     return (
-      <div>
+      <div className="form form--horizontal">
         {this.state.errors.length > 0 && <div className="form-error">{this.state.errors.join('. ')}.</div>}
-        <div className="field__form">
+        <div className="admin-item__form">
           <div className="form-field">
             <input type="text" onChange={this.changeName} value={this.state.name} placeholder="Esim. P11 tai T09"/>
           </div>

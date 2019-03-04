@@ -4,20 +4,16 @@
   @include white-box();
 }
 
-.field {
+.admin-item {
   margin: 8px;
 
-  .field__name {
+  .admin-item__title {
     cursor: pointer;
   }
 
-  .field__form {
+  .admin-item__form {
     input {
       margin-right: 8px;
-    }
-
-    .form-field, .submit-button {
-      display: inline-block;
     }
   }
 }

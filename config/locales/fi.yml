@@ -11,3 +11,9 @@ fi:
       playoff_match:
         home_goals: Kotijoukkueen maalit
         away_goals: Vierasjoukkueen maalit
+      tournament:
+        address: Osoite
+        days: Kesto (pv)
+        location: Sijainti
+        name: Nimi
+        start_date: Pvm

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { fetchTournament } from '../api-client'
 import Title from '../title'
+import TournamentFields from './tournament_fields'
 import AgeGroup from './age_group'
 import Field from './field'
 
@@ -35,11 +36,16 @@ export default class AdminTournamentPage extends React.PureComponent {
   }
 
   renderContent() {
-    if (!this.state.tournament) return null
+    const { tournament } = this.state
+    if (!tournament) return null
     const { sessionKey } = this.props
     const tournamentId = this.getTournamentId()
     return (
       <div>
+        <div className="title-2">Perustiedot</div>
+        <div className="admin-tournament-page__section">
+          <TournamentFields onSave={this.onSave} sessionKey={sessionKey} tournament={tournament}/>
+        </div>
         <div className="title-2">Kentät</div>
         <div className="admin-tournament-page__section">
           {this.renderFields()}
@@ -66,6 +72,11 @@ export default class AdminTournamentPage extends React.PureComponent {
         this.setState({ error: true })
       }
     })
+  }
+
+  onSave = data => {
+    const { tournament } = this.state
+    this.setState({ tournament: { ...tournament, ...data } })
   }
 
   renderFields() {

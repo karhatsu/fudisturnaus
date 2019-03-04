@@ -58,6 +58,16 @@ export function loginToAdmin(username, password, callback) {
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
+export function saveTournament(adminSessionKey, id, data, callback) {
+  fetch(`/api/v1/admin/tournaments/${id}`, {
+    method: 'PATCH',
+    headers: adminHeaders(adminSessionKey),
+    body: JSON.stringify({ tournament: data }),
+  }).then(response => {
+    handleSaveResponse(response, callback)
+  }).catch(() => handleConnectionErrorOnSave(callback))
+}
+
 export function saveField(adminSessionKey, tournamentId, id, name, callback) {
   const url = `/api/v1/admin/tournaments/${tournamentId}/fields` + (id ? `/${id}` : '')
   const method = id ? 'PATCH' : 'POST'

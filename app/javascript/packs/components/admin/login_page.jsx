@@ -40,19 +40,17 @@ export default class AdminLoginPage extends React.PureComponent {
 
   renderField(label, field, type) {
     return (
-      <div className="row form-field">
-        <div className="col-xs-12 col-sm-2 label">{label}</div>
-        <div className="col-xs-12 col-sm-10"><input type={type} value={this.state[field]} onChange={this.setValue(field)}/></div>
+      <div className="form__field">
+        <div className="label">{label}</div>
+        <div className=""><input type={type} value={this.state[field]} onChange={this.setValue(field)}/></div>
       </div>
     )
   }
 
   renderSubmitButton() {
     return (
-      <div className="row submit-button">
-        <div className="col-xs-12">
-          <input type="submit" value="Kirjaudu sisään" onClick={this.submit} className="button button--primary"/>
-        </div>
+      <div className="form__buttons">
+        <input type="submit" value="Kirjaudu sisään" onClick={this.submit} className="button button--primary"/>
       </div>
     )
   }

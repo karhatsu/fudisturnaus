@@ -5,13 +5,9 @@ $inputHeight: 16px;
   @include white-box();
 }
 
-.form-field, .submit-button {
-  line-height: $inputHeight;
-}
-
-.form-field {
+.form__field {
   .label {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
   }
 
@@ -29,6 +25,12 @@ $inputHeight: 16px;
   padding: 8px 16px;
 }
 
+.form__buttons {
+  .button {
+    margin-right: 8px;
+  }
+}
+
 .button--primary {
   border: 1px solid $green;
 }
@@ -38,11 +40,11 @@ $inputHeight: 16px;
 }
 
 .form--vertical {
-  .form-field, .submit-button {
+  .form__field, .form__buttons {
     margin-top: 8px;
   }
 
-  .form-field {
+  .form__field {
     .label {
       margin-top: 8px;
     }
@@ -52,14 +54,18 @@ $inputHeight: 16px;
     }
   }
 
-  .submit-button {
+  .form__buttons {
     margin-top: $inputHeight;
   }
 }
 
 .form--horizontal {
-  .form-field, .submit-button {
+  .form__field, .form__buttons {
     display: inline-block;
+  }
+
+  .form__field {
+    margin-right: 8px;
   }
 }
 

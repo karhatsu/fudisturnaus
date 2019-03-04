@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { formatTournamentDates } from '../util/util'
-import { saveTournament } from '../api-client'
+import { saveTournament } from './api-client'
 import AdminSessionKeyContext from './session_key_context'
 
 export default class TournamentFields extends React.PureComponent {

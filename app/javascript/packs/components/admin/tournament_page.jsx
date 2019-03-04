@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { fetchAdminTournament } from '../api-client'
+import { fetchTournament } from './api-client'
 import Title from '../title'
 import TournamentFields from './tournament_fields'
 import AgeGroup from './age_group'
@@ -66,7 +66,7 @@ export default class AdminTournamentPage extends React.PureComponent {
   }
 
   fetchTournamentData = () => {
-    fetchAdminTournament(this.context, this.getTournamentId(), (err, tournament) => {
+    fetchTournament(this.context, this.getTournamentId(), (err, tournament) => {
       if (tournament) {
         this.setState({ tournament })
       } else if (err && !this.state.tournament) {

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { deleteField, saveField } from '../api-client'
+import { deleteField, saveField } from './api-client'
 import AdminSessionKeyContext from './session_key_context'
 
 export default class Field extends React.PureComponent {

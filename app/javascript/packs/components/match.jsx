@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { format, parseISO } from 'date-fns'
 import { matchTypes } from './util/enums'
-import { saveResult } from './api-client'
+import { saveResult } from './official/api-client'
 
 export default class Match extends React.PureComponent {
   static propTypes = {

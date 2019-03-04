@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { deleteAgeGroup, saveAgeGroup } from '../api-client'
+import { deleteAgeGroup, saveAgeGroup } from './api-client'
 import AdminSessionKeyContext from './session_key_context'
 
 export default class AgeGroup extends React.PureComponent {

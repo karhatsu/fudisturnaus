@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { fetchTournament } from '../api-client'
+import { fetchAdminTournament } from '../api-client'
 import Title from '../title'
 import TournamentFields from './tournament_fields'
 import AgeGroup from './age_group'
 import Field from './field'
+import AdminSessionKeyContext from './session_key_context'
 
 export default class AdminTournamentPage extends React.PureComponent {
   static propTypes = {
@@ -14,6 +15,8 @@ export default class AdminTournamentPage extends React.PureComponent {
       }).isRequired,
     }).isRequired,
   }
+
+  static contextType = AdminSessionKeyContext
 
   constructor(props) {
     super(props)
@@ -63,7 +66,7 @@ export default class AdminTournamentPage extends React.PureComponent {
   }
 
   fetchTournamentData = () => {
-    fetchTournament(this.getTournamentId(), (err, tournament) => {
+    fetchAdminTournament(this.context, this.getTournamentId(), (err, tournament) => {
       if (tournament) {
         this.setState({ tournament })
       } else if (err && !this.state.tournament) {

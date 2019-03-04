@@ -1,4 +1,8 @@
 class Api::V1::Admin::TournamentsController < Api::V1::Admin::AdminBaseController
+  def show
+    @tournament = Tournament.where(id: params[:id]).includes(:age_groups, :fields).first
+  end
+
   def update
     @tournament = Tournament.find params[:id]
     unless @tournament.update(tournament_params)

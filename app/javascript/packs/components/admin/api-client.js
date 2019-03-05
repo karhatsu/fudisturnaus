@@ -62,14 +62,10 @@ export function deleteField(adminSessionKey, tournamentId, id, callback) {
 export function saveAgeGroup(adminSessionKey, tournamentId, id, data, callback) {
   const url = `/api/v1/admin/tournaments/${tournamentId}/age_groups` + (id ? `/${id}` : '')
   const method = id ? 'PATCH' : 'POST'
-  const ageGroup = {
-    name: data.name,
-    calculate_group_tables: data.calculateGroupTables,
-  }
   fetch(url, {
     method,
     headers: adminHeaders(adminSessionKey),
-    body: JSON.stringify({ age_group: ageGroup }),
+    body: JSON.stringify({ ageGroup: data }),
   }).then(response => {
     handleSaveResponse(response, callback)
   }).catch(() => handleConnectionErrorOnSave(callback))

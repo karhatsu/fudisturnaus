@@ -8,11 +8,7 @@ export function saveResult(accessKey, type, matchId, homeGoals, awayGoals, penal
     method: 'PUT',
     headers: officialHeaders(accessKey),
     body: JSON.stringify({
-      match: {
-        home_goals: homeGoals,
-        away_goals: awayGoals,
-        penalties,
-      },
+      match: { homeGoals, awayGoals, penalties },
     }),
   }).then(response => {
     handleSaveResponse(response, callback)

@@ -8,6 +8,7 @@ export default class AgeGroup extends React.PureComponent {
     ageGroup: PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
+      calculateGroupTables: PropTypes.bool.isRequired,
     }),
     onAgeGroupDelete: PropTypes.func,
     onAgeGroupSave: PropTypes.func.isRequired,
@@ -20,7 +21,10 @@ export default class AgeGroup extends React.PureComponent {
     super(props)
     this.state = {
       formOpen: false,
-      name: undefined,
+      form: {
+        name: undefined,
+        calculateGroupTables: undefined,
+      },
       errors: [],
     }
   }
@@ -40,12 +44,17 @@ export default class AgeGroup extends React.PureComponent {
   }
 
   renderForm() {
+    const checked = !!this.state.form.calculateGroupTables
     return (
       <div className="form form--horizontal">
         {this.state.errors.length > 0 && <div className="form-error">{this.state.errors.join('. ')}.</div>}
         <div className="admin-item__form">
           <div className="form__field">
-            <input type="text" onChange={this.changeName} value={this.state.name} placeholder="Esim. P11 tai T09"/>
+            <input type="text" onChange={this.changeName} value={this.state.form.name} placeholder="Esim. P11 tai T09"/>
+          </div>
+          <div className="form__field">
+            <input type="checkbox" onChange={this.changeCalculateGroupTables} value={true} checked={checked}/>
+            Laske sarjataulukot
           </div>
           <div className="form__buttons">
             <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary"/>
@@ -59,22 +68,33 @@ export default class AgeGroup extends React.PureComponent {
 
   editAgeGroup = () => {
     const { ageGroup } = this.props
-    this.setState({ formOpen: true, name: ageGroup ? ageGroup.name : '' })
+    this.setState({
+      formOpen: true,
+      form: {
+        name: ageGroup ? ageGroup.name : '',
+        calculateGroupTables: ageGroup && ageGroup.calculateGroupTables,
+      },
+    })
   }
 
   changeName = event => {
-    this.setState({ name: event.target.value })
+    const { form } = this.state
+    this.setState({ form: { ...form, name: event.target.value } })
+  }
+
+  changeCalculateGroupTables = event => {
+    const { form } = this.state
+    this.setState({ form: { ...form, calculateGroupTables: event.target.checked } })
   }
 
   submit = () => {
     const { ageGroup, onAgeGroupSave, tournamentId } = this.props
-    const { name } = this.state
-    saveAgeGroup(this.context, tournamentId, ageGroup ? ageGroup.id : undefined, name, (errors, data) => {
+    saveAgeGroup(this.context, tournamentId, ageGroup ? ageGroup.id : undefined, this.state.form, (errors, data) => {
       if (errors) {
         this.setState({ errors })
       } else {
         this.setState({ formOpen: false, errors: [] })
-        onAgeGroupSave({ id: data.id, name })
+        onAgeGroupSave(data.id, data)
       }
     })
   }

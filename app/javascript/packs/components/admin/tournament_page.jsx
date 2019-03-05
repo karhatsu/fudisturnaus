@@ -132,14 +132,13 @@ export default class AdminTournamentPage extends React.PureComponent {
     this.setState({ tournament: { ...this.state.tournament, ageGroups } })
   }
 
-  onAgeGroupSave = data => {
-    const { id, name } = data
+  onAgeGroupSave = (id, data) => {
     const ageGroups = [...this.state.tournament.ageGroups]
     const ageGroupIndex = ageGroups.findIndex(ageGroup => ageGroup.id === id)
     if (ageGroupIndex !== -1) {
-      ageGroups[ageGroupIndex] = { ...ageGroups[ageGroupIndex], name }
+      ageGroups[ageGroupIndex] = { ...ageGroups[ageGroupIndex], ...data }
     } else {
-      ageGroups.push({ id, name })
+      ageGroups.push({ id, ...data })
     }
     this.setState({ tournament: { ...this.state.tournament, ageGroups } })
   }

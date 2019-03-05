@@ -16,6 +16,10 @@ $inputHeight: 16px;
     padding: 8px;
     width: 200px;
   }
+
+  input[type='checkbox'] {
+    width: 16px;
+  }
 }
 
 .button {

@@ -12,6 +12,8 @@ export default class Group extends React.PureComponent {
     group: PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
+      ageGroupId: PropTypes.number.isRequired,
+      ageGroupName: PropTypes.string.isRequired,
     }),
     onGroupDelete: PropTypes.func,
     onGroupSave: PropTypes.func.isRequired,
@@ -42,13 +44,9 @@ export default class Group extends React.PureComponent {
   }
 
   renderName() {
-    const { ageGroups, group } = this.props
-    let name = 'Lisää uusi lohko'
-    if (group) {
-      const ageGroup = ageGroups.find(ageGroup => ageGroup.id === group.ageGroupId)
-      name = `${group.name} (${ageGroup.name})`
-    }
-    return <div className="admin-item__title" onClick={this.editGroup}>{name}</div>
+    const { group } = this.props
+    const text = group ? `${group.name} (${group.ageGroupName})` : 'Lisää uusi lohko'
+    return <div className="admin-item__title" onClick={this.editGroup}>{text}</div>
   }
 
   renderForm() {

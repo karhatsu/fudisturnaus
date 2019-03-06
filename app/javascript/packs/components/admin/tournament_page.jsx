@@ -4,6 +4,7 @@ import { fetchTournament } from './api-client'
 import Title from '../title'
 import TournamentFields from './tournament_fields'
 import AgeGroup from './age_group'
+import Group from './group'
 import Field from './field'
 import AdminSessionKeyContext from './session_key_context'
 
@@ -56,6 +57,11 @@ export default class AdminTournamentPage extends React.PureComponent {
         <div className="admin-tournament-page__section">
           {this.renderAgeGroups()}
           <AgeGroup onAgeGroupSave={this.onAgeGroupSave} tournamentId={tournamentId}/>
+        </div>
+        <div className="title-2">Lohkot</div>
+        <div className="admin-tournament-page__section">
+          {this.renderGroups()}
+          <Group ageGroups={tournament.ageGroups} onGroupSave={this.onGroupSave} tournamentId={tournamentId}/>
         </div>
       </div>
     )
@@ -141,6 +147,38 @@ export default class AdminTournamentPage extends React.PureComponent {
       ageGroups.push({ id, ...data })
     }
     this.setState({ tournament: { ...this.state.tournament, ageGroups } })
+  }
+
+  renderGroups() {
+    const { tournament: { ageGroups, groups } } = this.state
+    return groups.map(group => {
+      return <Group
+        key={group.id}
+        ageGroups={ageGroups}
+        group={group}
+        onGroupDelete={this.onGroupDelete}
+        onGroupSave={this.onGroupSave}
+        tournamentId={this.getTournamentId()}
+      />
+    })
+  }
+
+  onGroupDelete = id => {
+    const groups = [...this.state.tournament.groups]
+    const groupIndex = groups.findIndex(group => group.id === id)
+    groups.splice(groupIndex, 1)
+    this.setState({ tournament: { ...this.state.tournament, groups } })
+  }
+
+  onGroupSave = (id, data) => {
+    const groups = [...this.state.tournament.groups]
+    const groupIndex = groups.findIndex(group => group.id === id)
+    if (groupIndex !== -1) {
+      groups[groupIndex] = { ...groups[groupIndex], ...data }
+    } else {
+      groups.push({ id, ...data })
+    }
+    this.setState({ tournament: { ...this.state.tournament, groups } })
   }
 
   getTournamentId = () => {

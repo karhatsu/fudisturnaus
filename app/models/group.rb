@@ -7,6 +7,8 @@ class Group < ApplicationRecord
 
   validates :name, presence: true
 
+  before_destroy :check_usage
+
   def results
     return [] unless age_group.calculate_group_tables?
     teams.map(&:group_results).sort do |a, b|
@@ -32,5 +34,14 @@ class Group < ApplicationRecord
       changed_matches << match
     end
     changed_matches
+  end
+
+  private
+
+  def check_usage
+    unless teams.empty?
+      errors.add :base, 'Lohkoa ei voi poistaa, koska se on käytössä'
+      throw :abort
+    end
   end
 end

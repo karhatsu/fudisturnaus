@@ -14,6 +14,7 @@ Rails.application.routes.draw do
         resources :tournaments, only: [:show, :update] do
           resources :age_groups, only: [:create, :update, :destroy]
           resources :fields, only: [:create, :update, :destroy]
+          resources :groups, only: [:create, :update, :destroy]
         end
       end
     end

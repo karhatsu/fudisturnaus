@@ -41,7 +41,6 @@ export default class AdminTournamentPage extends React.PureComponent {
   renderContent() {
     const { tournament } = this.state
     if (!tournament) return null
-    const tournamentId = this.getTournamentId()
     return (
       <div>
         <div className="title-2">Perustiedot</div>
@@ -49,20 +48,11 @@ export default class AdminTournamentPage extends React.PureComponent {
           <TournamentFields onSave={this.onSave} tournament={tournament}/>
         </div>
         <div className="title-2">Kentät</div>
-        <div className="admin-tournament-page__section">
-          {this.renderFields()}
-          <Field onFieldSave={this.onFieldSave} tournamentId={tournamentId}/>
-        </div>
+        {this.renderFieldsSection()}
         <div className="title-2">Ikäryhmät</div>
-        <div className="admin-tournament-page__section">
-          {this.renderAgeGroups()}
-          <AgeGroup onAgeGroupSave={this.onAgeGroupSave} tournamentId={tournamentId}/>
-        </div>
+        {this.renderAgeGroupsSection()}
         <div className="title-2">Lohkot</div>
-        <div className="admin-tournament-page__section">
-          {this.renderGroups()}
-          <Group ageGroups={tournament.ageGroups} onGroupSave={this.onGroupSave} tournamentId={tournamentId}/>
-        </div>
+        {this.renderGroupsSection()}
       </div>
     )
   }
@@ -84,6 +74,15 @@ export default class AdminTournamentPage extends React.PureComponent {
   onSave = data => {
     const { tournament } = this.state
     this.setState({ tournament: { ...tournament, ...data } })
+  }
+
+  renderFieldsSection() {
+    return (
+      <div className="admin-tournament-page__section">
+        {this.renderFields()}
+        <Field onFieldSave={this.onFieldSave} tournamentId={this.getTournamentId()}/>
+      </div>
+    )
   }
 
   renderFields() {
@@ -118,6 +117,15 @@ export default class AdminTournamentPage extends React.PureComponent {
     this.setState({ tournament: { ...this.state.tournament, fields } })
   }
 
+  renderAgeGroupsSection() {
+    return (
+      <div className="admin-tournament-page__section">
+        {this.renderAgeGroups()}
+        <AgeGroup onAgeGroupSave={this.onAgeGroupSave} tournamentId={this.getTournamentId()}/>
+      </div>
+    )
+  }
+
   renderAgeGroups() {
     const { tournament: { ageGroups } } = this.state
     return ageGroups.map(ageGroup => {
@@ -147,6 +155,24 @@ export default class AdminTournamentPage extends React.PureComponent {
       ageGroups.push({ id, ...data })
     }
     this.setState({ tournament: { ...this.state.tournament, ageGroups } })
+  }
+
+  renderGroupsSection() {
+    const { tournament: { ageGroups, id } } = this.state
+    return (
+      <div className="admin-tournament-page__section">
+        {ageGroups.length > 0 ? this.renderGroups() : this.renderCannotAddGroups()}
+        {ageGroups.length > 0 && <Group ageGroups={ageGroups} onGroupSave={this.onGroupSave} tournamentId={id}/>}
+      </div>
+    )
+  }
+
+  renderCannotAddGroups = () => {
+    return (
+      <div className="admin-item">
+        Et voi lisätä lohkoja ennen kuin olet lisännyt vähintään yhden ikäryhmän.
+      </div>
+    )
   }
 
   renderGroups() {

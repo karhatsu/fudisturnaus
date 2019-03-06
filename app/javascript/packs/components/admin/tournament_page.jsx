@@ -6,6 +6,7 @@ import TournamentFields from './tournament_fields'
 import AgeGroup from './age_group'
 import Group from './group'
 import Field from './field'
+import Team from './team'
 import AdminSessionKeyContext from './session_key_context'
 
 export default class AdminTournamentPage extends React.PureComponent {
@@ -53,6 +54,8 @@ export default class AdminTournamentPage extends React.PureComponent {
         {this.renderAgeGroupsSection()}
         <div className="title-2">Lohkot</div>
         {this.renderGroupsSection()}
+        <div className="title-2">Joukkueet</div>
+        {this.renderTeamsSection()}
       </div>
     )
   }
@@ -205,6 +208,58 @@ export default class AdminTournamentPage extends React.PureComponent {
       groups.push({ id, ...data })
     }
     this.setState({ tournament: { ...this.state.tournament, groups } })
+  }
+
+  renderTeamsSection() {
+    const { tournament: { clubs, groups, id } } = this.state
+    const canAddTeams = groups.length > 0
+    return (
+      <div className="admin-tournament-page__section">
+        {canAddTeams ? this.renderTeams() : this.renderCannotAddTeams()}
+        {canAddTeams && <Team clubs={clubs} groups={groups} onTeamSave={this.onTeamSave} tournamentId={id}/>}
+      </div>
+    )
+  }
+
+  renderCannotAddTeams = () => {
+    return (
+      <div className="admin-item">
+        Et voi lisätä joukkueita ennen kuin olet lisännyt vähintään yhden lohkon.
+      </div>
+    )
+  }
+
+  renderTeams() {
+    const { tournament: { clubs, groups, teams } } = this.state
+    return teams.map(team => {
+      return <Team
+        key={team.id}
+        clubs={clubs}
+        groups={groups}
+        onTeamDelete={this.onTeamDelete}
+        onTeamSave={this.onTeamSave}
+        team={team}
+        tournamentId={this.getTournamentId()}
+      />
+    })
+  }
+
+  onTeamDelete = id => {
+    const teams = [...this.state.tournament.teams]
+    const teamIndex = teams.findIndex(team => team.id === id)
+    teams.splice(teamIndex, 1)
+    this.setState({ tournament: { ...this.state.tournament, teams } })
+  }
+
+  onTeamSave = (id, data) => {
+    const teams = [...this.state.tournament.teams]
+    const teamIndex = teams.findIndex(team => team.id === id)
+    if (teamIndex !== -1) {
+      teams[teamIndex] = { ...teams[teamIndex], ...data }
+    } else {
+      teams.push({ id, ...data })
+    }
+    this.setState({ tournament: { ...this.state.tournament, teams } })
   }
 
   getTournamentId = () => {

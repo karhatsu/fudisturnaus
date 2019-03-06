@@ -7,7 +7,18 @@ class Team < ApplicationRecord
   validates :name, presence: true
   validates :group_stage_number, numericality: { only_integer: true, greater_than_or_equal_to: 1, allow_nil: true }
 
+  before_destroy :check_usage
+
   def group_results
     TeamGroupResults.new self
+  end
+
+  private
+
+  def check_usage
+    unless group_stage_home_matches.empty? && group_stage_away_matches.empty?
+      errors.add :base, 'Joukkuetta ei voi poistaa, koska se on käytössä'
+      throw :abort
+    end
   end
 end

@@ -101,6 +101,27 @@ export function deleteGroup(adminSessionKey, tournamentId, id, callback) {
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
+export function saveTeam(adminSessionKey, tournamentId, id, data, callback) {
+  const url = `/api/v1/admin/tournaments/${tournamentId}/teams` + (id ? `/${id}` : '')
+  const method = id ? 'PATCH' : 'POST'
+  fetch(url, {
+    method,
+    headers: adminHeaders(adminSessionKey),
+    body: JSON.stringify({ team: data }),
+  }).then(response => {
+    handleSaveResponse(response, callback)
+  }).catch(() => handleConnectionErrorOnSave(callback))
+}
+
+export function deleteTeam(adminSessionKey, tournamentId, id, callback) {
+  fetch(`/api/v1/admin/tournaments/${tournamentId}/teams/${id}`, {
+    method: 'DELETE',
+    headers: adminHeaders(adminSessionKey),
+  }).then(response => {
+    handleSaveResponse(response, callback)
+  }).catch(() => handleConnectionErrorOnSave(callback))
+}
+
 function handleSaveResponse(response, callback) {
   if (response.ok) {
     response.json().then(data => {

@@ -74,7 +74,7 @@ export default class Field extends React.PureComponent {
         this.setState({ errors })
       } else {
         this.setState({ formOpen: false, errors: [] })
-        onFieldSave({ id: data.id, name })
+        onFieldSave(data)
       }
     })
   }

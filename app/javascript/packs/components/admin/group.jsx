@@ -45,7 +45,7 @@ export default class Group extends React.PureComponent {
 
   renderName() {
     const { group } = this.props
-    const text = group ? `${group.name} (${group.ageGroupName})` : 'Lisää uusi lohko'
+    const text = group ? `${group.name} (${group.ageGroupName})` : '+ Lisää uusi lohko'
     return <div className="admin-item__title" onClick={this.editGroup}>{text}</div>
   }
 

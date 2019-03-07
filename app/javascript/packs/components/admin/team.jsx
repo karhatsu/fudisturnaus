@@ -64,7 +64,7 @@ export default class Team extends React.PureComponent {
 
   renderName() {
     const { team } = this.props
-    const text = team ? `${team.name} (${team.group.name}, ${team.group.ageGroupName})` : 'Lisää uusi joukkue'
+    const text = team ? `${team.name} (${team.group.name}, ${team.group.ageGroupName})` : '+ Lisää uusi joukkue'
     return <div className="admin-item__title" onClick={this.editTeam}>{text}</div>
   }
 
@@ -85,7 +85,7 @@ export default class Team extends React.PureComponent {
           <div className="form__field">
             <select onChange={this.changeValue('clubId')} value={this.state.form.clubId}>
               <option value={CHOOSE_CLUB_ID}>- Valitse seura -</option>
-              <option value={NEW_CLUB_ID}>- Lisää uusi seura -</option>
+              <option value={NEW_CLUB_ID}>- + Lisää uusi seura -</option>
               {this.props.clubs.map(club => {
                 const { id, name } = club
                 return <option key={id} value={id}>{name}</option>

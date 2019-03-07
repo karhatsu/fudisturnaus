@@ -216,7 +216,7 @@ export default class AdminTournamentPage extends React.PureComponent {
     return (
       <div className="admin-tournament-page__section">
         {canAddTeams ? this.renderTeams() : this.renderCannotAddTeams()}
-        {canAddTeams && <Team clubs={clubs} groups={groups} onTeamSave={this.onTeamSave} tournamentId={id}/>}
+        {canAddTeams && <Team clubs={clubs} groups={groups} onClubSave={this.onClubSave} onTeamSave={this.onTeamSave} tournamentId={id}/>}
       </div>
     )
   }
@@ -236,12 +236,23 @@ export default class AdminTournamentPage extends React.PureComponent {
         key={team.id}
         clubs={clubs}
         groups={groups}
+        onClubSave={this.onClubSave}
         onTeamDelete={this.onTeamDelete}
         onTeamSave={this.onTeamSave}
         team={team}
         tournamentId={this.getTournamentId()}
       />
     })
+  }
+
+  onClubSave = data => {
+    const clubs = [...this.state.tournament.clubs]
+    const clubIndex = clubs.findIndex(club => club.id === data.id)
+    if (clubIndex === -1) {
+      clubs.push(data)
+      clubs.sort((a, b) => a.name.localeCompare(b.name))
+      this.setState({ tournament: { ...this.state.tournament, clubs } })
+    }
   }
 
   onTeamDelete = id => {

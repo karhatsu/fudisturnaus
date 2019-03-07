@@ -1,0 +1,1 @@
+json.(@club, :id, :name)

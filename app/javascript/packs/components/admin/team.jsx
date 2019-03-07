@@ -1,7 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { deleteTeam, saveTeam } from './api-client'
+import { createClub, deleteTeam, saveTeam } from './api-client'
 import AdminSessionKeyContext from './session_key_context'
+
+const CHOOSE_CLUB_ID = '-1'
+const NEW_CLUB_ID = '-2'
 
 export default class Team extends React.PureComponent {
   static propTypes = {
@@ -26,6 +29,7 @@ export default class Team extends React.PureComponent {
         ageGroupName: PropTypes.string.isRequired,
       }).isRequired,
     }),
+    onClubSave: PropTypes.func.isRequired,
     onTeamDelete: PropTypes.func,
     onTeamSave: PropTypes.func.isRequired,
     tournamentId: PropTypes.number.isRequired,
@@ -38,19 +42,22 @@ export default class Team extends React.PureComponent {
     this.state = {
       formOpen: false,
       form: {
-        clubId: undefined,
+        clubId: CHOOSE_CLUB_ID,
         groupId: undefined,
         name: undefined,
       },
       errors: [],
+      clubName: '',
     }
   }
 
   render() {
+    const { formOpen, form: { clubId } } = this.state
     return (
       <div className="admin-item">
-        {this.state.formOpen && this.renderForm()}
-        {!this.state.formOpen && this.renderName()}
+        {formOpen && this.renderForm()}
+        {!formOpen && this.renderName()}
+        {clubId === NEW_CLUB_ID && this.renderClubForm()}
       </div>
     )
   }
@@ -62,6 +69,7 @@ export default class Team extends React.PureComponent {
   }
 
   renderForm() {
+    const submitDisabled = this.state.form.clubId <= 0
     return (
       <div className="form form--horizontal">
         {this.state.errors.length > 0 && <div className="form-error">{this.state.errors.join('. ')}.</div>}
@@ -76,6 +84,8 @@ export default class Team extends React.PureComponent {
           </div>
           <div className="form__field">
             <select onChange={this.changeValue('clubId')} value={this.state.form.clubId}>
+              <option value={CHOOSE_CLUB_ID}>- Valitse seura -</option>
+              <option value={NEW_CLUB_ID}>- Lisää uusi seura -</option>
               {this.props.clubs.map(club => {
                 const { id, name } = club
                 return <option key={id} value={id}>{name}</option>
@@ -86,7 +96,7 @@ export default class Team extends React.PureComponent {
             <input type="text" onChange={this.changeValue('name')} value={this.state.form.name} placeholder="Esim. FC Kontu Valkoinen"/>
           </div>
           <div className="form__buttons">
-            <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary"/>
+            <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={submitDisabled}/>
             <input type="button" value="Peruuta" onClick={this.cancel} className="button"/>
             {!!this.props.team && <input type="button" value="Poista" onClick={this.delete} className="button button--danger"/>}
           </div>
@@ -95,12 +105,31 @@ export default class Team extends React.PureComponent {
     )
   }
 
+  renderClubForm() {
+    return (
+      <div className="form form--horizontal new-club-form">
+        <div className="form__field">
+          <input
+            type="text"
+            onChange={this.setClubName}
+            value={this.state.clubName}
+            placeholder="Seuran nimi (tarkasta oikeinkirjoitus)"
+          />
+        </div>
+        <div className="form__buttons">
+          <input type="submit" value="Lisää uusi seura" onClick={this.saveClub} className="button button--primary"/>
+          <input type="button" value="Peruuta" onClick={this.closeClubForm} className="button"/>
+        </div>
+      </div>
+    )
+  }
+
   editTeam = () => {
-    const { clubs, groups, team } = this.props
+    const { groups, team } = this.props
     this.setState({
       formOpen: true,
       form: {
-        clubId: team ? team.club.id : clubs[0].id,
+        clubId: team ? team.club.id : CHOOSE_CLUB_ID,
         groupId: team ? team.group.id : groups[0].id,
         name: team ? team.name : '',
       },
@@ -110,6 +139,10 @@ export default class Team extends React.PureComponent {
   changeValue = field => event => {
     const { form } = this.state
     this.setState({ form: { ...form, [field]: event.target.value } })
+  }
+
+  setClubName = event => {
+    this.setState({ clubName: event.target.value })
   }
 
   submit = () => {
@@ -138,5 +171,22 @@ export default class Team extends React.PureComponent {
         onTeamDelete(id)
       }
     })
+  }
+
+  saveClub = () => {
+    createClub(this.context, this.state.clubName, (errors, data) => {
+      if (errors) {
+        this.setState({ errors })
+      } else {
+        const { form } = this.state
+        this.setState({ errors: [], clubName: '', form: { ...form, clubId: data.id } })
+        this.props.onClubSave(data)
+      }
+    })
+  }
+
+  closeClubForm = () => {
+    const { form } = this.state
+    this.setState({ clubName: '', form: { ...form, clubId: CHOOSE_CLUB_ID } })
   }
 }

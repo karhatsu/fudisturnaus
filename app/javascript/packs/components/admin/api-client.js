@@ -101,6 +101,17 @@ export function deleteGroup(adminSessionKey, tournamentId, id, callback) {
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
+export function createClub(adminSessionKey, name, callback) {
+  const url = '/api/v1/admin/clubs'
+  fetch(url, {
+    method: 'POST',
+    headers: adminHeaders(adminSessionKey),
+    body: JSON.stringify({ name }),
+  }).then(response => {
+    handleSaveResponse(response, callback)
+  }).catch(() => handleConnectionErrorOnSave(callback))
+}
+
 export function saveTeam(adminSessionKey, tournamentId, id, data, callback) {
   const url = `/api/v1/admin/tournaments/${tournamentId}/teams` + (id ? `/${id}` : '')
   const method = id ? 'PATCH' : 'POST'

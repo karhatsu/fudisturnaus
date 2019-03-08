@@ -90,7 +90,7 @@ export default class GroupStageMatch extends React.PureComponent {
       const { awayTeam, field, group, homeTeam, startTime } = groupStageMatch
       text = `${formatTime(startTime)} | ${field.name} | ${group.name} (${group.ageGroupName}) | ${homeTeam.name} - ${awayTeam.name}`
     }
-    return <div className="admin-item__title" onClick={this.editMatch}>{text}</div>
+    return <div className="admin-item__title"><span onClick={this.editMatch}>{text}</span></div>
   }
 
   renderForm() {

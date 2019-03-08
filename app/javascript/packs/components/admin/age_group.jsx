@@ -40,7 +40,8 @@ export default class AgeGroup extends React.PureComponent {
 
   renderName() {
     const { ageGroup } = this.props
-    return <div className="admin-item__title" onClick={this.editAgeGroup}>{ageGroup ? ageGroup.name : '+ Lisää uusi ikäryhmä'}</div>
+    const text = ageGroup ? ageGroup.name : '+ Lisää uusi ikäryhmä'
+    return <div className="admin-item__title"><span onClick={this.editAgeGroup}>{text}</span></div>
   }
 
   renderForm() {

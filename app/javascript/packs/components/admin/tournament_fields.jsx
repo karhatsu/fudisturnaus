@@ -81,8 +81,8 @@ export default class TournamentFields extends React.PureComponent {
     const { tournament: { name, startDate, endDate, location, address } } = this.props
     return (
       <div className="admin-item">
-        <div className="admin-item__title" onClick={this.openForm}>
-          {name}, {formatTournamentDates(startDate, endDate)}, {location}, {address || '(ei osoitetta)'}
+        <div className="admin-item__title">
+          <span onClick={this.openForm}>{name}, {formatTournamentDates(startDate, endDate)}, {location}, {address || '(ei osoitetta)'}</span>
         </div>
       </div>
     )

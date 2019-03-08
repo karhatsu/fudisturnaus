@@ -36,7 +36,8 @@ export default class Field extends React.PureComponent {
 
   renderName() {
     const { field } = this.props
-    return <div className="admin-item__title" onClick={this.editField}>{field ? field.name : '+ Lisää uusi kenttä'}</div>
+    const text = field ? field.name : '+ Lisää uusi kenttä'
+    return <div className="admin-item__title"><span onClick={this.editField}>{text}</span></div>
   }
 
   renderForm() {

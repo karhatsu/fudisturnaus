@@ -9,7 +9,10 @@
 
   .admin-item__title {
     color: $green;
-    cursor: pointer;
+
+    span {
+      cursor: pointer;
+    }
   }
 }
 

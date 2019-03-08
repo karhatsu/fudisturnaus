@@ -86,7 +86,7 @@ export default class GroupStageMatch extends React.PureComponent {
   }
 
   renderForm() {
-    const { fields, groups, groupStageMatch, teams } = this.props
+    const { fields, groups, groupStageMatch } = this.props
     return (
       <div className="form form--horizontal">
         {this.state.errors.length > 0 && <div className="form-error">{this.state.errors.join('. ')}.</div>}
@@ -96,8 +96,8 @@ export default class GroupStageMatch extends React.PureComponent {
             <input type="text" onChange={this.changeValue('startTime')} value={this.state.form.startTime} placeholder="HH:MM"/>
           </div>
           {this.buildIdNameDropDown(groups, 'groupId', '- Lohko -')}
-          {this.buildIdNameDropDown(teams, 'homeTeamId', '- Kotijoukkue -')}
-          {this.buildIdNameDropDown(teams, 'awayTeamId', '- Vierasjoukkue -')}
+          {this.buildTeamDropDown('homeTeamId', '- Kotijoukkue -')}
+          {this.buildTeamDropDown('awayTeamId', '- Vierasjoukkue -')}
           <div className="form__buttons">
             <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary"/>
             <input type="button" value="Peruuta" onClick={this.cancel} className="button"/>
@@ -106,6 +106,14 @@ export default class GroupStageMatch extends React.PureComponent {
         </div>
       </div>
     )
+  }
+
+  buildTeamDropDown(field, label) {
+    const { form: { groupId } } = this.state
+    if (groupId) {
+      const { teams } = this.props
+      return this.buildIdNameDropDown(teams.filter(team => team.group.id === parseInt(groupId)), field, label)
+    }
   }
 
   buildIdNameDropDown(items, field, label) {

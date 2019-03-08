@@ -92,7 +92,7 @@ export default class TournamentFields extends React.PureComponent {
     const { tournament: { name, startDate, days, location, address } } = this.props
     this.setState({
       formOpen: true,
-      form: { name, startDate, days, location, address },
+      form: { name, startDate, days, location, address: address || '' },
     })
   }
 

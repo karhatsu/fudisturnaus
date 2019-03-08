@@ -58,7 +58,7 @@ export default class AgeGroup extends React.PureComponent {
             Laske sarjataulukot
           </div>
           <div className="form__buttons">
-            <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary"/>
+            <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
             <input type="button" value="Peruuta" onClick={this.cancel} className="button"/>
             {!!this.props.ageGroup && <input type="button" value="Poista" onClick={this.delete} className="button button--danger"/>}
           </div>
@@ -86,6 +86,10 @@ export default class AgeGroup extends React.PureComponent {
   changeCalculateGroupTables = event => {
     const { form } = this.state
     this.setState({ form: { ...form, calculateGroupTables: event.target.checked } })
+  }
+
+  canSubmit = () => {
+    return !!this.state.form.name
   }
 
   submit = () => {

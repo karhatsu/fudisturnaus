@@ -56,6 +56,7 @@ export default class Group extends React.PureComponent {
         <div className="admin-item__form">
           <div className="form__field">
             <select onChange={this.changeValue('ageGroupId')} value={this.state.form.ageGroupId}>
+              <option>Ikäryhmä</option>
               {this.props.ageGroups.map(ageGroup => {
                 const { id, name } = ageGroup
                 return <option key={id} value={id}>{name}</option>
@@ -66,7 +67,7 @@ export default class Group extends React.PureComponent {
             <input type="text" onChange={this.changeValue('name')} value={this.state.form.name} placeholder="Esim. A tai Taso 2"/>
           </div>
           <div className="form__buttons">
-            <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary"/>
+            <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
             <input type="button" value="Peruuta" onClick={this.cancel} className="button"/>
             {!!this.props.group && <input type="button" value="Poista" onClick={this.delete} className="button button--danger"/>}
           </div>
@@ -76,11 +77,11 @@ export default class Group extends React.PureComponent {
   }
 
   editGroup = () => {
-    const { ageGroups, group } = this.props
+    const { group } = this.props
     this.setState({
       formOpen: true,
       form: {
-        ageGroupId: group ? group.ageGroupId : ageGroups[0].id,
+        ageGroupId: group ? group.ageGroupId : -1,
         name: group ? group.name : '',
       },
     })
@@ -89,6 +90,11 @@ export default class Group extends React.PureComponent {
   changeValue = field => event => {
     const { form } = this.state
     this.setState({ form: { ...form, [field]: event.target.value } })
+  }
+
+  canSubmit = () => {
+    const { form: { ageGroupId, name } } = this.state
+    return parseInt(ageGroupId) > 0 && !!name
   }
 
   submit = () => {

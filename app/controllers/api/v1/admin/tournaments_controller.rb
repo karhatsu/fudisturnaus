@@ -1,6 +1,10 @@
 class Api::V1::Admin::TournamentsController < Api::V1::Admin::AdminBaseController
   def show
-    @tournament = Tournament.where(id: params[:id]).includes(:age_groups, :fields).first
+    includes = {
+        age_groups: [groups: [:age_group, :teams, group_stage_matches: [:field, :home_team, :away_team]]],
+        groups: [teams: :club]
+    }
+    @tournament = Tournament.where(id: params[:id]).includes(includes).first
     @clubs = Club.all
   end
 

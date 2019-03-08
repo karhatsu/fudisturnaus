@@ -49,7 +49,7 @@ export default class Field extends React.PureComponent {
             <input type="text" onChange={this.changeName} value={this.state.name} placeholder="Esim. Kenttä 1"/>
           </div>
           <div className="form__buttons">
-            <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary"/>
+            <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
             <input type="button" value="Peruuta" onClick={this.cancel} className="button"/>
             {!!this.props.field && <input type="button" value="Poista" onClick={this.delete} className="button button--danger"/>}
           </div>
@@ -65,6 +65,10 @@ export default class Field extends React.PureComponent {
 
   changeName = event => {
     this.setState({ name: event.target.value })
+  }
+
+  canSubmit = () => {
+    return !!this.state.name
   }
 
   submit = () => {

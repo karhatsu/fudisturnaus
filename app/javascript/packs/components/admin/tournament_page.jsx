@@ -83,7 +83,7 @@ export default class AdminTournamentPage extends React.PureComponent {
     return (
       <div className="admin-tournament-page__section">
         {this.renderFields()}
-        <Field onFieldSave={this.onFieldSave} tournamentId={this.getTournamentId()}/>
+        <Field onFieldSave={this.onItemSave('fields')} tournamentId={this.getTournamentId()}/>
       </div>
     )
   }
@@ -94,37 +94,18 @@ export default class AdminTournamentPage extends React.PureComponent {
       return <Field
         key={field.id}
         field={field}
-        onFieldDelete={this.onFieldDelete}
-        onFieldSave={this.onFieldSave}
+        onFieldDelete={this.onItemDelete('fields')}
+        onFieldSave={this.onItemSave('fields')}
         tournamentId={this.getTournamentId()}
       />
     })
-  }
-
-  onFieldDelete = id => {
-    const fields = [...this.state.tournament.fields]
-    const fieldIndex = fields.findIndex(field => field.id === id)
-    fields.splice(fieldIndex, 1)
-    this.setState({ tournament: { ...this.state.tournament, fields } })
-  }
-
-  onFieldSave = data => {
-    const { id, name } = data
-    const fields = [...this.state.tournament.fields]
-    const fieldIndex = fields.findIndex(field => field.id === id)
-    if (fieldIndex !== -1) {
-      fields[fieldIndex] = { ...fields[fieldIndex], name }
-    } else {
-      fields.push({ id, name })
-    }
-    this.setState({ tournament: { ...this.state.tournament, fields } })
   }
 
   renderAgeGroupsSection() {
     return (
       <div className="admin-tournament-page__section">
         {this.renderAgeGroups()}
-        <AgeGroup onAgeGroupSave={this.onAgeGroupSave} tournamentId={this.getTournamentId()}/>
+        <AgeGroup onAgeGroupSave={this.onItemSave('ageGroups')} tournamentId={this.getTournamentId()}/>
       </div>
     )
   }
@@ -135,29 +116,11 @@ export default class AdminTournamentPage extends React.PureComponent {
       return <AgeGroup
         key={ageGroup.id}
         ageGroup={ageGroup}
-        onAgeGroupDelete={this.onAgeGroupDelete}
-        onAgeGroupSave={this.onAgeGroupSave}
+        onAgeGroupDelete={this.onItemDelete('ageGroups')}
+        onAgeGroupSave={this.onItemSave('ageGroups')}
         tournamentId={this.getTournamentId()}
       />
     })
-  }
-
-  onAgeGroupDelete = id => {
-    const ageGroups = [...this.state.tournament.ageGroups]
-    const ageGroupIndex = ageGroups.findIndex(ageGroup => ageGroup.id === id)
-    ageGroups.splice(ageGroupIndex, 1)
-    this.setState({ tournament: { ...this.state.tournament, ageGroups } })
-  }
-
-  onAgeGroupSave = (id, data) => {
-    const ageGroups = [...this.state.tournament.ageGroups]
-    const ageGroupIndex = ageGroups.findIndex(ageGroup => ageGroup.id === id)
-    if (ageGroupIndex !== -1) {
-      ageGroups[ageGroupIndex] = { ...ageGroups[ageGroupIndex], ...data }
-    } else {
-      ageGroups.push({ id, ...data })
-    }
-    this.setState({ tournament: { ...this.state.tournament, ageGroups } })
   }
 
   renderGroupsSection() {
@@ -165,7 +128,7 @@ export default class AdminTournamentPage extends React.PureComponent {
     return (
       <div className="admin-tournament-page__section">
         {ageGroups.length > 0 ? this.renderGroups() : this.renderCannotAddGroups()}
-        {ageGroups.length > 0 && <Group ageGroups={ageGroups} onGroupSave={this.onGroupSave} tournamentId={id}/>}
+        {ageGroups.length > 0 && <Group ageGroups={ageGroups} onGroupSave={this.onItemSave('groups')} tournamentId={id}/>}
       </div>
     )
   }
@@ -185,29 +148,11 @@ export default class AdminTournamentPage extends React.PureComponent {
         key={group.id}
         ageGroups={ageGroups}
         group={group}
-        onGroupDelete={this.onGroupDelete}
-        onGroupSave={this.onGroupSave}
+        onGroupDelete={this.onItemDelete('groups')}
+        onGroupSave={this.onItemSave('groups')}
         tournamentId={this.getTournamentId()}
       />
     })
-  }
-
-  onGroupDelete = id => {
-    const groups = [...this.state.tournament.groups]
-    const groupIndex = groups.findIndex(group => group.id === id)
-    groups.splice(groupIndex, 1)
-    this.setState({ tournament: { ...this.state.tournament, groups } })
-  }
-
-  onGroupSave = (id, data) => {
-    const groups = [...this.state.tournament.groups]
-    const groupIndex = groups.findIndex(group => group.id === id)
-    if (groupIndex !== -1) {
-      groups[groupIndex] = { ...groups[groupIndex], ...data }
-    } else {
-      groups.push({ id, ...data })
-    }
-    this.setState({ tournament: { ...this.state.tournament, groups } })
   }
 
   renderTeamsSection() {
@@ -216,7 +161,7 @@ export default class AdminTournamentPage extends React.PureComponent {
     return (
       <div className="admin-tournament-page__section">
         {canAddTeams ? this.renderTeams() : this.renderCannotAddTeams()}
-        {canAddTeams && <Team clubs={clubs} groups={groups} onClubSave={this.onClubSave} onTeamSave={this.onTeamSave} tournamentId={id}/>}
+        {canAddTeams && <Team clubs={clubs} groups={groups} onClubSave={this.onClubSave} onTeamSave={this.onItemSave('teams')} tournamentId={id}/>}
       </div>
     )
   }
@@ -237,8 +182,8 @@ export default class AdminTournamentPage extends React.PureComponent {
         clubs={clubs}
         groups={groups}
         onClubSave={this.onClubSave}
-        onTeamDelete={this.onTeamDelete}
-        onTeamSave={this.onTeamSave}
+        onTeamDelete={this.onItemDelete('teams')}
+        onTeamSave={this.onItemSave('teams')}
         team={team}
         tournamentId={this.getTournamentId()}
       />
@@ -255,22 +200,22 @@ export default class AdminTournamentPage extends React.PureComponent {
     }
   }
 
-  onTeamDelete = id => {
-    const teams = [...this.state.tournament.teams]
-    const teamIndex = teams.findIndex(team => team.id === id)
-    teams.splice(teamIndex, 1)
-    this.setState({ tournament: { ...this.state.tournament, teams } })
+  onItemSave = itemName => data => {
+    const items = [...this.state.tournament[itemName]]
+    const itemIndex = items.findIndex(item => item.id === data.id)
+    if (itemIndex !== -1) {
+      items[itemIndex] = { ...items[itemIndex], ...data }
+    } else {
+      items.push(data)
+    }
+    this.setState({ tournament: { ...this.state.tournament, [itemName]: items } })
   }
 
-  onTeamSave = (id, data) => {
-    const teams = [...this.state.tournament.teams]
-    const teamIndex = teams.findIndex(team => team.id === id)
-    if (teamIndex !== -1) {
-      teams[teamIndex] = { ...teams[teamIndex], ...data }
-    } else {
-      teams.push({ id, ...data })
-    }
-    this.setState({ tournament: { ...this.state.tournament, teams } })
+  onItemDelete = itemName => id => {
+    const items = [...this.state.tournament[itemName]]
+    const itemIndex = items.findIndex(item => item.id === id)
+    items.splice(itemIndex, 1)
+    this.setState({ tournament: { ...this.state.tournament, [itemName]: items } })
   }
 
   getTournamentId = () => {

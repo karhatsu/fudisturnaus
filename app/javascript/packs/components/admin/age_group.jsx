@@ -94,7 +94,7 @@ export default class AgeGroup extends React.PureComponent {
         this.setState({ errors })
       } else {
         this.setState({ formOpen: false, errors: [] })
-        onAgeGroupSave(data.id, data)
+        onAgeGroupSave(data)
       }
     })
   }

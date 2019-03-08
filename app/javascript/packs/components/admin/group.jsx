@@ -98,7 +98,7 @@ export default class Group extends React.PureComponent {
         this.setState({ errors })
       } else {
         this.setState({ formOpen: false, errors: [] })
-        onGroupSave(data.id, data)
+        onGroupSave(data)
       }
     })
   }

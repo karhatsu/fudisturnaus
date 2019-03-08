@@ -152,7 +152,7 @@ export default class Team extends React.PureComponent {
         this.setState({ errors })
       } else {
         this.setState({ formOpen: false, errors: [] })
-        onTeamSave(data.id, data)
+        onTeamSave(data)
       }
     })
   }

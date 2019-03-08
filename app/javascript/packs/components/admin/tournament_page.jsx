@@ -164,7 +164,7 @@ export default class AdminTournamentPage extends React.PureComponent {
     const canAddTeams = groups.length > 0
     return (
       <div className="admin-tournament-page__section">
-        {canAddTeams ? this.renderTeams() : this.renderCannotAddTeams()}
+        {canAddTeams ? this.renderGroupTeams() : this.renderCannotAddTeams()}
         {canAddTeams && <Team clubs={clubs} groups={groups} onClubSave={this.onClubSave} onTeamSave={this.onItemSave('teams')} tournamentId={id}/>}
       </div>
     )
@@ -178,8 +178,27 @@ export default class AdminTournamentPage extends React.PureComponent {
     )
   }
 
-  renderTeams() {
-    const { tournament: { clubs, groups, teams } } = this.state
+  renderGroupTeams() {
+    const { tournament: { teams } } = this.state
+    const teamsByGroups = teams.reduce((groupTeams, team) => {
+      if (!groupTeams[team.group.name]) {
+        groupTeams[team.group.name] = []
+      }
+      groupTeams[team.group.name].push(team)
+      return groupTeams
+    }, {})
+    return Object.keys(teamsByGroups).map(group => {
+      return (
+        <div key={group}>
+          <div className="admin-tournament-page__section-title">{group}</div>
+          {this.renderTeams(teamsByGroups[group])}
+        </div>
+      )
+    })
+  }
+
+  renderTeams(teams) {
+    const { tournament: { clubs, groups } } = this.state
     return teams.map(team => {
       return <Team
         key={team.id}

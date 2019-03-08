@@ -97,7 +97,7 @@ export default class TournamentFields extends React.PureComponent {
   }
 
   closeForm = () => {
-    this.setState({ formOpen: false })
+    this.setState({ formOpen: false, errors: [] })
   }
 
   setValue = field => event => {

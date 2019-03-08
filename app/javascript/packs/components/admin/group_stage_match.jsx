@@ -94,7 +94,7 @@ export default class GroupStageMatch extends React.PureComponent {
   }
 
   renderForm() {
-    const { fields, groups, groupStageMatch } = this.props
+    const { fields, groupStageMatch } = this.props
     return (
       <div className="form form--horizontal">
         {this.state.errors.length > 0 && <div className="form-error">{this.state.errors.join('. ')}.</div>}
@@ -103,7 +103,7 @@ export default class GroupStageMatch extends React.PureComponent {
           <div className="form__field form__field--time">
             <input type="text" onChange={this.changeValue('startTime')} value={this.state.form.startTime} placeholder="HH:MM"/>
           </div>
-          {this.buildIdNameDropDown(groups, 'groupId', '- Lohko -')}
+          {this.buildGroupDropDown()}
           {this.buildTeamDropDown('homeTeamId', '- Kotijoukkue -')}
           {this.buildTeamDropDown('awayTeamId', '- Vierasjoukkue -')}
           <div className="form__buttons">
@@ -124,15 +124,22 @@ export default class GroupStageMatch extends React.PureComponent {
     }
   }
 
-  buildIdNameDropDown(items, field, label, customOnChange) {
+  buildGroupDropDown() {
+    return this.buildIdNameDropDown(this.props.groups, 'groupId', '- Lohko -', this.changeValue('groupId'), item => {
+      return `${item.name} (${item.ageGroupName})`
+    })
+  }
+
+  buildIdNameDropDown(items, field, label, customOnChange, customNameBuild) {
+    const nameBuild = customNameBuild || (item => item.name)
     const onChange = customOnChange || this.changeValue(field)
     return (
       <div className="form__field">
         <select onChange={onChange} value={this.state.form[field]}>
           <option>{label}</option>
           {items.map(item => {
-            const { id, name } = item
-            return <option key={id} value={id}>{name}</option>
+            const { id } = item
+            return <option key={id} value={id}>{nameBuild(item)}</option>
           })}
         </select>
       </div>

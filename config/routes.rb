@@ -16,6 +16,7 @@ Rails.application.routes.draw do
           resources :age_groups, only: [:create, :update, :destroy]
           resources :fields, only: [:create, :update, :destroy]
           resources :groups, only: [:create, :update, :destroy]
+          resources :group_stage_matches, only: [:create, :update, :destroy]
           resources :teams, only: [:create, :update, :destroy]
         end
       end

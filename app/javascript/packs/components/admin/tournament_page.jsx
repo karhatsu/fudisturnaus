@@ -5,6 +5,7 @@ import Title from '../title'
 import TournamentFields from './tournament_fields'
 import AgeGroup from './age_group'
 import Group from './group'
+import GroupStageMatch from './group_stage_match'
 import Field from './field'
 import Team from './team'
 import AdminSessionKeyContext from './session_key_context'
@@ -56,6 +57,8 @@ export default class AdminTournamentPage extends React.PureComponent {
         {this.renderGroupsSection()}
         <div className="title-2">Joukkueet</div>
         {this.renderTeamsSection()}
+        <div className="title-2">Alkulohkojen ottelut</div>
+        {this.renderGroupStageMatchesSection()}
       </div>
     )
   }
@@ -198,6 +201,50 @@ export default class AdminTournamentPage extends React.PureComponent {
       clubs.sort((a, b) => a.name.localeCompare(b.name))
       this.setState({ tournament: { ...this.state.tournament, clubs } })
     }
+  }
+
+  renderGroupStageMatchesSection() {
+    const { tournament: { fields, groups, teams, id } } = this.state
+    const canMatches = teams.length > 1 && fields.length > 0
+    return (
+      <div className="admin-tournament-page__section">
+        {canMatches ? this.renderGroupStageMatches() : this.renderCannotAddGroupStageMatches()}
+        {canMatches && <GroupStageMatch
+          fields={fields}
+          groups={groups}
+          onGroupStageMatchSave={this.onItemSave('groupStageMatches')}
+          teams={teams}
+          tournamentId={id}
+          tournamentDate={this.state.tournament.startDate}
+        />}
+      </div>
+    )
+  }
+
+  renderCannotAddGroupStageMatches = () => {
+    return (
+      <div className="admin-item">
+        Et voi lisätä otteluita ennen kuin olet lisännyt vähintään yhden kentän ja vähintään kaksi joukkuetta.
+      </div>
+    )
+  }
+
+  renderGroupStageMatches() {
+    const { tournament: { fields, groups, groupStageMatches, teams } } = this.state
+    return groupStageMatches.map(groupStageMatch => {
+      return <GroupStageMatch
+        key={groupStageMatch.id}
+        fields={fields}
+        groups={groups}
+        onClubSave={this.onClubSave}
+        onGroupStageMatchDelete={this.onItemDelete('groupStageMatches')}
+        onGroupStageMatchSave={this.onItemSave('groupStageMatches')}
+        groupStageMatch={groupStageMatch}
+        teams={teams}
+        tournamentId={this.getTournamentId()}
+        tournamentDate={this.state.tournament.startDate}
+      />
+    })
   }
 
   onItemSave = itemName => data => {

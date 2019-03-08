@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { format, parseISO } from 'date-fns'
+import { formatTime } from './util/util'
 import { matchTypes } from './util/enums'
 import { saveResult } from './official/api-client'
 
@@ -67,7 +67,7 @@ export default class Match extends React.PureComponent {
   renderMatchInfo = (startTime, field, ageGroup, group) => {
     return (
       <div>
-        <span className="match__start-time">{format(parseISO(startTime), 'HH:mm')}</span>
+        <span className="match__start-time">{formatTime(startTime)}</span>
         {field.name}, {ageGroup.name}{group ? `, ${group.name}` : ''}
       </div>
     )

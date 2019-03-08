@@ -26,6 +26,12 @@ $inputHeight: 16px;
   }
 }
 
+.form__field--time {
+  input {
+    width: 60px;
+  }
+}
+
 .button {
   border: none;
   border-radius: 2px;

@@ -63,6 +63,10 @@ export function formatDate(date) {
   return format(parseISO(date), 'dd.MM.yyyy')
 }
 
+export function formatTime(time) {
+  return format(parseISO(time), 'HH:mm')
+}
+
 export function resolveColStyles(count) {
   if (count === 1) {
     return 'col-xs-12'

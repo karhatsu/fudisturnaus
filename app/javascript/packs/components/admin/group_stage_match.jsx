@@ -88,7 +88,7 @@ export default class GroupStageMatch extends React.PureComponent {
     let text = '+ Lisää uusi alkulohkon ottelu'
     if (groupStageMatch) {
       const { awayTeam, field, group, homeTeam, startTime } = groupStageMatch
-      text = `${formatTime(startTime)} | ${field.name} | ${group.name} (${group.ageGroupName}) | ${homeTeam.name} - ${awayTeam.name}`
+      text = `${field.name} | ${formatTime(startTime)} | ${group.name} (${group.ageGroupName}) | ${homeTeam.name} - ${awayTeam.name}`
     }
     return <div className="admin-item__title"><span onClick={this.editMatch}>{text}</span></div>
   }

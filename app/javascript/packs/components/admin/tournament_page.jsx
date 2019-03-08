@@ -70,7 +70,8 @@ export default class AdminTournamentPage extends React.PureComponent {
   fetchTournamentData = () => {
     fetchTournament(this.context, this.getTournamentId(), (err, tournament) => {
       if (tournament) {
-        this.setState({ tournament })
+        const { teams } = tournament
+        this.setState({ tournament: { ...tournament, teams: teams.sort(this.getComparator('teams')) } })
       } else if (err && !this.state.tournament) {
         this.setState({ error: true })
       }
@@ -257,7 +258,7 @@ export default class AdminTournamentPage extends React.PureComponent {
     } else {
       items.push(data)
     }
-    this.setState({ tournament: { ...this.state.tournament, [itemName]: items } })
+    this.setState({ tournament: { ...this.state.tournament, [itemName]: items.sort(this.getComparator(itemName)) } })
   }
 
   onItemDelete = itemName => id => {
@@ -265,6 +266,44 @@ export default class AdminTournamentPage extends React.PureComponent {
     const itemIndex = items.findIndex(item => item.id === id)
     items.splice(itemIndex, 1)
     this.setState({ tournament: { ...this.state.tournament, [itemName]: items } })
+  }
+
+  getComparator = itemName => {
+    switch (itemName) {
+      case 'ageGroups':
+      case 'fields':
+        return (a, b) => a.name.localeCompare(b.name)
+      case 'teams':
+        return (a, b) => {
+          const ageGroupCompare = a.group.ageGroupName.localeCompare(b.group.ageGroupName)
+          if (ageGroupCompare !== 0) {
+            return ageGroupCompare
+          }
+          const groupCompare = a.group.name.localeCompare(b.group.name)
+          if (groupCompare !== 0) {
+            return groupCompare
+          }
+          return a.name.localeCompare(b.name)
+        }
+      case 'groups':
+        return (a, b) => {
+          const ageGroupCompare = a.ageGroupName.localeCompare(b.ageGroupName)
+          if (ageGroupCompare !== 0) {
+            return ageGroupCompare
+          }
+          return a.name.localeCompare(b.name)
+        }
+      case 'groupStageMatches':
+        return (a, b) => {
+          const timeCompare = a.startTime.localeCompare(b.startTime)
+          if (timeCompare !== 0) {
+            return timeCompare
+          }
+          return a.field.name.localeCompare(b.field.name)
+        }
+      default:
+        console.error('No comparator for', itemName) // eslint-disable-line no-console
+    }
   }
 
   getTournamentId = () => {

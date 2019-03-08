@@ -107,7 +107,7 @@ export default class GroupStageMatch extends React.PureComponent {
           {this.buildTeamDropDown('homeTeamId', '- Kotijoukkue -')}
           {this.buildTeamDropDown('awayTeamId', '- Vierasjoukkue -')}
           <div className="form__buttons">
-            <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary"/>
+            <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
             <input type="button" value="Peruuta" onClick={this.cancel} className="button"/>
             {!!groupStageMatch && <input type="button" value="Poista" onClick={this.delete} className="button button--danger"/>}
           </div>
@@ -171,6 +171,11 @@ export default class GroupStageMatch extends React.PureComponent {
   changeValue = field => event => {
     const { form } = this.state
     this.setState({ form: { ...form, [field]: event.target.value } })
+  }
+
+  canSubmit = () => {
+    const { form: { awayTeamId, fieldId, groupId, homeTeamId, startTime } } = this.state
+    return parseInt(awayTeamId) > 0 && parseInt(fieldId) > 0 && parseInt(groupId) > 0 && parseInt(homeTeamId) > 0 && startTime.match(/\d{2}:\d{2}/)
   }
 
   submit = () => {

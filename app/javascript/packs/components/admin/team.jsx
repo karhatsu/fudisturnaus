@@ -69,13 +69,13 @@ export default class Team extends React.PureComponent {
   }
 
   renderForm() {
-    const submitDisabled = this.state.form.clubId <= 0
     return (
       <div className="form form--horizontal">
         {this.state.errors.length > 0 && <div className="form-error">{this.state.errors.join('. ')}.</div>}
         <div className="admin-item__form">
           <div className="form__field">
             <select onChange={this.changeValue('groupId')} value={this.state.form.groupId}>
+              <option>Lohko</option>
               {this.props.groups.map(group => {
                 const { id, name, ageGroupName } = group
                 return <option key={id} value={id}>{name} ({ageGroupName})</option>
@@ -84,8 +84,8 @@ export default class Team extends React.PureComponent {
           </div>
           <div className="form__field">
             <select onChange={this.changeValue('clubId')} value={this.state.form.clubId}>
-              <option value={CHOOSE_CLUB_ID}>- Valitse seura -</option>
-              <option value={NEW_CLUB_ID}>- + Lisää uusi seura -</option>
+              <option value={CHOOSE_CLUB_ID}>Seura</option>
+              <option value={NEW_CLUB_ID}>+ Lisää uusi seura</option>
               {this.props.clubs.map(club => {
                 const { id, name } = club
                 return <option key={id} value={id}>{name}</option>
@@ -96,7 +96,7 @@ export default class Team extends React.PureComponent {
             <input type="text" onChange={this.changeValue('name')} value={this.state.form.name} placeholder="Esim. FC Kontu Valkoinen"/>
           </div>
           <div className="form__buttons">
-            <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={submitDisabled}/>
+            <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
             <input type="button" value="Peruuta" onClick={this.cancel} className="button"/>
             {!!this.props.team && <input type="button" value="Poista" onClick={this.delete} className="button button--danger"/>}
           </div>
@@ -125,12 +125,12 @@ export default class Team extends React.PureComponent {
   }
 
   editTeam = () => {
-    const { groups, team } = this.props
+    const { team } = this.props
     this.setState({
       formOpen: true,
       form: {
         clubId: team ? team.club.id : CHOOSE_CLUB_ID,
-        groupId: team ? team.group.id : groups[0].id,
+        groupId: team ? team.group.id : -1,
         name: team ? team.name : '',
       },
     })
@@ -143,6 +143,11 @@ export default class Team extends React.PureComponent {
 
   setClubName = event => {
     this.setState({ clubName: event.target.value })
+  }
+
+  canSubmit = () => {
+    const { form: { clubId, groupId, name } } = this.state
+    return clubId > 0 && groupId > 0 && !!name
   }
 
   submit = () => {

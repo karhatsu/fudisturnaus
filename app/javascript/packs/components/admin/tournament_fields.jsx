@@ -71,7 +71,7 @@ export default class TournamentFields extends React.PureComponent {
   renderTournamentFormButtons() {
     return (
       <div className="form__buttons">
-        <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary"/>
+        <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
         <input type="submit" value="Peruuta" onClick={this.closeForm} className="button"/>
       </div>
     )
@@ -103,6 +103,11 @@ export default class TournamentFields extends React.PureComponent {
   setValue = field => event => {
     const { form } = this.state
     this.setState({ form: { ...form, [field]: event.target.value } })
+  }
+
+  canSubmit = () => {
+    const { form: { days, name, startDate, location } } = this.state
+    return parseInt(days) >= 1 && !!name && !!startDate && !!location
   }
 
   submit = () => {

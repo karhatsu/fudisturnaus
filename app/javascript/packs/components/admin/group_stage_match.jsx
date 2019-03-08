@@ -1,10 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { parseISO } from 'date-fns'
+import { addMinutes, format, parseISO } from 'date-fns'
 import { parseFromTimeZone } from 'date-fns-timezone'
 import { deleteGroupStageMatch, saveGroupStageMatch } from './api-client'
 import AdminSessionKeyContext from './session_key_context'
 import { formatTime } from '../util/util'
+
+const matchMinutes = 40
 
 export default class GroupStageMatch extends React.PureComponent {
   static propTypes = {
@@ -39,6 +41,12 @@ export default class GroupStageMatch extends React.PureComponent {
       id: PropTypes.number.isRequired,
       startTime: PropTypes.string.isRequired,
     }),
+    groupStageMatches: PropTypes.arrayOf(PropTypes.shape({
+      field: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+      }).isRequired,
+      startTime: PropTypes.string.isRequired,
+    })).isRequired,
     onGroupStageMatchDelete: PropTypes.func,
     onGroupStageMatchSave: PropTypes.func.isRequired,
     teams: PropTypes.arrayOf(PropTypes.shape({
@@ -91,7 +99,7 @@ export default class GroupStageMatch extends React.PureComponent {
       <div className="form form--horizontal">
         {this.state.errors.length > 0 && <div className="form-error">{this.state.errors.join('. ')}.</div>}
         <div className="admin-item__form">
-          {this.buildIdNameDropDown(fields, 'fieldId', '- Kenttä -')}
+          {this.buildIdNameDropDown(fields, 'fieldId', '- Kenttä -', this.setField)}
           <div className="form__field form__field--time">
             <input type="text" onChange={this.changeValue('startTime')} value={this.state.form.startTime} placeholder="HH:MM"/>
           </div>
@@ -116,10 +124,11 @@ export default class GroupStageMatch extends React.PureComponent {
     }
   }
 
-  buildIdNameDropDown(items, field, label) {
+  buildIdNameDropDown(items, field, label, customOnChange) {
+    const onChange = customOnChange || this.changeValue(field)
     return (
       <div className="form__field">
-        <select onChange={this.changeValue(field)} value={this.state.form[field]}>
+        <select onChange={onChange} value={this.state.form[field]}>
           <option>{label}</option>
           {items.map(item => {
             const { id, name } = item
@@ -142,6 +151,21 @@ export default class GroupStageMatch extends React.PureComponent {
         startTime: groupStageMatch ? formatTime(groupStageMatch.startTime) : '',
       },
     })
+  }
+
+  setField = event => {
+    const { groupStageMatches } = this.props
+    const { form } = this.state
+    let { form: { startTime } } = this.state
+    const fieldId = event.target.value
+    if (fieldId && startTime === '') {
+      const sameFieldMatches = groupStageMatches.filter(match => match.field.id === parseInt(fieldId))
+      if (sameFieldMatches.length) {
+        const previousMatch = sameFieldMatches[sameFieldMatches.length - 1]
+        startTime = format(addMinutes(parseISO(previousMatch.startTime), matchMinutes), 'HH:mm')
+      }
+    }
+    this.setState({ form: { ...form, fieldId, startTime } })
   }
 
   changeValue = field => event => {

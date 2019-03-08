@@ -3,11 +3,19 @@ fi:
     models:
       group_stage_match: Alkulohkon ottelu
     attributes:
+      age_group:
+        name: Ikäryhmän nimi
       field:
         name: Kentän nimi
+      group:
+        name: Lohkon nimi
       group_stage_match:
-        home_goals: Kotijoukkueen maalit
         away_goals: Vierasjoukkueen maalit
+        away_team: Vierasjoukkue
+        field: Kenttä
+        group: Lohko
+        home_goals: Kotijoukkueen maalit
+        home_team: Kotijoukkue
       playoff_match:
         home_goals: Kotijoukkueen maalit
         away_goals: Vierasjoukkueen maalit

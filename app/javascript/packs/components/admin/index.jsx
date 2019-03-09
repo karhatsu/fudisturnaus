@@ -2,6 +2,7 @@ import React from 'react'
 import Loading from '../loading'
 import TournamentLinkBox from '../tournament_link_box'
 import { fetchTournaments } from '../api-client'
+import Title from '../title'
 
 export default class AdminIndex extends React.PureComponent {
   constructor(props) {
@@ -13,6 +14,16 @@ export default class AdminIndex extends React.PureComponent {
   }
 
   render() {
+    const { error, tournaments } = this.state
+    return (
+      <div>
+        <Title loading={!error && !tournaments} text="Admin"/>
+        {this.renderContent()}
+      </div>
+    )
+  }
+
+  renderContent() {
     const { error, tournaments } = this.state
     if (error) {
       return <div className="message message--error">Virhe haettaessa turnauksia. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.</div>

@@ -34,7 +34,7 @@ export default class AdminTournamentPage extends React.PureComponent {
     const title = tournament ? tournament.name : 'fudisturnaus.com'
     return (
       <div>
-        <Title loading={!tournament && !error} text={`ADMIN - ${title}`}/>
+        <Title iconLink="/admin" loading={!tournament && !error} text={`ADMIN - ${title}`}/>
         {this.renderContent()}
       </div>
     )

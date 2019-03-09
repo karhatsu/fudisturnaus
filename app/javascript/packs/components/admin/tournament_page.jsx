@@ -181,10 +181,11 @@ export default class AdminTournamentPage extends React.PureComponent {
   renderGroupTeams() {
     const { tournament: { teams } } = this.state
     const teamsByGroups = teams.reduce((groupTeams, team) => {
-      if (!groupTeams[team.group.name]) {
-        groupTeams[team.group.name] = []
+      const key = `${team.group.name} (${team.group.ageGroupName})`
+      if (!groupTeams[key]) {
+        groupTeams[key] = []
       }
-      groupTeams[team.group.name].push(team)
+      groupTeams[key].push(team)
       return groupTeams
     }, {})
     return Object.keys(teamsByGroups).map(group => {

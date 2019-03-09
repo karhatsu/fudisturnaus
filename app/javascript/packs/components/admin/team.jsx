@@ -64,7 +64,7 @@ export default class Team extends React.PureComponent {
 
   renderName() {
     const { team } = this.props
-    const text = team ? `${team.name} (${team.group.name}, ${team.group.ageGroupName})` : '+ Lisää uusi joukkue'
+    const text = team ? team.name : '+ Lisää uusi joukkue'
     return <div className="admin-item__title"><span onClick={this.editTeam}>{text}</span></div>
   }
 

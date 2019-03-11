@@ -59,6 +59,8 @@ export default class AdminTournamentPage extends React.PureComponent {
         {this.renderTeamsSection()}
         <div className="title-2">Alkulohkojen ottelut</div>
         {this.renderGroupStageMatchesSection()}
+        <div className="title-2">Toimitsijan linkki</div>
+        {this.renderOfficialLink()}
       </div>
     )
   }
@@ -324,6 +326,15 @@ export default class AdminTournamentPage extends React.PureComponent {
       default:
         console.error('No comparator for', itemName) // eslint-disable-line no-console
     }
+  }
+
+  renderOfficialLink() {
+    const url = `http://www.fudisturnaus.com/official/${this.state.tournament.accessKey}`
+    return (
+      <div className="form__field form__field--official-link">
+        <input type="text" value={url} disabled={true}/>
+      </div>
+    )
   }
 
   getTournamentId = () => {

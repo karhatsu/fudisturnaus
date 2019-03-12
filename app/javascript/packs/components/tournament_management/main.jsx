@@ -8,7 +8,7 @@ import Group from './group'
 import GroupStageMatch from './group_stage_match'
 import Field from './field'
 import Team from './team'
-import AdminSessionKeyContext from '../admin/session_key_context'
+import AccessContext from '../access_context'
 
 export default class AdminTournamentPage extends React.PureComponent {
   static propTypes = {
@@ -19,7 +19,7 @@ export default class AdminTournamentPage extends React.PureComponent {
     }).isRequired,
   }
 
-  static contextType = AdminSessionKeyContext
+  static contextType = AccessContext
 
   constructor(props) {
     super(props)

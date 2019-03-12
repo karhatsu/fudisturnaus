@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { createClub, deleteTeam, saveTeam } from './api-client'
-import AdminSessionKeyContext from '../admin/session_key_context'
+import AccessContext from '../access_context'
 
 const CHOOSE_CLUB_ID = '-1'
 const NEW_CLUB_ID = '-2'
@@ -35,7 +35,7 @@ export default class Team extends React.PureComponent {
     tournamentId: PropTypes.number.isRequired,
   }
 
-  static contextType = AdminSessionKeyContext
+  static contextType = AccessContext
 
   constructor(props) {
     super(props)

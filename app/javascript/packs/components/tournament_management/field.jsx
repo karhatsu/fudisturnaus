@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { deleteField, saveField } from './api-client'
-import AdminSessionKeyContext from '../admin/session_key_context'
+import AccessContext from '../access_context'
 
 export default class Field extends React.PureComponent {
   static propTypes = {
@@ -14,7 +14,7 @@ export default class Field extends React.PureComponent {
     tournamentId: PropTypes.number.isRequired,
   }
 
-  static contextType = AdminSessionKeyContext
+  static contextType = AccessContext
 
   constructor(props) {
     super(props)

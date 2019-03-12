@@ -30,7 +30,7 @@ export default class AdminMain extends React.PureComponent {
     const { sessionKey } = this.state
     if (sessionKey) {
       return (
-        <AdminSessionKeyContext.Provider value={sessionKey}>
+        <AdminSessionKeyContext.Provider value={{ adminSessionKey: sessionKey }}>
           <Switch>
             <Route path="/admin/tournaments/:id" component={AdminTournamentPage} />
             <Route path="/admin" component={AdminIndex} exact />

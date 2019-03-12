@@ -18,137 +18,137 @@ export function loginToAdmin(username, password, callback) {
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
-export function fetchTournament(adminAccessKey, id, callback) {
+export function fetchTournament(accessContext, id, callback) {
   fetch(`/api/v1/official/tournaments/${id}`, {
     method: 'GET',
-    headers: adminHeaders(adminAccessKey),
+    headers: buildHeaders(accessContext),
   })
     .then(response => response.json())
     .then(tournament => callback(null, tournament))
     .catch(() => handleConnectionErrorOnSave(callback))
 }
 
-export function saveTournament(adminSessionKey, id, data, callback) {
+export function saveTournament(accessContext, id, data, callback) {
   fetch(`/api/v1/official/tournaments/${id}`, {
     method: 'PATCH',
-    headers: adminHeaders(adminSessionKey),
+    headers: buildHeaders(accessContext),
     body: JSON.stringify({ tournament: data }),
   }).then(response => {
     handleSaveResponse(response, callback)
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
-export function saveField(adminSessionKey, tournamentId, id, name, callback) {
+export function saveField(accessContext, tournamentId, id, name, callback) {
   const url = `/api/v1/official/tournaments/${tournamentId}/fields` + (id ? `/${id}` : '')
   const method = id ? 'PATCH' : 'POST'
   fetch(url, {
     method,
-    headers: adminHeaders(adminSessionKey),
+    headers: buildHeaders(accessContext),
     body: JSON.stringify({ field: { name } }),
   }).then(response => {
     handleSaveResponse(response, callback)
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
-export function deleteField(adminSessionKey, tournamentId, id, callback) {
+export function deleteField(accessContext, tournamentId, id, callback) {
   fetch(`/api/v1/official/tournaments/${tournamentId}/fields/${id}`, {
     method: 'DELETE',
-    headers: adminHeaders(adminSessionKey),
+    headers: buildHeaders(accessContext),
   }).then(response => {
     handleSaveResponse(response, callback)
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
-export function saveAgeGroup(adminSessionKey, tournamentId, id, data, callback) {
+export function saveAgeGroup(accessContext, tournamentId, id, data, callback) {
   const url = `/api/v1/official/tournaments/${tournamentId}/age_groups` + (id ? `/${id}` : '')
   const method = id ? 'PATCH' : 'POST'
   fetch(url, {
     method,
-    headers: adminHeaders(adminSessionKey),
+    headers: buildHeaders(accessContext),
     body: JSON.stringify({ ageGroup: data }),
   }).then(response => {
     handleSaveResponse(response, callback)
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
-export function deleteAgeGroup(adminSessionKey, tournamentId, id, callback) {
+export function deleteAgeGroup(accessContext, tournamentId, id, callback) {
   fetch(`/api/v1/official/tournaments/${tournamentId}/age_groups/${id}`, {
     method: 'DELETE',
-    headers: adminHeaders(adminSessionKey),
+    headers: buildHeaders(accessContext),
   }).then(response => {
     handleSaveResponse(response, callback)
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
-export function saveGroup(adminSessionKey, tournamentId, id, data, callback) {
+export function saveGroup(accessContext, tournamentId, id, data, callback) {
   const url = `/api/v1/official/tournaments/${tournamentId}/groups` + (id ? `/${id}` : '')
   const method = id ? 'PATCH' : 'POST'
   fetch(url, {
     method,
-    headers: adminHeaders(adminSessionKey),
+    headers: buildHeaders(accessContext),
     body: JSON.stringify({ group: data }),
   }).then(response => {
     handleSaveResponse(response, callback)
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
-export function deleteGroup(adminSessionKey, tournamentId, id, callback) {
+export function deleteGroup(accessContext, tournamentId, id, callback) {
   fetch(`/api/v1/official/tournaments/${tournamentId}/groups/${id}`, {
     method: 'DELETE',
-    headers: adminHeaders(adminSessionKey),
+    headers: buildHeaders(accessContext),
   }).then(response => {
     handleSaveResponse(response, callback)
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
-export function createClub(adminSessionKey, name, callback) {
+export function createClub(accessContext, name, callback) {
   const url = '/api/v1/official/clubs'
   fetch(url, {
     method: 'POST',
-    headers: adminHeaders(adminSessionKey),
+    headers: buildHeaders(accessContext),
     body: JSON.stringify({ name }),
   }).then(response => {
     handleSaveResponse(response, callback)
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
-export function saveTeam(adminSessionKey, tournamentId, id, data, callback) {
+export function saveTeam(accessContext, tournamentId, id, data, callback) {
   const url = `/api/v1/official/tournaments/${tournamentId}/teams` + (id ? `/${id}` : '')
   const method = id ? 'PATCH' : 'POST'
   fetch(url, {
     method,
-    headers: adminHeaders(adminSessionKey),
+    headers: buildHeaders(accessContext),
     body: JSON.stringify({ team: data }),
   }).then(response => {
     handleSaveResponse(response, callback)
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
-export function deleteTeam(adminSessionKey, tournamentId, id, callback) {
+export function deleteTeam(accessContext, tournamentId, id, callback) {
   fetch(`/api/v1/official/tournaments/${tournamentId}/teams/${id}`, {
     method: 'DELETE',
-    headers: adminHeaders(adminSessionKey),
+    headers: buildHeaders(accessContext),
   }).then(response => {
     handleSaveResponse(response, callback)
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
-export function saveGroupStageMatch(adminSessionKey, tournamentId, id, data, callback) {
+export function saveGroupStageMatch(accessContext, tournamentId, id, data, callback) {
   const url = `/api/v1/official/tournaments/${tournamentId}/group_stage_matches` + (id ? `/${id}` : '')
   const method = id ? 'PATCH' : 'POST'
   fetch(url, {
     method,
-    headers: adminHeaders(adminSessionKey),
+    headers: buildHeaders(accessContext),
     body: JSON.stringify({ groupStageMatch: data }),
   }).then(response => {
     handleSaveResponse(response, callback)
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
-export function deleteGroupStageMatch(adminSessionKey, tournamentId, id, callback) {
+export function deleteGroupStageMatch(accessContext, tournamentId, id, callback) {
   fetch(`/api/v1/official/tournaments/${tournamentId}/group_stage_matches/${id}`, {
     method: 'DELETE',
-    headers: adminHeaders(adminSessionKey),
+    headers: buildHeaders(accessContext),
   }).then(response => {
     handleSaveResponse(response, callback)
   }).catch(() => handleConnectionErrorOnSave(callback))
@@ -170,9 +170,12 @@ function handleConnectionErrorOnSave(callback) {
   callback(['Yhteysvirhe, yritä uudestaan'])
 }
 
-function adminHeaders(adminSessionKey) {
-  return {
-    'Content-Type': 'application/json',
-    'X-Session-Key': adminSessionKey,
+function buildHeaders(accessContext) {
+  const headers = { 'Content-Type': 'application/json' }
+  if (accessContext.officialAccessKey) {
+    headers['X-Access-Key'] = accessContext.officialAccessKey
+  } else if (accessContext.adminSessionKey) {
+    headers['X-Session-Key'] = accessContext.adminSessionKey
   }
+  return headers
 }

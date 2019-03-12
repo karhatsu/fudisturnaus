@@ -8,7 +8,7 @@ import Group from './group'
 import GroupStageMatch from './group_stage_match'
 import Field from './field'
 import Team from './team'
-import AdminSessionKeyContext from './session_key_context'
+import AdminSessionKeyContext from '../admin/session_key_context'
 
 export default class AdminTournamentPage extends React.PureComponent {
   static propTypes = {

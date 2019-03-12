@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { addMinutes, format, parseISO } from 'date-fns'
 import { parseFromTimeZone } from 'date-fns-timezone'
 import { deleteGroupStageMatch, saveGroupStageMatch } from './api-client'
-import AdminSessionKeyContext from './session_key_context'
+import AdminSessionKeyContext from '../admin/session_key_context'
 import { formatTime } from '../util/util'
 
 const matchMinutes = 40

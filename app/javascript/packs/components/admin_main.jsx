@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
 import AdminLoginPage from './admin/login_page'
 import AdminIndex from './admin/index'
-import AdminTournamentPage from './admin/tournament_page'
+import TournamentManagementPage from './tournament_management/main'
 import AdminSessionKeyContext from './admin/session_key_context'
 
 export default class AdminMain extends React.PureComponent {
@@ -32,7 +32,7 @@ export default class AdminMain extends React.PureComponent {
       return (
         <AdminSessionKeyContext.Provider value={{ adminSessionKey: sessionKey }}>
           <Switch>
-            <Route path="/admin/tournaments/:id" component={AdminTournamentPage} />
+            <Route path="/admin/tournaments/:id" component={TournamentManagementPage} />
             <Route path="/admin" component={AdminIndex} exact />
           </Switch>
         </AdminSessionKeyContext.Provider>

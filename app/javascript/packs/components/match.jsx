@@ -34,6 +34,7 @@ export default class Match extends React.PureComponent {
     }).isRequired,
     selectedClubId: PropTypes.number,
     selectedTeamId: PropTypes.number,
+    tournamentId: PropTypes.number.isRequired,
   }
 
   constructor(props) {
@@ -169,9 +170,9 @@ export default class Match extends React.PureComponent {
   }
 
   saveResult = () => {
-    const { accessKey, match: { id, type } } = this.props
+    const { accessKey, match: { id, type }, tournamentId } = this.props
     const { homeGoals, awayGoals, penalties } = this.state
-    saveResult(accessKey, type, id, homeGoals, awayGoals, penalties, (errors) => {
+    saveResult(accessKey, tournamentId, type, id, homeGoals, awayGoals, penalties, (errors) => {
       if (errors) {
         this.setState({ errors })
       } else {

@@ -1,4 +1,4 @@
-class Api::V1::Admin::GroupsController < Api::V1::Admin::AdminBaseController
+class Api::V1::Official::GroupsController < Api::V1::Official::OfficialBaseController
   def create
     @group = Group.new group_params
     unless @group.save

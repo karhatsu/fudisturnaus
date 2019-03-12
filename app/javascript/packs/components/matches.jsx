@@ -11,6 +11,7 @@ export default class Matches extends React.PureComponent {
     matches: PropTypes.array.isRequired,
     selectedClubId: PropTypes.number,
     selectedTeamId: PropTypes.number,
+    tournamentId: PropTypes.number.isRequired,
   }
 
   static defaultProps = {
@@ -51,6 +52,7 @@ export default class Matches extends React.PureComponent {
           match={match}
           selectedClubId={this.props.selectedClubId}
           selectedTeamId={this.props.selectedTeamId}
+          tournamentId={this.props.tournamentId}
         />
       </div>
     )

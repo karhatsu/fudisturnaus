@@ -1,4 +1,4 @@
-class Api::V1::Admin::FieldsController < Api::V1::Admin::AdminBaseController
+class Api::V1::Official::FieldsController < Api::V1::Official::OfficialBaseController
   def create
     @field = Field.new field_params
     @field.tournament_id = params[:tournament_id]

@@ -126,6 +126,7 @@ export default class TournamentPage extends React.PureComponent {
           matches={matches}
           selectedClubId={filters.clubId}
           selectedTeamId={filters.teamId}
+          tournamentId={this.props.tournamentId}
         />
       </div>
     )

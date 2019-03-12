@@ -1,4 +1,4 @@
-class Api::V1::Admin::AgeGroupsController < Api::V1::Admin::AdminBaseController
+class Api::V1::Official::AgeGroupsController < Api::V1::Official::OfficialBaseController
   def create
     @age_group = AgeGroup.new age_group_params
     @age_group.tournament_id = params[:tournament_id]

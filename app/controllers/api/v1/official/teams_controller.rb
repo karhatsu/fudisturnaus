@@ -1,4 +1,4 @@
-class Api::V1::Admin::TeamsController < Api::V1::Admin::AdminBaseController
+class Api::V1::Official::TeamsController < Api::V1::Official::OfficialBaseController
   def create
     @team = Team.new team_params
     unless @team.save

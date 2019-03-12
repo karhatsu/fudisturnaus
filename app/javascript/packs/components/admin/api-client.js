@@ -19,7 +19,7 @@ export function loginToAdmin(username, password, callback) {
 }
 
 export function fetchTournament(adminAccessKey, id, callback) {
-  fetch(`/api/v1/admin/tournaments/${id}`, {
+  fetch(`/api/v1/official/tournaments/${id}`, {
     method: 'GET',
     headers: adminHeaders(adminAccessKey),
   })
@@ -29,7 +29,7 @@ export function fetchTournament(adminAccessKey, id, callback) {
 }
 
 export function saveTournament(adminSessionKey, id, data, callback) {
-  fetch(`/api/v1/admin/tournaments/${id}`, {
+  fetch(`/api/v1/official/tournaments/${id}`, {
     method: 'PATCH',
     headers: adminHeaders(adminSessionKey),
     body: JSON.stringify({ tournament: data }),
@@ -39,7 +39,7 @@ export function saveTournament(adminSessionKey, id, data, callback) {
 }
 
 export function saveField(adminSessionKey, tournamentId, id, name, callback) {
-  const url = `/api/v1/admin/tournaments/${tournamentId}/fields` + (id ? `/${id}` : '')
+  const url = `/api/v1/official/tournaments/${tournamentId}/fields` + (id ? `/${id}` : '')
   const method = id ? 'PATCH' : 'POST'
   fetch(url, {
     method,
@@ -51,7 +51,7 @@ export function saveField(adminSessionKey, tournamentId, id, name, callback) {
 }
 
 export function deleteField(adminSessionKey, tournamentId, id, callback) {
-  fetch(`/api/v1/admin/tournaments/${tournamentId}/fields/${id}`, {
+  fetch(`/api/v1/official/tournaments/${tournamentId}/fields/${id}`, {
     method: 'DELETE',
     headers: adminHeaders(adminSessionKey),
   }).then(response => {
@@ -60,7 +60,7 @@ export function deleteField(adminSessionKey, tournamentId, id, callback) {
 }
 
 export function saveAgeGroup(adminSessionKey, tournamentId, id, data, callback) {
-  const url = `/api/v1/admin/tournaments/${tournamentId}/age_groups` + (id ? `/${id}` : '')
+  const url = `/api/v1/official/tournaments/${tournamentId}/age_groups` + (id ? `/${id}` : '')
   const method = id ? 'PATCH' : 'POST'
   fetch(url, {
     method,
@@ -72,7 +72,7 @@ export function saveAgeGroup(adminSessionKey, tournamentId, id, data, callback) 
 }
 
 export function deleteAgeGroup(adminSessionKey, tournamentId, id, callback) {
-  fetch(`/api/v1/admin/tournaments/${tournamentId}/age_groups/${id}`, {
+  fetch(`/api/v1/official/tournaments/${tournamentId}/age_groups/${id}`, {
     method: 'DELETE',
     headers: adminHeaders(adminSessionKey),
   }).then(response => {
@@ -81,7 +81,7 @@ export function deleteAgeGroup(adminSessionKey, tournamentId, id, callback) {
 }
 
 export function saveGroup(adminSessionKey, tournamentId, id, data, callback) {
-  const url = `/api/v1/admin/tournaments/${tournamentId}/groups` + (id ? `/${id}` : '')
+  const url = `/api/v1/official/tournaments/${tournamentId}/groups` + (id ? `/${id}` : '')
   const method = id ? 'PATCH' : 'POST'
   fetch(url, {
     method,
@@ -93,7 +93,7 @@ export function saveGroup(adminSessionKey, tournamentId, id, data, callback) {
 }
 
 export function deleteGroup(adminSessionKey, tournamentId, id, callback) {
-  fetch(`/api/v1/admin/tournaments/${tournamentId}/groups/${id}`, {
+  fetch(`/api/v1/official/tournaments/${tournamentId}/groups/${id}`, {
     method: 'DELETE',
     headers: adminHeaders(adminSessionKey),
   }).then(response => {
@@ -102,7 +102,7 @@ export function deleteGroup(adminSessionKey, tournamentId, id, callback) {
 }
 
 export function createClub(adminSessionKey, name, callback) {
-  const url = '/api/v1/admin/clubs'
+  const url = '/api/v1/official/clubs'
   fetch(url, {
     method: 'POST',
     headers: adminHeaders(adminSessionKey),
@@ -113,7 +113,7 @@ export function createClub(adminSessionKey, name, callback) {
 }
 
 export function saveTeam(adminSessionKey, tournamentId, id, data, callback) {
-  const url = `/api/v1/admin/tournaments/${tournamentId}/teams` + (id ? `/${id}` : '')
+  const url = `/api/v1/official/tournaments/${tournamentId}/teams` + (id ? `/${id}` : '')
   const method = id ? 'PATCH' : 'POST'
   fetch(url, {
     method,
@@ -125,7 +125,7 @@ export function saveTeam(adminSessionKey, tournamentId, id, data, callback) {
 }
 
 export function deleteTeam(adminSessionKey, tournamentId, id, callback) {
-  fetch(`/api/v1/admin/tournaments/${tournamentId}/teams/${id}`, {
+  fetch(`/api/v1/official/tournaments/${tournamentId}/teams/${id}`, {
     method: 'DELETE',
     headers: adminHeaders(adminSessionKey),
   }).then(response => {
@@ -134,7 +134,7 @@ export function deleteTeam(adminSessionKey, tournamentId, id, callback) {
 }
 
 export function saveGroupStageMatch(adminSessionKey, tournamentId, id, data, callback) {
-  const url = `/api/v1/admin/tournaments/${tournamentId}/group_stage_matches` + (id ? `/${id}` : '')
+  const url = `/api/v1/official/tournaments/${tournamentId}/group_stage_matches` + (id ? `/${id}` : '')
   const method = id ? 'PATCH' : 'POST'
   fetch(url, {
     method,
@@ -146,7 +146,7 @@ export function saveGroupStageMatch(adminSessionKey, tournamentId, id, data, cal
 }
 
 export function deleteGroupStageMatch(adminSessionKey, tournamentId, id, callback) {
-  fetch(`/api/v1/admin/tournaments/${tournamentId}/group_stage_matches/${id}`, {
+  fetch(`/api/v1/official/tournaments/${tournamentId}/group_stage_matches/${id}`, {
     method: 'DELETE',
     headers: adminHeaders(adminSessionKey),
   }).then(response => {

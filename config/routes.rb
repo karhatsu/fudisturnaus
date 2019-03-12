@@ -4,21 +4,23 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :tournaments, only: [:index, :show]
+
       namespace :official do
         resources :matches, only: :update
-        put 'group_stage_results/:match_id' => 'group_stage_results#update'
-        put 'playoff_results/:match_id' => 'playoff_results#update'
-      end
-      namespace :admin do
-        resources :admin_sessions, only: :create
-        resources :clubs, only: :create
         resources :tournaments, only: [:show, :update] do
+          put 'group_stage_results/:match_id' => 'group_stage_results#update'
+          put 'playoff_results/:match_id' => 'playoff_results#update'
           resources :age_groups, only: [:create, :update, :destroy]
           resources :fields, only: [:create, :update, :destroy]
           resources :groups, only: [:create, :update, :destroy]
           resources :group_stage_matches, only: [:create, :update, :destroy]
           resources :teams, only: [:create, :update, :destroy]
         end
+        resources :clubs, only: :create
+      end
+
+      namespace :admin do
+        resources :admin_sessions, only: :create
       end
     end
   end

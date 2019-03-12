@@ -1,4 +1,4 @@
-class Api::V1::Admin::GroupStageMatchesController < Api::V1::Admin::AdminBaseController
+class Api::V1::Official::GroupStageMatchesController < Api::V1::Official::OfficialBaseController
   def create
     @group_stage_match = GroupStageMatch.new match_params
     unless @group_stage_match.save

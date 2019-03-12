@@ -2,9 +2,9 @@ import { matchTypes } from '../util/enums'
 
 const unexpectedErrorMsg = 'Odottamaton virhe, yritä uudestaan. Jos ongelma ei poistu, ota yhteys palvelun ylläpitoon.'
 
-export function saveResult(accessKey, type, matchId, homeGoals, awayGoals, penalties, callback) {
+export function saveResult(accessKey, tournamentId, type, matchId, homeGoals, awayGoals, penalties, callback) {
   const typePath = type === matchTypes.playoff ? 'playoff_results' : 'group_stage_results'
-  fetch(`/api/v1/official/${typePath}/${matchId}`, {
+  fetch(`/api/v1/official/tournaments/${tournamentId}/${typePath}/${matchId}`, {
     method: 'PUT',
     headers: officialHeaders(accessKey),
     body: JSON.stringify({

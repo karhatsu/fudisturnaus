@@ -2,11 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { formatTime } from './util/util'
 import { matchTypes } from './util/enums'
-import { saveResult } from './official/api-client'
+import { saveResult } from './tournament_management/api-client'
+import AccessContext from './access_context'
 
 export default class Match extends React.PureComponent {
   static propTypes = {
-    accessKey: PropTypes.string,
     editable: PropTypes.bool.isRequired,
     match: PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -36,6 +36,8 @@ export default class Match extends React.PureComponent {
     selectedTeamId: PropTypes.number,
     tournamentId: PropTypes.number.isRequired,
   }
+
+  static contextType = AccessContext
 
   constructor(props) {
     super(props)
@@ -170,9 +172,9 @@ export default class Match extends React.PureComponent {
   }
 
   saveResult = () => {
-    const { accessKey, match: { id, type }, tournamentId } = this.props
+    const { match: { id, type }, tournamentId } = this.props
     const { homeGoals, awayGoals, penalties } = this.state
-    saveResult(accessKey, tournamentId, type, id, homeGoals, awayGoals, penalties, (errors) => {
+    saveResult(this.context, tournamentId, type, id, homeGoals, awayGoals, penalties, (errors) => {
       if (errors) {
         this.setState({ errors })
       } else {

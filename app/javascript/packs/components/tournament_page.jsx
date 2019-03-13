@@ -10,7 +10,7 @@ import { fetchTournament } from './api-client'
 
 export default class TournamentPage extends React.PureComponent {
   static propTypes = {
-    officialAccessKey: PropTypes.string,
+    official: PropTypes.bool.isRequired,
     tournamentId: PropTypes.number.isRequired,
   }
 
@@ -31,7 +31,7 @@ export default class TournamentPage extends React.PureComponent {
 
   render() {
     const { error, tournament } = this.state
-    const iconLink = this.props.officialAccessKey ? null : '/'
+    const iconLink = this.props.official ? null : '/'
     const title = tournament ? tournament.name : 'fudisturnaus.com'
     return (
       <div>
@@ -114,14 +114,13 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   renderMatches = (matches, title, showTitle) => {
-    const { officialAccessKey } = this.props
+    const { official } = this.props
     const { filters, tournament: { fields } } = this.state
     return (
       <div>
         {showTitle ? <div className="result-section-title">{title}</div> : ''}
         <Matches
-          accessKey={officialAccessKey}
-          editable={!!officialAccessKey}
+          editable={official}
           fieldsCount={fields.length}
           matches={matches}
           selectedClubId={filters.clubId}

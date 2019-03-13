@@ -1,3 +1,5 @@
+import { matchTypes } from '../util/enums'
+
 const unexpectedErrorMsg = 'Odottamaton virhe, yritä uudestaan. Jos ongelma ei poistu, ota yhteys palvelun ylläpitoon.'
 
 export function loginToAdmin(username, password, callback) {
@@ -15,6 +17,19 @@ export function loginToAdmin(username, password, callback) {
     } else {
       callback('Odottamaton virhe')
     }
+  }).catch(() => handleConnectionErrorOnSave(callback))
+}
+
+export function saveResult(accessContext, tournamentId, type, matchId, homeGoals, awayGoals, penalties, callback) {
+  const typePath = type === matchTypes.playoff ? 'playoff_results' : 'group_stage_results'
+  fetch(`/api/v1/official/tournaments/${tournamentId}/${typePath}/${matchId}`, {
+    method: 'PUT',
+    headers: buildHeaders(accessContext),
+    body: JSON.stringify({
+      match: { homeGoals, awayGoals, penalties },
+    }),
+  }).then(response => {
+    handleSaveResponse(response, callback)
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 

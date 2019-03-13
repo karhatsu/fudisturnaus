@@ -5,8 +5,7 @@ import { resolveColStyles } from './util/util'
 
 export default class Matches extends React.PureComponent {
   static propTypes = {
-    accessKey: PropTypes.string,
-    editable: PropTypes.bool,
+    editable: PropTypes.bool.isRequired,
     fieldsCount: PropTypes.number.isRequired,
     matches: PropTypes.array.isRequired,
     selectedClubId: PropTypes.number,
@@ -47,7 +46,6 @@ export default class Matches extends React.PureComponent {
     return (
       <div className={resolveColStyles(this.props.fieldsCount)} key={match.id}>
         <Match
-          accessKey={this.props.accessKey}
           editable={this.props.editable}
           match={match}
           selectedClubId={this.props.selectedClubId}

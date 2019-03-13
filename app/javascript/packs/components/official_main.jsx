@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
-import TournamentPage from './tournament_page'
 import './styles/application.scss'
+import TournamentPage from './tournament_page'
+import TournamentManagementPage from './tournament_management/main'
 import AccessContext from './access_context'
 
 export default class OfficialMain extends React.PureComponent {
@@ -22,6 +23,7 @@ export default class OfficialMain extends React.PureComponent {
     return (
       <AccessContext.Provider value={{ officialAccessKey: accessKey }}>
         <Switch>
+          <Route path="/official/:accessKey/management" render={props => <TournamentManagementPage {...props} tournamentId={tournamentId}/>}/>
           <Route path="/official/:accessKey" render={props => <TournamentPage {...props} official={true} tournamentId={tournamentId}/>}/>
         </Switch>
       </AccessContext.Provider>

@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 import Loading from './loading'
 import Matches from './matches'
@@ -10,6 +11,11 @@ import { fetchTournament } from './api-client'
 
 export default class TournamentPage extends React.PureComponent {
   static propTypes = {
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        accessKey: PropTypes.string,
+      }).isRequired,
+    }),
     official: PropTypes.bool.isRequired,
     tournamentId: PropTypes.number.isRequired,
   }
@@ -61,6 +67,7 @@ export default class TournamentPage extends React.PureComponent {
         {this.renderMatches(groupStageMatches, 'Alkulohkojen ottelut', tournament.playoffMatches.length)}
         {this.renderGroupTables()}
         {this.renderMatches(filteredPlayoffMatches, 'Jatko-ottelut', filteredPlayoffMatches.length)}
+        {this.renderManagementLink()}
       </div>
     )
   }
@@ -167,6 +174,18 @@ export default class TournamentPage extends React.PureComponent {
       && (!filters.groupId || filters.groupId === groupId)
       && (!filters.clubId || teams.findIndex(team => team.clubId === filters.clubId) !== -1)
       && (!filters.teamId || teams.findIndex(team => team.id === filters.teamId) !== -1)
+  }
+
+  renderManagementLink() {
+    if (this.props.official) {
+      const { match: { params: { accessKey } } } = this.props
+      return (
+        <div>
+          <div className="result-section-title">Turnauksen hallinta</div>
+          <div className="management-link"><Link to={`/official/${accessKey}/management`}>Muokkaa turnauksen asetuksia</Link></div>
+        </div>
+      )
+    }
   }
 
   componentDidMount() {

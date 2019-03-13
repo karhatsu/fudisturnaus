@@ -36,3 +36,11 @@
   color: $green;
   font-weight: 600;
 }
+
+.management-link {
+  @include white-box();
+
+  a {
+    color: $green;
+  }
+}

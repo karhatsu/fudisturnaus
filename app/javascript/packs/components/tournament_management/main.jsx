@@ -10,13 +10,14 @@ import Field from './field'
 import Team from './team'
 import AccessContext from '../access_context'
 
-export default class AdminTournamentPage extends React.PureComponent {
+export default class TournamentManagementPage extends React.PureComponent {
   static propTypes = {
     match: PropTypes.shape({
       params: PropTypes.shape({
-        id: PropTypes.string.isRequired,
+        id: PropTypes.string,
       }).isRequired,
     }).isRequired,
+    tournamentId: PropTypes.number,
   }
 
   static contextType = AccessContext
@@ -338,6 +339,6 @@ export default class AdminTournamentPage extends React.PureComponent {
   }
 
   getTournamentId = () => {
-    return parseInt(this.props.match.params.id)
+    return this.props.tournamentId || parseInt(this.props.match.params.id)
   }
 }

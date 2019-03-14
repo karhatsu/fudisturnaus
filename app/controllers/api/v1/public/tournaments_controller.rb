@@ -1,4 +1,4 @@
-class Api::V1::TournamentsController < ApplicationController
+class Api::V1::Public::TournamentsController < ApplicationController
   protect_from_forgery with: :null_session, only: Proc.new { |c| c.request.format.json? }
 
   def index

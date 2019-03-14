@@ -1,5 +1,5 @@
 export function fetchTournaments(callback) {
-  fetch('/api/v1/tournaments')
+  fetch('/api/v1/public/tournaments')
     .then(response => response.json())
     .then(json => callback(null, json.tournaments))
     .catch(err => {
@@ -9,7 +9,7 @@ export function fetchTournaments(callback) {
 }
 
 export function fetchTournament(id, callback) {
-  fetch(`/api/v1/tournaments/${id}`)
+  fetch(`/api/v1/public/tournaments/${id}`)
     .then(response => response.json())
     .then(tournament => callback(null, tournament))
     .catch(err => {

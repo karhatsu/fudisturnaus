@@ -4,7 +4,7 @@ import { endOfDay, isBefore, isSameDay, parseISO } from 'date-fns'
 import Loading from './loading'
 import Title from './title'
 import TournamentLinkBox from './tournament_link_box'
-import { fetchTournaments } from './api-client'
+import { fetchTournaments } from './public/api-client'
 
 export default class Main extends React.PureComponent {
   constructor(props) {

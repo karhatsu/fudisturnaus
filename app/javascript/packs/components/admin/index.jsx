@@ -1,7 +1,7 @@
 import React from 'react'
 import Loading from '../loading'
 import TournamentLinkBox from '../tournament_link_box'
-import { fetchTournaments } from '../api-client'
+import { fetchTournaments } from '../public/api-client'
 import Title from '../title'
 
 export default class AdminIndex extends React.PureComponent {

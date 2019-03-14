@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Match from './match'
 import { resolveColStyles } from '../util/util'
 
 export default class Matches extends React.PureComponent {
@@ -8,6 +7,7 @@ export default class Matches extends React.PureComponent {
     editable: PropTypes.bool.isRequired,
     fieldsCount: PropTypes.number.isRequired,
     matches: PropTypes.array.isRequired,
+    renderMatch: PropTypes.func.isRequired,
     selectedClubId: PropTypes.number,
     selectedTeamId: PropTypes.number,
     tournamentId: PropTypes.number.isRequired,
@@ -43,15 +43,11 @@ export default class Matches extends React.PureComponent {
   }
 
   renderMatch = match => {
+    const { renderMatch, selectedClubId, selectedTeamId, tournamentId } = this.props
+    const matchProps = { match, selectedClubId, selectedTeamId, tournamentId }
     return (
       <div className={resolveColStyles(this.props.fieldsCount)} key={match.id}>
-        <Match
-          editable={this.props.editable}
-          match={match}
-          selectedClubId={this.props.selectedClubId}
-          selectedTeamId={this.props.selectedTeamId}
-          tournamentId={this.props.tournamentId}
-        />
+        {renderMatch(matchProps)}
       </div>
     )
   }

@@ -17,6 +17,7 @@ export default class TournamentPage extends React.PureComponent {
       }).isRequired,
     }),
     official: PropTypes.bool.isRequired,
+    renderMatch: PropTypes.func.isRequired,
     tournamentId: PropTypes.number.isRequired,
   }
 
@@ -121,7 +122,7 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   renderMatches = (matches, title, showTitle) => {
-    const { official } = this.props
+    const { official, renderMatch } = this.props
     const { filters, tournament: { fields } } = this.state
     return (
       <div>
@@ -130,6 +131,7 @@ export default class TournamentPage extends React.PureComponent {
           editable={official}
           fieldsCount={fields.length}
           matches={matches}
+          renderMatch={renderMatch}
           selectedClubId={filters.clubId}
           selectedTeamId={filters.teamId}
           tournamentId={this.props.tournamentId}

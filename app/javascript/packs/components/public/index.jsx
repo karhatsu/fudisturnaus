@@ -1,12 +1,12 @@
 import React from 'react'
 import { endOfDay, isBefore, isSameDay, parseISO } from 'date-fns'
 
-import Loading from './components/loading'
-import Title from './components/title'
-import TournamentLinkBox from './components/tournament_link_box'
-import { fetchTournaments } from './public/api-client'
+import Loading from '../components/loading'
+import Title from '../components/title'
+import TournamentLinkBox from '../components/tournament_link_box'
+import { fetchTournaments } from './api-client'
 
-export default class Main extends React.PureComponent {
+export default class Index extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {

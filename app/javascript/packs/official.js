@@ -7,7 +7,7 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-import OfficialMain from './components/official_main'
+import OfficialMain from './components/official/main'
 import WebpackerReact from 'webpacker-react'
 
 WebpackerReact.setup({ OfficialMain })

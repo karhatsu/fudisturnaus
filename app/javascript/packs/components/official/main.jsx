@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
-import './styles/application.scss'
-import TournamentPage from './tournament_page'
-import TournamentManagementPage from './tournament_management/main'
-import AccessContext from './access_context'
+import '../styles/application.scss'
+import TournamentPage from '../tournament_page'
+import TournamentManagementPage from '../tournament_management/main'
+import AccessContext from '../access_context'
 
 export default class OfficialMain extends React.PureComponent {
   static propTypes = {

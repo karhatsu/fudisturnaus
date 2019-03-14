@@ -8,7 +8,7 @@ import Group from './group'
 import GroupStageMatch from './group_stage_match'
 import Field from './field'
 import Team from './team'
-import AccessContext from '../access_context'
+import AccessContext from '../util/access_context'
 
 export default class TournamentManagementPage extends React.PureComponent {
   static propTypes = {

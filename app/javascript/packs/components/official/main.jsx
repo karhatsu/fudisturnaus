@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import '../styles/application.scss'
 import TournamentPage from '../public/tournament_page'
 import TournamentManagementPage from '../tournament_management/main'
-import AccessContext from '../access_context'
+import AccessContext from '../util/access_context'
 
 export default class OfficialMain extends React.PureComponent {
   static propTypes = {

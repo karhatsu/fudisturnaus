@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { formatTime } from '../util/util'
 import { matchTypes } from '../util/enums'
 import { saveResult } from '../tournament_management/api-client'
-import AccessContext from '../access_context'
+import AccessContext from '../util/access_context'
 
 export default class Match extends React.PureComponent {
   static propTypes = {

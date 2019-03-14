@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { addMinutes, format, parseISO } from 'date-fns'
 import { parseFromTimeZone } from 'date-fns-timezone'
 import { deleteGroupStageMatch, saveGroupStageMatch } from './api-client'
-import AccessContext from '../access_context'
+import AccessContext from '../util/access_context'
 import { formatTime } from '../util/util'
 
 export default class GroupStageMatch extends React.PureComponent {

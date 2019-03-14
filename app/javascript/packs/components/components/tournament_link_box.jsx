@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { formatTournamentDates } from './util/util'
+import { formatTournamentDates } from '../util/util'
 
 export default class TournamentLinkBox extends React.PureComponent {
   static propTypes = {

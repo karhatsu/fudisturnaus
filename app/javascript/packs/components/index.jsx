@@ -1,9 +1,9 @@
 import React from 'react'
 import { endOfDay, isBefore, isSameDay, parseISO } from 'date-fns'
 
-import Loading from './loading'
-import Title from './title'
-import TournamentLinkBox from './tournament_link_box'
+import Loading from './components/loading'
+import Title from './components/title'
+import TournamentLinkBox from './components/tournament_link_box'
 import { fetchTournaments } from './public/api-client'
 
 export default class Main extends React.PureComponent {

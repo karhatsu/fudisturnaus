@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { fetchTournament } from './api-client'
-import Title from '../title'
+import Title from '../components/title'
 import TournamentFields from './tournament_fields'
 import AgeGroup from './age_group'
 import Group from './group'

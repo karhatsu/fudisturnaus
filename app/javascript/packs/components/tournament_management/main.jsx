@@ -230,7 +230,7 @@ export default class TournamentManagementPage extends React.PureComponent {
   }
 
   renderGroupStageMatchesSection() {
-    const { tournament: { fields, groups, groupStageMatches, teams, id } } = this.state
+    const { tournament: { fields, groups, groupStageMatches, teams, id, matchMinutes } } = this.state
     const canMatches = teams.length > 1 && fields.length > 0
     return (
       <div className="admin-tournament-page__section">
@@ -240,6 +240,7 @@ export default class TournamentManagementPage extends React.PureComponent {
           groups={groups}
           groupStageMatches={groupStageMatches}
           onGroupStageMatchSave={this.onItemSave('groupStageMatches')}
+          matchMinutes={matchMinutes}
           teams={teams}
           tournamentId={id}
           tournamentDate={this.state.tournament.startDate}
@@ -257,7 +258,7 @@ export default class TournamentManagementPage extends React.PureComponent {
   }
 
   renderGroupStageMatches() {
-    const { tournament: { fields, groups, groupStageMatches, teams } } = this.state
+    const { tournament: { fields, groups, groupStageMatches, teams, matchMinutes } } = this.state
     return groupStageMatches.map(groupStageMatch => {
       return <GroupStageMatch
         key={groupStageMatch.id}
@@ -268,6 +269,7 @@ export default class TournamentManagementPage extends React.PureComponent {
         onClubSave={this.onClubSave}
         onGroupStageMatchDelete={this.onItemDelete('groupStageMatches')}
         onGroupStageMatchSave={this.onItemSave('groupStageMatches')}
+        matchMinutes={matchMinutes}
         teams={teams}
         tournamentId={this.getTournamentId()}
         tournamentDate={this.state.tournament.startDate}

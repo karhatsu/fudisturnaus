@@ -6,8 +6,6 @@ import { deleteGroupStageMatch, saveGroupStageMatch } from './api-client'
 import AccessContext from '../access_context'
 import { formatTime } from '../util/util'
 
-const matchMinutes = 40
-
 export default class GroupStageMatch extends React.PureComponent {
   static propTypes = {
     fields: PropTypes.arrayOf(PropTypes.shape({
@@ -49,6 +47,7 @@ export default class GroupStageMatch extends React.PureComponent {
     })).isRequired,
     onGroupStageMatchDelete: PropTypes.func,
     onGroupStageMatchSave: PropTypes.func.isRequired,
+    matchMinutes: PropTypes.number.isRequired,
     teams: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
@@ -161,7 +160,7 @@ export default class GroupStageMatch extends React.PureComponent {
   }
 
   setField = event => {
-    const { groupStageMatches } = this.props
+    const { groupStageMatches, matchMinutes } = this.props
     const { form } = this.state
     let { form: { startTime } } = this.state
     const fieldId = event.target.value

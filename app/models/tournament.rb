@@ -9,6 +9,7 @@ class Tournament < ApplicationRecord
   validates :start_date, presence: true
   validates :days, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
   validates :location, presence: true
+  validates :match_minutes, numericality: { only_integer: true, greater_than_or_equal_to: 15, less_than_or_equal_to: 180 }
 
   before_create :generate_access_key
 

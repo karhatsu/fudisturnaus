@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   end
 
   namespace :official do
+    get ':access_key/management' => 'official#index'
     get ':access_key' => 'official#index'
   end
 

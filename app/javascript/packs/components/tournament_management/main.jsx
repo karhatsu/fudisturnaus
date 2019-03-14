@@ -17,6 +17,7 @@ export default class TournamentManagementPage extends React.PureComponent {
         id: PropTypes.string,
       }).isRequired,
     }).isRequired,
+    titleIconLink: PropTypes.string.isRequired,
     tournamentId: PropTypes.number,
   }
 
@@ -32,10 +33,11 @@ export default class TournamentManagementPage extends React.PureComponent {
 
   render() {
     const { error, tournament } = this.state
-    const title = tournament ? tournament.name : 'fudisturnaus.com'
+    const titlePrefix = tournament ? tournament.name : 'fudisturnaus.com'
+    const title = `${titlePrefix} - Hallintasivut`
     return (
       <div>
-        <Title iconLink="/admin" loading={!tournament && !error} text={`ADMIN - ${title}`}/>
+        <Title iconLink={this.props.titleIconLink} loading={!tournament && !error} text={title}/>
         {this.renderContent()}
       </div>
     )

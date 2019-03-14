@@ -23,11 +23,16 @@ export default class OfficialMain extends React.PureComponent {
     return (
       <AccessContext.Provider value={{ officialAccessKey: accessKey }}>
         <Switch>
-          <Route path="/official/:accessKey/management" render={props => <TournamentManagementPage {...props} tournamentId={tournamentId}/>}/>
+          <Route path="/official/:accessKey/management" render={props => this.renderTournamentManagementPage(props)}/>
           <Route path="/official/:accessKey" render={props => <TournamentPage {...props} official={true} tournamentId={tournamentId}/>}/>
         </Switch>
       </AccessContext.Provider>
     )
+  }
+
+  renderTournamentManagementPage(props) {
+    const { match: { params: { accessKey } }, tournamentId } = this.props
+    return <TournamentManagementPage {...props} titleIconLink={`/official/${accessKey}`} tournamentId={tournamentId} />
   }
 }
 

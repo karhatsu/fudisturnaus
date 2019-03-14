@@ -2,10 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
-import AdminLoginPage from './admin/login_page'
-import AdminIndex from './admin/index'
-import TournamentManagementPage from './tournament_management/main'
-import AccessContext from './access_context'
+import AdminLoginPage from './login_page'
+import AdminIndex from './index'
+import TournamentManagementPage from '../tournament_management/main'
+import AccessContext from '../access_context'
 
 export default class AdminMain extends React.PureComponent {
   static propTypes = {

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
 import '../styles/application.scss'
-import TournamentPage from '../tournament_page'
+import TournamentPage from '../public/tournament_page'
 import TournamentManagementPage from '../tournament_management/main'
 import AccessContext from '../access_context'
 

@@ -2,12 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import Loading from './components/loading'
-import Matches from './matches'
-import GroupResults from './group_results'
-import { buildTournamentFromSocketData, formatTournamentDates } from './util/util'
-import Title from './components/title'
-import { fetchTournament } from './public/api-client'
+import Loading from '../components/loading'
+import Matches from '../matches'
+import GroupResults from '../group_results'
+import { buildTournamentFromSocketData, formatTournamentDates } from '../util/util'
+import Title from '../components/title'
+import { fetchTournament } from './api-client'
 
 export default class TournamentPage extends React.PureComponent {
   static propTypes = {

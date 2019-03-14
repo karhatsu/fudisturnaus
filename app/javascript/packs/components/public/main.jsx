@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter, Route } from 'react-router-dom'
 import '../styles/application.scss'
 import Index from './index'
-import TournamentPage from '../tournament_page'
+import TournamentPage from './tournament_page'
 import PropTypes from 'prop-types'
 
 export default class Main extends React.PureComponent {

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Match from './match'
-import { resolveColStyles } from './util/util'
+import { resolveColStyles } from '../util/util'
 
 export default class Matches extends React.PureComponent {
   static propTypes = {

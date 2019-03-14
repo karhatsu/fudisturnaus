@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { resolveColStyles } from './util/util'
+import { resolveColStyles } from '../util/util'
 
 export default class GroupResults extends React.PureComponent {
   static propTypes = {

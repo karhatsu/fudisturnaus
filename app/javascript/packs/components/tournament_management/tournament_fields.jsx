@@ -14,6 +14,7 @@ export default class TournamentFields extends React.PureComponent {
       startDate: PropTypes.string.isRequired,
       endDate: PropTypes.string.isRequired,
       days: PropTypes.number.isRequired,
+      matchMinutes: PropTypes.number.isRequired,
     }).isRequired,
   }
 
@@ -30,6 +31,7 @@ export default class TournamentFields extends React.PureComponent {
         days: undefined,
         location: undefined,
         address: undefined,
+        matchMinutes: undefined,
       },
     }
   }
@@ -52,6 +54,7 @@ export default class TournamentFields extends React.PureComponent {
         {this.renderTournamentField('Kesto (pv)', 'number', 'days')}
         {this.renderTournamentField('Paikka', 'text', 'location', 'Esim. Kontulan tekonurmi')}
         {this.renderTournamentField('Osoite', 'text', 'address', 'Esim. Tanhuantie 4-6, 00940 Helsinki')}
+        {this.renderTournamentField('Otteluiden välinen aika (min)', 'number', 'matchMinutes')}
         {this.renderTournamentFormButtons()}
       </div>
     )
@@ -89,10 +92,10 @@ export default class TournamentFields extends React.PureComponent {
   }
 
   openForm = () => {
-    const { tournament: { name, startDate, days, location, address } } = this.props
+    const { tournament: { name, startDate, days, location, address, matchMinutes } } = this.props
     this.setState({
       formOpen: true,
-      form: { name, startDate, days, location, address: address || '' },
+      form: { name, startDate, days, location, address: address || '', matchMinutes },
     })
   }
 

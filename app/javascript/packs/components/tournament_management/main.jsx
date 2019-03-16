@@ -27,6 +27,7 @@ export default class TournamentManagementPage extends React.PureComponent {
     super(props)
     this.state = {
       error: false,
+      officialLinkCopied: false,
       tournament: undefined,
     }
   }
@@ -334,12 +335,25 @@ export default class TournamentManagementPage extends React.PureComponent {
   }
 
   renderOfficialLink() {
+    const feedbackStyle = this.state.officialLinkCopied ? undefined :  { display: 'none' }
     const url = `http://www.fudisturnaus.com/official/${this.state.tournament.accessKey}`
     return (
-      <div className="form__field form__field--official-link">
-        <input type="text" value={url} disabled={true}/>
+      <div className="admin-tournament-page__section official-link">
+        <div className="official-link__copy" onClick={this.copyOfficialLink}>Kopioi linkki</div>
+        <div className="official-link__feedback" style={feedbackStyle}>Linkki kopioitu leikepöydälle</div>
+        <textarea id="hidden-copy-link-textarea" className="official-link__textarea" readOnly={true}>{url}</textarea>
       </div>
     )
+  }
+
+  copyOfficialLink = () => {
+    const textarea = document.getElementById('hidden-copy-link-textarea')
+    textarea.select()
+    document.execCommand('copy')
+    this.setState({ officialLinkCopied: true })
+    setTimeout(() => {
+      this.setState({ officialLinkCopied: false })
+    }, 5000)
   }
 
   getTournamentId = () => {

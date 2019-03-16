@@ -32,10 +32,21 @@ $inputHeight: 16px;
   }
 }
 
-.form__field--official-link {
-  margin-top: 8px;
-  input {
-    width: 400px;
+.official-link {
+  .official-link__copy {
+    cursor: pointer;
+    display: inline-block;
+  }
+
+  .official-link__feedback {
+    color: $green;
+    display: inline-block;
+    margin-left: 8px;
+  }
+
+  .official-link__textarea {
+    position: absolute;
+    left: -99999px;
   }
 }
 

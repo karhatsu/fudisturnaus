@@ -106,7 +106,11 @@ $inputHeight: 16px;
   }
 
   .form__field {
-    margin-right: 8px;
+    margin: 8px 8px 8px 0;
+  }
+
+  .form__buttons {
+    margin: 8px 0;
   }
 }
 

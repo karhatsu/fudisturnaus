@@ -51,10 +51,11 @@ $inputHeight: 16px;
 }
 
 .button {
-  border: none;
+  border: 1px solid $black;
   border-radius: 2px;
   cursor: pointer;
   padding: 8px 16px;
+  -webkit-appearance: none;
 }
 
 .form__buttons {

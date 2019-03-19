@@ -1,5 +1,5 @@
 class Group < ApplicationRecord
-  belongs_to :age_group
+  belongs_to :age_group, touch: true
   has_many :teams
   has_many :group_stage_matches
   has_many :first_round_playoff_matches_as_home_team, as: :home_team_origin, class_name: 'FirstRoundPlayoffMatch'

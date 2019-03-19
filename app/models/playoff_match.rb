@@ -1,7 +1,7 @@
 class PlayoffMatch < ApplicationRecord
   include Match
 
-  belongs_to :age_group
+  belongs_to :age_group, touch: true
   belongs_to :home_team_origin, polymorphic: true
   belongs_to :away_team_origin, polymorphic: true
   belongs_to :home_team, class_name: 'Team', optional: true

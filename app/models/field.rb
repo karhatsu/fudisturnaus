@@ -1,5 +1,5 @@
 class Field < ApplicationRecord
-  belongs_to :tournament
+  belongs_to :tournament, touch: true
   has_many :group_stage_matches
   has_many :playoff_matches
 

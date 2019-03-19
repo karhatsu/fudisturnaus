@@ -41,6 +41,24 @@ class Tournament < ApplicationRecord
     age_groups.flat_map(&:playoff_matches).sort { |a, b| [a.start_time, a.field.name] <=> [b.start_time, b.field.name] }
   end
 
+  def public_data
+    Rails.cache.fetch(cache_key_with_version) do
+      includes = {
+        age_groups: [
+          playoff_matches: [:field, :home_team, :away_team],
+          groups: [
+            :age_group,
+            group_stage_matches: [:field, :home_team, :away_team],
+            teams: [:group_stage_home_matches, :group_stage_away_matches]
+          ]
+        ],
+        fields: [],
+        groups: [teams: :club]
+      }
+      Tournament.where('id=?', id).includes(includes).first
+    end
+  end
+
   private
 
   def generate_access_key

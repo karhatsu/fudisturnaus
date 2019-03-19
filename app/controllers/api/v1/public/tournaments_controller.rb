@@ -11,7 +11,8 @@ class Api::V1::Public::TournamentsController < ApplicationController
         playoff_matches: [:field, :home_team, :away_team],
         groups: [
           :age_group,
-          group_stage_matches: [:field, :home_team, :away_team]
+          group_stage_matches: [:field, :home_team, :away_team],
+          teams: [:group_stage_home_matches, :group_stage_away_matches]
         ]
       ],
       fields: [],

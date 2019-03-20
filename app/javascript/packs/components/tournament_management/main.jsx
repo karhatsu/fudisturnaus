@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
+
 import { fetchTournament } from './api-client'
 import Title from '../components/title'
 import TournamentFields from './tournament_fields'
@@ -17,6 +19,7 @@ export default class TournamentManagementPage extends React.PureComponent {
         id: PropTypes.string,
       }).isRequired,
     }).isRequired,
+    official: PropTypes.bool.isRequired,
     titleIconLink: PropTypes.string.isRequired,
     tournamentId: PropTypes.number,
   }
@@ -65,6 +68,7 @@ export default class TournamentManagementPage extends React.PureComponent {
         {this.renderGroupStageMatchesSection()}
         <div className="title-2">Toimitsijan linkki</div>
         {this.renderOfficialLink()}
+        {this.renderBackLink()}
       </div>
     )
   }
@@ -354,6 +358,20 @@ export default class TournamentManagementPage extends React.PureComponent {
     setTimeout(() => {
       this.setState({ officialLinkCopied: false })
     }, 5000)
+  }
+
+  renderBackLink() {
+    if (this.props.official) {
+      const to = `/official/${this.state.tournament.accessKey}`
+      return (
+        <React.Fragment>
+          <div className="title-2">Takaisin tulosten syöttöön</div>
+          <div className="admin-tournament-page__section">
+            <Link to={to}>Takaisin tulosten syöttöön</Link>
+          </div>
+        </React.Fragment>
+      )
+    }
   }
 
   getTournamentId = () => {

@@ -32,7 +32,7 @@ export default class AdminMain extends React.PureComponent {
       return (
         <AccessContext.Provider value={{ adminSessionKey: sessionKey }}>
           <Switch>
-            <Route path="/admin/tournaments/:id" render={props => <TournamentManagementPage {...props} titleIconLink="/admin"/>} />
+            <Route path="/admin/tournaments/:id" render={props => <TournamentManagementPage {...props} official={false} titleIconLink="/admin"/>} />
             <Route path="/admin" component={AdminIndex} exact />
           </Switch>
         </AccessContext.Provider>

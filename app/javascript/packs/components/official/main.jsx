@@ -33,7 +33,7 @@ export default class OfficialMain extends React.PureComponent {
 
   renderTournamentManagementPage(routeProps) {
     const { match: { params: { accessKey } }, tournamentId } = this.props
-    return <TournamentManagementPage {...routeProps} titleIconLink={`/official/${accessKey}`} tournamentId={tournamentId} />
+    return <TournamentManagementPage {...routeProps} official={true} titleIconLink={`/official/${accessKey}`} tournamentId={tournamentId} />
   }
 
   renderTournamentPage(routeProps) {

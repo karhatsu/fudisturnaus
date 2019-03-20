@@ -2,6 +2,10 @@
 
 .admin-tournament-page__section {
   @include white-box();
+
+  a {
+    color: $green;
+  }
 }
 
 .admin-tournament-page__section-title {

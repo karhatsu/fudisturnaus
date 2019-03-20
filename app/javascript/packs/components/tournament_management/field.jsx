@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { deleteField, saveField } from './api-client'
+import { deleteField, saveField } from './api_client'
 import AccessContext from '../util/access_context'
 
 export default class Field extends React.PureComponent {

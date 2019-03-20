@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import TournamentFields from '../tournament_management/tournament_fields'
-import { createTournament } from './api-client'
+import { createTournament } from './api_client'
 import AccessContext from '../util/access_context'
 
 export default class NewTournamentPage extends React.PureComponent {

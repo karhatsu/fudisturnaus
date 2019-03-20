@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { deleteGroup, saveGroup } from './api-client'
+import { deleteGroup, saveGroup } from './api_client'
 import AccessContext from '../util/access_context'
 
 export default class Group extends React.PureComponent {

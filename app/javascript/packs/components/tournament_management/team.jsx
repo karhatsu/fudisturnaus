@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { createClub, deleteTeam, saveTeam } from './api-client'
+import { createClub, deleteTeam, saveTeam } from './api_client'
 import AccessContext from '../util/access_context'
 
 const CHOOSE_CLUB_ID = '-1'

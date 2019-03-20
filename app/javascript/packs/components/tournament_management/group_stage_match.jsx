@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { addMinutes, format, parseISO } from 'date-fns'
 import { parseFromTimeZone } from 'date-fns-timezone'
-import { deleteGroupStageMatch, saveGroupStageMatch } from './api-client'
+import { deleteGroupStageMatch, saveGroupStageMatch } from './api_client'
 import AccessContext from '../util/access_context'
 import { formatTime } from '../util/util'
 

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Match from '../public/match'
 import { matchTypes } from '../util/enums'
-import { saveResult } from '../tournament_management/api-client'
+import { saveResult } from '../tournament_management/api_client'
 import AccessContext from '../util/access_context'
 
 export default class EditableMatch extends Match {

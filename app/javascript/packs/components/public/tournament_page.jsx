@@ -7,7 +7,7 @@ import Matches from './matches'
 import GroupResults from './group_results'
 import { buildTournamentFromSocketData, formatTournamentDates } from '../util/util'
 import Title from '../components/title'
-import { fetchTournament } from './api-client'
+import { fetchTournament } from './api_client'
 
 export default class TournamentPage extends React.PureComponent {
   static propTypes = {

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { fetchTournament, updateTournament } from './api-client'
+import { fetchTournament, updateTournament } from './api_client'
 import Title from '../components/title'
 import TournamentFields from './tournament_fields'
 import AgeGroup from './age_group'

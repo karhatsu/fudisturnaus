@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { loginToAdmin } from './api-client'
+import { loginToAdmin } from './api_client'
 import Title from '../components/title'
 
 export default class AdminLoginPage extends React.PureComponent {

@@ -45,6 +45,7 @@ export default class TournamentPage extends React.PureComponent {
         <Title iconLink={iconLink} loading={!tournament && !error} text={title}/>
         {this.renderSubTitle()}
         {this.renderContent()}
+        {this.renderManagementLink()}
       </div>
     )
   }
@@ -58,7 +59,8 @@ export default class TournamentPage extends React.PureComponent {
       return <Loading/>
     }
     if (!tournament.groupStageMatches.length) {
-      return <div className="message message--error">Turnauksen otteluohjelmaa ei ole vielä julkistettu</div>
+      const msg = this.props.official ? 'Aloita syöttämällä turnauksen tiedot' : 'Turnauksen otteluohjelmaa ei ole vielä julkistettu'
+      return <div className="message message--error">{msg}</div>
     }
     const groupStageMatches = tournament.groupStageMatches.filter(this.isFilterMatch)
     const filteredPlayoffMatches = tournament.playoffMatches.filter(this.isFilterMatch)
@@ -68,7 +70,6 @@ export default class TournamentPage extends React.PureComponent {
         {this.renderMatches(groupStageMatches, 'Alkulohkojen ottelut', tournament.playoffMatches.length)}
         {this.renderGroupTables()}
         {this.renderMatches(filteredPlayoffMatches, 'Jatko-ottelut', filteredPlayoffMatches.length)}
-        {this.renderManagementLink()}
       </div>
     )
   }

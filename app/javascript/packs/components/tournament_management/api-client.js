@@ -1,6 +1,5 @@
 import { matchTypes } from '../util/enums'
-
-const unexpectedErrorMsg = 'Odottamaton virhe, yritä uudestaan. Jos ongelma ei poistu, ota yhteys palvelun ylläpitoon.'
+import { handleConnectionErrorOnSave, handleSaveResponse } from '../util/api_util'
 
 export function saveResult(accessContext, tournamentId, type, matchId, homeGoals, awayGoals, penalties, callback) {
   const typePath = type === matchTypes.playoff ? 'playoff_results' : 'group_stage_results'
@@ -149,22 +148,6 @@ export function deleteGroupStageMatch(accessContext, tournamentId, id, callback)
   }).then(response => {
     handleSaveResponse(response, callback)
   }).catch(() => handleConnectionErrorOnSave(callback))
-}
-
-function handleSaveResponse(response, callback) {
-  if (response.ok) {
-    response.json().then(data => {
-      callback(null, data)
-    }).catch(() => callback([unexpectedErrorMsg]))
-  } else {
-    response.json().then(({ errors }) => {
-      callback(errors)
-    }).catch(() => callback([unexpectedErrorMsg]))
-  }
-}
-
-function handleConnectionErrorOnSave(callback) {
-  callback(['Yhteysvirhe, yritä uudestaan'])
 }
 
 function buildHeaders(accessContext) {

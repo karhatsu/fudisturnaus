@@ -345,7 +345,7 @@ export default class TournamentManagementPage extends React.PureComponent {
       <div className="admin-tournament-page__section official-link">
         <div className="official-link__copy" onClick={this.copyOfficialLink}>Kopioi linkki</div>
         <div className="official-link__feedback" style={feedbackStyle}>Linkki kopioitu leikepöydälle</div>
-        <textarea id="hidden-copy-link-textarea" className="official-link__textarea" readOnly={true}>{url}</textarea>
+        <textarea id="hidden-copy-link-textarea" className="official-link__textarea" readOnly={true} value={url}/>
       </div>
     )
   }

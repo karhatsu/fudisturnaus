@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
 import AdminLoginPage from './login_page'
 import AdminIndex from './index'
+import NewTournamentPage from './new_tournament_page'
 import TournamentManagementPage from '../tournament_management/main'
 import AccessContext from '../util/access_context'
 
@@ -32,6 +33,7 @@ export default class AdminMain extends React.PureComponent {
       return (
         <AccessContext.Provider value={{ adminSessionKey: sessionKey }}>
           <Switch>
+            <Route path="/admin/tournaments/new" component={NewTournamentPage}/>
             <Route path="/admin/tournaments/:id" render={props => <TournamentManagementPage {...props} official={false} titleIconLink="/admin"/>} />
             <Route path="/admin" component={AdminIndex} exact />
           </Switch>

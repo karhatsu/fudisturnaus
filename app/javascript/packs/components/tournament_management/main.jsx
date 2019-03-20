@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { fetchTournament } from './api-client'
+import { fetchTournament, updateTournament } from './api-client'
 import Title from '../components/title'
 import TournamentFields from './tournament_fields'
 import AgeGroup from './age_group'
@@ -88,9 +88,12 @@ export default class TournamentManagementPage extends React.PureComponent {
     })
   }
 
-  onSave = data => {
-    const { tournament } = this.state
-    this.setState({ tournament: { ...tournament, ...data } })
+  onSave = (form, callback) => {
+    updateTournament(this.context, this.getTournamentId(), form, (errors, data) => {
+      callback(errors, data)
+      const { tournament } = this.state
+      this.setState({ tournament: { ...tournament, ...data } })
+    })
   }
 
   renderFieldsSection() {

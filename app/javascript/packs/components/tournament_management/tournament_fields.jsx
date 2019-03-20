@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { formatTournamentDates } from '../util/util'
-import { saveTournament } from './api-client'
 import AccessContext from '../util/access_context'
 
 export default class TournamentFields extends React.PureComponent {
   static propTypes = {
+    onCancel: PropTypes.func,
     onSave: PropTypes.func.isRequired,
     tournament: PropTypes.shape({
       name: PropTypes.string.isRequired,
@@ -15,7 +15,7 @@ export default class TournamentFields extends React.PureComponent {
       endDate: PropTypes.string.isRequired,
       days: PropTypes.number.isRequired,
       matchMinutes: PropTypes.number.isRequired,
-    }).isRequired,
+    }),
   }
 
   static contextType = AccessContext
@@ -33,6 +33,12 @@ export default class TournamentFields extends React.PureComponent {
         address: undefined,
         matchMinutes: undefined,
       },
+    }
+  }
+
+  componentWillMount() {
+    if (!this.props.tournament) {
+      this.openForm()
     }
   }
 
@@ -75,7 +81,7 @@ export default class TournamentFields extends React.PureComponent {
     return (
       <div className="form__buttons">
         <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
-        <input type="submit" value="Peruuta" onClick={this.closeForm} className="button"/>
+        <input type="submit" value="Peruuta" onClick={this.cancel} className="button"/>
       </div>
     )
   }
@@ -92,15 +98,24 @@ export default class TournamentFields extends React.PureComponent {
   }
 
   openForm = () => {
-    const { tournament: { name, startDate, days, location, address, matchMinutes } } = this.props
-    this.setState({
-      formOpen: true,
-      form: { name, startDate, days, location, address: address || '', matchMinutes },
-    })
+    const { tournament } = this.props
+    if (tournament) {
+      const { name, startDate, days, location, address, matchMinutes } = tournament
+      this.setState({
+        formOpen: true,
+        form: { name, startDate, days, location, address: address || '', matchMinutes },
+      })
+    } else {
+      this.setState({
+        formOpen: true,
+        form: { name: '', startDate: '', days: 1, location: '', address: '', matchMinutes: 45 },
+      })
+    }
   }
 
-  closeForm = () => {
-    this.setState({ formOpen: false, errors: [] })
+  cancel = () => {
+    const { onCancel } = this.props
+    onCancel ? onCancel() : this.setState({ formOpen: false, errors: [] })
   }
 
   setValue = field => event => {
@@ -114,13 +129,11 @@ export default class TournamentFields extends React.PureComponent {
   }
 
   submit = () => {
-    const { onSave, tournament: { id } } = this.props
-    saveTournament(this.context, id, this.state.form, (errors, data) => {
+    this.props.onSave(this.state.form, errors => {
       if (errors) {
         this.setState({ errors })
       } else {
         this.setState({ formOpen: false, errors: [] })
-        onSave(data)
       }
     })
   }

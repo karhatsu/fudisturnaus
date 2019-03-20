@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import Loading from '../components/loading'
 import TournamentLinkBox from '../components/tournament_link_box'
 import { fetchTournaments } from '../public/api-client'
@@ -19,6 +20,10 @@ export default class AdminIndex extends React.PureComponent {
       <div>
         <Title loading={!error && !tournaments} text="Admin"/>
         {this.renderContent()}
+        <div className="title-2">Uusi turnaus</div>
+        <div className="admin-tournament-page__section">
+          <Link to="/admin/tournaments/new">+ Lisää uusi turnaus</Link>
+        </div>
       </div>
     )
   }

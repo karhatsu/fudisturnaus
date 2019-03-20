@@ -25,7 +25,7 @@ export function fetchTournament(accessContext, id, callback) {
     .catch(() => handleConnectionErrorOnSave(callback))
 }
 
-export function saveTournament(accessContext, id, data, callback) {
+export function updateTournament(accessContext, id, data, callback) {
   fetch(`/api/v1/official/tournaments/${id}`, {
     method: 'PATCH',
     headers: buildHeaders(accessContext),

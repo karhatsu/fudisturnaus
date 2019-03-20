@@ -126,7 +126,7 @@ export default class TournamentPage extends React.PureComponent {
     const { filters, tournament: { fields } } = this.state
     return (
       <div>
-        {showTitle ? <div className="result-section-title">{title}</div> : ''}
+        {showTitle ? <div className="title-2">{title}</div> : ''}
         <Matches
           editable={official}
           fieldsCount={fields.length}
@@ -156,7 +156,7 @@ export default class TournamentPage extends React.PureComponent {
     if (calculateGroupTables && filteredGroups.length) {
       return (
         <React.Fragment>
-          <div className="result-section-title">Sarjataulukot</div>
+          <div className="title-2">Sarjataulukot</div>
           <div className="group-results row">{filteredGroups.map(this.renderGroup)}</div>
         </React.Fragment>
       )
@@ -183,7 +183,7 @@ export default class TournamentPage extends React.PureComponent {
       const { match: { params: { accessKey } } } = this.props
       return (
         <div>
-          <div className="result-section-title">Turnauksen hallinta</div>
+          <div className="title-2">Turnauksen hallinta</div>
           <div className="management-link"><Link to={`/official/${accessKey}/management`}>Muokkaa turnauksen asetuksia</Link></div>
         </div>
       )

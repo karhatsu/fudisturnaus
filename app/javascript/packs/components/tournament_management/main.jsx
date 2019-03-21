@@ -355,7 +355,9 @@ export default class TournamentManagementPage extends React.PureComponent {
   }
 
   copyOfficialLink = () => {
-    const url = `http://www.fudisturnaus.com/official/${this.state.tournament.accessKey}`
+    const location = window.location
+    const port = location.port ? `:${location.port}` : ''
+    const url = `${location.protocol}//${location.hostname}${port}/official/${this.state.tournament.accessKey}`
     clipboard.writeText(url).then(() => {
       this.setState({ officialLinkCopied: true })
       setTimeout(() => {

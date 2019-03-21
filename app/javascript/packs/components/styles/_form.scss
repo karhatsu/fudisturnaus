@@ -44,9 +44,10 @@ $inputHeight: 16px;
     margin-left: 8px;
   }
 
-  .official-link__textarea {
-    position: absolute;
-    left: -99999px;
+  .official-link__error {
+    color: $red;
+    display: inline-block;
+    margin-left: 8px;
   }
 }
 

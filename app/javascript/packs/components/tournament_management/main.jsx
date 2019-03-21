@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import * as clipboard from 'clipboard-polyfill'
 
 import { fetchTournament, updateTournament } from './api_client'
 import Title from '../components/title'
@@ -342,25 +343,30 @@ export default class TournamentManagementPage extends React.PureComponent {
   }
 
   renderOfficialLink() {
-    const feedbackStyle = this.state.officialLinkCopied ? undefined :  { display: 'none' }
-    const url = `http://www.fudisturnaus.com/official/${this.state.tournament.accessKey}`
+    const successFeedbackStyle = this.state.officialLinkCopied ? undefined :  { display: 'none' }
+    const errorFeedbackStyle = this.state.officialLinkCopyError ? undefined :  { display: 'none' }
     return (
       <div className="admin-tournament-page__section official-link">
         <div className="official-link__copy" onClick={this.copyOfficialLink}>Kopioi linkki</div>
-        <div className="official-link__feedback" style={feedbackStyle}>Linkki kopioitu leikepöydälle</div>
-        <textarea id="hidden-copy-link-textarea" className="official-link__textarea" readOnly={true} value={url}/>
+        <div className="official-link__feedback" style={successFeedbackStyle}>Linkki kopioitu leikepöydälle</div>
+        <div className="official-link__error" style={errorFeedbackStyle}>Selaimesi ei tue linkin kopiointia</div>
       </div>
     )
   }
 
   copyOfficialLink = () => {
-    const textarea = document.getElementById('hidden-copy-link-textarea')
-    textarea.select()
-    document.execCommand('copy')
-    this.setState({ officialLinkCopied: true })
-    setTimeout(() => {
-      this.setState({ officialLinkCopied: false })
-    }, 5000)
+    const url = `http://www.fudisturnaus.com/official/${this.state.tournament.accessKey}`
+    clipboard.writeText(url).then(() => {
+      this.setState({ officialLinkCopied: true })
+      setTimeout(() => {
+        this.setState({ officialLinkCopied: false })
+      }, 5000)
+    }).catch(() => {
+      this.setState({ officialLinkCopyError: true })
+      setTimeout(() => {
+        this.setState({ officialLinkCopyError: false })
+      }, 5000)
+    })
   }
 
   renderBackLink() {

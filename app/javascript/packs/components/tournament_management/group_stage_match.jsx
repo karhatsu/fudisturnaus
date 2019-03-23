@@ -71,6 +71,7 @@ export default class GroupStageMatch extends React.PureComponent {
       },
       errors: [],
     }
+    this.timeFieldRed = React.createRef()
   }
 
   render() {
@@ -94,13 +95,14 @@ export default class GroupStageMatch extends React.PureComponent {
 
   renderForm() {
     const { fields, groupStageMatch } = this.props
+    const { errors, form: { startTime } } = this.state
     return (
       <div className="form form--horizontal">
-        {this.state.errors.length > 0 && <div className="form-error">{this.state.errors.join('. ')}.</div>}
+        {errors.length > 0 && <div className="form-error">{errors.join('. ')}.</div>}
         <div className="admin-item__form">
           {this.buildIdNameDropDown(fields, 'fieldId', '- Kenttä -', this.setField)}
           <div className="form__field form__field--time">
-            <input type="text" onChange={this.changeValue('startTime')} value={this.state.form.startTime} placeholder="HH:MM"/>
+            <input ref={this.timeFieldRed} type="text" onChange={this.changeValue('startTime')} value={startTime} placeholder="HH:MM"/>
           </div>
           {this.buildGroupDropDown()}
           {this.buildTeamDropDown('homeTeamId', '- Kotijoukkue -')}
@@ -172,6 +174,9 @@ export default class GroupStageMatch extends React.PureComponent {
       }
     }
     this.setState({ form: { ...form, fieldId, startTime } })
+    if (this.timeFieldRed) {
+      this.timeFieldRed.current.focus()
+    }
   }
 
   changeValue = field => event => {

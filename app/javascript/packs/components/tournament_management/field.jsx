@@ -23,6 +23,7 @@ export default class Field extends React.PureComponent {
       name: undefined,
       errors: [],
     }
+    this.nameFieldRed = React.createRef()
   }
 
   render() {
@@ -37,7 +38,7 @@ export default class Field extends React.PureComponent {
   renderName() {
     const { field } = this.props
     const text = field ? field.name : '+ Lisää uusi kenttä'
-    return <div className="admin-item__title"><span onClick={this.editField}>{text}</span></div>
+    return <div className="admin-item__title"><span onClick={this.openForm}>{text}</span></div>
   }
 
   renderForm() {
@@ -46,7 +47,7 @@ export default class Field extends React.PureComponent {
         {this.state.errors.length > 0 && <div className="form-error">{this.state.errors.join('. ')}.</div>}
         <div className="admin-item__form">
           <div className="form__field">
-            <input type="text" onChange={this.changeName} value={this.state.name} placeholder="Esim. Kenttä 1"/>
+            <input ref={this.nameFieldRed} type="text" onChange={this.changeName} value={this.state.name} placeholder="Esim. Kenttä 1"/>
           </div>
           <div className="form__buttons">
             <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
@@ -58,7 +59,7 @@ export default class Field extends React.PureComponent {
     )
   }
 
-  editField = () => {
+  openForm = () => {
     const { field } = this.props
     this.setState({ formOpen: true, name: field ? field.name : '' })
   }
@@ -98,5 +99,11 @@ export default class Field extends React.PureComponent {
         onFieldDelete(id)
       }
     })
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevState.formOpen && this.state.formOpen && this.nameFieldRed) {
+      this.nameFieldRed.current.focus()
+    }
   }
 }

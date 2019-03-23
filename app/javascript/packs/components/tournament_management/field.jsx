@@ -42,12 +42,13 @@ export default class Field extends React.PureComponent {
   }
 
   renderForm() {
+    const placeholder = 'Esim. Kenttä 1 tai Tekonurmi 2'
     return (
       <div className="form form--horizontal">
         {this.state.errors.length > 0 && <div className="form-error">{this.state.errors.join('. ')}.</div>}
         <div className="admin-item__form">
           <div className="form__field">
-            <input ref={this.nameFieldRed} type="text" onChange={this.changeName} value={this.state.name} placeholder="Esim. Kenttä 1"/>
+            <input ref={this.nameFieldRed} type="text" onChange={this.changeName} value={this.state.name} placeholder={placeholder}/>
           </div>
           <div className="form__buttons">
             <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>

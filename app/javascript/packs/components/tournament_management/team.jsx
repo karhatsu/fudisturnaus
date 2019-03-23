@@ -49,6 +49,8 @@ export default class Team extends React.PureComponent {
       errors: [],
       clubName: '',
     }
+    this.nameFieldRed = React.createRef()
+    this.clubNameFieldRed = React.createRef()
   }
 
   render() {
@@ -69,12 +71,13 @@ export default class Team extends React.PureComponent {
   }
 
   renderForm() {
+    const { errors, form: { clubId, groupId, name } } = this.state
     return (
       <div className="form form--horizontal">
-        {this.state.errors.length > 0 && <div className="form-error">{this.state.errors.join('. ')}.</div>}
+        {errors.length > 0 && <div className="form-error">{errors.join('. ')}.</div>}
         <div className="admin-item__form">
           <div className="form__field">
-            <select onChange={this.changeValue('groupId')} value={this.state.form.groupId}>
+            <select onChange={this.changeValue('groupId')} value={groupId}>
               <option>Lohko</option>
               {this.props.groups.map(group => {
                 const { id, name, ageGroupName } = group
@@ -83,7 +86,7 @@ export default class Team extends React.PureComponent {
             </select>
           </div>
           <div className="form__field">
-            <select onChange={this.changeValue('clubId')} value={this.state.form.clubId}>
+            <select onChange={this.changeValue('clubId')} value={clubId}>
               <option value={CHOOSE_CLUB_ID}>Seura</option>
               <option value={NEW_CLUB_ID}>+ Lisää uusi seura</option>
               {this.props.clubs.map(club => {
@@ -93,7 +96,7 @@ export default class Team extends React.PureComponent {
             </select>
           </div>
           <div className="form__field">
-            <input type="text" onChange={this.changeValue('name')} value={this.state.form.name} placeholder="Esim. FC Kontu Valkoinen"/>
+            <input ref={this.nameFieldRed} type="text" onChange={this.changeValue('name')} value={name} placeholder="Esim. FC Kontu Valkoinen"/>
           </div>
           <div className="form__buttons">
             <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
@@ -110,6 +113,7 @@ export default class Team extends React.PureComponent {
       <div className="form form--horizontal new-club-form">
         <div className="form__field">
           <input
+            ref={this.clubNameFieldRed}
             type="text"
             onChange={this.setClubName}
             value={this.state.clubName}
@@ -138,7 +142,16 @@ export default class Team extends React.PureComponent {
 
   changeValue = field => event => {
     const { form } = this.state
-    this.setState({ form: { ...form, [field]: event.target.value } })
+    const value = event.target.value
+    this.setState({ form: { ...form, [field]: value } }, () => {
+      if (field === 'clubId') {
+        if (value === NEW_CLUB_ID && this.clubNameFieldRed) {
+          this.clubNameFieldRed.current.focus()
+        } else if (value !== NEW_CLUB_ID && this.nameFieldRed) {
+          this.nameFieldRed.current.focus()
+        }
+      }
+    })
   }
 
   setClubName = event => {
@@ -186,6 +199,9 @@ export default class Team extends React.PureComponent {
         const { form } = this.state
         this.setState({ errors: [], clubName: '', form: { ...form, clubId: data.id } })
         this.props.onClubSave(data)
+        if (this.nameFieldRed) {
+          this.nameFieldRed.current.focus()
+        }
       }
     })
   }

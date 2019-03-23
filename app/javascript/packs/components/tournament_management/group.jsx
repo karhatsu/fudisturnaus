@@ -32,6 +32,7 @@ export default class Group extends React.PureComponent {
       },
       errors: [],
     }
+    this.nameFieldRed = React.createRef()
   }
 
   render() {
@@ -50,12 +51,13 @@ export default class Group extends React.PureComponent {
   }
 
   renderForm() {
+    const { errors, form: { ageGroupId, name } } = this.state
     return (
       <div className="form form--horizontal">
-        {this.state.errors.length > 0 && <div className="form-error">{this.state.errors.join('. ')}.</div>}
+        {errors.length > 0 && <div className="form-error">{errors.join('. ')}.</div>}
         <div className="admin-item__form">
           <div className="form__field">
-            <select onChange={this.changeValue('ageGroupId')} value={this.state.form.ageGroupId}>
+            <select onChange={this.changeValue('ageGroupId')} value={ageGroupId}>
               <option>Ikäryhmä</option>
               {this.props.ageGroups.map(ageGroup => {
                 const { id, name } = ageGroup
@@ -64,7 +66,7 @@ export default class Group extends React.PureComponent {
             </select>
           </div>
           <div className="form__field">
-            <input type="text" onChange={this.changeValue('name')} value={this.state.form.name} placeholder="Esim. A tai Taso 2"/>
+            <input ref={this.nameFieldRed} type="text" onChange={this.changeValue('name')} value={name} placeholder="Esim. A tai Taso 2"/>
           </div>
           <div className="form__buttons">
             <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
@@ -90,6 +92,9 @@ export default class Group extends React.PureComponent {
   changeValue = field => event => {
     const { form } = this.state
     this.setState({ form: { ...form, [field]: event.target.value } })
+    if (field === 'ageGroupId' && this.nameFieldRed) {
+      this.nameFieldRed.current.focus()
+    }
   }
 
   canSubmit = () => {

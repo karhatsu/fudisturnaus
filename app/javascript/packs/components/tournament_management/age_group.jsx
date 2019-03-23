@@ -27,6 +27,7 @@ export default class AgeGroup extends React.PureComponent {
       },
       errors: [],
     }
+    this.nameFieldRed = React.createRef()
   }
 
   render() {
@@ -51,7 +52,7 @@ export default class AgeGroup extends React.PureComponent {
         {this.state.errors.length > 0 && <div className="form-error">{this.state.errors.join('. ')}.</div>}
         <div className="admin-item__form">
           <div className="form__field">
-            <input type="text" onChange={this.changeName} value={this.state.form.name} placeholder="Esim. P11 tai T09"/>
+            <input ref={this.nameFieldRed} type="text" onChange={this.changeName} value={this.state.form.name} placeholder="Esim. P11 tai T09"/>
           </div>
           <div className="form__field">
             <input type="checkbox" onChange={this.changeCalculateGroupTables} value={true} checked={checked}/>
@@ -118,5 +119,11 @@ export default class AgeGroup extends React.PureComponent {
         onAgeGroupDelete(id)
       }
     })
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevState.formOpen && this.state.formOpen && this.nameFieldRed) {
+      this.nameFieldRed.current.focus()
+    }
   }
 }

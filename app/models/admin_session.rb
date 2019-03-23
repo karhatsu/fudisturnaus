@@ -14,7 +14,10 @@ class AdminSession
   def self.find_by_key(key)
     return false if key.blank?
     if use_redis?
-      !!Redis.new.get(REDIS_KEY)
+      redis = Redis.new
+      session_key = redis.get(REDIS_KEY)
+      redis.close
+      !!session_key
     else
       !!@@session_key
     end
@@ -22,7 +25,9 @@ class AdminSession
 
   def self.store_session(session_key)
     if use_redis?
-      Redis.new.set REDIS_KEY, session_key, ex: 1.hour
+      redis = Redis.new
+      redis.set REDIS_KEY, session_key, ex: 1.hour
+      redis.close
     else
       @@session_key = session_key
     end

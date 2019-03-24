@@ -104,7 +104,7 @@ export default class TournamentPage extends React.PureComponent {
   renderFilter = (key, items, defaultText) => {
     if (items.length > 1) {
       return (
-        <select className="filter" onChange={this.setFilterValue(key)}>
+        <select id={`filter-${key}`} className="filter" onChange={this.setFilterValue(key)}>
           <option>{defaultText}</option>
           {items.map(item => {
             const { id, name } = item

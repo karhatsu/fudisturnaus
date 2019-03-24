@@ -60,7 +60,7 @@ export default class Match extends React.PureComponent {
     return (
       <div>
         <span className="match__start-time">{formatTime(startTime)}</span>
-        {field.name}, {ageGroup.name}{group ? `, ${group.name}` : ''}
+        <span className="match__details">{field.name}, {ageGroup.name}{group ? `, ${group.name}` : ''}</span>
       </div>
     )
   }

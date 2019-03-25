@@ -10,7 +10,7 @@ import TournamentLinkBox from '../components/tournament_link_box'
 export default class TournamentList extends React.PureComponent {
   static propTypes = {
     buildLink: PropTypes.func.isRequired,
-    children: PropTypes.element,
+    children: PropTypes.arrayOf(PropTypes.element),
     title: PropTypes.string.isRequired,
   }
 

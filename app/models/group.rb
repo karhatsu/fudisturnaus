@@ -9,6 +9,8 @@ class Group < ApplicationRecord
 
   before_destroy :check_usage
 
+  delegate :tournament, to: :age_group
+
   def age_group_name
     age_group.name
   end

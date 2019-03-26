@@ -72,7 +72,7 @@ describe 'tournament page', type: :system do
       end
 
       it 'shows the result' do
-        expect(page.find('.match .match__result').text).to eql '4 - 2'
+        expect_result '4 - 2'
       end
 
       it 'updates group tables' do

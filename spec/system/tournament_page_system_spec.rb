@@ -56,10 +56,9 @@ describe 'tournament page', type: :system do
 
     it 'shows group tables' do
       visit "/tournaments/#{tournament.id}"
-      group_rows = page.all('.group-results__group tbody tr')
-      expect(group_rows.length).to eql group1.teams.count
+      expect(page.all('.group-results__group tbody tr').length).to eql group1.teams.count
       group1.teams.sort {|a, b| a.name <=> b.name }.each_with_index do |team, row_index|
-        expect_group_table_row group_rows[row_index], team.name
+        expect_group_table_row row_index, team.name
       end
     end
 
@@ -76,10 +75,9 @@ describe 'tournament page', type: :system do
       end
 
       it 'updates group tables' do
-        group_rows = page.all('.group-results__group tbody tr')
-        expect_group_table_row group_rows[0], team1.name, 1, 1, 0, 0, 4, 2, 3
-        expect_group_table_row group_rows[1], team3.name
-        expect_group_table_row group_rows[2], team2.name, 1, 0, 0, 1, 2, 4, 0
+        expect_group_table_row 0, team1.name, 1, 1, 0, 0, 4, 2, 3
+        expect_group_table_row 1, team3.name
+        expect_group_table_row 2, team2.name, 1, 0, 0, 1, 2, 4, 0
       end
     end
 
@@ -116,16 +114,5 @@ describe 'tournament page', type: :system do
         expect(page).to have_selector('.match', count: expected_count)
       end
     end
-  end
-
-  def expect_group_table_row(row, team_name, matches = 0, wins = 0, draws = 0, losses = 0, goals_for = 0, goals_against = 0, points = 0)
-    cols = row.all 'td'
-    expect(cols[0].text).to eql team_name
-    expect(cols[1].text.to_i).to eql matches
-    expect(cols[2].text.to_i).to eql wins
-    expect(cols[3].text.to_i).to eql draws
-    expect(cols[4].text.to_i).to eql losses
-    expect(cols[5].text).to eql "#{goals_for}-#{goals_against}"
-    expect(cols[6].text.to_i).to eql points
   end
 end

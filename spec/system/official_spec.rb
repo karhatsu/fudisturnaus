@@ -43,8 +43,10 @@ describe 'official', type: :system do
         fill_result 2, 3, 0
       end
 
-      it 'sets playoff match teams' do
+      it 'sets playoff match teams and makes it possible to save result for it' do
         expect(page.all('.match .match__teams')[3].text).to eql "Final:#{@team3.name}-#{@team2.name}"
+        fill_result 3, 1, 0, true
+        expect_result 3, '1 - 0 rp'
       end
     end
   end

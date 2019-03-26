@@ -1,7 +1,10 @@
-def fill_result(match_index, home_goals, away_goals)
+def fill_result(match_index, home_goals, away_goals, penalties = false)
   page.all('.match')[match_index].click
   page.all('.match__goals-field')[0].fill_in with: home_goals
   page.all('.match__goals-field')[1].fill_in with: away_goals
+  if penalties
+    page.find('.match__penalties input').check
+  end
   page.all('.match__button')[0].click
 end
 

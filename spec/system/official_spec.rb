@@ -3,20 +3,23 @@ require 'rails_helper'
 describe 'official', type: :system do
   before do
     driven_by :selenium, using: :headless_chrome
-    age_group = create :age_group, calculate_group_tables: true
-    @group = create :group, age_group: age_group
   end
 
-  it 'allow access to official page only with correct access key' do
-    visit '/official/unknown-key'
-    expect(page).to have_current_path '/'
-    visit "/official/#{@group.tournament.access_key}"
-    expect(page).to have_current_path "/official/#{@group.tournament.access_key}"
-    expect(page.find('.title .title__text').text).to eql @group.tournament.name
+  describe 'access' do
+    it 'allow access to official page only with correct access key' do
+      tournament = create :tournament
+      visit '/official/unknown-key'
+      expect(page).to have_current_path '/'
+      visit "/official/#{tournament.access_key}"
+      expect(page).to have_current_path "/official/#{tournament.access_key}"
+      expect(page.find('.title .title__text').text).to eql tournament.name
+    end
   end
 
   describe 'result saving' do
     before do
+      age_group = create :age_group, calculate_group_tables: true
+      @group = create :group, age_group: age_group
       @team1 = create :team, group: @group, name: 'Team 1'
       @team2 = create :team, group: @group, name: 'Team 2'
       @team3 = create :team, group: @group, name: 'Team 3'

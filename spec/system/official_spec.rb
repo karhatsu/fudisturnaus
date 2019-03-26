@@ -39,8 +39,11 @@ describe 'official', type: :system do
     describe 'last match result' do
       before do
         fill_result 0, 4, 6
+        expect_result 0, '4 - 6'
         fill_result 1, 2, 2
+        expect_result 1, '2 - 2'
         fill_result 2, 3, 0
+        expect_result 2, '3 - 0'
       end
 
       it 'sets playoff match teams and makes it possible to save result for it' do

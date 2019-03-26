@@ -17,21 +17,35 @@ describe 'official', type: :system do
 
   describe 'result saving' do
     before do
-      club = create :club
-      @team1 = create :team, club: club, group: @group, name: 'Team 1'
-      @team2 = create :team, club: club, group: @group, name: 'Team 2'
-      create :group_stage_match, group: @group, home_team: @team1, away_team: @team2
+      @team1 = create :team, group: @group, name: 'Team 1'
+      @team2 = create :team, group: @group, name: 'Team 2'
+      @team3 = create :team, group: @group, name: 'Team 3'
+      create :group_stage_match, group: @group, home_team: @team1, away_team: @team2, start_time: '10:00'
+      create :group_stage_match, group: @group, home_team: @team2, away_team: @team3, start_time: '10:10'
+      create :group_stage_match, group: @group, home_team: @team3, away_team: @team1, start_time: '10:20'
+      create :playoff_match, age_group: @group.age_group, home_team_origin: @group, away_team_origin: @group,
+             home_team_origin_rule: 1, away_team_origin_rule: 2, title: 'Final'
       visit "/official/#{@group.tournament.access_key}"
     end
 
-    it 'works' do
-      page.find('.match').click
-      page.all('.match__goals-field')[0].fill_in with: '4'
-      page.all('.match__goals-field')[1].fill_in with: '6'
-      page.all('.match__button')[0].click
-      expect_result '4 - 6'
+    it 'stores result and updates group tables' do
+      fill_result 0, 4, 6
+      expect_result 0, '4 - 6'
       expect_group_table_row 0, @team2.name, 1, 1, 0, 0, 6, 4, 3
-      expect_group_table_row 1, @team1.name, 1, 0, 0, 1, 4, 6, 0
+      expect_group_table_row 1, @team3.name
+      expect_group_table_row 2, @team1.name, 1, 0, 0, 1, 4, 6, 0
+    end
+
+    describe 'last match result' do
+      before do
+        fill_result 0, 4, 6
+        fill_result 1, 2, 2
+        fill_result 2, 3, 0
+      end
+
+      it 'sets playoff match teams' do
+        expect(page.all('.match .match__teams')[3].text).to eql "Final:#{@team3.name}-#{@team2.name}"
+      end
     end
   end
 end

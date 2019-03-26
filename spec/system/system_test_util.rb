@@ -1,5 +1,12 @@
-def expect_result(result)
-  expect(page.find('.match .match__result').text).to eql result
+def fill_result(match_index, home_goals, away_goals)
+  page.all('.match')[match_index].click
+  page.all('.match__goals-field')[0].fill_in with: home_goals
+  page.all('.match__goals-field')[1].fill_in with: away_goals
+  page.all('.match__button')[0].click
+end
+
+def expect_result(match_index, result)
+  expect(page.all('.match .match__result')[match_index].text).to eql result
 end
 
 def expect_group_table_row(index, team_name, matches = 0, wins = 0, draws = 0, losses = 0, goals_for = 0, goals_against = 0, points = 0)

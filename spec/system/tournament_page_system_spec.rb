@@ -71,7 +71,7 @@ describe 'tournament page', type: :system do
       end
 
       it 'shows the result' do
-        expect_result '4 - 2'
+        expect_result 0, '4 - 2'
       end
 
       it 'updates group tables' do

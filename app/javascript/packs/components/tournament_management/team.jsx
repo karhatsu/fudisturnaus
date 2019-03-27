@@ -56,7 +56,7 @@ export default class Team extends React.PureComponent {
   render() {
     const { formOpen, form: { clubId } } = this.state
     return (
-      <div className="admin-item">
+      <div className="tournament-item">
         {formOpen && this.renderForm()}
         {!formOpen && this.renderName()}
         {clubId === NEW_CLUB_ID && this.renderClubForm()}
@@ -67,7 +67,7 @@ export default class Team extends React.PureComponent {
   renderName() {
     const { team } = this.props
     const text = team ? team.name : '+ Lisää uusi joukkue'
-    return <div className="admin-item__title"><span onClick={this.editTeam}>{text}</span></div>
+    return <div className="tournament-item__title"><span onClick={this.editTeam}>{text}</span></div>
   }
 
   renderForm() {
@@ -75,7 +75,7 @@ export default class Team extends React.PureComponent {
     return (
       <div className="form form--horizontal">
         {errors.length > 0 && <div className="form-error">{errors.join('. ')}.</div>}
-        <div className="admin-item__form">
+        <div className="tournament-item__form">
           <div className="form__field">
             <select onChange={this.changeValue('groupId')} value={groupId}>
               <option>Lohko</option>

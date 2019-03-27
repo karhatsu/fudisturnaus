@@ -74,7 +74,7 @@ describe 'official', type: :system do
     end
 
     def add_new_item(section_name, index = 0)
-      page.all(".admin-tournament-page__section--#{section_name} .admin-item__title span")[index].click
+      page.all(".tournament-management__section--#{section_name} .tournament-item__title span")[index].click
     end
 
     def form_inputs
@@ -90,7 +90,7 @@ describe 'official', type: :system do
     end
 
     def expect_item_title(section_name, title)
-      expect(page.all(".admin-tournament-page__section--#{section_name} .admin-item__title")[0].text).to eql title
+      expect(page.all(".tournament-management__section--#{section_name} .tournament-item__title")[0].text).to eql title
     end
 
     def expect_match_info_for_added_match

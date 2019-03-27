@@ -1,6 +1,6 @@
 @import 'shared';
 
-.admin-tournament-page__section {
+.tournament-management__section {
   @include white-box();
 
   a {
@@ -8,15 +8,15 @@
   }
 }
 
-.admin-tournament-page__section-title {
+.tournament-management__section-title {
   font-size: 14px;
   margin: 8px;
 }
 
-.admin-item {
+.tournament-item {
   margin: 8px;
 
-  .admin-item__title {
+  .tournament-item__title {
     color: $green;
 
     span {

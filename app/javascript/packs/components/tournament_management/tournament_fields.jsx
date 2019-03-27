@@ -89,8 +89,8 @@ export default class TournamentFields extends React.PureComponent {
   renderTournamentReadOnlyFields() {
     const { tournament: { name, startDate, endDate, location, address } } = this.props
     return (
-      <div className="admin-item">
-        <div className="admin-item__title">
+      <div className="tournament-item">
+        <div className="tournament-item__title">
           <span onClick={this.openForm}>{name}, {formatTournamentDates(startDate, endDate)}, {location}, {address || '(ei osoitetta)'}</span>
         </div>
       </div>

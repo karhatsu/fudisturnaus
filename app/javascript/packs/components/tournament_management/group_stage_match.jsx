@@ -76,7 +76,7 @@ export default class GroupStageMatch extends React.PureComponent {
 
   render() {
     return (
-      <div className="admin-item">
+      <div className="tournament-item">
         {this.state.formOpen && this.renderForm()}
         {!this.state.formOpen && this.renderName()}
       </div>
@@ -90,7 +90,7 @@ export default class GroupStageMatch extends React.PureComponent {
       const { awayTeam, field, group, homeTeam, startTime } = groupStageMatch
       text = `${field.name} | ${formatTime(startTime)} | ${group.name} (${group.ageGroupName}) | ${homeTeam.name} - ${awayTeam.name}`
     }
-    return <div className="admin-item__title"><span onClick={this.editMatch}>{text}</span></div>
+    return <div className="tournament-item__title"><span onClick={this.editMatch}>{text}</span></div>
   }
 
   renderForm() {
@@ -99,7 +99,7 @@ export default class GroupStageMatch extends React.PureComponent {
     return (
       <div className="form form--horizontal">
         {errors.length > 0 && <div className="form-error">{errors.join('. ')}.</div>}
-        <div className="admin-item__form">
+        <div className="tournament-item__form">
           {this.buildIdNameDropDown(fields, 'fieldId', '- Kenttä -', this.setField)}
           <div className="form__field form__field--time">
             <input ref={this.timeFieldRed} type="text" onChange={this.changeValue('startTime')} value={startTime} placeholder="HH:MM"/>

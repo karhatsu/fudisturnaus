@@ -18,7 +18,7 @@ export default class NewTournamentPage extends React.PureComponent {
     return (
       <div>
         <div className="title">Uusi turnaus</div>
-        <div className="admin-tournament-page__section">
+        <div className="tournament-management__section">
           <TournamentFields onCancel={this.goToIndex} onSave={this.onSave}/>
         </div>
       </div>

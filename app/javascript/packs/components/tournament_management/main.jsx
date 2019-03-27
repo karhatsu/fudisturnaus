@@ -54,7 +54,7 @@ export default class TournamentManagementPage extends React.PureComponent {
     return (
       <div>
         <div className="title-2">Perustiedot</div>
-        <div className="admin-tournament-page__section">
+        <div className="tournament-management__section">
           <TournamentFields onSave={this.onSave} tournament={tournament}/>
         </div>
         <div className="title-2">Kentät</div>
@@ -99,7 +99,7 @@ export default class TournamentManagementPage extends React.PureComponent {
 
   renderFieldsSection() {
     return (
-      <div className="admin-tournament-page__section admin-tournament-page__section--fields">
+      <div className="tournament-management__section tournament-management__section--fields">
         {this.renderFields()}
         <Field onFieldSave={this.onItemSave('fields')} tournamentId={this.getTournamentId()}/>
       </div>
@@ -121,7 +121,7 @@ export default class TournamentManagementPage extends React.PureComponent {
 
   renderAgeGroupsSection() {
     return (
-      <div className="admin-tournament-page__section admin-tournament-page__section--age-groups">
+      <div className="tournament-management__section tournament-management__section--age-groups">
         {this.renderAgeGroups()}
         <AgeGroup onAgeGroupSave={this.onItemSave('ageGroups')} tournamentId={this.getTournamentId()}/>
       </div>
@@ -144,7 +144,7 @@ export default class TournamentManagementPage extends React.PureComponent {
   renderGroupsSection() {
     const { tournament: { ageGroups, id } } = this.state
     return (
-      <div className="admin-tournament-page__section admin-tournament-page__section--groups">
+      <div className="tournament-management__section tournament-management__section--groups">
         {ageGroups.length > 0 ? this.renderGroups() : this.renderCannotAddGroups()}
         {ageGroups.length > 0 && <Group ageGroups={ageGroups} onGroupSave={this.onItemSave('groups')} tournamentId={id}/>}
       </div>
@@ -153,7 +153,7 @@ export default class TournamentManagementPage extends React.PureComponent {
 
   renderCannotAddGroups = () => {
     return (
-      <div className="admin-item">
+      <div className="tournament-item">
         Et voi lisätä lohkoja ennen kuin olet lisännyt vähintään yhden ikäryhmän.
       </div>
     )
@@ -177,7 +177,7 @@ export default class TournamentManagementPage extends React.PureComponent {
     const { tournament: { clubs, groups, id } } = this.state
     const canAddTeams = groups.length > 0
     return (
-      <div className="admin-tournament-page__section admin-tournament-page__section--teams">
+      <div className="tournament-management__section tournament-management__section--teams">
         {canAddTeams ? this.renderGroupTeams() : this.renderCannotAddTeams()}
         {canAddTeams && <Team clubs={clubs} groups={groups} onClubSave={this.onClubSave} onTeamSave={this.onItemSave('teams')} tournamentId={id}/>}
       </div>
@@ -186,7 +186,7 @@ export default class TournamentManagementPage extends React.PureComponent {
 
   renderCannotAddTeams = () => {
     return (
-      <div className="admin-item">
+      <div className="tournament-item">
         Et voi lisätä joukkueita ennen kuin olet lisännyt vähintään yhden lohkon.
       </div>
     )
@@ -205,7 +205,7 @@ export default class TournamentManagementPage extends React.PureComponent {
     return Object.keys(teamsByGroups).map(group => {
       return (
         <div key={group}>
-          <div className="admin-tournament-page__section-title">{group}</div>
+          <div className="tournament-management__section-title">{group}</div>
           {this.renderTeams(teamsByGroups[group])}
         </div>
       )
@@ -242,7 +242,7 @@ export default class TournamentManagementPage extends React.PureComponent {
     const { tournament: { fields, groups, groupStageMatches, teams, id, matchMinutes } } = this.state
     const canMatches = teams.length > 1 && fields.length > 0
     return (
-      <div className="admin-tournament-page__section admin-tournament-page__section--group-stage-matches">
+      <div className="tournament-management__section tournament-management__section--group-stage-matches">
         {canMatches ? this.renderGroupStageMatches() : this.renderCannotAddGroupStageMatches()}
         {canMatches && <GroupStageMatch
           fields={fields}
@@ -260,7 +260,7 @@ export default class TournamentManagementPage extends React.PureComponent {
 
   renderCannotAddGroupStageMatches = () => {
     return (
-      <div className="admin-item">
+      <div className="tournament-item">
         Et voi lisätä otteluita ennen kuin olet lisännyt vähintään yhden kentän ja vähintään kaksi joukkuetta.
       </div>
     )
@@ -346,7 +346,7 @@ export default class TournamentManagementPage extends React.PureComponent {
     const successFeedbackStyle = this.state.officialLinkCopied ? undefined :  { display: 'none' }
     const errorFeedbackStyle = this.state.officialLinkCopyError ? undefined :  { display: 'none' }
     return (
-      <div className="admin-tournament-page__section official-link">
+      <div className="tournament-management__section official-link">
         <div className="official-link__copy" onClick={this.copyOfficialLink}>Kopioi linkki</div>
         <div className="official-link__feedback" style={successFeedbackStyle}>Linkki kopioitu leikepöydälle</div>
         <div className="official-link__error" style={errorFeedbackStyle}>Selaimesi ei tue linkin kopiointia</div>
@@ -377,7 +377,7 @@ export default class TournamentManagementPage extends React.PureComponent {
       return (
         <React.Fragment>
           <div className="title-2">Takaisin tulosten syöttöön</div>
-          <div className="admin-tournament-page__section">
+          <div className="tournament-management__section">
             <Link to={to}>Takaisin tulosten syöttöön</Link>
           </div>
         </React.Fragment>

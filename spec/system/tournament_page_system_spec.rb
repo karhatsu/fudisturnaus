@@ -49,9 +49,7 @@ describe 'tournament page', type: :system do
 
     it 'shows match info' do
       visit "/tournaments/#{tournament.id}"
-      expect(page.find('.match .match__start-time').text).to eql "#{match1_start_time}"
-      expect(page.find('.match .match__details').text).to eql "#{field1.name}, #{age_group.name}, #{group1.name}"
-      expect(page.find('.match .match__teams').text).to eql "#{team1.name}-#{team2.name}"
+      expect_match_info match1_start_time, field1.name, age_group.name, group1.name, team1.name, team2.name
     end
 
     it 'shows group tables' do

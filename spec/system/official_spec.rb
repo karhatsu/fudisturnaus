@@ -16,6 +16,88 @@ describe 'official', type: :system do
     end
   end
 
+  describe 'tournament management' do
+    before do
+      @tournament = create :tournament
+      @club = create :club
+      visit "/official/#{@tournament.access_key}"
+    end
+
+    it 'works for new items' do
+      click_link 'Muokkaa turnauksen asetuksia'
+
+      add_new_item 'fields'
+      form_inputs[0].fill_in with: 'Field 1'
+      submit
+      expect_item_title 'fields', 'Field 1'
+
+      add_new_item 'age-groups'
+      form_inputs[0].fill_in with: 'T11'
+      submit
+      expect_item_title 'age-groups', 'T11'
+
+      add_new_item 'groups'
+      form_selects[0].select 'T11'
+      form_inputs[0].fill_in with: 'Group A'
+      submit
+      expect_item_title 'groups', 'Group A (T11)'
+
+      add_new_item 'teams'
+      form_selects[0].select 'Group A (T11)'
+      form_selects[1].select @club.name
+      form_inputs[0].fill_in with: 'FC Brown'
+      submit
+      expect_item_title 'teams', 'FC Brown'
+
+      add_new_item 'teams', 1
+      form_selects[0].select 'Group A (T11)'
+      form_selects[1].select '+ Lisää uusi seura'
+      page.find('.new-club-form .form__field input').fill_in with: 'SC Lions'
+      page.find('.new-club-form .button--primary').click
+      form_inputs[0].fill_in with: 'SC Lions Green'
+      submit
+
+      add_new_item 'group-stage-matches'
+      form_selects[0].select 'Field 1'
+      form_inputs[0].fill_in with: '11:30'
+      form_selects[1].select 'Group A (T11)'
+      form_selects[2].select 'FC Brown'
+      form_selects[3].select 'SC Lions Green'
+      submit
+      expect_item_title 'group-stage-matches', 'Field 1 | 11:30 | Group A (T11) | FC Brown - SC Lions Green'
+
+      click_link 'Takaisin tulosten syöttöön'
+      expect_match_info_for_added_match
+
+      visit "/tournaments/#{@tournament.id}"
+      expect_match_info_for_added_match
+    end
+
+    def add_new_item(section_name, index = 0)
+      page.all(".admin-tournament-page__section--#{section_name} .admin-item__title span")[index].click
+    end
+
+    def form_inputs
+      page.all('.form__field input')
+    end
+
+    def form_selects
+      page.all('.form__field select')
+    end
+
+    def submit
+      page.find('.button--primary').click
+    end
+
+    def expect_item_title(section_name, title)
+      expect(page.all(".admin-tournament-page__section--#{section_name} .admin-item__title")[0].text).to eql title
+    end
+
+    def expect_match_info_for_added_match
+      expect_match_info '11:30', 'Field 1', 'T11', 'Group A', 'FC Brown', 'SC Lions Green'
+    end
+  end
+
   describe 'result saving' do
     before do
       age_group = create :age_group, calculate_group_tables: true

@@ -99,7 +99,7 @@ export default class TournamentManagementPage extends React.PureComponent {
 
   renderFieldsSection() {
     return (
-      <div className="admin-tournament-page__section">
+      <div className="admin-tournament-page__section admin-tournament-page__section--fields">
         {this.renderFields()}
         <Field onFieldSave={this.onItemSave('fields')} tournamentId={this.getTournamentId()}/>
       </div>
@@ -121,7 +121,7 @@ export default class TournamentManagementPage extends React.PureComponent {
 
   renderAgeGroupsSection() {
     return (
-      <div className="admin-tournament-page__section">
+      <div className="admin-tournament-page__section admin-tournament-page__section--age-groups">
         {this.renderAgeGroups()}
         <AgeGroup onAgeGroupSave={this.onItemSave('ageGroups')} tournamentId={this.getTournamentId()}/>
       </div>
@@ -144,7 +144,7 @@ export default class TournamentManagementPage extends React.PureComponent {
   renderGroupsSection() {
     const { tournament: { ageGroups, id } } = this.state
     return (
-      <div className="admin-tournament-page__section">
+      <div className="admin-tournament-page__section admin-tournament-page__section--groups">
         {ageGroups.length > 0 ? this.renderGroups() : this.renderCannotAddGroups()}
         {ageGroups.length > 0 && <Group ageGroups={ageGroups} onGroupSave={this.onItemSave('groups')} tournamentId={id}/>}
       </div>
@@ -177,7 +177,7 @@ export default class TournamentManagementPage extends React.PureComponent {
     const { tournament: { clubs, groups, id } } = this.state
     const canAddTeams = groups.length > 0
     return (
-      <div className="admin-tournament-page__section">
+      <div className="admin-tournament-page__section admin-tournament-page__section--teams">
         {canAddTeams ? this.renderGroupTeams() : this.renderCannotAddTeams()}
         {canAddTeams && <Team clubs={clubs} groups={groups} onClubSave={this.onClubSave} onTeamSave={this.onItemSave('teams')} tournamentId={id}/>}
       </div>
@@ -242,7 +242,7 @@ export default class TournamentManagementPage extends React.PureComponent {
     const { tournament: { fields, groups, groupStageMatches, teams, id, matchMinutes } } = this.state
     const canMatches = teams.length > 1 && fields.length > 0
     return (
-      <div className="admin-tournament-page__section">
+      <div className="admin-tournament-page__section admin-tournament-page__section--group-stage-matches">
         {canMatches ? this.renderGroupStageMatches() : this.renderCannotAddGroupStageMatches()}
         {canMatches && <GroupStageMatch
           fields={fields}

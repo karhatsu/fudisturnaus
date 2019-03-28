@@ -1,4 +1,4 @@
-import { format, parseISO } from 'date-fns'
+import { addDays, differenceInCalendarDays, format, parseISO } from 'date-fns'
 
 export function buildTournamentFromSocketData(oldTournament, data) {
   const { groupId, groupStageMatch, playoffMatch, groupResults, resolvedPlayoffMatches } = data
@@ -64,13 +64,13 @@ export function formatDate(date) {
 }
 
 export function formatMatchTime(tournamentDays, time) {
-  const weekDay = tournamentDays > 1 ? `${formatWeekDay(time)} ` : ''
+  const weekDay = tournamentDays > 1 ? `${formatWeekDay(parseISO(time))} ` : ''
   return `${weekDay}${formatTime(time)}`
 }
 
-function formatWeekDay(time) {
-  // import { fi } from 'date-fns/locale' && format(parseISO(time), 'EEEEEE', { locale: fi })
-  const enWeekDay = format(parseISO(time), 'EEEEEE')
+function formatWeekDay(date) {
+  // import { fi } from 'date-fns/locale' && format(date, 'EEEEEE', { locale: fi })
+  const enWeekDay = format(date, 'EEEEEE')
   switch (enWeekDay) {
     case 'Mo':
       return 'ma'
@@ -91,6 +91,14 @@ function formatWeekDay(time) {
 
 export function formatTime(time) {
   return format(parseISO(time), 'HH:mm')
+}
+
+export function resolveWeekDay(baseDate, increment) {
+  return formatWeekDay(addDays(parseISO(baseDate), increment))
+}
+
+export function resolveDay(date, time) {
+  return differenceInCalendarDays(parseISO(time), parseISO(date)) + 1
 }
 
 export function resolveColStyles(count) {

@@ -73,26 +73,6 @@ describe 'official', type: :system do
       expect_match_info_for_added_match
     end
 
-    def add_new_item(section_name, index = 0)
-      page.all(".tournament-management__section--#{section_name} .tournament-item__title span")[index].click
-    end
-
-    def form_inputs
-      page.all('.form__field input')
-    end
-
-    def form_selects
-      page.all('.form__field select')
-    end
-
-    def submit
-      page.find('.button--primary').click
-    end
-
-    def expect_item_title(section_name, title)
-      expect(page.all(".tournament-management__section--#{section_name} .tournament-item__title")[0].text).to eql title
-    end
-
     def expect_match_info_for_added_match
       expect_match_info '11:30', 'Field 1', 'T11', 'Group A', 'FC Brown', 'SC Lions Green'
     end
@@ -137,5 +117,60 @@ describe 'official', type: :system do
         expect_result 3, '1 - 0 rp'
       end
     end
+  end
+
+  describe 'multiple days tournament' do
+    before do
+      tournament = create :tournament, start_date: '2019-06-05', days: 3 # Wed-Fri
+      age_group = create :age_group, tournament: tournament, name: 'P11'
+      group = create :group, age_group: age_group, name: 'Group B'
+      create :team, group: group, name: 'Team 1'
+      create :team, group: group, name: 'Team 2'
+      create :field, tournament: tournament, name: 'Field 1'
+      visit "/official/#{tournament.access_key}/management"
+    end
+
+    it 'provides days menu in form and shows weekday on match info' do
+      add_new_item 'group-stage-matches'
+      form_selects[0].select 'Field 1'
+      form_selects[1].select 'to' # Thursday
+      form_inputs[0].fill_in with: '14:45'
+      form_selects[2].select 'Group B (P11)'
+      form_selects[3].select 'Team 1'
+      form_selects[4].select 'Team 2'
+      submit
+      expect_item_title 'group-stage-matches', 'Field 1 | to 14:45 | Group B (P11) | Team 1 - Team 2'
+      edit_item 'group-stage-matches', 0
+      form_selects[1].select 'pe' # Friday
+      form_inputs[0].fill_in with: '12:00'
+      submit
+      expect_item_title 'group-stage-matches', 'Field 1 | pe 12:00 | Group B (P11) | Team 1 - Team 2'
+      click_link 'Takaisin tulosten syöttöön'
+      expect_match_info 'pe 12:00', 'Field 1', 'P11', 'Group B', 'Team 1', 'Team 2'
+    end
+  end
+
+  def edit_item(section_name, index)
+    add_new_item section_name, index
+  end
+
+  def add_new_item(section_name, index = 0)
+    page.all(".tournament-management__section--#{section_name} .tournament-item__title span")[index].click
+  end
+
+  def form_inputs
+    page.all('.form__field input')
+  end
+
+  def form_selects
+    page.all('.form__field select')
+  end
+
+  def submit
+    page.find('.button--primary').click
+  end
+
+  def expect_item_title(section_name, title)
+    expect(page.all(".tournament-management__section--#{section_name} .tournament-item__title")[0].text).to eql title
   end
 end

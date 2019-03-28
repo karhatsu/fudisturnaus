@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { addMinutes, format, parseISO } from 'date-fns'
+import { addDays, addMinutes, format, parseISO } from 'date-fns'
 import { parseFromTimeZone } from 'date-fns-timezone'
 import { deleteGroupStageMatch, saveGroupStageMatch } from './api_client'
 import AccessContext from '../util/access_context'
-import { formatMatchTime, formatTime } from '../util/util'
+import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util/util'
 
 export default class GroupStageMatch extends React.PureComponent {
   static propTypes = {
@@ -65,6 +65,7 @@ export default class GroupStageMatch extends React.PureComponent {
       formOpen: false,
       form: {
         awayTeamId: undefined,
+        day: undefined,
         fieldId: undefined,
         groupId: undefined,
         homeTeamId: undefined,
@@ -92,7 +93,7 @@ export default class GroupStageMatch extends React.PureComponent {
       const time = formatMatchTime(tournamentDays, startTime)
       text = `${field.name} | ${time} | ${group.name} (${group.ageGroupName}) | ${homeTeam.name} - ${awayTeam.name}`
     }
-    return <div className="tournament-item__title"><span onClick={this.editMatch}>{text}</span></div>
+    return <div className="tournament-item__title"><span onClick={this.openForm}>{text}</span></div>
   }
 
   renderForm() {
@@ -103,6 +104,7 @@ export default class GroupStageMatch extends React.PureComponent {
         {errors.length > 0 && <div className="form-error">{errors.join('. ')}.</div>}
         <div className="tournament-item__form">
           {this.buildIdNameDropDown(fields, 'fieldId', '- Kenttä -', this.setField)}
+          {this.buildDayDropDown()}
           <div className="form__field form__field--time">
             <input ref={this.timeFieldRed} type="text" onChange={this.changeValue('startTime')} value={startTime} placeholder="HH:MM"/>
           </div>
@@ -149,12 +151,28 @@ export default class GroupStageMatch extends React.PureComponent {
     )
   }
 
-  editMatch = () => {
-    const { groupStageMatch } = this.props
+  buildDayDropDown() {
+    const { tournamentDays, tournamentDate } = this.props
+    if (tournamentDays > 1) {
+      return (
+        <div className="form__field">
+          <select onChange={this.changeValue('day')} value={this.state.form.day}>
+            {Array(tournamentDays).fill().map((x, i) => {
+              return <option key={i} value={i + 1}>{resolveWeekDay(tournamentDate, i)}</option>
+            })}
+          </select>
+        </div>
+      )
+    }
+  }
+
+  openForm = () => {
+    const { groupStageMatch, tournamentDate } = this.props
     this.setState({
       formOpen: true,
       form: {
         awayTeamId: groupStageMatch ? groupStageMatch.awayTeam.id : undefined,
+        day: groupStageMatch ? resolveDay(tournamentDate, groupStageMatch.startTime) : 1,
         fieldId: groupStageMatch ? groupStageMatch.field.id : undefined,
         groupId: groupStageMatch ? groupStageMatch.group.id : undefined,
         homeTeamId: groupStageMatch ? groupStageMatch.homeTeam.id : undefined,
@@ -193,8 +211,9 @@ export default class GroupStageMatch extends React.PureComponent {
 
   submit = () => {
     const { groupStageMatch, onGroupStageMatchSave, tournamentId, tournamentDate } = this.props
-    const startTime = parseFromTimeZone(parseISO(`${tournamentDate}T${this.state.form.startTime}`), { timeZone: 'Europe/Helsinki' })
-    const form = { ...this.state.form, startTime }
+    const { form: { day, startTime } } = this.state
+    const isoStartTime = addDays(parseFromTimeZone(parseISO(`${tournamentDate}T${startTime}`), { timeZone: 'Europe/Helsinki' }), day - 1)
+    const form = { ...this.state.form, startTime: isoStartTime }
     const id = groupStageMatch ? groupStageMatch.id : undefined
     saveGroupStageMatch(this.context, tournamentId, id, form, (errors, data) => {
       if (errors) {

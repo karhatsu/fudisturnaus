@@ -4,7 +4,7 @@ import { addMinutes, format, parseISO } from 'date-fns'
 import { parseFromTimeZone } from 'date-fns-timezone'
 import { deleteGroupStageMatch, saveGroupStageMatch } from './api_client'
 import AccessContext from '../util/access_context'
-import { formatTime } from '../util/util'
+import { formatMatchTime, formatTime } from '../util/util'
 
 export default class GroupStageMatch extends React.PureComponent {
   static propTypes = {
@@ -52,6 +52,7 @@ export default class GroupStageMatch extends React.PureComponent {
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
     })).isRequired,
+    tournamentDays: PropTypes.number.isRequired,
     tournamentId: PropTypes.number.isRequired,
     tournamentDate: PropTypes.string.isRequired,
   }
@@ -84,11 +85,12 @@ export default class GroupStageMatch extends React.PureComponent {
   }
 
   renderName() {
-    const { groupStageMatch } = this.props
+    const { groupStageMatch, tournamentDays } = this.props
     let text = '+ Lisää uusi alkulohkon ottelu'
     if (groupStageMatch) {
       const { awayTeam, field, group, homeTeam, startTime } = groupStageMatch
-      text = `${field.name} | ${formatTime(startTime)} | ${group.name} (${group.ageGroupName}) | ${homeTeam.name} - ${awayTeam.name}`
+      const time = formatMatchTime(tournamentDays, startTime)
+      text = `${field.name} | ${time} | ${group.name} (${group.ageGroupName}) | ${homeTeam.name} - ${awayTeam.name}`
     }
     return <div className="tournament-item__title"><span onClick={this.editMatch}>{text}</span></div>
   }

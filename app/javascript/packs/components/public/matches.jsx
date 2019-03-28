@@ -10,6 +10,7 @@ export default class Matches extends React.PureComponent {
     renderMatch: PropTypes.func.isRequired,
     selectedClubId: PropTypes.number,
     selectedTeamId: PropTypes.number,
+    tournamentDays: PropTypes.number.isRequired,
     tournamentId: PropTypes.number.isRequired,
   }
 
@@ -43,8 +44,8 @@ export default class Matches extends React.PureComponent {
   }
 
   renderMatch = match => {
-    const { renderMatch, selectedClubId, selectedTeamId, tournamentId } = this.props
-    const matchProps = { match, selectedClubId, selectedTeamId, tournamentId }
+    const { renderMatch, selectedClubId, selectedTeamId, tournamentDays, tournamentId } = this.props
+    const matchProps = { match, selectedClubId, selectedTeamId, tournamentDays, tournamentId }
     return (
       <div className={resolveColStyles(this.props.fieldsCount)} key={match.id}>
         {renderMatch(matchProps)}

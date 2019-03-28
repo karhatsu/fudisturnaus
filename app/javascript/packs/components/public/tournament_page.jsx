@@ -124,7 +124,7 @@ export default class TournamentPage extends React.PureComponent {
 
   renderMatches = (matches, title, showTitle) => {
     const { official, renderMatch } = this.props
-    const { filters, tournament: { fields } } = this.state
+    const { filters, tournament: { days, fields } } = this.state
     return (
       <div>
         {showTitle ? <div className="title-2">{title}</div> : ''}
@@ -135,6 +135,7 @@ export default class TournamentPage extends React.PureComponent {
           renderMatch={renderMatch}
           selectedClubId={filters.clubId}
           selectedTeamId={filters.teamId}
+          tournamentDays={days}
           tournamentId={this.props.tournamentId}
         />
       </div>

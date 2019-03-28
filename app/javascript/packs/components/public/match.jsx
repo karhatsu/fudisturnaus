@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { formatTime } from '../util/util'
+import { formatMatchTime } from '../util/util'
 
 export default class Match extends React.PureComponent {
   static propTypes = {
@@ -30,16 +30,17 @@ export default class Match extends React.PureComponent {
     }).isRequired,
     selectedClubId: PropTypes.number,
     selectedTeamId: PropTypes.number,
+    tournamentDays: PropTypes.number.isRequired,
     tournamentId: PropTypes.number.isRequired,
   }
 
   render() {
-    const { match: { startTime, field, homeTeam, awayTeam, title, ageGroup, group } } = this.props
+    const { match: { startTime, field, homeTeam, awayTeam, title, ageGroup, group }, tournamentDays } = this.props
     return (
       <div className={this.resolveMainClasses()} onClick={this.onClick}>
         <div className="match__row1">
           <div className="match__matchInfo">
-            {this.renderMatchInfo(startTime, field, ageGroup, group)}
+            {this.renderMatchInfo(tournamentDays, startTime, field, ageGroup, group)}
             <div className="match__teams">
               {this.renderPlayoffMatchTitle(homeTeam, awayTeam, title)}
               {this.renderTeams(homeTeam, awayTeam)}
@@ -56,10 +57,10 @@ export default class Match extends React.PureComponent {
     return 'match'
   }
 
-  renderMatchInfo = (startTime, field, ageGroup, group) => {
+  renderMatchInfo = (tournamentDays, startTime, field, ageGroup, group) => {
     return (
       <div>
-        <span className="match__start-time">{formatTime(startTime)}</span>
+        <span className="match__start-time">{formatMatchTime(tournamentDays, startTime)}</span>
         <span className="match__details">{field.name}, {ageGroup.name}{group ? `, ${group.name}` : ''}</span>
       </div>
     )

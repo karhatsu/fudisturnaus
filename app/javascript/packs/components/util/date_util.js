@@ -9,24 +9,31 @@ export function formatTournamentDates(startDate, endDate) {
 }
 
 export function formatDate(date) {
-  return format(parseISO(date), 'dd.MM.yyyy')
+  return format(parse(date), 'dd.MM.yyyy')
 }
 
 export function formatMatchTime(tournamentDays, time) {
-  const weekDay = tournamentDays > 1 ? `${formatWeekDay(parseISO(time))} ` : ''
+  const weekDay = tournamentDays > 1 ? `${formatWeekDay(parse(time))} ` : ''
   return `${weekDay}${formatTime(time)}`
 }
 
 export function formatTime(time) {
-  return format(parseISO(time), 'HH:mm')
+  return format(parse(time), 'HH:mm')
 }
 
 export function resolveWeekDay(baseDate, increment) {
-  return formatWeekDay(addDays(parseISO(baseDate), increment))
+  return formatWeekDay(addDays(parse(baseDate), increment))
 }
 
 export function resolveDay(date, time) {
-  return differenceInCalendarDays(parseISO(time), parseISO(date)) + 1
+  return differenceInCalendarDays(parse(time), parse(date)) + 1
+}
+
+function parse(date) {
+  if (typeof date === 'string') {
+    return parseISO(date)
+  }
+  return date
 }
 
 function formatWeekDay(date) {

@@ -43,12 +43,12 @@ GroupStageMatch.create! group: g_b, field: f2, start_time: '2019-05-12 10:30', h
 GroupStageMatch.create! group: g_b, field: f1, start_time: '2019-05-12 12:30', home_team: viikingit_vihrea, away_team: honka_keltainen
 GroupStageMatch.create! group: g_b, field: f2, start_time: '2019-05-12 12:30', home_team: hjk_keltainen, away_team: lps_valkoinen
 
-b_semi1 = FirstRoundPlayoffMatch.create! age_group: ag1, field: f1, start_time: '2019-05-12 14:00', home_team_origin: g_a, away_team_origin: g_b, home_team_origin_rule: 3, away_team_origin_rule: 4, title: 'A3-B4'
-b_semi2 = FirstRoundPlayoffMatch.create! age_group: ag1, field: f2, start_time: '2019-05-12 14:00', home_team_origin: g_b, away_team_origin: g_a, home_team_origin_rule: 3, away_team_origin_rule: 4, title: 'B3-A4'
-semi1 = FirstRoundPlayoffMatch.create! age_group: ag1, field: f1, start_time: '2019-05-12 14:30', home_team_origin: g_a, away_team_origin: g_b, home_team_origin_rule: 1, away_team_origin_rule: 2, title: 'A1-B2'
-semi2 = FirstRoundPlayoffMatch.create! age_group: ag1, field: f2, start_time: '2019-05-12 14:30', home_team_origin: g_b, away_team_origin: g_a, home_team_origin_rule: 1, away_team_origin_rule: 2, title: 'B1-A2'
+b_semi1 = PlayoffMatch.create! age_group: ag1, field: f1, start_time: '2019-05-12 14:00', home_team_origin: g_a, away_team_origin: g_b, home_team_origin_rule: 3, away_team_origin_rule: 4, title: 'A3-B4'
+b_semi2 = PlayoffMatch.create! age_group: ag1, field: f2, start_time: '2019-05-12 14:00', home_team_origin: g_b, away_team_origin: g_a, home_team_origin_rule: 3, away_team_origin_rule: 4, title: 'B3-A4'
+semi1 = PlayoffMatch.create! age_group: ag1, field: f1, start_time: '2019-05-12 14:30', home_team_origin: g_a, away_team_origin: g_b, home_team_origin_rule: 1, away_team_origin_rule: 2, title: 'A1-B2'
+semi2 = PlayoffMatch.create! age_group: ag1, field: f2, start_time: '2019-05-12 14:30', home_team_origin: g_b, away_team_origin: g_a, home_team_origin_rule: 1, away_team_origin_rule: 2, title: 'B1-A2'
 
-NextRoundPlayoffMatch.create! age_group: ag1, field: f1, start_time: '2019-05-12 15:00', home_team_origin: b_semi1, away_team_origin: b_semi2, home_team_origin_rule: NextRoundPlayoffMatch::RULE_WINNER, away_team_origin_rule: NextRoundPlayoffMatch::RULE_WINNER, title: '5-6'
-NextRoundPlayoffMatch.create! age_group: ag1, field: f2, start_time: '2019-05-12 15:00', home_team_origin: b_semi1, away_team_origin: b_semi2, home_team_origin_rule: NextRoundPlayoffMatch::RULE_LOSER, away_team_origin_rule: NextRoundPlayoffMatch::RULE_LOSER, title: '7-8'
-NextRoundPlayoffMatch.create! age_group: ag1, field: f1, start_time: '2019-05-12 15:30', home_team_origin: semi1, away_team_origin: semi2, home_team_origin_rule: NextRoundPlayoffMatch::RULE_WINNER, away_team_origin_rule: NextRoundPlayoffMatch::RULE_WINNER, title: 'Finaali'
-NextRoundPlayoffMatch.create! age_group: ag1, field: f2, start_time: '2019-05-12 15:30', home_team_origin: semi1, away_team_origin: semi2, home_team_origin_rule: NextRoundPlayoffMatch::RULE_LOSER, away_team_origin_rule: NextRoundPlayoffMatch::RULE_LOSER, title: 'Pronssiottelu'
+PlayoffMatch.create! age_group: ag1, field: f1, start_time: '2019-05-12 15:00', home_team_origin: b_semi1, away_team_origin: b_semi2, home_team_origin_rule: PlayoffMatch::RULE_WINNER, away_team_origin_rule: PlayoffMatch::RULE_WINNER, title: '5-6'
+PlayoffMatch.create! age_group: ag1, field: f2, start_time: '2019-05-12 15:00', home_team_origin: b_semi1, away_team_origin: b_semi2, home_team_origin_rule: PlayoffMatch::RULE_LOSER, away_team_origin_rule: PlayoffMatch::RULE_LOSER, title: '7-8'
+PlayoffMatch.create! age_group: ag1, field: f1, start_time: '2019-05-12 15:30', home_team_origin: semi1, away_team_origin: semi2, home_team_origin_rule: PlayoffMatch::RULE_WINNER, away_team_origin_rule: PlayoffMatch::RULE_WINNER, title: 'Finaali'
+PlayoffMatch.create! age_group: ag1, field: f2, start_time: '2019-05-12 15:30', home_team_origin: semi1, away_team_origin: semi2, home_team_origin_rule: PlayoffMatch::RULE_LOSER, away_team_origin_rule: PlayoffMatch::RULE_LOSER, title: 'Pronssiottelu'

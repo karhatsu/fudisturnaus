@@ -2,8 +2,8 @@ class Group < ApplicationRecord
   belongs_to :age_group, touch: true
   has_many :teams
   has_many :group_stage_matches
-  has_many :first_round_playoff_matches_as_home_team, as: :home_team_origin, class_name: 'FirstRoundPlayoffMatch'
-  has_many :first_round_playoff_matches_as_away_team, as: :away_team_origin, class_name: 'FirstRoundPlayoffMatch'
+  has_many :playoff_matches_as_home_team, as: :home_team_origin, class_name: 'PlayoffMatch'
+  has_many :playoff_matches_as_away_team, as: :away_team_origin, class_name: 'PlayoffMatch'
 
   validates :name, presence: true
 
@@ -29,12 +29,12 @@ class Group < ApplicationRecord
   def populate_first_round_playoff_matches
     changed_matches = []
     group_results = results
-    first_round_playoff_matches_as_home_team.each do |match|
+    playoff_matches_as_home_team.each do |match|
       match.home_team_id = group_results[match.home_team_origin_rule - 1].team_id
       match.save!
       changed_matches << match
     end
-    first_round_playoff_matches_as_away_team.each do |match|
+    playoff_matches_as_away_team.each do |match|
       match.away_team_id = group_results[match.away_team_origin_rule - 1].team_id
       match.save!
       changed_matches << match

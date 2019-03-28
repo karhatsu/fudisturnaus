@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { addDays, addMinutes, format, parseISO } from 'date-fns'
+import { addDays, addMinutes, differenceInCalendarDays, format, parseISO } from 'date-fns'
 import { parseFromTimeZone } from 'date-fns-timezone'
 import { deleteGroupStageMatch, saveGroupStageMatch } from './api_client'
 import AccessContext from '../util/access_context'
@@ -182,18 +182,20 @@ export default class GroupStageMatch extends React.PureComponent {
   }
 
   setField = event => {
-    const { groupStageMatches, matchMinutes } = this.props
+    const { groupStageMatches, matchMinutes, tournamentDate } = this.props
     const { form } = this.state
-    let { form: { startTime } } = this.state
+    let { form: { day, startTime } } = this.state
     const fieldId = event.target.value
     if (fieldId && startTime === '') {
       const sameFieldMatches = groupStageMatches.filter(match => match.field.id === parseInt(fieldId))
       if (sameFieldMatches.length) {
         const previousMatch = sameFieldMatches[sameFieldMatches.length - 1]
-        startTime = format(addMinutes(parseISO(previousMatch.startTime), matchMinutes), 'HH:mm')
+        const suggestedDate = addMinutes(parseISO(previousMatch.startTime), matchMinutes)
+        startTime = format(suggestedDate, 'HH:mm')
+        day = differenceInCalendarDays(suggestedDate, parseISO(tournamentDate)) + 1
       }
     }
-    this.setState({ form: { ...form, fieldId, startTime } })
+    this.setState({ form: { ...form, day, fieldId, startTime } })
     if (this.timeFieldRed) {
       this.timeFieldRed.current.focus()
     }

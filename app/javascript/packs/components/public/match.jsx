@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { formatMatchTime } from '../util/util'
+import { formatMatchTime } from '../util/date_util'
 
 export default class Match extends React.PureComponent {
   static propTypes = {

@@ -4,7 +4,7 @@ import { addDays, addMinutes, differenceInCalendarDays, format, parseISO } from 
 import { parseFromTimeZone } from 'date-fns-timezone'
 import { deleteGroupStageMatch, saveGroupStageMatch } from './api_client'
 import AccessContext from '../util/access_context'
-import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util/util'
+import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util/date_util'
 
 export default class GroupStageMatch extends React.PureComponent {
   static propTypes = {

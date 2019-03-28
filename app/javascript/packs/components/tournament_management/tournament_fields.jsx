@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { formatTournamentDates } from '../util/util'
+import { formatTournamentDates } from '../util/date_util'
 import AccessContext from '../util/access_context'
 
 export default class TournamentFields extends React.PureComponent {

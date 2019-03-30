@@ -14,6 +14,13 @@ json.group_stage_matches @tournament.group_stage_matches do |match|
   json.group match.group, :id, :name, :age_group_name
 end
 
+json.playoff_matches @tournament.playoff_matches do |match|
+  json.(match, :id, :start_time, :title, :age_group_id)
+  json.(match, :home_team_origin_id, :home_team_origin_type, :home_team_origin_rule)
+  json.(match, :away_team_origin_id, :away_team_origin_type, :away_team_origin_rule)
+  json.field match.field, :id, :name
+end
+
 json.fields @tournament.fields, :id, :name
 
 json.teams @tournament.teams do |team|

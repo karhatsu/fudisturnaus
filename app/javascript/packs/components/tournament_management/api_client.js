@@ -150,6 +150,27 @@ export function deleteGroupStageMatch(accessContext, tournamentId, id, callback)
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
+export function savePlayoffMatch(accessContext, tournamentId, id, data, callback) {
+  const url = `/api/v1/official/tournaments/${tournamentId}/playoff_matches` + (id ? `/${id}` : '')
+  const method = id ? 'PATCH' : 'POST'
+  fetch(url, {
+    method,
+    headers: buildHeaders(accessContext),
+    body: JSON.stringify({ playoffMatch: data }),
+  }).then(response => {
+    handleSaveResponse(response, callback)
+  }).catch(() => handleConnectionErrorOnSave(callback))
+}
+
+export function deletePlayoffMatch(accessContext, tournamentId, id, callback) {
+  fetch(`/api/v1/official/tournaments/${tournamentId}/playoff_matches/${id}`, {
+    method: 'DELETE',
+    headers: buildHeaders(accessContext),
+  }).then(response => {
+    handleSaveResponse(response, callback)
+  }).catch(() => handleConnectionErrorOnSave(callback))
+}
+
 function buildHeaders(accessContext) {
   const headers = { 'Content-Type': 'application/json' }
   if (accessContext.officialAccessKey) {

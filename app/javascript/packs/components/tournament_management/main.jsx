@@ -9,6 +9,7 @@ import TournamentFields from './tournament_fields'
 import AgeGroup from './age_group'
 import Group from './group'
 import GroupStageMatch from './group_stage_match'
+import PlayoffMatch from './playoff_match'
 import Field from './field'
 import Team from './team'
 import AccessContext from '../util/access_context'
@@ -67,6 +68,8 @@ export default class TournamentManagementPage extends React.PureComponent {
         {this.renderTeamsSection()}
         <div className="title-2">Alkulohkojen ottelut</div>
         {this.renderGroupStageMatchesSection()}
+        <div className="title-2">Jatko-ottelut</div>
+        {this.renderPlayoffMatchesSection()}
         <div className="title-2">Toimitsijan linkki</div>
         {this.renderOfficialLink()}
         {this.renderBackLink()}
@@ -288,6 +291,61 @@ export default class TournamentManagementPage extends React.PureComponent {
     })
   }
 
+  renderPlayoffMatchesSection() {
+    const { tournament: { ageGroups, days, fields, groups, playoffMatches, teams, id, matchMinutes } } = this.state
+    const ageGroupsIdsWithTables = ageGroups.filter(ageGroup => ageGroup.calculateGroupTables).map(ageGroup => ageGroup.id)
+    const groupIdsWithTables = groups.filter(group => ageGroupsIdsWithTables.includes(group.ageGroupId)).map(group => group.id)
+    const teamsWithTables = teams.filter(team => groupIdsWithTables.includes(team.group.id))
+    const canAddMatches = teamsWithTables.length > 1 && fields.length > 0
+    return (
+      <div className="tournament-management__section tournament-management__section--group-stage-matches">
+        {canAddMatches ? this.renderPlayoffMatches() : this.renderCannotAddPlayoffMatches()}
+        {canAddMatches && <PlayoffMatch
+          ageGroups={ageGroups}
+          fields={fields}
+          groups={groups}
+          playoffMatches={playoffMatches}
+          onPlayoffMatchSave={this.onItemSave('playoffMatches')}
+          matchMinutes={matchMinutes}
+          teams={teams}
+          tournamentDays={days}
+          tournamentId={id}
+          tournamentDate={this.state.tournament.startDate}
+        />}
+      </div>
+    )
+  }
+
+  renderCannotAddPlayoffMatches = () => {
+    return (
+      <div className="tournament-item">
+        Jatko-otteluiden lisääminen vaatii vähintään yhden kentän sekä vähintään kaksi joukkuetta ikäryhmässä,
+        jolle lasketaan sarjataulukot.
+      </div>
+    )
+  }
+
+  renderPlayoffMatches() {
+    const { tournament: { ageGroups, days, fields, groups, playoffMatches, teams, matchMinutes } } = this.state
+    return playoffMatches.map(playoffMatch => {
+      return <PlayoffMatch
+        ageGroups={ageGroups}
+        key={playoffMatch.id}
+        fields={fields}
+        groups={groups}
+        playoffMatch={playoffMatch}
+        playoffMatches={playoffMatches}
+        onPlayoffMatchDelete={this.onItemDelete('playoffMatches')}
+        onPlayoffMatchSave={this.onItemSave('playoffMatches')}
+        matchMinutes={matchMinutes}
+        teams={teams}
+        tournamentDays={days}
+        tournamentId={this.getTournamentId()}
+        tournamentDate={this.state.tournament.startDate}
+      />
+    })
+  }
+
   onItemSave = itemName => data => {
     const items = [...this.state.tournament[itemName]]
     const itemIndex = items.findIndex(item => item.id === data.id)
@@ -332,6 +390,7 @@ export default class TournamentManagementPage extends React.PureComponent {
           return a.name.localeCompare(b.name)
         }
       case 'groupStageMatches':
+      case 'playoffMatches':
         return (a, b) => {
           const timeCompare = a.startTime.localeCompare(b.startTime)
           if (timeCompare !== 0) {

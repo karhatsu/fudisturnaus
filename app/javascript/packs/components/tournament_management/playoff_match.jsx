@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { addDays, addMinutes, differenceInCalendarDays, format, parseISO } from 'date-fns'
+import { addDays, parseISO } from 'date-fns'
 import { parseFromTimeZone } from 'date-fns-timezone'
 import { deletePlayoffMatch, savePlayoffMatch } from './api_client'
 import AccessContext from '../util/access_context'
 import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util/date_util'
+import { resolveSuggestedTime } from '../util/util'
 
 const ORIGIN_SEPARATOR = '@'
 
@@ -247,12 +248,10 @@ export default class PlayoffMatch extends React.PureComponent {
     let { form: { day, startTime } } = this.state
     const fieldId = event.target.value
     if (fieldId && startTime === '') {
-      const sameFieldMatches = playoffMatches.filter(match => match.field.id === parseInt(fieldId))
-      if (sameFieldMatches.length) {
-        const previousMatch = sameFieldMatches[sameFieldMatches.length - 1]
-        const suggestedDate = addMinutes(parseISO(previousMatch.startTime), matchMinutes)
-        startTime = format(suggestedDate, 'HH:mm')
-        day = differenceInCalendarDays(suggestedDate, parseISO(tournamentDate)) + 1
+      const suggestion = resolveSuggestedTime(playoffMatches, fieldId, matchMinutes, tournamentDate)
+      if (suggestion) {
+        startTime = suggestion.startTime
+        day = suggestion.day
       }
     }
     this.setState({ form: { ...form, day, fieldId, startTime } })

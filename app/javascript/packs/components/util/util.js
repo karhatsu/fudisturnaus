@@ -1,3 +1,5 @@
+import { addMinutes, differenceInCalendarDays, format, parseISO } from 'date-fns'
+
 export function buildTournamentFromSocketData(oldTournament, data) {
   const { groupId, groupStageMatch, playoffMatch, groupResults, resolvedPlayoffMatches } = data
   const tournament = { ...oldTournament }
@@ -47,6 +49,17 @@ function updatePlayoffMatches(originalPlayoffMatches, newPlayoffMatches) {
     }
   })
   return playoffMatches
+}
+
+export function resolveSuggestedTime(matches, fieldId, matchMinutes, tournamentDate) {
+  const sameFieldMatches = matches.filter(match => match.field.id === parseInt(fieldId))
+  if (sameFieldMatches.length) {
+    const previousMatch = sameFieldMatches[sameFieldMatches.length - 1]
+    const suggestedDate = addMinutes(parseISO(previousMatch.startTime), matchMinutes)
+    const startTime = format(suggestedDate, 'HH:mm')
+    const day = differenceInCalendarDays(suggestedDate, parseISO(tournamentDate)) + 1
+    return { startTime, day }
+  }
 }
 
 export function resolveColStyles(count) {

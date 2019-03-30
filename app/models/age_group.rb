@@ -11,7 +11,7 @@ class AgeGroup < ApplicationRecord
 
   def check_usage
     unless groups.empty? && playoff_matches.empty?
-      errors.add :base, 'Ikäryhmää ei voi poistaa, koska se on käytössä'
+      errors.add :base, 'Sarjaa ei voi poistaa, koska se on käytössä'
       throw :abort
     end
   end

@@ -58,7 +58,7 @@ export default class Group extends React.PureComponent {
         <div className="tournament-item__form">
           <div className="form__field">
             <select onChange={this.changeValue('ageGroupId')} value={ageGroupId}>
-              <option>Ikäryhmä</option>
+              <option>Sarja</option>
               {this.props.ageGroups.map(ageGroup => {
                 const { id, name } = ageGroup
                 return <option key={id} value={id}>{name}</option>

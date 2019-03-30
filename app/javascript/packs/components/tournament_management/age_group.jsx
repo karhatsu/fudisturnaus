@@ -41,7 +41,7 @@ export default class AgeGroup extends React.PureComponent {
 
   renderName() {
     const { ageGroup } = this.props
-    const text = ageGroup ? ageGroup.name : '+ Lisää uusi ikäryhmä'
+    const text = ageGroup ? ageGroup.name : '+ Lisää uusi sarja'
     return <div className="tournament-item__title"><span onClick={this.editAgeGroup}>{text}</span></div>
   }
 

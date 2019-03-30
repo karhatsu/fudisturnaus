@@ -4,7 +4,7 @@ fi:
       group_stage_match: Alkulohkon ottelu
     attributes:
       age_group:
-        name: Ikäryhmän nimi
+        name: Sarjan nimi
       field:
         name: Kentän nimi
       group:

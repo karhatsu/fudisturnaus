@@ -60,7 +60,7 @@ export default class TournamentManagementPage extends React.PureComponent {
         </div>
         <div className="title-2">Kentät</div>
         {this.renderFieldsSection()}
-        <div className="title-2">Ikäryhmät</div>
+        <div className="title-2">Sarjat</div>
         {this.renderAgeGroupsSection()}
         <div className="title-2">Lohkot</div>
         {this.renderGroupsSection()}
@@ -157,7 +157,7 @@ export default class TournamentManagementPage extends React.PureComponent {
   renderCannotAddGroups = () => {
     return (
       <div className="tournament-item">
-        Et voi lisätä lohkoja ennen kuin olet lisännyt vähintään yhden ikäryhmän.
+        Et voi lisätä lohkoja ennen kuin olet lisännyt vähintään yhden sarjan.
       </div>
     )
   }
@@ -319,7 +319,7 @@ export default class TournamentManagementPage extends React.PureComponent {
   renderCannotAddPlayoffMatches = () => {
     return (
       <div className="tournament-item">
-        Jatko-otteluiden lisääminen vaatii vähintään yhden kentän sekä vähintään kaksi joukkuetta ikäryhmässä,
+        Jatko-otteluiden lisääminen vaatii vähintään yhden kentän sekä vähintään kaksi joukkuetta sarjassa,
         jolle lasketaan sarjataulukot.
       </div>
     )

@@ -46,16 +46,16 @@ export default class AgeGroup extends React.PureComponent {
   }
 
   renderForm() {
-    const checked = !!this.state.form.calculateGroupTables
+    const { errors, form: { calculateGroupTables, name } } = this.state
     return (
       <div className="form form--horizontal">
-        {this.state.errors.length > 0 && <div className="form-error">{this.state.errors.join('. ')}.</div>}
+        {errors.length > 0 && <div className="form-error">{errors.join('. ')}.</div>}
         <div className="tournament-item__form">
           <div className="form__field">
-            <input ref={this.nameFieldRed} type="text" onChange={this.changeName} value={this.state.form.name} placeholder="Esim. P11 tai T09"/>
+            <input ref={this.nameFieldRed} type="text" onChange={this.changeName} value={name} placeholder="Esim. P11 tai T09 Haaste"/>
           </div>
           <div className="form__field">
-            <input type="checkbox" onChange={this.changeCalculateGroupTables} value={true} checked={checked}/>
+            <input type="checkbox" onChange={this.changeCalculateGroupTables} value={true} checked={!!calculateGroupTables}/>
             Laske sarjataulukot
           </div>
           <div className="form__buttons">

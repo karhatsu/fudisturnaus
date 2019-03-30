@@ -8,10 +8,16 @@ def fill_result(match_index, home_goals, away_goals, penalties = false)
   page.all('.match__button')[0].click
 end
 
-def expect_match_info(start_time, field_name, age_group_name, group_name, home_team_name, away_team_name)
-  expect(page.find('.match .match__start-time').text).to eql "#{start_time}"
-  expect(page.find('.match .match__details').text).to eql "#{field_name}, #{age_group_name}, #{group_name}"
-  expect(page.find('.match .match__teams').text).to eql "#{home_team_name}-#{away_team_name}"
+def expect_match_info(start_time, field_name, age_group_name, group_name, home_team_name, away_team_name, index = 0)
+  expect(page.all('.match .match__start-time')[index].text).to eql "#{start_time}"
+  expect(page.all('.match .match__details')[index].text).to eql "#{field_name}, #{age_group_name}, #{group_name}"
+  expect(page.all('.match .match__teams')[index].text).to eql "#{home_team_name}-#{away_team_name}"
+end
+
+def expect_playoff_match_info(start_time, field_name, age_group_name, title, index = 0)
+  expect(page.all('.match .match__start-time')[index].text).to eql "#{start_time}"
+  expect(page.all('.match .match__details')[index].text).to eql "#{field_name}, #{age_group_name}"
+  expect(page.all('.match .match__teams')[index].text).to eql "#{title}"
 end
 
 def expect_result(match_index, result)

@@ -298,7 +298,7 @@ export default class TournamentManagementPage extends React.PureComponent {
     const teamsWithTables = teams.filter(team => groupIdsWithTables.includes(team.group.id))
     const canAddMatches = teamsWithTables.length > 1 && fields.length > 0
     return (
-      <div className="tournament-management__section tournament-management__section--group-stage-matches">
+      <div className="tournament-management__section tournament-management__section--playoff-matches">
         {canAddMatches ? this.renderPlayoffMatches() : this.renderCannotAddPlayoffMatches()}
         {canAddMatches && <PlayoffMatch
           ageGroups={ageGroups}

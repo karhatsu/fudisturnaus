@@ -33,6 +33,7 @@ describe 'official', type: :system do
 
       add_new_item 'age-groups'
       form_inputs[0].fill_in with: 'T11'
+      form_inputs[1].check
       submit
       expect_item_title 'age-groups', 'T11'
 
@@ -66,11 +67,38 @@ describe 'official', type: :system do
       submit
       expect_item_title 'group-stage-matches', 'Field 1 | 11:30 | Group A (T11) | FC Brown - SC Lions Green'
 
+      add_new_item 'playoff-matches'
+      form_selects[0].select 'T11'
+      form_selects[1].select 'Field 1'
+      form_inputs[0].fill_in with: '13:00'
+      form_inputs[1].fill_in with: 'Finaali'
+      form_selects[2].select 'Group A'
+      form_selects[3].select '1.'
+      form_selects[4].select 'Group A'
+      form_selects[5].select '1.'
+      submit
+      expect_item_title 'playoff-matches', 'Field 1 | 13:00 | T11 | Finaali'
+
+      add_new_item 'playoff-matches', 1
+      form_selects[0].select 'T11'
+      form_selects[1].select 'Field 1'
+      form_inputs[1].fill_in with: 'Superfinaali'
+      form_selects[2].select 'Finaali'
+      form_selects[3].select 'Voittaja'
+      form_selects[4].select 'Finaali'
+      form_selects[5].select 'Häviäjä'
+      submit
+      expect_item_title 'playoff-matches', 'Field 1 | 13:45 | T11 | Superfinaali', 1
+
       click_link 'Takaisin tulosten syöttöön'
       expect_match_info_for_added_match
+      expect_playoff_match_info '13:00', 'Field 1', 'T11', 'Finaali', 1
+      expect_playoff_match_info '13:45', 'Field 1', 'T11', 'Superfinaali', 2
 
       visit "/tournaments/#{@tournament.id}"
       expect_match_info_for_added_match
+      expect_playoff_match_info '13:00', 'Field 1', 'T11', 'Finaali', 1
+      expect_playoff_match_info '13:45', 'Field 1', 'T11', 'Superfinaali', 2
     end
 
     def expect_match_info_for_added_match
@@ -170,7 +198,7 @@ describe 'official', type: :system do
     page.find('.button--primary').click
   end
 
-  def expect_item_title(section_name, title)
-    expect(page.all(".tournament-management__section--#{section_name} .tournament-item__title")[0].text).to eql title
+  def expect_item_title(section_name, title, index = 0)
+    expect(page.all(".tournament-management__section--#{section_name} .tournament-item__title")[index].text).to eql title
   end
 end

@@ -179,6 +179,12 @@ export default class PlayoffMatch extends React.PureComponent {
                 return <option key={key} value={key}>{group.name}</option>
               })}
             </optgroup>
+            <optgroup label="Jatko-ottelusta">
+              {this.props.playoffMatches.map(playoffMatch => {
+                const key = this.buildOrigin('PlayoffMatch', playoffMatch.id)
+                return <option key={key} value={key}>{playoffMatch.title}</option>
+              })}
+            </optgroup>
           </select>
         </div>
       )
@@ -189,18 +195,31 @@ export default class PlayoffMatch extends React.PureComponent {
     const origin = this.state.form[`${homeAway}TeamOrigin`]
     if (origin) {
       const field = `${homeAway}TeamOriginRule`
-      const groupId = this.parseOriginId(origin)
-      const teamCount = this.props.teams.filter(team => team.group.id === groupId).length
-      return (
-        <div className="form__field">
-          <select value={this.state.form[field]} onChange={this.changeValue(field)}>
-            <option>- Sija -</option>
-            {Array(teamCount).fill().map((x, i) => {
-              return <option key={i} value={i + 1}>{i + 1}.</option>
-            })}
-          </select>
-        </div>
-      )
+      const originType = this.parseOriginType(origin)
+      const originId = this.parseOriginId(origin)
+      if (originType === 'Group') {
+        const teamCount = this.props.teams.filter(team => team.group.id === originId).length
+        return (
+          <div className="form__field">
+            <select value={this.state.form[field]} onChange={this.changeValue(field)}>
+              <option>- Sija -</option>
+              {Array(teamCount).fill().map((x, i) => {
+                return <option key={i} value={i + 1}>{i + 1}.</option>
+              })}
+            </select>
+          </div>
+        )
+      } else if (originType === 'PlayoffMatch') {
+        return (
+          <div className="form__field">
+            <select value={this.state.form[field]} onChange={this.changeValue(field)}>
+              <option>- Ottelun -</option>
+              <option value={-2}>Voittaja</option>
+              <option value={-1}>Häviäjä</option>
+            </select>
+          </div>
+        )
+      }
     }
   }
 

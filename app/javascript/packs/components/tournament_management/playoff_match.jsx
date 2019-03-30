@@ -105,8 +105,8 @@ export default class PlayoffMatch extends React.PureComponent {
   }
 
   renderForm() {
-    const { ageGroups, fields, playoffMatch } = this.props
-    const { errors, form: { startTime, title } } = this.state
+    const { ageGroups, fields } = this.props
+    const { errors } = this.state
     return (
       <div className="form form--horizontal">
         {errors.length > 0 && <div className="form-error">{errors.join('. ')}.</div>}
@@ -114,21 +114,13 @@ export default class PlayoffMatch extends React.PureComponent {
           {this.buildIdNameDropDown(ageGroups, 'ageGroupId', '- Ikäryhmä -')}
           {this.buildIdNameDropDown(fields, 'fieldId', '- Kenttä -', this.setField)}
           {this.buildDayDropDown()}
-          <div className="form__field form__field--time">
-            <input ref={this.timeFieldRed} type="text" onChange={this.changeValue('startTime')} value={startTime} placeholder="HH:MM"/>
-          </div>
-          <div className="form__field">
-            <input type="text" onChange={this.changeValue('title')} value={title} placeholder="Kuvaus, esim. A1-B2 tai Finaali"/>
-          </div>
+          {this.renderStartTimeField()}
+          {this.renderTitleField()}
           {this.renderSourceField('home', 'Koti')}
           {this.renderRuleField('home')}
           {this.renderSourceField('away', 'Vieras')}
           {this.renderRuleField('away')}
-          <div className="form__buttons">
-            <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
-            <input type="button" value="Peruuta" onClick={this.cancel} className="button"/>
-            {!!playoffMatch && <input type="button" value="Poista" onClick={this.delete} className="button button--danger"/>}
-          </div>
+          {this.renderButtons()}
         </div>
       </div>
     )
@@ -163,6 +155,24 @@ export default class PlayoffMatch extends React.PureComponent {
         </div>
       )
     }
+  }
+
+  renderStartTimeField() {
+    const { form: { startTime } } = this.state
+    return (
+      <div className="form__field form__field--time">
+        <input ref={this.timeFieldRed} type="text" onChange={this.changeValue('startTime')} value={startTime} placeholder="HH:MM"/>
+      </div>
+    )
+  }
+
+  renderTitleField() {
+    const { form: { title } } = this.state
+    return (
+      <div className="form__field">
+        <input type="text" onChange={this.changeValue('title')} value={title} placeholder="Kuvaus, esim. A1-B2 tai Finaali"/>
+      </div>
+    )
   }
 
   renderSourceField(homeAway, label) {
@@ -222,6 +232,16 @@ export default class PlayoffMatch extends React.PureComponent {
         )
       }
     }
+  }
+
+  renderButtons() {
+    return (
+      <div className="form__buttons">
+        <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
+        <input type="button" value="Peruuta" onClick={this.cancel} className="button"/>
+        {!!this.props.playoffMatch && <input type="button" value="Poista" onClick={this.delete} className="button button--danger"/>}
+      </div>
+    )
   }
 
   openForm = () => {

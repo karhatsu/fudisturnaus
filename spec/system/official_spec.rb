@@ -199,6 +199,7 @@ describe 'official', type: :system do
   end
 
   def expect_item_title(section_name, title, index = 0)
+    expect(page).not_to have_css('.form')
     expect(page.all(".tournament-management__section--#{section_name} .tournament-item__title")[index].text).to eql title
   end
 end

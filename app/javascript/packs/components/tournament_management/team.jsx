@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { createClub, deleteTeam, saveTeam } from './api_client'
 import AccessContext from '../util/access_context'
+import { resolveTournamentItemClasses } from '../util/util'
 
 const CHOOSE_CLUB_ID = '-1'
 const NEW_CLUB_ID = '-2'
@@ -67,7 +68,7 @@ export default class Team extends React.PureComponent {
   renderName() {
     const { team } = this.props
     const text = team ? team.name : '+ Lisää uusi joukkue'
-    return <div className="tournament-item__title"><span onClick={this.editTeam}>{text}</span></div>
+    return <div className={resolveTournamentItemClasses(team)}><span onClick={this.editTeam}>{text}</span></div>
   }
 
   renderForm() {

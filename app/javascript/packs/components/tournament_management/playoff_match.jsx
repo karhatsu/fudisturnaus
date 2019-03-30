@@ -5,7 +5,7 @@ import { parseFromTimeZone } from 'date-fns-timezone'
 import { deletePlayoffMatch, savePlayoffMatch } from './api_client'
 import AccessContext from '../util/access_context'
 import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util/date_util'
-import { resolveSuggestedTime } from '../util/util'
+import { resolveTournamentItemClasses, resolveSuggestedTime } from '../util/util'
 
 const ORIGIN_SEPARATOR = '@'
 
@@ -101,7 +101,7 @@ export default class PlayoffMatch extends React.PureComponent {
       const ageGroupName = ageGroups.find(ageGroup => ageGroup.id === ageGroupId).name
       text = `${field.name} | ${time} | ${ageGroupName} | ${title}`
     }
-    return <div className="tournament-item__title"><span onClick={this.openForm}>{text}</span></div>
+    return <div className={resolveTournamentItemClasses(playoffMatch)}><span onClick={this.openForm}>{text}</span></div>
   }
 
   renderForm() {

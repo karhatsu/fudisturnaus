@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { deleteAgeGroup, saveAgeGroup } from './api_client'
 import AccessContext from '../util/access_context'
+import { resolveTournamentItemClasses } from '../util/util'
 
 export default class AgeGroup extends React.PureComponent {
   static propTypes = {
@@ -42,7 +43,7 @@ export default class AgeGroup extends React.PureComponent {
   renderName() {
     const { ageGroup } = this.props
     const text = ageGroup ? ageGroup.name : '+ Lisää uusi sarja'
-    return <div className="tournament-item__title"><span onClick={this.editAgeGroup}>{text}</span></div>
+    return <div className={resolveTournamentItemClasses(ageGroup)}><span onClick={this.editAgeGroup}>{text}</span></div>
   }
 
   renderForm() {

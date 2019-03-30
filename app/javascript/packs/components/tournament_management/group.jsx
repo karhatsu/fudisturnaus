@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { deleteGroup, saveGroup } from './api_client'
 import AccessContext from '../util/access_context'
+import { resolveTournamentItemClasses } from '../util/util'
 
 export default class Group extends React.PureComponent {
   static propTypes = {
@@ -47,7 +48,7 @@ export default class Group extends React.PureComponent {
   renderName() {
     const { group } = this.props
     const text = group ? `${group.name} (${group.ageGroupName})` : '+ Lisää uusi lohko'
-    return <div className="tournament-item__title"><span onClick={this.editGroup}>{text}</span></div>
+    return <div className={resolveTournamentItemClasses(group)}><span onClick={this.editGroup}>{text}</span></div>
   }
 
   renderForm() {

@@ -5,7 +5,7 @@ import { parseFromTimeZone } from 'date-fns-timezone'
 import { deleteGroupStageMatch, saveGroupStageMatch } from './api_client'
 import AccessContext from '../util/access_context'
 import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util/date_util'
-import { resolveSuggestedTime } from '../util/util'
+import { resolveTournamentItemClasses, resolveSuggestedTime } from '../util/util'
 
 export default class GroupStageMatch extends React.PureComponent {
   static propTypes = {
@@ -94,7 +94,7 @@ export default class GroupStageMatch extends React.PureComponent {
       const time = formatMatchTime(tournamentDays, startTime)
       text = `${field.name} | ${time} | ${group.name} (${group.ageGroupName}) | ${homeTeam.name} - ${awayTeam.name}`
     }
-    return <div className="tournament-item__title"><span onClick={this.openForm}>{text}</span></div>
+    return <div className={resolveTournamentItemClasses(groupStageMatch)}><span onClick={this.openForm}>{text}</span></div>
   }
 
   renderForm() {

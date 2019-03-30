@@ -62,6 +62,10 @@ export function resolveSuggestedTime(matches, fieldId, matchMinutes, tournamentD
   }
 }
 
+export function resolveTournamentItemClasses(existing) {
+  return `tournament-item__title ${existing ? 'tournament-item__title--existing' : 'tournament-item__title--new'}`
+}
+
 export function resolveColStyles(count) {
   if (count === 1) {
     return 'col-xs-12'

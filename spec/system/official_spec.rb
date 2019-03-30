@@ -50,7 +50,7 @@ describe 'official', type: :system do
       submit
       expect_item_title 'teams', 'FC Brown'
 
-      add_new_item 'teams', 1
+      add_new_item 'teams'
       form_selects[0].select 'Group A (T11)'
       form_selects[1].select '+ Lisää uusi seura'
       page.find('.new-club-form .form__field input').fill_in with: 'SC Lions'
@@ -79,7 +79,7 @@ describe 'official', type: :system do
       submit
       expect_item_title 'playoff-matches', 'Field 1 | 13:00 | T11 | Finaali'
 
-      add_new_item 'playoff-matches', 1
+      add_new_item 'playoff-matches'
       form_selects[0].select 'T11'
       form_selects[1].select 'Field 1'
       form_inputs[1].fill_in with: 'Superfinaali'
@@ -179,11 +179,11 @@ describe 'official', type: :system do
   end
 
   def edit_item(section_name, index)
-    add_new_item section_name, index
+    page.all(".tournament-management__section--#{section_name} .tournament-item__title--existing span")[index].click
   end
 
-  def add_new_item(section_name, index = 0)
-    page.all(".tournament-management__section--#{section_name} .tournament-item__title span")[index].click
+  def add_new_item(section_name)
+    page.find(".tournament-management__section--#{section_name} .tournament-item__title--new span").click
   end
 
   def form_inputs

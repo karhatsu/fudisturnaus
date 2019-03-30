@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { deleteField, saveField } from './api_client'
 import AccessContext from '../util/access_context'
+import { resolveTournamentItemClasses } from '../util/util'
 
 export default class Field extends React.PureComponent {
   static propTypes = {
@@ -38,7 +39,7 @@ export default class Field extends React.PureComponent {
   renderName() {
     const { field } = this.props
     const text = field ? field.name : '+ Lisää uusi kenttä'
-    return <div className="tournament-item__title"><span onClick={this.openForm}>{text}</span></div>
+    return <div className={resolveTournamentItemClasses(field)}><span onClick={this.openForm}>{text}</span></div>
   }
 
   renderForm() {

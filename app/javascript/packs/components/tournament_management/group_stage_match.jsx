@@ -98,25 +98,19 @@ export default class GroupStageMatch extends React.PureComponent {
   }
 
   renderForm() {
-    const { fields, groupStageMatch } = this.props
-    const { errors, form: { startTime } } = this.state
+    const { fields } = this.props
+    const { errors } = this.state
     return (
       <div className="form form--horizontal">
         {errors.length > 0 && <div className="form-error">{errors.join('. ')}.</div>}
         <div className="tournament-item__form">
           {this.buildIdNameDropDown(fields, 'fieldId', '- Kenttä -', this.setField)}
           {this.buildDayDropDown()}
-          <div className="form__field form__field--time">
-            <input ref={this.timeFieldRed} type="text" onChange={this.changeValue('startTime')} value={startTime} placeholder="HH:MM"/>
-          </div>
+          {this.renderStartTimeField()}
           {this.buildGroupDropDown()}
           {this.buildTeamDropDown('homeTeamId', '- Kotijoukkue -')}
           {this.buildTeamDropDown('awayTeamId', '- Vierasjoukkue -')}
-          <div className="form__buttons">
-            <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
-            <input type="button" value="Peruuta" onClick={this.cancel} className="button"/>
-            {!!groupStageMatch && <input type="button" value="Poista" onClick={this.delete} className="button button--danger"/>}
-          </div>
+          {this.renderButtons()}
         </div>
       </div>
     )
@@ -165,6 +159,25 @@ export default class GroupStageMatch extends React.PureComponent {
         </div>
       )
     }
+  }
+
+  renderStartTimeField() {
+    const { form: { startTime } } = this.state
+    return (
+      <div className="form__field form__field--time">
+        <input ref={this.timeFieldRed} type="text" onChange={this.changeValue('startTime')} value={startTime} placeholder="HH:MM"/>
+      </div>
+    )
+  }
+
+  renderButtons() {
+    return (
+      <div className="form__buttons">
+        <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
+        <input type="button" value="Peruuta" onClick={this.cancel} className="button"/>
+        {!!this.props.groupStageMatch && <input type="button" value="Poista" onClick={this.delete} className="button button--danger"/>}
+      </div>
+    )
   }
 
   openForm = () => {

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { deleteGroup, saveGroup } from './api_client'
 import AccessContext from '../util/access_context'
-import { resolveTournamentItemClasses } from '../util/util'
+import { getName, resolveTournamentItemClasses } from '../util/util'
 
 export default class Group extends React.PureComponent {
   static propTypes = {
@@ -14,7 +14,6 @@ export default class Group extends React.PureComponent {
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
       ageGroupId: PropTypes.number.isRequired,
-      ageGroupName: PropTypes.string.isRequired,
     }),
     onGroupDelete: PropTypes.func,
     onGroupSave: PropTypes.func.isRequired,
@@ -46,8 +45,8 @@ export default class Group extends React.PureComponent {
   }
 
   renderName() {
-    const { group } = this.props
-    const text = group ? `${group.name} (${group.ageGroupName})` : '+ Lisää uusi lohko'
+    const { ageGroups, group } = this.props
+    const text = group ? `${group.name} (${getName(ageGroups, group.ageGroupId)})` : '+ Lisää uusi lohko'
     return <div className={resolveTournamentItemClasses(group)}><span onClick={this.editGroup}>{text}</span></div>
   }
 

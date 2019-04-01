@@ -52,7 +52,7 @@ function updatePlayoffMatches(originalPlayoffMatches, newPlayoffMatches) {
 }
 
 export function resolveSuggestedTime(matches, fieldId, matchMinutes, tournamentDate) {
-  const sameFieldMatches = matches.filter(match => match.field.id === parseInt(fieldId))
+  const sameFieldMatches = matches.filter(match => match.fieldId === parseInt(fieldId))
   if (sameFieldMatches.length) {
     const previousMatch = sameFieldMatches[sameFieldMatches.length - 1]
     const suggestedDate = addMinutes(parseISO(previousMatch.startTime), matchMinutes)
@@ -64,6 +64,11 @@ export function resolveSuggestedTime(matches, fieldId, matchMinutes, tournamentD
 
 export function resolveTournamentItemClasses(existing) {
   return `tournament-item__title ${existing ? 'tournament-item__title--existing' : 'tournament-item__title--new'}`
+}
+
+export function getName(items, id) {
+  const item = items.find(ag => ag.id === id)
+  return item ? item.name : '-'
 }
 
 export function resolveColStyles(count) {

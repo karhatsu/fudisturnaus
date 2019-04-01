@@ -11,10 +11,6 @@ class Group < ApplicationRecord
 
   delegate :tournament, to: :age_group
 
-  def age_group_name
-    age_group.name
-  end
-
   def results
     return [] unless age_group.calculate_group_tables?
     teams.map(&:group_results).sort do |a, b|

@@ -13,6 +13,7 @@ import PlayoffMatch from './playoff_match'
 import Field from './field'
 import Team from './team'
 import AccessContext from '../util/access_context'
+import { getName } from '../util/util'
 
 export default class TournamentManagementPage extends React.PureComponent {
   static propTypes = {
@@ -55,7 +56,7 @@ export default class TournamentManagementPage extends React.PureComponent {
     return (
       <div>
         <div className="title-2">Perustiedot</div>
-        <div className="tournament-management__section">
+        <div className="tournament-management__section tournament-management__section--tournament">
           <TournamentFields onSave={this.onSave} tournament={tournament}/>
         </div>
         <div className="title-2">Kentät</div>
@@ -177,12 +178,19 @@ export default class TournamentManagementPage extends React.PureComponent {
   }
 
   renderTeamsSection() {
-    const { tournament: { clubs, groups, id } } = this.state
+    const { tournament: { ageGroups, clubs, groups, id } } = this.state
     const canAddTeams = groups.length > 0
     return (
       <div className="tournament-management__section tournament-management__section--teams">
         {canAddTeams ? this.renderGroupTeams() : this.renderCannotAddTeams()}
-        {canAddTeams && <Team clubs={clubs} groups={groups} onClubSave={this.onClubSave} onTeamSave={this.onItemSave('teams')} tournamentId={id}/>}
+        {canAddTeams && <Team
+          ageGroups={ageGroups}
+          clubs={clubs}
+          groups={groups}
+          onClubSave={this.onClubSave}
+          onTeamSave={this.onItemSave('teams')}
+          tournamentId={id}
+        />}
       </div>
     )
   }
@@ -196,9 +204,11 @@ export default class TournamentManagementPage extends React.PureComponent {
   }
 
   renderGroupTeams() {
-    const { tournament: { teams } } = this.state
+    const { tournament: { ageGroups, groups, teams } } = this.state
     const teamsByGroups = teams.reduce((groupTeams, team) => {
-      const key = `${team.group.name} (${team.group.ageGroupName})`
+      const { groupId } = team
+      const group = groups.find(g => g.id === groupId)
+      const key = `${group.name} (${getName(ageGroups, group.ageGroupId)})`
       if (!groupTeams[key]) {
         groupTeams[key] = []
       }
@@ -216,10 +226,11 @@ export default class TournamentManagementPage extends React.PureComponent {
   }
 
   renderTeams(teams) {
-    const { tournament: { clubs, groups } } = this.state
+    const { tournament: { ageGroups, clubs, groups } } = this.state
     return teams.map(team => {
       return <Team
         key={team.id}
+        ageGroups={ageGroups}
         clubs={clubs}
         groups={groups}
         onClubSave={this.onClubSave}
@@ -242,12 +253,13 @@ export default class TournamentManagementPage extends React.PureComponent {
   }
 
   renderGroupStageMatchesSection() {
-    const { tournament: { days, fields, groups, groupStageMatches, teams, id, matchMinutes } } = this.state
+    const { tournament: { ageGroups, days, fields, groups, groupStageMatches, teams, id, matchMinutes } } = this.state
     const canMatches = teams.length > 1 && fields.length > 0
     return (
       <div className="tournament-management__section tournament-management__section--group-stage-matches">
         {canMatches ? this.renderGroupStageMatches() : this.renderCannotAddGroupStageMatches()}
         {canMatches && <GroupStageMatch
+          ageGroups={ageGroups}
           fields={fields}
           groups={groups}
           groupStageMatches={groupStageMatches}
@@ -271,10 +283,11 @@ export default class TournamentManagementPage extends React.PureComponent {
   }
 
   renderGroupStageMatches() {
-    const { tournament: { days, fields, groups, groupStageMatches, teams, matchMinutes } } = this.state
+    const { tournament: { ageGroups, days, fields, groups, groupStageMatches, teams, matchMinutes } } = this.state
     return groupStageMatches.map(groupStageMatch => {
       return <GroupStageMatch
         key={groupStageMatch.id}
+        ageGroups={ageGroups}
         fields={fields}
         groups={groups}
         groupStageMatch={groupStageMatch}
@@ -295,7 +308,7 @@ export default class TournamentManagementPage extends React.PureComponent {
     const { tournament: { ageGroups, days, fields, groups, playoffMatches, teams, id, matchMinutes } } = this.state
     const ageGroupsIdsWithTables = ageGroups.filter(ageGroup => ageGroup.calculateGroupTables).map(ageGroup => ageGroup.id)
     const groupIdsWithTables = groups.filter(group => ageGroupsIdsWithTables.includes(group.ageGroupId)).map(group => group.id)
-    const teamsWithTables = teams.filter(team => groupIdsWithTables.includes(team.group.id))
+    const teamsWithTables = teams.filter(team => groupIdsWithTables.includes(team.groupId))
     const canAddMatches = teamsWithTables.length > 1 && fields.length > 0
     return (
       <div className="tournament-management__section tournament-management__section--playoff-matches">
@@ -365,25 +378,30 @@ export default class TournamentManagementPage extends React.PureComponent {
   }
 
   getComparator = itemName => {
+    const { tournament } = this.state
     switch (itemName) {
       case 'ageGroups':
       case 'fields':
         return (a, b) => a.name.localeCompare(b.name)
       case 'teams':
         return (a, b) => {
-          const ageGroupCompare = a.group.ageGroupName.localeCompare(b.group.ageGroupName)
-          if (ageGroupCompare !== 0) {
-            return ageGroupCompare
-          }
-          const groupCompare = a.group.name.localeCompare(b.group.name)
-          if (groupCompare !== 0) {
-            return groupCompare
+          if (tournament) {
+            const { ageGroups, groups } = tournament
+            const ageGroupCompare = getName(ageGroups, a.ageGroupId).localeCompare(getName(ageGroups, b.ageGroupId))
+            if (ageGroupCompare !== 0) {
+              return ageGroupCompare
+            }
+            const groupCompare = getName(groups, a.groupId).localeCompare(getName(groups, b.groupId))
+            if (groupCompare !== 0) {
+              return groupCompare
+            }
           }
           return a.name.localeCompare(b.name)
         }
       case 'groups':
         return (a, b) => {
-          const ageGroupCompare = a.ageGroupName.localeCompare(b.ageGroupName)
+          const { ageGroups } = tournament
+          const ageGroupCompare = getName(ageGroups, a.ageGroupId).localeCompare(getName(ageGroups, b.ageGroupId))
           if (ageGroupCompare !== 0) {
             return ageGroupCompare
           }
@@ -392,11 +410,12 @@ export default class TournamentManagementPage extends React.PureComponent {
       case 'groupStageMatches':
       case 'playoffMatches':
         return (a, b) => {
+          const { fields } = tournament
           const timeCompare = a.startTime.localeCompare(b.startTime)
           if (timeCompare !== 0) {
             return timeCompare
           }
-          return a.field.name.localeCompare(b.field.name)
+          return getName(fields, a.fieldId).localeCompare(getName(fields, b.fieldId))
         }
       default:
         console.error('No comparator for', itemName) // eslint-disable-line no-console

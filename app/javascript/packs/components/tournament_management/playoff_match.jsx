@@ -5,7 +5,7 @@ import { parseFromTimeZone } from 'date-fns-timezone'
 import { deletePlayoffMatch, savePlayoffMatch } from './api_client'
 import AccessContext from '../util/access_context'
 import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util/date_util'
-import { resolveTournamentItemClasses, resolveSuggestedTime } from '../util/util'
+import { resolveTournamentItemClasses, resolveSuggestedTime, getName } from '../util/util'
 
 const ORIGIN_SEPARATOR = '@'
 
@@ -23,17 +23,13 @@ export default class PlayoffMatch extends React.PureComponent {
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
       ageGroupId: PropTypes.number.isRequired,
-      ageGroupName: PropTypes.string.isRequired,
     })),
     playoffMatch: PropTypes.shape({
       ageGroupId: PropTypes.number.isRequired,
       awayTeamOriginId: PropTypes.number.isRequired,
       awayTeamOriginType: PropTypes.string.isRequired,
       awayTeamOriginRule: PropTypes.number.isRequired,
-      field: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-      }).isRequired,
+      fieldId: PropTypes.number.isRequired,
       homeTeamOriginId: PropTypes.number.isRequired,
       homeTeamOriginType: PropTypes.string.isRequired,
       homeTeamOriginRule: PropTypes.number.isRequired,
@@ -42,9 +38,7 @@ export default class PlayoffMatch extends React.PureComponent {
       title: PropTypes.string.isRequired,
     }),
     playoffMatches: PropTypes.arrayOf(PropTypes.shape({
-      field: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-      }).isRequired,
+      fieldId: PropTypes.number.isRequired,
       startTime: PropTypes.string.isRequired,
     })).isRequired,
     onPlayoffMatchDelete: PropTypes.func,
@@ -53,9 +47,7 @@ export default class PlayoffMatch extends React.PureComponent {
     teams: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
-      group: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-      }).isRequired,
+      groupId: PropTypes.number.isRequired,
     })).isRequired,
     tournamentDays: PropTypes.number.isRequired,
     tournamentId: PropTypes.number.isRequired,
@@ -93,13 +85,13 @@ export default class PlayoffMatch extends React.PureComponent {
   }
 
   renderName() {
-    const { ageGroups, playoffMatch, tournamentDays } = this.props
+    const { ageGroups, fields, playoffMatch, tournamentDays } = this.props
     let text = '+ Lisää uusi jatko-ottelu'
     if (playoffMatch) {
-      const { ageGroupId, field, startTime, title } = playoffMatch
+      const { ageGroupId, fieldId, startTime, title } = playoffMatch
       const time = formatMatchTime(tournamentDays, startTime)
-      const ageGroupName = ageGroups.find(ageGroup => ageGroup.id === ageGroupId).name
-      text = `${field.name} | ${time} | ${ageGroupName} | ${title}`
+      const fieldName = getName(fields, fieldId)
+      text = `${fieldName} | ${time} | ${getName(ageGroups, ageGroupId)} | ${title}`
     }
     return <div className={resolveTournamentItemClasses(playoffMatch)}><span onClick={this.openForm}>{text}</span></div>
   }
@@ -209,7 +201,7 @@ export default class PlayoffMatch extends React.PureComponent {
       const originType = this.parseOriginType(origin)
       const originId = this.parseOriginId(origin)
       if (originType === 'Group') {
-        const teamCount = this.props.teams.filter(team => team.group.id === originId).length
+        const teamCount = this.props.teams.filter(team => team.groupId === originId).length
         return (
           <div className="form__field">
             <select value={this.state.form[field]} onChange={this.changeValue(field)}>
@@ -253,7 +245,7 @@ export default class PlayoffMatch extends React.PureComponent {
         awayTeamOrigin: playoffMatch ? this.buildOrigin(playoffMatch.awayTeamOriginType, playoffMatch.awayTeamOriginId) : undefined,
         awayTeamOriginRule: playoffMatch ? playoffMatch.awayTeamOriginRule : undefined,
         day: playoffMatch ? resolveDay(tournamentDate, playoffMatch.startTime) : 1,
-        fieldId: playoffMatch ? playoffMatch.field.id : undefined,
+        fieldId: playoffMatch ? playoffMatch.fieldId : undefined,
         homeTeamOrigin: playoffMatch ? this.buildOrigin(playoffMatch.homeTeamOriginType, playoffMatch.homeTeamOriginId) : undefined,
         homeTeamOriginRule: playoffMatch ? playoffMatch.homeTeamOriginRule : undefined,
         startTime: playoffMatch ? formatTime(playoffMatch.startTime) : '',

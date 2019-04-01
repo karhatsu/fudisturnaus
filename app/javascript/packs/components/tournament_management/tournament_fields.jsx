@@ -90,7 +90,7 @@ export default class TournamentFields extends React.PureComponent {
     const { tournament: { name, startDate, endDate, location, address } } = this.props
     return (
       <div className="tournament-item">
-        <div className="tournament-item__title">
+        <div className="tournament-item__title tournament-item__title--existing">
           <span onClick={this.openForm}>{name}, {formatTournamentDates(startDate, endDate)}, {location}, {address || '(ei osoitetta)'}</span>
         </div>
       </div>

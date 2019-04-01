@@ -5,10 +5,14 @@ import { parseFromTimeZone } from 'date-fns-timezone'
 import { deleteGroupStageMatch, saveGroupStageMatch } from './api_client'
 import AccessContext from '../util/access_context'
 import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util/date_util'
-import { resolveTournamentItemClasses, resolveSuggestedTime } from '../util/util'
+import { resolveTournamentItemClasses, resolveSuggestedTime, getName } from '../util/util'
 
 export default class GroupStageMatch extends React.PureComponent {
   static propTypes = {
+    ageGroups: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })).isRequired,
     fields: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
@@ -17,33 +21,18 @@ export default class GroupStageMatch extends React.PureComponent {
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
       ageGroupId: PropTypes.number.isRequired,
-      ageGroupName: PropTypes.string.isRequired,
     })),
     groupStageMatch: PropTypes.shape({
-      awayTeam: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-      }).isRequired,
-      field: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-      }).isRequired,
-      group: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-        ageGroupName: PropTypes.string.isRequired,
-      }),
-      homeTeam: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-      }).isRequired,
+      ageGroupId: PropTypes.number.isRequired,
+      awayTeamId: PropTypes.number.isRequired,
+      fieldId: PropTypes.number.isRequired,
+      groupId: PropTypes.number.isRequired,
+      homeTeamId: PropTypes.number.isRequired,
       id: PropTypes.number.isRequired,
       startTime: PropTypes.string.isRequired,
     }),
     groupStageMatches: PropTypes.arrayOf(PropTypes.shape({
-      field: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-      }).isRequired,
+      fieldId: PropTypes.number.isRequired,
       startTime: PropTypes.string.isRequired,
     })).isRequired,
     onGroupStageMatchDelete: PropTypes.func,
@@ -87,12 +76,17 @@ export default class GroupStageMatch extends React.PureComponent {
   }
 
   renderName() {
-    const { groupStageMatch, tournamentDays } = this.props
+    const { ageGroups, fields, groups, groupStageMatch, teams, tournamentDays } = this.props
     let text = '+ Lisää uusi alkulohkon ottelu'
     if (groupStageMatch) {
-      const { awayTeam, field, group, homeTeam, startTime } = groupStageMatch
+      const { ageGroupId, awayTeamId, fieldId, groupId, homeTeamId, startTime } = groupStageMatch
       const time = formatMatchTime(tournamentDays, startTime)
-      text = `${field.name} | ${time} | ${group.name} (${group.ageGroupName}) | ${homeTeam.name} - ${awayTeam.name}`
+      const fieldName = getName(fields, fieldId)
+      const groupName = getName(groups, groupId)
+      const ageGroupName = getName(ageGroups, ageGroupId)
+      const homeTeamName = getName(teams, homeTeamId)
+      const awayTeamName = getName(teams, awayTeamId)
+      text = `${fieldName} | ${time} | ${groupName} (${ageGroupName}) | ${homeTeamName} - ${awayTeamName}`
     }
     return <div className={resolveTournamentItemClasses(groupStageMatch)}><span onClick={this.openForm}>{text}</span></div>
   }
@@ -120,13 +114,14 @@ export default class GroupStageMatch extends React.PureComponent {
     const { form: { groupId } } = this.state
     if (groupId) {
       const { teams } = this.props
-      return this.buildIdNameDropDown(teams.filter(team => team.group.id === parseInt(groupId)), field, label)
+      return this.buildIdNameDropDown(teams.filter(team => team.groupId === parseInt(groupId)), field, label)
     }
   }
 
   buildGroupDropDown() {
-    return this.buildIdNameDropDown(this.props.groups, 'groupId', '- Lohko -', this.changeValue('groupId'), item => {
-      return `${item.name} (${item.ageGroupName})`
+    const { ageGroups, groups } = this.props
+    return this.buildIdNameDropDown(groups, 'groupId', '- Lohko -', this.changeValue('groupId'), item => {
+      return `${item.name} (${getName(ageGroups, item.ageGroupId)})`
     })
   }
 
@@ -185,11 +180,11 @@ export default class GroupStageMatch extends React.PureComponent {
     this.setState({
       formOpen: true,
       form: {
-        awayTeamId: groupStageMatch ? groupStageMatch.awayTeam.id : undefined,
+        awayTeamId: groupStageMatch ? groupStageMatch.awayTeamId : undefined,
         day: groupStageMatch ? resolveDay(tournamentDate, groupStageMatch.startTime) : 1,
-        fieldId: groupStageMatch ? groupStageMatch.field.id : undefined,
-        groupId: groupStageMatch ? groupStageMatch.group.id : undefined,
-        homeTeamId: groupStageMatch ? groupStageMatch.homeTeam.id : undefined,
+        fieldId: groupStageMatch ? groupStageMatch.fieldId : undefined,
+        groupId: groupStageMatch ? groupStageMatch.groupId : undefined,
+        homeTeamId: groupStageMatch ? groupStageMatch.homeTeamId : undefined,
         startTime: groupStageMatch ? formatTime(groupStageMatch.startTime) : '',
       },
     })

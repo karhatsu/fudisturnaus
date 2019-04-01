@@ -106,6 +106,60 @@ describe 'official', type: :system do
     end
   end
 
+  describe 'tournament editing' do
+    let(:start_date) { '2019-05-25' } # Sat = la
+    before do
+      club = create :club
+      tournament = create :tournament, start_date: start_date
+      age_group = create :age_group, tournament: tournament, calculate_group_tables: true, name: 'P10'
+      group = create :group, age_group: age_group, name: 'A'
+      team1 = create :team, group: group, name: 'Team 1', club: club
+      team2 = create :team, group: group, name: 'Team 2', club: club
+      field = create :field, name: 'Field', tournament: tournament
+      create :group_stage_match, group: group, home_team: team1, away_team: team2,
+             start_time: "#{start_date}T#10:00+03:00", field: field
+      create :playoff_match, age_group: age_group, home_team_origin: group, away_team_origin: group,
+             home_team_origin_rule: 1, away_team_origin_rule: 2, title: 'Final', field: field,
+             start_time: "#{start_date}T12:00+03:00"
+      visit "/official/#{tournament.access_key}/management"
+    end
+
+    it 'works' do
+      edit_item 'tournament', 0
+      form_inputs[0].fill_in with: 'New name'
+      form_inputs[1].fill_in with: '01/07/2019'
+      form_inputs[2].fill_in with: '2'
+      form_inputs[3].fill_in with: 'Test city'
+      form_inputs[4].fill_in with: 'Street 10'
+      form_inputs[5].fill_in with: '60'
+      submit
+      expect_item_title 'tournament', 'New name, 01.07.2019 - 02.07.2019, Test city, Street 10'
+
+      edit_item 'fields', 0
+      form_inputs[0].fill_in with: 'Grass'
+      submit
+      expect_item_title 'fields', 'Grass'
+      expect_item_title 'group-stage-matches', 'Grass | la 10:00 | A (P10) | Team 1 - Team 2'
+      expect_item_title 'playoff-matches', 'Grass | la 12:00 | P10 | Final'
+
+      edit_item 'age-groups', 0
+      form_inputs[0].fill_in with: 'T08'
+      submit
+      expect_item_title 'age-groups', 'T08'
+      expect_item_title 'groups', 'A (T08)'
+      expect_section_title 'teams', 'A (T08)'
+      expect_item_title 'group-stage-matches', 'Grass | la 10:00 | A (T08) | Team 1 - Team 2'
+      expect_item_title 'playoff-matches', 'Grass | la 12:00 | T08 | Final'
+
+      edit_item 'groups', 0
+      form_inputs[0].fill_in with: 'B'
+      submit
+      expect_item_title 'groups', 'B (T08)'
+      expect_section_title 'teams', 'B (T08)'
+      expect_item_title 'group-stage-matches', 'Grass | la 10:00 | B (T08) | Team 1 - Team 2'
+    end
+  end
+
   describe 'result saving' do
     before do
       age_group = create :age_group, calculate_group_tables: true
@@ -201,5 +255,9 @@ describe 'official', type: :system do
   def expect_item_title(section_name, title, index = 0)
     expect(page).not_to have_css('.form')
     expect(page.all(".tournament-management__section--#{section_name} .tournament-item__title")[index].text).to eql title
+  end
+
+  def expect_section_title(section_name, title, index = 0)
+    expect(page.all(".tournament-management__section--#{section_name} .tournament-management__section-title")[index].text).to eql title
   end
 end

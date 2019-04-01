@@ -2,13 +2,17 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { createClub, deleteTeam, saveTeam } from './api_client'
 import AccessContext from '../util/access_context'
-import { resolveTournamentItemClasses } from '../util/util'
+import { getName, resolveTournamentItemClasses } from '../util/util'
 
 const CHOOSE_CLUB_ID = '-1'
 const NEW_CLUB_ID = '-2'
 
 export default class Team extends React.PureComponent {
   static propTypes = {
+    ageGroups: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })).isRequired,
     clubs: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
@@ -24,11 +28,7 @@ export default class Team extends React.PureComponent {
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
       }).isRequired,
-      group: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-        ageGroupName: PropTypes.string.isRequired,
-      }).isRequired,
+      groupId: PropTypes.number.isRequired,
     }),
     onClubSave: PropTypes.func.isRequired,
     onTeamDelete: PropTypes.func,
@@ -72,6 +72,7 @@ export default class Team extends React.PureComponent {
   }
 
   renderForm() {
+    const { ageGroups, clubs, groups, team } = this.props
     const { errors, form: { clubId, groupId, name } } = this.state
     return (
       <div className="form form--horizontal">
@@ -80,9 +81,9 @@ export default class Team extends React.PureComponent {
           <div className="form__field">
             <select onChange={this.changeValue('groupId')} value={groupId}>
               <option>Lohko</option>
-              {this.props.groups.map(group => {
-                const { id, name, ageGroupName } = group
-                return <option key={id} value={id}>{name} ({ageGroupName})</option>
+              {groups.map(group => {
+                const { id, name, ageGroupId } = group
+                return <option key={id} value={id}>{name} ({getName(ageGroups, ageGroupId)})</option>
               })}
             </select>
           </div>
@@ -90,7 +91,7 @@ export default class Team extends React.PureComponent {
             <select onChange={this.changeValue('clubId')} value={clubId}>
               <option value={CHOOSE_CLUB_ID}>Seura</option>
               <option value={NEW_CLUB_ID}>+ Lisää uusi seura</option>
-              {this.props.clubs.map(club => {
+              {clubs.map(club => {
                 const { id, name } = club
                 return <option key={id} value={id}>{name}</option>
               })}
@@ -102,7 +103,7 @@ export default class Team extends React.PureComponent {
           <div className="form__buttons">
             <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
             <input type="button" value="Peruuta" onClick={this.cancel} className="button"/>
-            {!!this.props.team && <input type="button" value="Poista" onClick={this.delete} className="button button--danger"/>}
+            {!!team && <input type="button" value="Poista" onClick={this.delete} className="button button--danger"/>}
           </div>
         </div>
       </div>

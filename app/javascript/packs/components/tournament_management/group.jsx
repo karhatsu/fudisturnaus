@@ -3,13 +3,11 @@ import PropTypes from 'prop-types'
 import { deleteGroup, saveGroup } from './api_client'
 import AccessContext from '../util/access_context'
 import { getName, resolveTournamentItemClasses } from '../util/util'
+import { idNamePropType } from '../util/custom_prop_types'
 
 export default class Group extends React.PureComponent {
   static propTypes = {
-    ageGroups: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    })).isRequired,
+    ageGroups: PropTypes.arrayOf(idNamePropType).isRequired,
     group: PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,

@@ -3,13 +3,11 @@ import PropTypes from 'prop-types'
 import { deleteField, saveField } from './api_client'
 import AccessContext from '../util/access_context'
 import { resolveTournamentItemClasses } from '../util/util'
+import { idNamePropType } from '../util/custom_prop_types'
 
 export default class Field extends React.PureComponent {
   static propTypes = {
-    field: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    }),
+    field: idNamePropType,
     onFieldDelete: PropTypes.func,
     onFieldSave: PropTypes.func.isRequired,
     tournamentId: PropTypes.number.isRequired,

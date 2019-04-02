@@ -7,19 +7,14 @@ import AccessContext from '../util/access_context'
 import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util/date_util'
 import { resolveTournamentItemClasses, resolveSuggestedTime, getName } from '../util/util'
 import IdNameSelect from '../form/IdNameSelect'
+import { idNamePropType } from '../util/custom_prop_types'
 
 const ORIGIN_SEPARATOR = '@'
 
 export default class PlayoffMatch extends React.PureComponent {
   static propTypes = {
-    ageGroups: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    })).isRequired,
-    fields: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    })).isRequired,
+    ageGroups: PropTypes.arrayOf(idNamePropType).isRequired,
+    fields: PropTypes.arrayOf(idNamePropType).isRequired,
     groups: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,

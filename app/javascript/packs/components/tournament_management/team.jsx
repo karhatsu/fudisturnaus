@@ -3,31 +3,20 @@ import PropTypes from 'prop-types'
 import { createClub, deleteTeam, saveTeam } from './api_client'
 import AccessContext from '../util/access_context'
 import { getName, resolveTournamentItemClasses } from '../util/util'
+import { idNamePropType } from '../util/custom_prop_types'
 
 const CHOOSE_CLUB_ID = '-1'
 const NEW_CLUB_ID = '-2'
 
 export default class Team extends React.PureComponent {
   static propTypes = {
-    ageGroups: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    })).isRequired,
-    clubs: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    })).isRequired,
-    groups: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    })).isRequired,
+    ageGroups: PropTypes.arrayOf(idNamePropType).isRequired,
+    clubs: PropTypes.arrayOf(idNamePropType).isRequired,
+    groups: PropTypes.arrayOf(idNamePropType).isRequired,
     team: PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
-      club: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-      }).isRequired,
+      club: idNamePropType.isRequired,
       groupId: PropTypes.number.isRequired,
     }),
     onClubSave: PropTypes.func.isRequired,

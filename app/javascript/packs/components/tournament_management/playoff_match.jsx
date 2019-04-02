@@ -103,7 +103,7 @@ export default class PlayoffMatch extends React.PureComponent {
       <div className="form form--horizontal">
         {errors.length > 0 && <div className="form-error">{errors.join('. ')}.</div>}
         <div className="tournament-item__form">
-          {this.buildIdNameDropDown(ageGroups, 'ageGroupId', '- Sarja -')}
+          {this.buildIdNameDropDown(ageGroups.filter(ageGroup => ageGroup.calculateGroupTables), 'ageGroupId', '- Sarja -')}
           {this.buildIdNameDropDown(fields, 'fieldId', '- Kenttä -', this.setField)}
           {this.buildDayDropDown()}
           {this.renderStartTimeField()}

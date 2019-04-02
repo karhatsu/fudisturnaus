@@ -38,6 +38,7 @@ export default class PlayoffMatch extends React.PureComponent {
       title: PropTypes.string.isRequired,
     }),
     playoffMatches: PropTypes.arrayOf(PropTypes.shape({
+      ageGroupId: PropTypes.number.isRequired,
       fieldId: PropTypes.number.isRequired,
       startTime: PropTypes.string.isRequired,
     })).isRequired,
@@ -171,6 +172,7 @@ export default class PlayoffMatch extends React.PureComponent {
     const { form: { ageGroupId } } = this.state
     if (ageGroupId) {
       const groups = this.props.groups.filter(group => group.ageGroupId === parseInt(ageGroupId))
+      const playoffMatches = this.props.playoffMatches.filter(match => match.ageGroupId === parseInt(ageGroupId))
       const field = `${homeAway}TeamOrigin`
       return (
         <div className="form__field">
@@ -183,7 +185,7 @@ export default class PlayoffMatch extends React.PureComponent {
               })}
             </optgroup>
             <optgroup label="Jatko-ottelusta">
-              {this.props.playoffMatches.map(playoffMatch => {
+              {playoffMatches.map(playoffMatch => {
                 const key = this.buildOrigin('PlayoffMatch', playoffMatch.id)
                 return <option key={key} value={key}>{playoffMatch.title}</option>
               })}

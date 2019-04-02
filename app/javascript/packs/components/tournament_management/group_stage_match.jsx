@@ -6,6 +6,7 @@ import { deleteGroupStageMatch, saveGroupStageMatch } from './api_client'
 import AccessContext from '../util/access_context'
 import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util/date_util'
 import { resolveTournamentItemClasses, resolveSuggestedTime, getName } from '../util/util'
+import IdNameSelect from '../form/IdNameSelect'
 
 export default class GroupStageMatch extends React.PureComponent {
   static propTypes = {
@@ -93,12 +94,12 @@ export default class GroupStageMatch extends React.PureComponent {
 
   renderForm() {
     const { fields } = this.props
-    const { errors } = this.state
+    const { errors, form } = this.state
     return (
       <div className="form form--horizontal">
         {errors.length > 0 && <div className="form-error">{errors.join('. ')}.</div>}
         <div className="tournament-item__form">
-          {this.buildIdNameDropDown(fields, 'fieldId', '- Kenttä -', this.setField)}
+          <IdNameSelect field="fieldId" formData={form} items={fields} label="- Kenttä -" onChange={this.setField}/>
           {this.buildDayDropDown()}
           {this.renderStartTimeField()}
           {this.buildGroupDropDown()}
@@ -111,34 +112,19 @@ export default class GroupStageMatch extends React.PureComponent {
   }
 
   buildTeamDropDown(field, label) {
-    const { form: { groupId } } = this.state
+    const { form, form: { groupId } } = this.state
     if (groupId) {
-      const { teams } = this.props
-      return this.buildIdNameDropDown(teams.filter(team => team.groupId === parseInt(groupId)), field, label)
+      const teams = this.props.teams.filter(team => team.groupId === parseInt(groupId))
+      return <IdNameSelect field={field} formData={form} items={teams} label={label} onChange={this.changeValue(field)}/>
     }
   }
 
   buildGroupDropDown() {
+    const { form } = this.state
     const { ageGroups, groups } = this.props
-    return this.buildIdNameDropDown(groups, 'groupId', '- Lohko -', this.changeValue('groupId'), item => {
-      return `${item.name} (${getName(ageGroups, item.ageGroupId)})`
-    })
-  }
-
-  buildIdNameDropDown(items, field, label, customOnChange, customNameBuild) {
-    const nameBuild = customNameBuild || (item => item.name)
-    const onChange = customOnChange || this.changeValue(field)
-    return (
-      <div className="form__field">
-        <select onChange={onChange} value={this.state.form[field]}>
-          <option>{label}</option>
-          {items.map(item => {
-            const { id } = item
-            return <option key={id} value={id}>{nameBuild(item)}</option>
-          })}
-        </select>
-      </div>
-    )
+    const customNameBuild = item => `${item.name} (${getName(ageGroups, item.ageGroupId)})`
+    const onChange = this.changeValue('groupId')
+    return <IdNameSelect customNameBuild={customNameBuild} field="groupId" formData={form} items={groups} label="- Lohko -" onChange={onChange}/>
   }
 
   buildDayDropDown() {

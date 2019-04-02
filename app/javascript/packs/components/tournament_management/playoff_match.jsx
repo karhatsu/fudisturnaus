@@ -6,6 +6,7 @@ import { deletePlayoffMatch, savePlayoffMatch } from './api_client'
 import AccessContext from '../util/access_context'
 import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util/date_util'
 import { resolveTournamentItemClasses, resolveSuggestedTime, getName } from '../util/util'
+import IdNameSelect from '../form/IdNameSelect'
 
 const ORIGIN_SEPARATOR = '@'
 
@@ -98,14 +99,14 @@ export default class PlayoffMatch extends React.PureComponent {
   }
 
   renderForm() {
-    const { ageGroups, fields } = this.props
-    const { errors } = this.state
+    const ageGroups = this.props.ageGroups.filter(ageGroup => ageGroup.calculateGroupTables)
+    const { errors, form } = this.state
     return (
       <div className="form form--horizontal">
         {errors.length > 0 && <div className="form-error">{errors.join('. ')}.</div>}
         <div className="tournament-item__form">
-          {this.buildIdNameDropDown(ageGroups.filter(ageGroup => ageGroup.calculateGroupTables), 'ageGroupId', '- Sarja -')}
-          {this.buildIdNameDropDown(fields, 'fieldId', '- Kenttä -', this.setField)}
+          <IdNameSelect field="ageGroupId" formData={form} items={ageGroups} label="- Sarja -" onChange={this.changeValue('ageGroupId')}/>
+          <IdNameSelect field="fieldId" formData={form} items={this.props.fields} label="- Kenttä -" onChange={this.setField}/>
           {this.buildDayDropDown()}
           {this.renderStartTimeField()}
           {this.renderTitleField()}
@@ -115,22 +116,6 @@ export default class PlayoffMatch extends React.PureComponent {
           {this.renderRuleField('away')}
           {this.renderButtons()}
         </div>
-      </div>
-    )
-  }
-
-  buildIdNameDropDown(items, field, label, customOnChange, customNameBuild) {
-    const nameBuild = customNameBuild || (item => item.name)
-    const onChange = customOnChange || this.changeValue(field)
-    return (
-      <div className="form__field">
-        <select onChange={onChange} value={this.state.form[field]}>
-          <option>{label}</option>
-          {items.map(item => {
-            const { id } = item
-            return <option key={id} value={id}>{nameBuild(item)}</option>
-          })}
-        </select>
       </div>
     )
   }

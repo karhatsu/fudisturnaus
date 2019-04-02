@@ -157,6 +157,12 @@ describe 'official', type: :system do
       expect_item_title 'groups', 'B (T08)'
       expect_section_title 'teams', 'B (T08)'
       expect_item_title 'group-stage-matches', 'Grass | la 10:00 | B (T08) | Team 1 - Team 2'
+
+      edit_item 'teams', 0
+      form_inputs[0].fill_in with: 'FC Team'
+      submit
+      expect_item_title 'teams', 'FC Team'
+      expect_item_title 'group-stage-matches', 'Grass | la 10:00 | B (T08) | FC Team - Team 2'
     end
   end
 

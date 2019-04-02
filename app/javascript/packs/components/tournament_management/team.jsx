@@ -125,7 +125,7 @@ export default class Team extends React.PureComponent {
       formOpen: true,
       form: {
         clubId: team ? team.club.id : CHOOSE_CLUB_ID,
-        groupId: team ? team.group.id : -1,
+        groupId: team ? team.groupId : -1,
         name: team ? team.name : '',
       },
     })

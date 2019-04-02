@@ -107,7 +107,7 @@ describe 'official', type: :system do
   end
 
   describe 'tournament editing' do
-    let(:start_date) { '2019-05-25' } # Sat = la
+    let(:start_date) { '2019-05-18' } # Sat = la
     before do
       club = create :club
       tournament = create :tournament, start_date: start_date
@@ -127,13 +127,13 @@ describe 'official', type: :system do
     it 'works' do
       edit_item 'tournament', 0
       form_inputs[0].fill_in with: 'New name'
-      form_inputs[1].fill_in with: '01/07/2019'
+      form_inputs[1].fill_in with: '25/05/2019' # still Sat
       form_inputs[2].fill_in with: '2'
       form_inputs[3].fill_in with: 'Test city'
       form_inputs[4].fill_in with: 'Street 10'
       form_inputs[5].fill_in with: '60'
       submit
-      expect_item_title 'tournament', 'New name, 01.07.2019 - 02.07.2019, Test city, Street 10'
+      expect_item_title 'tournament', 'New name, 25.05.2019 - 26.05.2019, Test city, Street 10'
 
       edit_item 'fields', 0
       form_inputs[0].fill_in with: 'Grass'
@@ -163,6 +163,21 @@ describe 'official', type: :system do
       submit
       expect_item_title 'teams', 'FC Team'
       expect_item_title 'group-stage-matches', 'Grass | la 10:00 | B (T08) | FC Team - Team 2'
+
+      edit_item 'group-stage-matches', 0
+      form_selects[1].select 'su'
+      form_inputs[0].fill_in with: '11:00'
+      form_selects[3].select 'Team 2'
+      form_selects[4].select 'FC Team'
+      submit
+      expect_item_title 'group-stage-matches', 'Grass | su 11:00 | B (T08) | Team 2 - FC Team'
+
+      edit_item 'playoff-matches', 0
+      form_selects[2].select 'su'
+      form_inputs[0].fill_in with: '13:00'
+      form_inputs[1].fill_in with: 'Grande Finale'
+      submit
+      expect_item_title 'playoff-matches', 'Grass | su 13:00 | T08 | Grande Finale'
     end
   end
 

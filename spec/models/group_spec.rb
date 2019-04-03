@@ -60,13 +60,11 @@ RSpec.describe Team, type: :model do
 end
 
 class FakeTeamGroupResults
-  attr_reader :team, :team_name, :points, :goals_difference, :goals_for
+  attr_reader :team, :team_name, :relative_points
 
   def initialize(team, points, goals_difference, goals_for)
     @team = team
     @team_name = team.name
-    @points = points
-    @goals_difference = goals_difference
-    @goals_for = goals_for
+    @relative_points = TeamGroupResults.relative_points points, goals_difference, goals_for
   end
 end

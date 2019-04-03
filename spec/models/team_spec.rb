@@ -51,6 +51,10 @@ RSpec.describe Team, type: :model do
             expect_group_result team, 2, 1, 0, 1, 4, 5, 3
           end
 
+          it 'calculates relative points correctly' do
+            expect(team.reload.group_results.relative_points).to eql TeamGroupResults.relative_points(3, -1, 4)
+          end
+
           context 'and there is a draw match as home team' do
             before do
               home_match3.home_goals = 1

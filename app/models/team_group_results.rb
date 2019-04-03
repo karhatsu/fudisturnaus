@@ -34,6 +34,14 @@ class TeamGroupResults
     @goals_for - @goals_against
   end
 
+  def relative_points
+    TeamGroupResults.relative_points points, goals_difference, goals_for
+  end
+
+  def self.relative_points(points, goals_difference, goals_for)
+    10_000 * points + 100 * goals_difference + goals_for
+  end
+
   private
 
   def handle_match(goals_for, goals_against)

@@ -13,9 +13,17 @@ class Group < ApplicationRecord
 
   def results
     return [] unless age_group.calculate_group_tables?
-    teams.map(&:group_results).sort do |a, b|
+    sorted_teams = teams.map(&:group_results).sort do |a, b|
       [b.relative_points, a.team_name] <=> [a.relative_points, b.team_name]
     end
+    prev_team_relative_points = -1
+    prev_team_ranking = -1
+    sorted_teams.map.with_index do |team, index|
+      team.ranking = team.relative_points == prev_team_relative_points ? prev_team_ranking : index + 1
+      prev_team_relative_points = team.relative_points
+      prev_team_ranking = team.ranking
+    end
+    sorted_teams
   end
 
   def results_in_all_matches?

@@ -33,6 +33,10 @@ RSpec.describe Team, type: :model do
       it 'returns teams sorted by their names' do
         expect_results [team1, team2, team3, team4]
       end
+
+      it 'sets ranking #1 for all teams' do
+        expect_rankings [1, 1, 1, 1]
+      end
     end
 
     context 'when match results' do
@@ -46,10 +50,35 @@ RSpec.describe Team, type: :model do
       it 'returns teams sorted by points, goals difference, goals for and team name' do
         expect_results [team4, team2, team1, team3]
       end
+
+      it 'sets rankings for teams' do
+        expect_rankings [1, 2, 3, 4]
+      end
+    end
+
+    context 'when some teams have equal results' do
+      before do
+        mock_results team4, 5, +10, 8
+        mock_results team2, 4, +11, 11
+        mock_results team1, 4, +11, 11
+        mock_results team3, 4, +11, 10
+      end
+
+      it 'returns teams sorted by points, goals difference, goals for and team name' do
+        expect_results [team4, team1, team2, team3]
+      end
+
+      it 'sets equal rankings for teams having equal numbers' do
+        expect_rankings [1, 2, 2, 4]
+      end
     end
 
     def expect_results(teams)
       expect(group.results.map(&:team_name)).to eql teams.map(&:name)
+    end
+
+    def expect_rankings(rankings)
+      expect(group.results.map(&:ranking)).to eql rankings
     end
 
     def mock_results(team, points = 0, goals_difference = 0, goals_for = 0)
@@ -61,6 +90,7 @@ end
 
 class FakeTeamGroupResults
   attr_reader :team, :team_name, :relative_points
+  attr_accessor :ranking
 
   def initialize(team, points, goals_difference, goals_for)
     @team = team

@@ -1,5 +1,6 @@
 class TeamGroupResults
   attr_reader :matches, :wins, :draws, :losses, :goals_for, :goals_against, :points, :team
+  attr_accessor :ranking
 
   def initialize(team)
     @matches = 0

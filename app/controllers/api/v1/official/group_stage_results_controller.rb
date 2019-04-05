@@ -35,6 +35,7 @@ class Api::V1::Official::GroupStageResultsController < Api::V1::Official::Offici
         },
         groupResults: group_results.map do |result|
           {
+              ranking: result.ranking,
               teamName: result.team_name,
               teamId: result.team_id,
               matches: result.matches,

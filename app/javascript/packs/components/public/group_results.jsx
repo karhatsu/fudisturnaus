@@ -30,7 +30,8 @@ export default class GroupResults extends React.PureComponent {
                 <th colSpan={7}>{ageGroup.name} {name}</th>
               </tr>
               <tr>
-                <th>Joukkue</th>
+                <th/>
+                <th className="group-results__team-name">Joukkue</th>
                 <th title="Ottelut">O</th>
                 <th title="Voitot">V</th>
                 <th title="Tasapelit">T</th>
@@ -40,7 +41,7 @@ export default class GroupResults extends React.PureComponent {
               </tr>
             </thead>
             <tbody>
-              {results.map(this.renderGroupResultRow)}
+              {results.map((result, index) => this.renderGroupResultRow(results, result, index))}
             </tbody>
           </table>
         </div>
@@ -48,10 +49,12 @@ export default class GroupResults extends React.PureComponent {
     )
   }
 
-  renderGroupResultRow = teamGroupResults => {
+  renderGroupResultRow = (allResults, teamGroupResults, index) => {
+    const ranking = index > 0 && teamGroupResults.ranking === allResults[index - 1].ranking ? '' : `${teamGroupResults.ranking}.`
     return (
       <tr key={teamGroupResults.teamName} className={this.resolveTeamClasses(teamGroupResults)}>
-        <td>{teamGroupResults.teamName}</td>
+        <td>{ranking}</td>
+        <td className="group-results__team-name">{teamGroupResults.teamName}</td>
         <td>{teamGroupResults.matches}</td>
         <td>{teamGroupResults.wins}</td>
         <td>{teamGroupResults.draws}</td>

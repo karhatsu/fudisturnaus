@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Team, type: :model do
+RSpec.describe Group, type: :model do
   describe '#results' do
     let(:calculate_group_tables) { true }
     let(:age_group) { create :age_group, calculate_group_tables: calculate_group_tables }

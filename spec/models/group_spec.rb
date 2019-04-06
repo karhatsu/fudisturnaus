@@ -86,6 +86,50 @@ RSpec.describe Team, type: :model do
       allow(team).to receive(:group_results).and_return(fake_results)
     end
   end
+
+  describe '#populate_first_round_playoff_matches' do
+    let(:age_group) { create :age_group, calculate_group_tables: true }
+    let(:groupA) { create :group, age_group: age_group, name: 'A' }
+    let(:groupB) { create :group, age_group: age_group, name: 'B' }
+    let(:team1) { create :team, group: groupA, name: 'Team 1' }
+    let(:team2) { create :team, group: groupA, name: 'Team 2' }
+    let(:team3) { create :team, group: groupA, name: 'Team 3' }
+    let!(:match1) { create :group_stage_match, group: groupA, home_team: team1, away_team: team2, home_goals: 1, away_goals: 0 }
+    let!(:match2) { create :group_stage_match, group: groupA, home_team: team2, away_team: team3, home_goals: 1, away_goals: 0 }
+    let!(:match3) { create :group_stage_match, group: groupA, home_team: team3, away_team: team1 }
+    let!(:playoff_match1) { create :playoff_match, age_group: age_group,
+                                  home_team_origin: groupA, home_team_origin_rule: 1,
+                                  away_team_origin: groupB, away_team_origin_rule: 2 }
+    let!(:playoff_match2) { create :playoff_match, age_group: age_group,
+                                  home_team_origin: groupB, home_team_origin_rule: 1,
+                                  away_team_origin: groupA, away_team_origin_rule: 2 }
+
+    context 'when no results for all matches' do
+      it 'returns empty array' do
+        expect(groupA.populate_first_round_playoff_matches).to eql []
+      end
+    end
+
+    context 'when results for all matches' do
+      before do
+        match3.update_column :home_goals, 3
+        match3.update_column :away_goals, 1
+        groupA.reload
+      end
+
+      it 'defines home and away teams' do
+        groupA.populate_first_round_playoff_matches
+        expect(playoff_match1.reload.home_team.name).to eql 'Team 3'
+        expect(playoff_match1.away_team).to be_nil
+        expect(playoff_match2.reload.home_team).to be_nil
+        expect(playoff_match2.away_team.name).to eql 'Team 2'
+      end
+
+      it 'returns the matches that were defined' do
+        expect(groupA.populate_first_round_playoff_matches.map(&:id)).to eq [playoff_match1.id, playoff_match2.id]
+      end
+    end
+  end
 end
 
 class FakeTeamGroupResults

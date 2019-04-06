@@ -111,22 +111,36 @@ RSpec.describe Team, type: :model do
     end
 
     context 'when results for all matches' do
-      before do
-        match3.update_column :home_goals, 3
-        match3.update_column :away_goals, 1
-        groupA.reload
+      context 'but results lead to equal rankings' do
+        before do
+          match3.update_column :home_goals, 1
+          match3.update_column :away_goals, 0
+          groupA.reload
+        end
+
+        it 'returns empty array' do
+          expect(groupA.populate_first_round_playoff_matches).to eql []
+        end
       end
 
-      it 'defines home and away teams' do
-        groupA.populate_first_round_playoff_matches
-        expect(playoff_match1.reload.home_team.name).to eql 'Team 3'
-        expect(playoff_match1.away_team).to be_nil
-        expect(playoff_match2.reload.home_team).to be_nil
-        expect(playoff_match2.away_team.name).to eql 'Team 2'
-      end
+      context 'and group results are complete and playoff matches refer to this group' do
+        before do
+          match3.update_column :home_goals, 3
+          match3.update_column :away_goals, 1
+          groupA.reload
+        end
 
-      it 'returns the matches that were defined' do
-        expect(groupA.populate_first_round_playoff_matches.map(&:id)).to eq [playoff_match1.id, playoff_match2.id]
+        it 'defines home and away teams' do
+          groupA.populate_first_round_playoff_matches
+          expect(playoff_match1.reload.home_team.name).to eql 'Team 3'
+          expect(playoff_match1.away_team).to be_nil
+          expect(playoff_match2.reload.home_team).to be_nil
+          expect(playoff_match2.away_team.name).to eql 'Team 2'
+        end
+
+        it 'returns the matches that were defined' do
+          expect(groupA.populate_first_round_playoff_matches.map(&:id)).to eq [playoff_match1.id, playoff_match2.id]
+        end
       end
     end
   end

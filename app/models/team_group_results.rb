@@ -19,6 +19,10 @@ class TeamGroupResults
     end
   end
 
+  def to_s
+    "#{ranking}. #{team_name} (#{team_id}) #{matches}  #{wins} #{draws} #{losses}  #{goals_for}-#{goals_against}  #{points}"
+  end
+
   def team_name
     @team.name
   end

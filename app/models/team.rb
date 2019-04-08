@@ -9,8 +9,8 @@ class Team < ApplicationRecord
 
   before_destroy :check_usage
 
-  def group_results
-    TeamGroupResults.new self
+  def group_results(teams = nil)
+    TeamGroupResults.new self, teams
   end
 
   private

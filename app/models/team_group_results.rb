@@ -2,7 +2,7 @@ class TeamGroupResults
   attr_reader :matches, :wins, :draws, :losses, :goals_for, :goals_against, :points, :team
   attr_accessor :ranking
 
-  def initialize(team)
+  def initialize(team, teams = nil)
     @matches = 0
     @wins = 0
     @draws = 0
@@ -11,10 +11,10 @@ class TeamGroupResults
     @goals_against = 0
     @points = 0
     @team = team
-    team.group_stage_home_matches.each do |match|
+    team.group_stage_home_matches.select{|match| use_match?(match, teams)}.each do |match|
       handle_match match.home_goals, match.away_goals
     end
-    team.group_stage_away_matches.each do |match|
+    team.group_stage_away_matches.select{|match| use_match?(match, teams)}.each do |match|
       handle_match match.away_goals, match.home_goals
     end
   end
@@ -44,6 +44,10 @@ class TeamGroupResults
   end
 
   private
+
+  def use_match?(match, teams)
+    teams.nil? || teams.map(&:id).include?(match.home_team_id) && teams.map(&:id).include?(match.away_team_id)
+  end
 
   def handle_match(goals_for, goals_against)
     if goals_for

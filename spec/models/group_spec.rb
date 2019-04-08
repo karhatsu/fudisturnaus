@@ -73,6 +73,41 @@ RSpec.describe Group, type: :model do
       end
     end
 
+    context 'when some teams end up into similar results' do
+      let(:age_group) { create :age_group, calculate_group_tables: true }
+      let(:groupX) { create :group, age_group: age_group }
+      let(:teamA) { create :team, name: 'Team A', group: groupX }
+      let(:teamB) { create :team, name: 'Team B', group: groupX }
+      let(:teamC) { create :team, name: 'Team C', group: groupX }
+      let(:teamD) { create :team, name: 'Team D', group: groupX }
+
+      before do
+        create_match teamA, teamB, 2, 0
+        create_match teamA, teamC, 2, 1
+        create_match teamA, teamD, 0, 0
+        create_match teamB, teamC, 3, 0
+        create_match teamB, teamD, 0, 3
+        create_match teamC, teamD, 2, 0
+      end
+
+      it 'compares the matches of only those teams to define the ranking' do
+        results = groupX.reload.results
+        expect_result results, 1, teamA # 4-1 7
+        expect_result results, 2, teamD # 3-2 4
+        expect_result results, 3, teamB # 3-5 3 but B-C 3-0
+        expect_result results, 4, teamC # 3-5 3
+      end
+
+      def create_match(home_team, away_team, home_goals, away_goals)
+        create :group_stage_match, group: group, home_team: home_team, away_team: away_team, home_goals: home_goals, away_goals: away_goals
+      end
+
+      def expect_result(results, ranking, team)
+        expect(results[ranking - 1].ranking).to eql ranking
+        expect(results[ranking - 1].team).to eql team
+      end
+    end
+
     def expect_results(teams)
       expect(group.results.map(&:team_name)).to eql teams.map(&:name)
     end

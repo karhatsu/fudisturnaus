@@ -8,7 +8,7 @@ RSpec.describe Team, type: :model do
 
     context 'when no matches' do
       it 'contains only zeros' do
-        expect_group_result team, 0, 0, 0, 0, 0, 0, 0
+        expect_group_result team.group_results, 0, 0, 0, 0, 0, 0, 0
       end
     end
 
@@ -26,7 +26,7 @@ RSpec.describe Team, type: :model do
       end
 
       it 'contains only zeros' do
-        expect_group_result team, 0, 0, 0, 0, 0, 0, 0
+        expect_group_result team.reload.group_results, 0, 0, 0, 0, 0, 0, 0
       end
 
       context 'when there is a match that the team has won as home team' do
@@ -37,7 +37,7 @@ RSpec.describe Team, type: :model do
         end
 
         it 'returns one win' do
-          expect_group_result team, 1, 1, 0, 0, 2, 1, 3
+          expect_group_result team.reload.group_results, 1, 1, 0, 0, 2, 1, 3
         end
 
         context 'and there is a match that the team has lost as home team' do
@@ -48,7 +48,7 @@ RSpec.describe Team, type: :model do
           end
 
           it 'returns one win and one loss' do
-            expect_group_result team, 2, 1, 0, 1, 4, 5, 3
+            expect_group_result team.reload.group_results, 2, 1, 0, 1, 4, 5, 3
           end
 
           it 'calculates relative points correctly' do
@@ -63,7 +63,7 @@ RSpec.describe Team, type: :model do
             end
 
             it 'returns one win, one draw, and one loss' do
-              expect_group_result team, 3, 1, 1, 1, 5, 6, 4
+              expect_group_result team.reload.group_results, 3, 1, 1, 1, 5, 6, 4
             end
 
             context 'and there is one win, one draw, and one loss as an away team' do
@@ -80,7 +80,22 @@ RSpec.describe Team, type: :model do
               end
 
               it 'returns one win, one draw, and one loss' do
-                expect_group_result team, 6, 2, 2, 2, 20, 13, 8
+                expect_group_result team.reload.group_results, 6, 2, 2, 2, 20, 13, 8
+              end
+            end
+
+            context 'when teams are limited' do
+              let(:team3) { create :team, name: 'Team 3', group: group }
+              let(:team4) { create :team, name: 'Team 4', group: group }
+              let!(:match23) { create :group_stage_match, field: field, home_team: team2, away_team: team3, home_goals: 1, away_goals: 1 }
+              let!(:match34) { create :group_stage_match, field: field, home_team: team3, away_team: team4, home_goals: 3, away_goals: 4 }
+              let!(:match42) { create :group_stage_match, field: field, home_team: team4, away_team: team2, home_goals: 4, away_goals: 1 }
+
+              it 'calculates results only from the matches of the given teams' do
+                teams = [team2, team3, team4]
+                expect_group_result team2.reload.group_results(teams), 2, 0, 1, 1, 2, 5, 1
+                expect_group_result team3.reload.group_results(teams), 2, 0, 1, 1, 4, 5, 1
+                expect_group_result team4.reload.group_results(teams), 2, 2, 0, 0, 8, 4, 6
               end
             end
           end
@@ -89,8 +104,7 @@ RSpec.describe Team, type: :model do
     end
   end
 
-  def expect_group_result(team, matches, wins, draws, losses, goals_for, goals_against, points)
-    team_group_results = team.reload.group_results
+  def expect_group_result(team_group_results, matches, wins, draws, losses, goals_for, goals_against, points)
     expect(team_group_results.matches).to eq matches
     expect(team_group_results.wins).to eq wins
     expect(team_group_results.draws).to eq draws

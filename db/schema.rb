@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_27_143713) do
+ActiveRecord::Schema.define(version: 2019_04_09_135734) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,6 +95,7 @@ ActiveRecord::Schema.define(version: 2019_03_27_143713) do
     t.integer "group_stage_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "lot"
     t.index ["club_id"], name: "index_teams_on_club_id"
     t.index ["group_id"], name: "index_teams_on_group_id"
   end

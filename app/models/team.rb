@@ -6,6 +6,7 @@ class Team < ApplicationRecord
 
   validates :name, presence: true
   validates :group_stage_number, numericality: { only_integer: true, greater_than_or_equal_to: 1, allow_nil: true }
+  validates :lot, numericality: { only_integer: true, allow_nil: true }
 
   before_destroy :check_usage
 

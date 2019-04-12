@@ -56,7 +56,8 @@ describe 'tournament page', type: :system do
       visit "/tournaments/#{tournament.id}"
       expect(page.all('.group-results__group tbody tr').length).to eql group1.teams.count
       group1.teams.sort {|a, b| a.name <=> b.name }.each_with_index do |team, row_index|
-        expect_group_table_row row_index, team.name
+        ranking = row_index == 0 ? 1 : nil
+        expect_group_table_row row_index, ranking, team.name
       end
     end
 
@@ -73,9 +74,9 @@ describe 'tournament page', type: :system do
       end
 
       it 'updates group tables' do
-        expect_group_table_row 0, team1.name, 1, 1, 0, 0, 4, 2, 3
-        expect_group_table_row 1, team3.name
-        expect_group_table_row 2, team2.name, 1, 0, 0, 1, 2, 4, 0
+        expect_group_table_row 0, 1, team1.name, 1, 1, 0, 0, 4, 2, 3
+        expect_group_table_row 1, 2, team3.name
+        expect_group_table_row 2, 3, team2.name, 1, 0, 0, 1, 2, 4, 0
       end
     end
 

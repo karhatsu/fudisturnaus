@@ -199,9 +199,9 @@ describe 'official', type: :system do
     it 'stores result and updates group tables' do
       fill_result 0, 4, 6
       expect_result 0, '4 - 6'
-      expect_group_table_row 0, @team2.name, 1, 1, 0, 0, 6, 4, 3
-      expect_group_table_row 1, @team3.name
-      expect_group_table_row 2, @team1.name, 1, 0, 0, 1, 4, 6, 0
+      expect_group_table_row 0, 1, @team2.name, 1, 1, 0, 0, 6, 4, 3
+      expect_group_table_row 1, 2, @team3.name
+      expect_group_table_row 2, 3, @team1.name, 1, 0, 0, 1, 4, 6, 0
     end
 
     describe 'last match result' do

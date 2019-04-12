@@ -14,10 +14,12 @@ class Group < ApplicationRecord
   def results
     return [] unless age_group.calculate_group_tables?
 
+    # 1. points, goals difference, goals for
     sorted_team_results = sort_teams_and_set_rankings
     teams_with_duplicate_rankings = sorted_team_results.group_by(&:ranking).select {|_, teams| teams.length > 1}
     return sorted_team_results if teams_with_duplicate_rankings.empty?
 
+    # 2. matches between teams with equal rankings
     teams_with_duplicate_rankings.each do |ranking, team_results|
       sorted_sub_team_results = sort_teams_and_set_rankings(team_results.map(&:team))
       sorted_sub_team_results.each do |sub_team_result|
@@ -25,7 +27,19 @@ class Group < ApplicationRecord
         main_team_result.ranking = ranking - 1 + sub_team_result.ranking
       end
     end
-    sorted_team_results
+    teams_with_duplicate_rankings = sorted_team_results.group_by(&:ranking).select {|_, teams| teams.length > 1}
+    return sorted_team_results if teams_with_duplicate_rankings.empty?
+
+    # 3. lottery
+    teams_with_duplicate_rankings.each do |ranking, team_results|
+      team_results = team_results.sort_by { |result| -result.lot.to_i }.each { |result| result.relative_points = result.lot.to_i }
+      set_rankings team_results
+      team_results.each do |sub_team_result|
+        main_team_result = sorted_team_results.find {|results| results.team_id == sub_team_result.team_id}
+        main_team_result.ranking = ranking - 1 + sub_team_result.ranking
+      end
+    end
+    sorted_team_results.sort_by {|result| result.ranking}
   end
 
   def results_in_all_matches?
@@ -67,6 +81,11 @@ class Group < ApplicationRecord
     sorted_teams = (selected_teams || teams).map{|team| team.group_results(selected_teams)}.sort do |a, b|
       [b.relative_points, a.team_name] <=> [a.relative_points, b.team_name]
     end
+    set_rankings sorted_teams
+    sorted_teams
+  end
+
+  def set_rankings(sorted_teams)
     prev_team_relative_points = -1
     prev_team_ranking = -1
     sorted_teams.map.with_index do |team, index|
@@ -74,6 +93,5 @@ class Group < ApplicationRecord
       prev_team_relative_points = team.relative_points
       prev_team_ranking = team.ranking
     end
-    sorted_teams
   end
 end

@@ -1,6 +1,6 @@
 class TeamGroupResults
   attr_reader :matches, :wins, :draws, :losses, :goals_for, :goals_against, :points, :team
-  attr_accessor :ranking
+  attr_accessor :ranking, :relative_points
 
   def initialize(team, teams = nil)
     @matches = 0
@@ -17,6 +17,7 @@ class TeamGroupResults
     team.group_stage_away_matches.select{|match| use_match?(match, teams)}.each do |match|
       handle_match match.away_goals, match.home_goals
     end
+    @relative_points = TeamGroupResults.relative_points points, goals_difference, goals_for
   end
 
   def to_s
@@ -41,10 +42,6 @@ class TeamGroupResults
 
   def goals_difference
     @goals_for - @goals_against
-  end
-
-  def relative_points
-    TeamGroupResults.relative_points points, goals_difference, goals_for
   end
 
   def self.relative_points(points, goals_difference, goals_for)

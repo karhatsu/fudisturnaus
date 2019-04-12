@@ -5,10 +5,10 @@ RSpec.describe Group, type: :model do
     let(:calculate_group_tables) { true }
     let(:age_group) { create :age_group, calculate_group_tables: calculate_group_tables }
     let(:group) { build :group, age_group: age_group }
-    let(:team1) { double Team, name: 'Team 1' }
-    let(:team2) { double Team, name: 'Team 2' }
-    let(:team3) { double Team, name: 'Team 3' }
-    let(:team4) { double Team, name: 'Team 4' }
+    let(:team1) { double Team, id: 1, name: 'Team 1' }
+    let(:team2) { double Team, id: 2, name: 'Team 2' }
+    let(:team3) { double Team, id: 3, name: 'Team 3' }
+    let(:team4) { double Team, id: 4, name: 'Team 4' }
 
     before do
       allow(group).to receive(:teams).and_return([team4, team3, team2, team1])
@@ -57,19 +57,38 @@ RSpec.describe Group, type: :model do
     end
 
     context 'when some teams have equal results' do
-      before do
-        mock_results team4, 5, +10, 8
-        mock_results team2, 4, +11, 11
-        mock_results team1, 4, +11, 11
-        mock_results team3, 4, +11, 10
+      context 'and lottery has not been done' do
+        before do
+          mock_results team4, 5, +10, 8
+          mock_results team2, 4, +11, 11
+          mock_results team1, 4, +11, 11
+          mock_results team3, 4, +11, 10
+        end
+
+        it 'returns teams sorted by points, goals difference, goals for and team name' do
+          expect_results [team4, team1, team2, team3]
+        end
+
+        it 'sets equal rankings for teams having equal numbers' do
+          expect_rankings [1, 2, 2, 4]
+        end
       end
 
-      it 'returns teams sorted by points, goals difference, goals for and team name' do
-        expect_results [team4, team1, team2, team3]
-      end
+      context 'and lottery has been done' do
+        before do
+          mock_results team4, 5, +10, 8
+          mock_results team2, 4, +11, 11, 1
+          mock_results team1, 4, +11, 11, 0
+          mock_results team3, 4, +11, 10
+        end
 
-      it 'sets equal rankings for teams having equal numbers' do
-        expect_rankings [1, 2, 2, 4]
+        it 'takes lottery into account' do
+          expect_results [team4, team2, team1, team3]
+        end
+
+        it 'sets own rankings for teams having equal numbers' do
+          expect_rankings [1, 2, 3, 4]
+        end
       end
     end
 
@@ -116,8 +135,8 @@ RSpec.describe Group, type: :model do
       expect(group.results.map(&:ranking)).to eql rankings
     end
 
-    def mock_results(team, points = 0, goals_difference = 0, goals_for = 0)
-      fake_results = FakeTeamGroupResults.new(team, points, goals_difference, goals_for)
+    def mock_results(team, points = 0, goals_difference = 0, goals_for = 0, lot = nil)
+      fake_results = FakeTeamGroupResults.new(team, points, goals_difference, goals_for, lot)
       allow(team).to receive(:group_results).and_return(fake_results)
     end
   end
@@ -182,12 +201,18 @@ RSpec.describe Group, type: :model do
 end
 
 class FakeTeamGroupResults
-  attr_reader :team, :team_name, :relative_points
-  attr_accessor :ranking
+  attr_reader :team, :team_id, :team_name, :lot
+  attr_accessor :ranking, :relative_points
 
-  def initialize(team, points, goals_difference, goals_for)
+  def initialize(team, points, goals_difference, goals_for, lot)
     @team = team
+    @team_id = team.id
     @team_name = team.name
     @relative_points = TeamGroupResults.relative_points points, goals_difference, goals_for
+    @lot = lot
+  end
+
+  def to_s
+    "#{team_name}: #{ranking}. (#{relative_points})"
   end
 end

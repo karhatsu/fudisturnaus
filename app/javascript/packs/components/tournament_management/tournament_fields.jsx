@@ -15,6 +15,7 @@ export default class TournamentFields extends React.PureComponent {
       endDate: PropTypes.string.isRequired,
       days: PropTypes.number.isRequired,
       matchMinutes: PropTypes.number.isRequired,
+      equalPointsRule: PropTypes.number.isRequired,
     }),
   }
 
@@ -61,6 +62,7 @@ export default class TournamentFields extends React.PureComponent {
         {this.renderTournamentField('Paikka', 'text', 'location', 'Esim. Kontulan tekonurmi')}
         {this.renderTournamentField('Osoite', 'text', 'address', 'Esim. Tanhuantie 4-6, 00940 Helsinki')}
         {this.renderTournamentField('Otteluiden välinen aika (min)', 'number', 'matchMinutes')}
+        {this.renderEqualPointsRuleField()}
         {this.renderTournamentFormButtons()}
       </div>
     )
@@ -72,6 +74,20 @@ export default class TournamentFields extends React.PureComponent {
         <div className="label">{label}</div>
         <div className="">
           <input type={type} value={this.state.form[field]} placeholder={placeholder} onChange={this.setValue(field)}/>
+        </div>
+      </div>
+    )
+  }
+
+  renderEqualPointsRuleField() {
+    return (
+      <div className="form__field">
+        <div className="label">Sääntö tasapisteissä</div>
+        <div className="">
+          <select onChange={this.setValue('equalPointsRule')} value={this.state.form.equalPointsRule}>
+            <option value={0}>Kaikki ottelut (maaliero, tehdyt maalit), keskinäiset ottelut, arpa</option>
+            <option value={1}>Keskinäiset ottelut, kaikki ottelut (maaliero, tehdyt maalit), arpa</option>
+          </select>
         </div>
       </div>
     )
@@ -100,15 +116,15 @@ export default class TournamentFields extends React.PureComponent {
   openForm = () => {
     const { tournament } = this.props
     if (tournament) {
-      const { name, startDate, days, location, address, matchMinutes } = tournament
+      const { name, startDate, days, location, address, matchMinutes, equalPointsRule } = tournament
       this.setState({
         formOpen: true,
-        form: { name, startDate, days, location, address: address || '', matchMinutes },
+        form: { name, startDate, days, location, address: address || '', matchMinutes, equalPointsRule },
       })
     } else {
       this.setState({
         formOpen: true,
-        form: { name: '', startDate: '', days: 1, location: '', address: '', matchMinutes: 45 },
+        form: { name: '', startDate: '', days: 1, location: '', address: '', matchMinutes: 45, equalPointsRule: 0 },
       })
     }
   }

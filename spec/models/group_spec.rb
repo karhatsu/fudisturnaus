@@ -202,13 +202,14 @@ end
 
 class FakeTeamGroupResults
   attr_reader :team, :team_id, :team_name, :lot
-  attr_accessor :ranking, :relative_points
+  attr_accessor :ranking, :relative_points, :mutual_relative_points
 
   def initialize(team, points, goals_difference, goals_for, lot)
     @team = team
     @team_id = team.id
     @team_name = team.name
     @relative_points = TeamGroupResults.relative_points points, goals_difference, goals_for
+    @mutual_relative_points = 0
     @lot = lot
   end
 

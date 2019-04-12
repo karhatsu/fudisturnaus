@@ -1,6 +1,6 @@
 class TeamGroupResults
   attr_reader :matches, :wins, :draws, :losses, :goals_for, :goals_against, :points, :team
-  attr_accessor :ranking, :relative_points
+  attr_accessor :ranking, :relative_points, :mutual_relative_points
 
   def initialize(team, teams = nil)
     @matches = 0
@@ -18,6 +18,7 @@ class TeamGroupResults
       handle_match match.away_goals, match.home_goals
     end
     @relative_points = TeamGroupResults.relative_points points, goals_difference, goals_for
+    @mutual_relative_points = 0
   end
 
   def to_s

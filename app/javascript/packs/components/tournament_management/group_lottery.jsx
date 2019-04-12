@@ -70,13 +70,13 @@ export default class GroupLottery extends React.PureComponent {
   }
 
   renderGroupResultRow = (allResults, teamGroupResults, index, rankingCounts) => {
-    const { ranking, teamId, teamName } = teamGroupResults
+    const { ranking, teamId, teamName, lot } = teamGroupResults
     const rankingText = index > 0 && ranking === allResults[index - 1].ranking ? '' : `${ranking}.`
     return (
       <tr key={teamId}>
         <td>{rankingText}</td>
         <td className="group-results__team-name">{teamName}</td>
-        <td>{rankingCounts[ranking] > 1 ? this.renderLotField(teamId) : '-'}</td>
+        <td>{rankingCounts[ranking] > 1 || lot || lot === 0 ? this.renderLotField(teamId) : '-'}</td>
       </tr>
     )
   }

@@ -51,6 +51,10 @@ class Group < ApplicationRecord
     group_results.length != group_results.group_by(&:ranking).length
   end
 
+  def lottery_done?
+    teams.any? {|team| team.lot}
+  end
+
   def populate_first_round_playoff_matches
     return [] if !results_in_all_matches? || has_equal_rankings?
     changed_matches = []

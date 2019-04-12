@@ -6,7 +6,7 @@ json.clubs @clubs, :id, :name
 
 json.groups @tournament.groups do |group|
   json.(group, :id, :name, :age_group_id, :results_in_all_matches?)
-  if group.results_in_all_matches? && group.has_equal_rankings?
+  if group.results_in_all_matches? && group.has_equal_rankings? || group.lottery_done?
     json.results group.results, :ranking, :team_name, :team_id, :lot
   end
 end

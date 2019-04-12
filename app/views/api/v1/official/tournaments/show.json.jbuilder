@@ -4,7 +4,12 @@ json.age_groups @tournament.age_groups, :id, :name, :calculate_group_tables
 
 json.clubs @clubs, :id, :name
 
-json.groups @tournament.groups, :id, :name, :age_group_id
+json.groups @tournament.groups do |group|
+  json.(group, :id, :name, :age_group_id, :results_in_all_matches?)
+  if group.results_in_all_matches? && group.has_equal_rankings?
+    json.results group.results, :ranking, :team_name, :team_id, :lot
+  end
+end
 
 json.group_stage_matches @tournament.group_stage_matches, :id, :age_group_id, :group_id, :field_id, :start_time,
                          :home_team_id, :away_team_id

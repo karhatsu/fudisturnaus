@@ -14,7 +14,9 @@ Rails.application.routes.draw do
           put 'playoff_results/:match_id' => 'playoff_results#update'
           resources :age_groups, only: [:create, :update, :destroy]
           resources :fields, only: [:create, :update, :destroy]
-          resources :groups, only: [:create, :update, :destroy]
+          resources :groups, only: [:create, :update, :destroy] do
+            put 'lottery' => 'lotteries#update'
+          end
           resources :group_stage_matches, only: [:create, :update, :destroy]
           resources :playoff_matches, only: [:create, :update, :destroy]
           resources :teams, only: [:create, :update, :destroy]

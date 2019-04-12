@@ -32,13 +32,13 @@ class Group < ApplicationRecord
     group_stage_matches.all? { |match| match.home_goals && match.away_goals }
   end
 
-  def no_equal_rankings?
+  def has_equal_rankings?
     group_results = results
-    group_results.length == group_results.group_by(&:ranking).length
+    group_results.length != group_results.group_by(&:ranking).length
   end
 
   def populate_first_round_playoff_matches
-    return [] unless results_in_all_matches? && no_equal_rankings?
+    return [] if !results_in_all_matches? || has_equal_rankings?
     changed_matches = []
     group_results = results
     playoff_matches_as_home_team.each do |match|

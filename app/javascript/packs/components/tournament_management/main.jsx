@@ -12,6 +12,7 @@ import GroupStageMatch from './group_stage_match'
 import PlayoffMatch from './playoff_match'
 import Field from './field'
 import Team from './team'
+import Lottery from './lottery'
 import AccessContext from '../util/access_context'
 import { getName } from '../util/util'
 
@@ -69,6 +70,8 @@ export default class TournamentManagementPage extends React.PureComponent {
         {this.renderTeamsSection()}
         <div className="title-2">Alkulohkojen ottelut</div>
         {this.renderGroupStageMatchesSection()}
+        <div className="title-2">Tasatilanteen ratkaisu arvalla</div>
+        {this.renderLotterySection()}
         <div className="title-2">Jatko-ottelut</div>
         {this.renderPlayoffMatchesSection()}
         <div className="title-2">Toimitsijan linkki</div>
@@ -302,6 +305,22 @@ export default class TournamentManagementPage extends React.PureComponent {
         tournamentDate={this.state.tournament.startDate}
       />
     })
+  }
+
+  renderLotterySection() {
+    const { tournament: { ageGroups, groups } } = this.state
+    return (
+      <div className="tournament-management__section tournament-management__section--lottery">
+        <Lottery ageGroups={ageGroups} groups={groups} onLotterySave={this.onLotterySave} tournamentId={this.getTournamentId()}/>
+      </div>
+    )
+  }
+
+  onLotterySave = (groupId, data) => {
+    const groups = [...this.state.tournament.groups]
+    const index = groups.findIndex(group => group.id === groupId)
+    groups[index] = { ...groups[index], results: data.results }
+    this.setState({ tournament: { ...this.state.tournament, groups } })
   }
 
   renderPlayoffMatchesSection() {

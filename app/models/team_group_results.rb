@@ -31,6 +31,10 @@ class TeamGroupResults
     @team.id
   end
 
+  def lot
+    @team.lot
+  end
+
   def club_id
     @team.club_id
   end

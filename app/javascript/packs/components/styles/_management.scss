@@ -8,6 +8,22 @@
   }
 }
 
+.tournament-management__section--lottery {
+  .group-results__group {
+    table {
+      width: auto;
+    }
+
+    input {
+      width: 100px;
+    }
+  }
+
+  .form__buttons {
+    margin-top: 8px;
+  }
+}
+
 .tournament-management__section-title {
   font-size: 14px;
   margin: 8px;

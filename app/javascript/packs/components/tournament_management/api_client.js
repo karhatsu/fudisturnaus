@@ -171,6 +171,16 @@ export function deletePlayoffMatch(accessContext, tournamentId, id, callback) {
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
+export function saveLottery(accessContext, tournamentId, groupId, data, callback) {
+  fetch(`/api/v1/official/tournaments/${tournamentId}/groups/${groupId}/lottery`, {
+    method: 'PUT',
+    headers: buildHeaders(accessContext),
+    body: JSON.stringify({ teams: data }),
+  }).then(response => {
+    handleSaveResponse(response, callback)
+  }).catch(() => handleConnectionErrorOnSave(callback))
+}
+
 function buildHeaders(accessContext) {
   const headers = { 'Content-Type': 'application/json' }
   if (accessContext.officialAccessKey) {

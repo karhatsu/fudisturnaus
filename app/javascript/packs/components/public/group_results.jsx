@@ -50,17 +50,18 @@ export default class GroupResults extends React.PureComponent {
   }
 
   renderGroupResultRow = (allResults, teamGroupResults, index) => {
-    const ranking = index > 0 && teamGroupResults.ranking === allResults[index - 1].ranking ? '' : `${teamGroupResults.ranking}.`
+    const { ranking, teamName, lot, matches, wins, draws, losses, goalsFor, goalsAgainst, points } = teamGroupResults
+    const rankingText = index > 0 && ranking === allResults[index - 1].ranking ? '' : `${ranking}.`
     return (
-      <tr key={teamGroupResults.teamName} className={this.resolveTeamClasses(teamGroupResults)}>
-        <td>{ranking}</td>
-        <td className="group-results__team-name">{teamGroupResults.teamName}</td>
-        <td>{teamGroupResults.matches}</td>
-        <td>{teamGroupResults.wins}</td>
-        <td>{teamGroupResults.draws}</td>
-        <td>{teamGroupResults.losses}</td>
-        <td>{teamGroupResults.goalsFor}-{teamGroupResults.goalsAgainst}</td>
-        <td>{teamGroupResults.points}</td>
+      <tr key={teamName} className={this.resolveTeamClasses(teamGroupResults)}>
+        <td>{rankingText}</td>
+        <td className="group-results__team-name">{teamName}{typeof lot === 'number' ? ` (arpa: ${lot})` : ''}</td>
+        <td>{matches}</td>
+        <td>{wins}</td>
+        <td>{draws}</td>
+        <td>{losses}</td>
+        <td>{goalsFor}-{goalsAgainst}</td>
+        <td>{points}</td>
       </tr>
     )
   }

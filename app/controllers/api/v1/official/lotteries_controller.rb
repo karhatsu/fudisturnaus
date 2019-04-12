@@ -7,5 +7,6 @@ class Api::V1::Official::LotteriesController < Api::V1::Official::OfficialBaseCo
       team.save!
     end
     @group = Group.find params[:group_id]
+    @group.populate_first_round_playoff_matches
   end
 end

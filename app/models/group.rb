@@ -28,7 +28,7 @@ class Group < ApplicationRecord
       end
     end
     teams_with_duplicate_rankings = sorted_team_results.group_by(&:ranking).select {|_, teams| teams.length > 1}
-    return sorted_team_results if teams_with_duplicate_rankings.empty?
+    return sorted_team_results.sort_by(&:ranking) if teams_with_duplicate_rankings.empty?
 
     # 3. lottery
     teams_with_duplicate_rankings.each do |ranking, team_results|
@@ -39,7 +39,7 @@ class Group < ApplicationRecord
         main_team_result.ranking = ranking - 1 + sub_team_result.ranking
       end
     end
-    sorted_team_results.sort_by {|result| result.ranking}
+    sorted_team_results.sort_by(&:ranking)
   end
 
   def results_in_all_matches?

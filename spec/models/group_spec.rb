@@ -96,7 +96,7 @@ RSpec.describe Group, type: :model do
       let(:age_group) { create :age_group, calculate_group_tables: true }
       let(:groupX) { create :group, age_group: age_group }
       let(:teamA) { create :team, name: 'Team A', group: groupX }
-      let(:teamB) { create :team, name: 'Team B', group: groupX }
+      let(:teamB) { create :team, name: 'Team XB', group: groupX }
       let(:teamC) { create :team, name: 'Team C', group: groupX }
       let(:teamD) { create :team, name: 'Team D', group: groupX }
 

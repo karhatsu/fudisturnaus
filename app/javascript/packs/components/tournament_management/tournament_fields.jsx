@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { formatTournamentDates } from '../util/date_util'
 import AccessContext from '../util/access_context'
 import FormErrors from '../form/form_errors'
+import TextField from '../form/text_field'
 
 export default class TournamentFields extends React.PureComponent {
   static propTypes = {
@@ -70,14 +71,7 @@ export default class TournamentFields extends React.PureComponent {
   }
 
   renderTournamentField(label, type, field, placeholder) {
-    return (
-      <div className="form__field">
-        <div className="label">{label}</div>
-        <div className="">
-          <input type={type} value={this.state.form[field]} placeholder={placeholder} onChange={this.setValue(field)}/>
-        </div>
-      </div>
-    )
+    return <TextField label={label} onChange={this.setValue(field)} placeholder={placeholder} type={type} value={this.state.form[field]}/>
   }
 
   renderEqualPointsRuleField() {

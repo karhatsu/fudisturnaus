@@ -5,6 +5,7 @@ import AccessContext from '../util/access_context'
 import { resolveTournamentItemClasses } from '../util/util'
 import { idNamePropType } from '../util/custom_prop_types'
 import FormErrors from '../form/form_errors'
+import TextField from '../form/text_field'
 
 export default class Field extends React.PureComponent {
   static propTypes = {
@@ -47,9 +48,7 @@ export default class Field extends React.PureComponent {
       <div className="form form--horizontal">
         <FormErrors errors={this.state.errors}/>
         <div className="tournament-item__form">
-          <div className="form__field">
-            <input ref={this.nameFieldRed} type="text" onChange={this.changeName} value={this.state.name} placeholder={placeholder}/>
-          </div>
+          <TextField ref={this.nameFieldRed} onChange={this.changeName} placeholder={placeholder} value={this.state.name}/>
           <div className="form__buttons">
             <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
             <input type="button" value="Peruuta" onClick={this.cancel} className="button"/>

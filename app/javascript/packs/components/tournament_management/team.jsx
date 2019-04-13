@@ -5,6 +5,7 @@ import AccessContext from '../util/access_context'
 import { getName, resolveTournamentItemClasses } from '../util/util'
 import { idNamePropType } from '../util/custom_prop_types'
 import FormErrors from '../form/form_errors'
+import TextField from '../form/text_field'
 
 const CHOOSE_CLUB_ID = '-1'
 const NEW_CLUB_ID = '-2'
@@ -87,9 +88,7 @@ export default class Team extends React.PureComponent {
               })}
             </select>
           </div>
-          <div className="form__field">
-            <input ref={this.nameFieldRed} type="text" onChange={this.changeValue('name')} value={name} placeholder="Esim. FC Kontu Valkoinen"/>
-          </div>
+          <TextField ref={this.nameFieldRed} onChange={this.changeValue('name')} placeholder="Esim. FC Kontu Valkoinen" value={name}/>
           <div className="form__buttons">
             <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
             <input type="button" value="Peruuta" onClick={this.cancel} className="button"/>

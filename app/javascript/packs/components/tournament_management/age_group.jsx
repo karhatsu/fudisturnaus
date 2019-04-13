@@ -4,6 +4,7 @@ import { deleteAgeGroup, saveAgeGroup } from './api_client'
 import AccessContext from '../util/access_context'
 import { resolveTournamentItemClasses } from '../util/util'
 import FormErrors from '../form/form_errors'
+import TextField from '../form/text_field'
 
 export default class AgeGroup extends React.PureComponent {
   static propTypes = {
@@ -53,9 +54,7 @@ export default class AgeGroup extends React.PureComponent {
       <div className="form form--horizontal">
         <FormErrors errors={this.state.errors}/>
         <div className="tournament-item__form">
-          <div className="form__field">
-            <input ref={this.nameFieldRed} type="text" onChange={this.changeName} value={name} placeholder="Esim. P11 tai T09 Haaste"/>
-          </div>
+          <TextField ref={this.nameFieldRed} onChange={this.changeName} placeholder="Esim. P11 tai T09 Haaste" value={name}/>
           <div className="form__field">
             <input type="checkbox" onChange={this.changeCalculateGroupTables} value={true} checked={!!calculateGroupTables}/>
             Laske sarjataulukot

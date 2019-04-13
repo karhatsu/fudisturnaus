@@ -4,6 +4,7 @@ import { getName } from '../util/util'
 import { saveLottery } from './api_client'
 import AccessContext from '../util/access_context'
 import FormErrors from '../form/form_errors'
+import TextField from '../form/text_field'
 
 export default class GroupLottery extends React.PureComponent {
   static propTypes = {
@@ -92,11 +93,7 @@ export default class GroupLottery extends React.PureComponent {
 
   renderLotField(teamId) {
     if (this.state.formOpen) {
-      return (
-        <div className="form__field">
-          <input type="number" value={this.state.lots[teamId] || ''} placeholder="Esim. 0 tai 1" onChange={this.setLot(teamId)}/>
-        </div>
-      )
+      return <TextField onChange={this.setLot(teamId)} placeholder="Esim. 0 tai 1" type="number" value={this.state.lots[teamId] || ''}/>
     }
     const lot = this.props.group.results.find(result => result.teamId === teamId).lot
     const text = lot || lot === 0 ? `Arpa: ${lot}` : 'Aseta arpa'

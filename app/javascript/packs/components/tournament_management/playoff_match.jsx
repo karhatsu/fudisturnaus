@@ -9,6 +9,7 @@ import { resolveTournamentItemClasses, resolveSuggestedTime, getName } from '../
 import IdNameSelect from '../form/id_name_select'
 import { idNamePropType } from '../util/custom_prop_types'
 import FormErrors from '../form/form_errors'
+import TextField from '../form/text_field'
 
 const ORIGIN_SEPARATOR = '@'
 
@@ -133,20 +134,13 @@ export default class PlayoffMatch extends React.PureComponent {
 
   renderStartTimeField() {
     const { form: { startTime } } = this.state
-    return (
-      <div className="form__field form__field--time">
-        <input ref={this.timeFieldRed} type="text" onChange={this.changeValue('startTime')} value={startTime} placeholder="HH:MM"/>
-      </div>
-    )
+    const onChange = this.changeValue('startTime')
+    return <TextField ref={this.timeFieldRed} containerClass="form__field--time" onChange={onChange} placeholder="HH:MM" value={startTime}/>
   }
 
   renderTitleField() {
     const { form: { title } } = this.state
-    return (
-      <div className="form__field">
-        <input type="text" onChange={this.changeValue('title')} value={title} placeholder="Kuvaus, esim. A1-B2 tai Finaali"/>
-      </div>
-    )
+    return <TextField onChange={this.changeValue('title')} placeholder="Kuvaus, esim. A1-B2 tai Finaali" value={title}/>
   }
 
   renderSourceField(homeAway, label) {

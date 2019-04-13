@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { getName } from '../util/util'
 import { saveLottery } from './api_client'
 import AccessContext from '../util/access_context'
+import FormErrors from '../form/form_errors'
 
 export default class GroupLottery extends React.PureComponent {
   static propTypes = {
@@ -38,7 +39,7 @@ export default class GroupLottery extends React.PureComponent {
     return (
       <div key={id}>
         <div className="tournament-management__section-title">{name} ({getName(this.props.ageGroups, ageGroupId)})</div>
-        {this.state.errors.length > 0 && <div className="form-error">{this.state.errors.join('. ')}.</div>}
+        <FormErrors errors={this.state.errors}/>
         <div className="group-results__group">
           <table>
             <thead>

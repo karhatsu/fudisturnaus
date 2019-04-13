@@ -8,6 +8,7 @@ import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util
 import { resolveTournamentItemClasses, resolveSuggestedTime, getName } from '../util/util'
 import IdNameSelect from '../form/IdNameSelect'
 import { idNamePropType } from '../util/custom_prop_types'
+import FormErrors from '../form/form_errors'
 
 const ORIGIN_SEPARATOR = '@'
 
@@ -95,10 +96,10 @@ export default class PlayoffMatch extends React.PureComponent {
 
   renderForm() {
     const ageGroups = this.props.ageGroups.filter(ageGroup => ageGroup.calculateGroupTables)
-    const { errors, form } = this.state
+    const { form } = this.state
     return (
       <div className="form form--horizontal">
-        {errors.length > 0 && <div className="form-error">{errors.join('. ')}.</div>}
+        <FormErrors errors={this.state.errors}/>
         <div className="tournament-item__form">
           <IdNameSelect field="ageGroupId" formData={form} items={ageGroups} label="- Sarja -" onChange={this.changeValue('ageGroupId')}/>
           <IdNameSelect field="fieldId" formData={form} items={this.props.fields} label="- Kenttä -" onChange={this.setField}/>

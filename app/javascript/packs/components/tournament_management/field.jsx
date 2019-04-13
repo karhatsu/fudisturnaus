@@ -4,6 +4,7 @@ import { deleteField, saveField } from './api_client'
 import AccessContext from '../util/access_context'
 import { resolveTournamentItemClasses } from '../util/util'
 import { idNamePropType } from '../util/custom_prop_types'
+import FormErrors from '../form/form_errors'
 
 export default class Field extends React.PureComponent {
   static propTypes = {
@@ -44,7 +45,7 @@ export default class Field extends React.PureComponent {
     const placeholder = 'Esim. Kenttä 1 tai Tekonurmi 2'
     return (
       <div className="form form--horizontal">
-        {this.state.errors.length > 0 && <div className="form-error">{this.state.errors.join('. ')}.</div>}
+        <FormErrors errors={this.state.errors}/>
         <div className="tournament-item__form">
           <div className="form__field">
             <input ref={this.nameFieldRed} type="text" onChange={this.changeName} value={this.state.name} placeholder={placeholder}/>

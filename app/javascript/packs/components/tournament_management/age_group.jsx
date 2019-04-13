@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { deleteAgeGroup, saveAgeGroup } from './api_client'
 import AccessContext from '../util/access_context'
 import { resolveTournamentItemClasses } from '../util/util'
+import FormErrors from '../form/form_errors'
 
 export default class AgeGroup extends React.PureComponent {
   static propTypes = {
@@ -47,10 +48,10 @@ export default class AgeGroup extends React.PureComponent {
   }
 
   renderForm() {
-    const { errors, form: { calculateGroupTables, name } } = this.state
+    const { form: { calculateGroupTables, name } } = this.state
     return (
       <div className="form form--horizontal">
-        {errors.length > 0 && <div className="form-error">{errors.join('. ')}.</div>}
+        <FormErrors errors={this.state.errors}/>
         <div className="tournament-item__form">
           <div className="form__field">
             <input ref={this.nameFieldRed} type="text" onChange={this.changeName} value={name} placeholder="Esim. P11 tai T09 Haaste"/>

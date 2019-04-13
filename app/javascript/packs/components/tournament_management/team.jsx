@@ -4,6 +4,7 @@ import { createClub, deleteTeam, saveTeam } from './api_client'
 import AccessContext from '../util/access_context'
 import { getName, resolveTournamentItemClasses } from '../util/util'
 import { idNamePropType } from '../util/custom_prop_types'
+import FormErrors from '../form/form_errors'
 
 const CHOOSE_CLUB_ID = '-1'
 const NEW_CLUB_ID = '-2'
@@ -62,10 +63,10 @@ export default class Team extends React.PureComponent {
 
   renderForm() {
     const { ageGroups, clubs, groups, team } = this.props
-    const { errors, form: { clubId, groupId, name } } = this.state
+    const { form: { clubId, groupId, name } } = this.state
     return (
       <div className="form form--horizontal">
-        {errors.length > 0 && <div className="form-error">{errors.join('. ')}.</div>}
+        <FormErrors errors={this.state.errors}/>
         <div className="tournament-item__form">
           <div className="form__field">
             <select onChange={this.changeValue('groupId')} value={groupId}>

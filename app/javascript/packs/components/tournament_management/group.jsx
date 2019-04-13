@@ -4,6 +4,7 @@ import { deleteGroup, saveGroup } from './api_client'
 import AccessContext from '../util/access_context'
 import { getName, resolveTournamentItemClasses } from '../util/util'
 import { idNamePropType } from '../util/custom_prop_types'
+import FormErrors from '../form/form_errors'
 
 export default class Group extends React.PureComponent {
   static propTypes = {
@@ -49,10 +50,10 @@ export default class Group extends React.PureComponent {
   }
 
   renderForm() {
-    const { errors, form: { ageGroupId, name } } = this.state
+    const { form: { ageGroupId, name } } = this.state
     return (
       <div className="form form--horizontal">
-        {errors.length > 0 && <div className="form-error">{errors.join('. ')}.</div>}
+        <FormErrors errors={this.state.errors}/>
         <div className="tournament-item__form">
           <div className="form__field">
             <select onChange={this.changeValue('ageGroupId')} value={ageGroupId}>

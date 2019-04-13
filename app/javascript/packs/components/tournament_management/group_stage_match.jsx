@@ -8,6 +8,7 @@ import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util
 import { resolveTournamentItemClasses, resolveSuggestedTime, getName } from '../util/util'
 import IdNameSelect from '../form/IdNameSelect'
 import { idNamePropType } from '../util/custom_prop_types'
+import FormErrors from '../form/form_errors'
 
 export default class GroupStageMatch extends React.PureComponent {
   static propTypes = {
@@ -86,12 +87,11 @@ export default class GroupStageMatch extends React.PureComponent {
 
   renderForm() {
     const { fields } = this.props
-    const { errors, form } = this.state
     return (
       <div className="form form--horizontal">
-        {errors.length > 0 && <div className="form-error">{errors.join('. ')}.</div>}
+        <FormErrors errors={this.state.errors}/>
         <div className="tournament-item__form">
-          <IdNameSelect field="fieldId" formData={form} items={fields} label="- Kenttä -" onChange={this.setField}/>
+          <IdNameSelect field="fieldId" formData={this.state.form} items={fields} label="- Kenttä -" onChange={this.setField}/>
           {this.buildDayDropDown()}
           {this.renderStartTimeField()}
           {this.buildGroupDropDown()}

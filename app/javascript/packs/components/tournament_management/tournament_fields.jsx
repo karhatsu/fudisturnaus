@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { formatTournamentDates } from '../util/date_util'
 import AccessContext from '../util/access_context'
+import FormErrors from '../form/form_errors'
 
 export default class TournamentFields extends React.PureComponent {
   static propTypes = {
@@ -24,7 +25,7 @@ export default class TournamentFields extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      errors: false,
+      errors: [],
       formOpen: false,
       form: {
         name: undefined,
@@ -55,7 +56,7 @@ export default class TournamentFields extends React.PureComponent {
   renderTournamentForm() {
     return (
       <div className="form form--vertical">
-        {this.state.errors.length > 0 && <div className="form-error">{this.state.errors.join('. ')}.</div>}
+        <FormErrors errors={this.state.errors}/>
         {this.renderTournamentField('Nimi', 'text', 'name', 'Esim. Kevät Cup 2019')}
         {this.renderTournamentField('Pvm', 'date', 'startDate')}
         {this.renderTournamentField('Kesto (pv)', 'number', 'days')}

@@ -4,15 +4,11 @@ RSpec.describe Group, type: :model do
   describe '#results' do
     let(:calculate_group_tables) { true }
     let(:age_group) { create :age_group, calculate_group_tables: calculate_group_tables }
-    let(:group) { build :group, age_group: age_group }
-    let(:team1) { double Team, id: 1, name: 'Team 1' }
-    let(:team2) { double Team, id: 2, name: 'Team 2' }
-    let(:team3) { double Team, id: 3, name: 'Team 3' }
-    let(:team4) { double Team, id: 4, name: 'Team 4' }
-
-    before do
-      allow(group).to receive(:teams).and_return([team4, team3, team2, team1])
-    end
+    let(:group) { create :group, age_group: age_group }
+    let!(:team1) { create :team, group: group, name: 'Team 1' }
+    let!(:team2) { create :team, group: group, name: 'Team 2' }
+    let!(:team3) { create :team, group: group, name: 'Team 3' }
+    let!(:team4) { create :team, group: group, name: 'Team 4' }
 
     context 'when group tables are not calculated for the age group' do
       let(:calculate_group_tables) { false }
@@ -23,121 +19,101 @@ RSpec.describe Group, type: :model do
     end
 
     context 'when no match results' do
-      before do
-        mock_results team1
-        mock_results team2
-        mock_results team3
-        mock_results team4
-      end
-
-      it 'returns teams sorted by their names' do
-        expect_results [team1, team2, team3, team4]
-      end
-
-      it 'sets ranking #1 for all teams' do
-        expect_rankings [1, 1, 1, 1]
+      it 'sets ranking #1 for all teams and sorts teams by name' do
+        results = group.reload.results
+        expect_ranking results, 0, 1, team1
+        expect_ranking results, 1, 1, team2
+        expect_ranking results, 2, 1, team3
+        expect_ranking results, 3, 1, team4
       end
     end
 
     context 'when match results' do
       before do
-        mock_results team4, 5, +10, 8
-        mock_results team2, 5, +9, 10
-        mock_results team1, 4, +11, 11
-        mock_results team3, 4, +11, 10
+        create_match team1, team2, 1, 1
+        create_match team1, team3, 0, 2
+        create_match team1, team4, 0, 2
+        create_match team2, team3, 1, 3
+        create_match team2, team4, 0, 2
+        create_match team3, team4, 1, 1
       end
 
       it 'returns teams sorted by points, goals difference, goals for and team name' do
-        expect_results [team4, team2, team1, team3]
-      end
-
-      it 'sets rankings for teams' do
-        expect_rankings [1, 2, 3, 4]
+        results = group.reload.results
+        expect_ranking results, 0, 1, team3
+        expect_ranking results, 1, 2, team4
+        expect_ranking results, 2, 3, team2
+        expect_ranking results, 3, 4, team1
       end
     end
 
-    context 'when some teams have equal results' do
-      context 'and lottery has not been done' do
+    context 'when some teams end up to the same ranking by points, goals diff and goals for' do
+      context 'but mutual matches sort the teams' do
         before do
-          mock_results team4, 5, +10, 8
-          mock_results team2, 4, +11, 11
-          mock_results team1, 4, +11, 11
-          mock_results team3, 4, +11, 10
+          team2.update_attribute :name, 'Team X2' # to break the default order by name
+          create_match team1, team2, 2, 0
+          create_match team1, team3, 2, 1
+          create_match team1, team4, 0, 0
+          create_match team2, team3, 3, 0
+          create_match team2, team4, 0, 3
+          create_match team3, team4, 2, 0
         end
 
-        it 'returns teams sorted by points, goals difference, goals for and team name' do
-          expect_results [team4, team1, team2, team3]
-        end
-
-        it 'sets equal rankings for teams having equal numbers' do
-          expect_rankings [1, 2, 2, 4]
+        it 'sets rankings based on mutual matches' do
+          results = group.reload.results
+          expect_ranking results, 0, 1, team1 # 4-1 7
+          expect_ranking results, 1, 2, team4 # 3-2 4
+          expect_ranking results, 2, 3, team2 # 3-5 3 but B-C 3-0
+          expect_ranking results, 3, 4, team3 # 3-5 3
         end
       end
 
-      context 'and lottery has been done' do
+      context 'and mutual matches do not solve the ranking' do
         before do
-          mock_results team4, 5, +10, 8
-          mock_results team2, 4, +11, 11, 1
-          mock_results team1, 4, +11, 11, 0
-          mock_results team3, 4, +11, 10
+          create_match team1, team2, 1, 1
+          create_match team1, team3, 0, 2
+          create_match team1, team4, 0, 2
+          create_match team2, team3, 0, 2
+          create_match team2, team4, 0, 2
+          create_match team3, team4, 1, 1
         end
 
-        it 'takes lottery into account' do
-          expect_results [team4, team2, team1, team3]
+        context 'and lottery has not been done' do
+          it 'sets equal rankings for teams having equal numbers' do
+            results = group.reload.results
+            expect_ranking results, 0, 1, team3
+            expect_ranking results, 1, 1, team4
+            expect_ranking results, 2, 3, team1
+            expect_ranking results, 3, 3, team2
+          end
         end
 
-        it 'sets own rankings for teams having equal numbers' do
-          expect_rankings [1, 2, 3, 4]
+        context 'and lottery has been done' do
+          before do
+            team1.update_attribute :lot, 10
+            team2.update_attribute :lot, 11
+            team3.update_attribute :lot, 0
+            team4.update_attribute :lot, 1
+          end
+
+          it 'takes lottery into account' do
+            results = group.reload.results
+            expect_ranking results, 0, 1, team4
+            expect_ranking results, 1, 2, team3
+            expect_ranking results, 2, 3, team2
+            expect_ranking results, 3, 4, team1
+          end
         end
       end
     end
 
-    context 'when some teams end up into similar results' do
-      let(:age_group) { create :age_group, calculate_group_tables: true }
-      let(:groupX) { create :group, age_group: age_group }
-      let(:teamA) { create :team, name: 'Team A', group: groupX }
-      let(:teamB) { create :team, name: 'Team XB', group: groupX }
-      let(:teamC) { create :team, name: 'Team C', group: groupX }
-      let(:teamD) { create :team, name: 'Team D', group: groupX }
-
-      before do
-        create_match teamA, teamB, 2, 0
-        create_match teamA, teamC, 2, 1
-        create_match teamA, teamD, 0, 0
-        create_match teamB, teamC, 3, 0
-        create_match teamB, teamD, 0, 3
-        create_match teamC, teamD, 2, 0
-      end
-
-      it 'compares the matches of only those teams to define the ranking' do
-        results = groupX.reload.results
-        expect_result results, 1, teamA # 4-1 7
-        expect_result results, 2, teamD # 3-2 4
-        expect_result results, 3, teamB # 3-5 3 but B-C 3-0
-        expect_result results, 4, teamC # 3-5 3
-      end
-
-      def create_match(home_team, away_team, home_goals, away_goals)
-        create :group_stage_match, group: group, home_team: home_team, away_team: away_team, home_goals: home_goals, away_goals: away_goals
-      end
-
-      def expect_result(results, ranking, team)
-        expect(results[ranking - 1].ranking).to eql ranking
-        expect(results[ranking - 1].team).to eql team
-      end
+    def create_match(home_team, away_team, home_goals, away_goals)
+      create :group_stage_match, group: group, home_team: home_team, away_team: away_team, home_goals: home_goals, away_goals: away_goals
     end
 
-    def expect_results(teams)
-      expect(group.results.map(&:team_name)).to eql teams.map(&:name)
-    end
-
-    def expect_rankings(rankings)
-      expect(group.results.map(&:ranking)).to eql rankings
-    end
-
-    def mock_results(team, points = 0, goals_difference = 0, goals_for = 0, lot = nil)
-      fake_results = FakeTeamGroupResults.new(team, points, goals_difference, goals_for, lot)
-      allow(team).to receive(:group_results).and_return(fake_results)
+    def expect_ranking(results, index, ranking, team)
+      expect(results[index].ranking).to eql ranking
+      expect(results[index].team).to eql team
     end
   end
 
@@ -197,23 +173,5 @@ RSpec.describe Group, type: :model do
         end
       end
     end
-  end
-end
-
-class FakeTeamGroupResults
-  attr_reader :team, :team_id, :team_name, :lot
-  attr_accessor :ranking, :relative_points, :mutual_relative_points
-
-  def initialize(team, points, goals_difference, goals_for, lot)
-    @team = team
-    @team_id = team.id
-    @team_name = team.name
-    @relative_points = TeamGroupResults.relative_points points, goals_difference, goals_for
-    @mutual_relative_points = 0
-    @lot = lot
-  end
-
-  def to_s
-    "#{team_name}: #{ranking}. (#{relative_points})"
   end
 end

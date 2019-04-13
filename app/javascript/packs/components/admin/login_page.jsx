@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { loginToAdmin } from './api_client'
 import Title from '../components/title'
+import TextField from '../form/text_field'
+import Button from '../form/button'
 
 export default class AdminLoginPage extends React.PureComponent {
   static propTypes = {
@@ -39,18 +41,13 @@ export default class AdminLoginPage extends React.PureComponent {
   }
 
   renderField(label, field, type) {
-    return (
-      <div className="form__field">
-        <div className="label">{label}</div>
-        <div className=""><input type={type} value={this.state[field]} onChange={this.setValue(field)}/></div>
-      </div>
-    )
+    return <TextField label={label} onChange={this.setValue(field)} type={type} value={this.state[field]}/>
   }
 
   renderSubmitButton() {
     return (
       <div className="form__buttons">
-        <input type="submit" value="Kirjaudu sisään" onClick={this.submit} className="button button--primary"/>
+        <Button label="Kirjaudu sisään" onClick={this.submit} type="primary"/>
       </div>
     )
   }

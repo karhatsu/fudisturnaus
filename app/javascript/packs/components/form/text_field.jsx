@@ -16,7 +16,7 @@ TextField.propTypes = {
   label: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
-  type: PropTypes.oneOf(['date', 'number', 'text']),
+  type: PropTypes.oneOf(['date', 'number', 'password', 'text']),
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 }
 

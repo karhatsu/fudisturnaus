@@ -2,8 +2,9 @@ require 'rails_helper'
 
 RSpec.describe Group, type: :model do
   describe '#results' do
+    let(:tournament) { create :tournament, equal_points_rule: Tournament::EQUAL_POINTS_RULE_ALL_MATCHES_FIRST }
     let(:calculate_group_tables) { true }
-    let(:age_group) { create :age_group, calculate_group_tables: calculate_group_tables }
+    let(:age_group) { create :age_group, tournament: tournament, calculate_group_tables: calculate_group_tables }
     let(:group) { create :group, age_group: age_group }
     let!(:team1) { create :team, group: group, name: 'Team 1' }
     let!(:team2) { create :team, group: group, name: 'Team 2' }
@@ -30,20 +31,36 @@ RSpec.describe Group, type: :model do
 
     context 'when match results' do
       before do
-        create_match team1, team2, 1, 1
-        create_match team1, team3, 0, 2
-        create_match team1, team4, 0, 2
-        create_match team2, team3, 1, 3
-        create_match team2, team4, 0, 2
-        create_match team3, team4, 1, 1
+        create_match team1, team2, 1, 0
+        create_match team1, team3, 0, 3
+        create_match team1, team4, 10, 0
+        create_match team2, team3, 2, 0
+        create_match team2, team4, 5, 0
+        create_match team3, team4, 1, 0
       end
 
-      it 'returns teams sorted by points, goals difference, goals for and team name' do
-        results = group.reload.results
-        expect_ranking results, 0, 1, team3
-        expect_ranking results, 1, 2, team4
-        expect_ranking results, 2, 3, team2
-        expect_ranking results, 3, 4, team1
+      context 'and all matches first is used as equal points rule' do
+        it 'returns teams sorted by points, goals difference, goals for' do
+          results = group.reload.results
+          expect_ranking results, 0, 1, team1
+          expect_ranking results, 1, 2, team2
+          expect_ranking results, 2, 3, team3
+          expect_ranking results, 3, 4, team4
+        end
+      end
+
+      context 'and mutual matches first is used as equal points rule' do
+        before do
+          tournament.update_attribute :equal_points_rule, Tournament::EQUAL_POINTS_RULE_MUTUAL_MATCHES_FIRST
+        end
+
+        it 'returns teams sorted by points, mutual match points, goals difference, goals for' do
+          results = group.reload.results
+          expect_ranking results, 0, 1, team3
+          expect_ranking results, 1, 2, team2
+          expect_ranking results, 2, 3, team1
+          expect_ranking results, 3, 4, team4
+        end
       end
     end
 

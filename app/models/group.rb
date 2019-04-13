@@ -10,22 +10,19 @@ class Group < ApplicationRecord
   before_destroy :check_usage
 
   delegate :tournament, to: :age_group
+  delegate :equal_points_rule, to: :age_group
 
   def results
     return [] unless age_group.calculate_group_tables?
 
-    sorted_team_results = teams.map(&:group_results).sort do |a, b|
-      [b.relative_points, a.team_name] <=> [a.relative_points, b.team_name]
-    end
-    set_rankings sorted_team_results, false
+    sorted_team_results = sort_teams_by_primary_rule teams.map(&:group_results)
+    set_rankings sorted_team_results, true
     teams_with_duplicate_rankings = sorted_team_results.group_by(&:ranking).select {|_, teams| teams.length > 1}
     return sorted_team_results if teams_with_duplicate_rankings.empty?
 
     set_mutual_match_relative_points sorted_team_results, teams_with_duplicate_rankings
-    sorted_team_results = sorted_team_results.sort do |a, b|
-      [b.relative_points, b.mutual_relative_points, b.lot, a.team_name] <=> [a.relative_points, a.mutual_relative_points, a.lot, b.team_name]
-    end
-    set_rankings sorted_team_results, true
+    sorted_team_results = sort_teams_by_all_rules sorted_team_results
+    set_rankings sorted_team_results, false
     sorted_team_results
   end
 
@@ -68,11 +65,44 @@ class Group < ApplicationRecord
     end
   end
 
-  def set_rankings(sorted_teams, use_lottery)
+  def sort_teams_by_primary_rule(group_results)
+    if equal_points_rule == Tournament::EQUAL_POINTS_RULE_ALL_MATCHES_FIRST
+      group_results.sort do |a, b|
+        [b.relative_points, a.team_name] <=> [a.relative_points, b.team_name]
+      end
+    else
+      group_results.sort do |a, b|
+        [b.points, a.team_name] <=> [a.points, b.team_name]
+      end
+    end
+  end
+
+  def sort_teams_by_all_rules(sorted_team_results)
+    if equal_points_rule == Tournament::EQUAL_POINTS_RULE_ALL_MATCHES_FIRST
+      sorted_team_results.sort do |a, b|
+        [b.relative_points, b.mutual_relative_points, b.lot, a.team_name] <=>
+            [a.relative_points, a.mutual_relative_points, a.lot, b.team_name]
+      end
+    else
+      sorted_team_results.sort do |a, b|
+        [b.points, b.mutual_relative_points, b.relative_points, b.lot, a.team_name] <=>
+            [a.points, a.mutual_relative_points, a.relative_points, a.lot, b.team_name]
+      end
+    end
+  end
+
+  def set_rankings(sorted_teams, only_primary)
     prev_team_relative_points = -1
     prev_team_ranking = -1
+    use_only_points = equal_points_rule == Tournament::EQUAL_POINTS_RULE_MUTUAL_MATCHES_FIRST
     sorted_teams.map.with_index do |team, index|
-      total_relative_points = team.relative_points + team.mutual_relative_points + (use_lottery ? team.lot.to_i : 0)
+      if only_primary && use_only_points
+        total_relative_points = team.points
+      elsif only_primary
+        total_relative_points = team.relative_points
+      else
+        total_relative_points = team.relative_points + team.mutual_relative_points + team.lot.to_i
+      end
       team.ranking = total_relative_points == prev_team_relative_points ? prev_team_ranking : index + 1
       prev_team_relative_points = total_relative_points
       prev_team_ranking = team.ranking

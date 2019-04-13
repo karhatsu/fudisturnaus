@@ -7,6 +7,8 @@ class AgeGroup < ApplicationRecord
 
   before_destroy :check_usage
 
+  delegate :equal_points_rule, to: :tournament
+
   private
 
   def check_usage

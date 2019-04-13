@@ -6,7 +6,7 @@ import { deleteGroupStageMatch, saveGroupStageMatch } from './api_client'
 import AccessContext from '../util/access_context'
 import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util/date_util'
 import { resolveTournamentItemClasses, resolveSuggestedTime, getName } from '../util/util'
-import IdNameSelect from '../form/IdNameSelect'
+import IdNameSelect from '../form/id_name_select'
 import { idNamePropType } from '../util/custom_prop_types'
 import FormErrors from '../form/form_errors'
 

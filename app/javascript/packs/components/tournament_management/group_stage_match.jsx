@@ -90,7 +90,7 @@ export default class GroupStageMatch extends React.PureComponent {
   renderForm() {
     const { fields } = this.props
     return (
-      <div className="form form--horizontal">
+      <form className="form form--horizontal">
         <FormErrors errors={this.state.errors}/>
         <div className="tournament-item__form">
           <IdNameSelect field="fieldId" formData={this.state.form} items={fields} label="- Kenttä -" onChange={this.setField}/>
@@ -101,7 +101,7 @@ export default class GroupStageMatch extends React.PureComponent {
           {this.buildTeamDropDown('awayTeamId', '- Vierasjoukkue -')}
           {this.renderButtons()}
         </div>
-      </div>
+      </form>
     )
   }
 

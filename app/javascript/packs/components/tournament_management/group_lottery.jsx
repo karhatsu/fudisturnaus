@@ -39,7 +39,7 @@ export default class GroupLottery extends React.PureComponent {
     const { group: { ageGroupId, id, name, results } } = this.props
     const rankingCounts = this.resolveRankingCounts(results)
     return (
-      <div key={id}>
+      <form key={id}>
         <div className="tournament-management__section-title">{name} ({getName(this.props.ageGroups, ageGroupId)})</div>
         <FormErrors errors={this.state.errors}/>
         <div className="group-results__group">
@@ -57,7 +57,7 @@ export default class GroupLottery extends React.PureComponent {
           </table>
         </div>
         {this.renderButtons()}
-      </div>
+      </form>
     )
   }
 

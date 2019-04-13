@@ -21,7 +21,7 @@ export default class AdminLoginPage extends React.PureComponent {
 
   render() {
     return (
-      <div className="form form--vertical">
+      <form className="form form--vertical">
         <Title text="fudisturnaus.com" loading={false}/>
         <div className="login-form">
           {this.renderError()}
@@ -29,7 +29,7 @@ export default class AdminLoginPage extends React.PureComponent {
           {this.renderField('Salasana', 'password', 'password')}
           {this.renderSubmitButton()}
         </div>
-      </div>
+      </form>
     )
   }
 

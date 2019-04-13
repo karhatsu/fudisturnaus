@@ -57,7 +57,7 @@ export default class TournamentFields extends React.PureComponent {
 
   renderTournamentForm() {
     return (
-      <div className="form form--vertical">
+      <form className="form form--vertical">
         <FormErrors errors={this.state.errors}/>
         {this.renderTournamentField('Nimi', 'text', 'name', 'Esim. Kevät Cup 2019')}
         {this.renderTournamentField('Pvm', 'date', 'startDate')}
@@ -67,7 +67,7 @@ export default class TournamentFields extends React.PureComponent {
         {this.renderTournamentField('Otteluiden välinen aika (min)', 'number', 'matchMinutes')}
         {this.renderEqualPointsRuleField()}
         {this.renderTournamentFormButtons()}
-      </div>
+      </form>
     )
   }
 

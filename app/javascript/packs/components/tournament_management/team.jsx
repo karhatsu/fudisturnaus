@@ -67,7 +67,7 @@ export default class Team extends React.PureComponent {
     const { ageGroups, clubs, groups, team } = this.props
     const { form: { clubId, groupId, name } } = this.state
     return (
-      <div className="form form--horizontal">
+      <form className="form form--horizontal">
         <FormErrors errors={this.state.errors}/>
         <div className="tournament-item__form">
           <div className="form__field">
@@ -96,7 +96,7 @@ export default class Team extends React.PureComponent {
             {!!team && <Button type="danger" label="Poista" onClick={this.delete}/>}
           </div>
         </div>
-      </div>
+      </form>
     )
   }
 

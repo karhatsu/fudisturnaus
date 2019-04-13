@@ -52,7 +52,7 @@ export default class AgeGroup extends React.PureComponent {
   renderForm() {
     const { form: { calculateGroupTables, name } } = this.state
     return (
-      <div className="form form--horizontal">
+      <form className="form form--horizontal">
         <FormErrors errors={this.state.errors}/>
         <div className="tournament-item__form">
           <TextField ref={this.nameFieldRed} onChange={this.changeName} placeholder="Esim. P11 tai T09 Haaste" value={name}/>
@@ -66,7 +66,7 @@ export default class AgeGroup extends React.PureComponent {
             {!!this.props.ageGroup && <Button type="danger" label="Poista" onClick={this.delete}/>}
           </div>
         </div>
-      </div>
+      </form>
     )
   }
 

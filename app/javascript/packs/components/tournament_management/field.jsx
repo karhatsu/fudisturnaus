@@ -46,7 +46,7 @@ export default class Field extends React.PureComponent {
   renderForm() {
     const placeholder = 'Esim. Kenttä 1 tai Tekonurmi 2'
     return (
-      <div className="form form--horizontal">
+      <form className="form form--horizontal">
         <FormErrors errors={this.state.errors}/>
         <div className="tournament-item__form">
           <TextField ref={this.nameFieldRed} onChange={this.changeName} placeholder={placeholder} value={this.state.name}/>
@@ -56,7 +56,7 @@ export default class Field extends React.PureComponent {
             {!!this.props.field && <Button type="danger" label="Poista" onClick={this.delete}/>}
           </div>
         </div>
-      </div>
+      </form>
     )
   }
 

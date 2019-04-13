@@ -100,7 +100,7 @@ export default class PlayoffMatch extends React.PureComponent {
     const ageGroups = this.props.ageGroups.filter(ageGroup => ageGroup.calculateGroupTables)
     const { form } = this.state
     return (
-      <div className="form form--horizontal">
+      <form className="form form--horizontal">
         <FormErrors errors={this.state.errors}/>
         <div className="tournament-item__form">
           <IdNameSelect field="ageGroupId" formData={form} items={ageGroups} label="- Sarja -" onChange={this.changeValue('ageGroupId')}/>
@@ -114,7 +114,7 @@ export default class PlayoffMatch extends React.PureComponent {
           {this.renderRuleField('away')}
           {this.renderButtons()}
         </div>
-      </div>
+      </form>
     )
   }
 

@@ -54,7 +54,7 @@ export default class Group extends React.PureComponent {
   renderForm() {
     const { form: { ageGroupId, name } } = this.state
     return (
-      <div className="form form--horizontal">
+      <form className="form form--horizontal">
         <FormErrors errors={this.state.errors}/>
         <div className="tournament-item__form">
           <div className="form__field">
@@ -73,7 +73,7 @@ export default class Group extends React.PureComponent {
             {!!this.props.group && <Button type="danger" label="Poista" onClick={this.delete}/>}
           </div>
         </div>
-      </div>
+      </form>
     )
   }
 

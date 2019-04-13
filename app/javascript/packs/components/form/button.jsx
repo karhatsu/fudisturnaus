@@ -10,8 +10,8 @@ export default class Button extends React.PureComponent {
   }
 
   render() {
-    const { disabled, label, onClick } = this.props
-    return <input type={this.inputType()} value={label} onClick={onClick} className={this.classNames()} disabled={disabled}/>
+    const { disabled, label } = this.props
+    return <input type={this.inputType()} value={label} onClick={this.onClick} className={this.classNames()} disabled={disabled}/>
   }
 
   inputType = () => {
@@ -27,5 +27,10 @@ export default class Button extends React.PureComponent {
       default:
         return 'button'
     }
+  }
+
+  onClick = event => {
+    event.preventDefault()
+    this.props.onClick()
   }
 }

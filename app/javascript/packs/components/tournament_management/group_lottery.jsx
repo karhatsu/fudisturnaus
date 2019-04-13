@@ -5,6 +5,7 @@ import { saveLottery } from './api_client'
 import AccessContext from '../util/access_context'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
+import Button from '../form/button'
 
 export default class GroupLottery extends React.PureComponent {
   static propTypes = {
@@ -64,8 +65,8 @@ export default class GroupLottery extends React.PureComponent {
     if (this.state.formOpen) {
       return (
         <div className="form__buttons">
-          <input type="submit" value="Tallennan arvonnan tulos" onClick={this.save} className="button button--primary"/>
-          <input type="button" value="Peruuta" onClick={this.cancel} className="button"/>
+          <Button label="Tallennan arvonnan tulos" onClick={this.save} type="primary"/>
+          <Button label="Peruuta" onClick={this.cancel} type="normal"/>
         </div>
       )
     }

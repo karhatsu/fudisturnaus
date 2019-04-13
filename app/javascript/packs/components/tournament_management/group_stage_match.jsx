@@ -10,6 +10,7 @@ import IdNameSelect from '../form/id_name_select'
 import { idNamePropType } from '../util/custom_prop_types'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
+import Button from '../form/button'
 
 export default class GroupStageMatch extends React.PureComponent {
   static propTypes = {
@@ -144,9 +145,9 @@ export default class GroupStageMatch extends React.PureComponent {
   renderButtons() {
     return (
       <div className="form__buttons">
-        <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
-        <input type="button" value="Peruuta" onClick={this.cancel} className="button"/>
-        {!!this.props.groupStageMatch && <input type="button" value="Poista" onClick={this.delete} className="button button--danger"/>}
+        <Button label="Tallenna" onClick={this.submit} type="primary" disabled={!this.canSubmit()}/>
+        <Button label="Peruuta" onClick={this.cancel} type="normal"/>
+        {!!this.props.groupStageMatch && <Button type="danger" label="Poista" onClick={this.delete}/>}
       </div>
     )
   }

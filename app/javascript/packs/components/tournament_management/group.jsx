@@ -6,6 +6,7 @@ import { getName, resolveTournamentItemClasses } from '../util/util'
 import { idNamePropType } from '../util/custom_prop_types'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
+import Button from '../form/button'
 
 export default class Group extends React.PureComponent {
   static propTypes = {
@@ -67,9 +68,9 @@ export default class Group extends React.PureComponent {
           </div>
           <TextField ref={this.nameFieldRed} onChange={this.changeValue('name')} placeholder="Esim. A tai Taso 2" value={name}/>
           <div className="form__buttons">
-            <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
-            <input type="button" value="Peruuta" onClick={this.cancel} className="button"/>
-            {!!this.props.group && <input type="button" value="Poista" onClick={this.delete} className="button button--danger"/>}
+            <Button label="Tallenna" onClick={this.submit} type="primary" disabled={!this.canSubmit()}/>
+            <Button label="Peruuta" onClick={this.cancel} type="normal"/>
+            {!!this.props.group && <Button type="danger" label="Poista" onClick={this.delete}/>}
           </div>
         </div>
       </div>

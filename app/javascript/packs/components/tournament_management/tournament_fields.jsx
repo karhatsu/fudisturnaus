@@ -4,6 +4,7 @@ import { formatTournamentDates } from '../util/date_util'
 import AccessContext from '../util/access_context'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
+import Button from '../form/button'
 
 export default class TournamentFields extends React.PureComponent {
   static propTypes = {
@@ -91,8 +92,8 @@ export default class TournamentFields extends React.PureComponent {
   renderTournamentFormButtons() {
     return (
       <div className="form__buttons">
-        <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
-        <input type="submit" value="Peruuta" onClick={this.cancel} className="button"/>
+        <Button label="Tallenna" onClick={this.submit} type="primary" disabled={!this.canSubmit()}/>
+        <Button label="Peruuta" onClick={this.cancel} type="normal"/>
       </div>
     )
   }

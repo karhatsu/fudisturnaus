@@ -5,6 +5,7 @@ import AccessContext from '../util/access_context'
 import { resolveTournamentItemClasses } from '../util/util'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
+import Button from '../form/button'
 
 export default class AgeGroup extends React.PureComponent {
   static propTypes = {
@@ -60,9 +61,9 @@ export default class AgeGroup extends React.PureComponent {
             Laske sarjataulukot
           </div>
           <div className="form__buttons">
-            <input type="submit" value="Tallenna" onClick={this.submit} className="button button--primary" disabled={!this.canSubmit()}/>
-            <input type="button" value="Peruuta" onClick={this.cancel} className="button"/>
-            {!!this.props.ageGroup && <input type="button" value="Poista" onClick={this.delete} className="button button--danger"/>}
+            <Button label="Tallenna" onClick={this.submit} type="primary" disabled={!this.canSubmit()}/>
+            <Button label="Peruuta" onClick={this.cancel} type="normal"/>
+            {!!this.props.ageGroup && <Button type="danger" label="Poista" onClick={this.delete}/>}
           </div>
         </div>
       </div>

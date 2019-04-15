@@ -1,1 +1,1 @@
-json.(@group, :id, :name, :age_group_id)
+json.partial! 'group', group: @group

@@ -1,1 +1,1 @@
-json.(@field, :id, :name)
+json.partial! 'field', field: @field

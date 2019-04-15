@@ -1,26 +1,20 @@
-json.(@tournament, :id, :name, :start_date, :end_date, :days, :location, :address, :match_minutes, :access_key, :equal_points_rule)
+json.partial! 'tournament', tournament: @tournament
 
-json.age_groups @tournament.age_groups, :id, :name, :calculate_group_tables
+json.age_groups @tournament.age_groups, partial: 'api/v1/official/age_groups/age_group', as: :age_group
 
-json.clubs @clubs, :id, :name
+json.clubs @clubs, partial: 'api/v1/official/clubs/club', as: :club
 
 json.groups @tournament.groups do |group|
-  json.(group, :id, :name, :age_group_id, :results_in_all_matches?)
+  json.partial! 'api/v1/official/groups/group', group: group
   if group.results_in_all_matches? && group.has_equal_rankings? || group.lottery_done?
     json.results group.results, :ranking, :team_name, :team_id, :lot
   end
 end
 
-json.group_stage_matches @tournament.group_stage_matches, :id, :age_group_id, :group_id, :field_id, :start_time,
-                         :home_team_id, :away_team_id
+json.group_stage_matches @tournament.group_stage_matches, partial: 'api/v1/official/group_stage_matches/group_stage_match', as: :group_stage_match
 
-json.playoff_matches @tournament.playoff_matches, :id, :start_time, :title, :age_group_id, :field_id,
-                     :home_team_origin_id, :home_team_origin_type, :home_team_origin_rule,
-                     :away_team_origin_id, :away_team_origin_type, :away_team_origin_rule
+json.playoff_matches @tournament.playoff_matches, partial: 'api/v1/official/playoff_matches/playoff_match', as: :playoff_match
 
-json.fields @tournament.fields, :id, :name
+json.fields @tournament.fields, partial: 'api/v1/official/fields/field', as: :field
 
-json.teams @tournament.teams do |team|
-  json.(team, :id, :name, :group_id)
-  json.club team.club, :id, :name
-end
+json.teams @tournament.teams, partial: 'api/v1/official/teams/team', as: :team

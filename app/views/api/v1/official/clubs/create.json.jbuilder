@@ -1,1 +1,1 @@
-json.(@club, :id, :name)
+json.partial! 'club', club: @club

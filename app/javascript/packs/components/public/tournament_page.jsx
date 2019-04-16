@@ -9,6 +9,7 @@ import { buildTournamentFromSocketData } from '../util/util'
 import { formatTournamentDates } from '../util/date_util'
 import Title from '../components/title'
 import { fetchTournament } from './api_client'
+import Filters from './filters'
 
 export default class TournamentPage extends React.PureComponent {
   static propTypes = {
@@ -52,7 +53,7 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   renderContent() {
-    const { error, tournament } = this.state
+    const { error, filters, tournament } = this.state
     if (error) {
       return <div className="message message--error">Virhe haettaessa turnauksen tietoja. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.</div>
     }
@@ -67,7 +68,7 @@ export default class TournamentPage extends React.PureComponent {
     const filteredPlayoffMatches = tournament.playoffMatches.filter(this.isFilterMatch)
     return (
       <div>
-        {this.renderFilters()}
+        <Filters filters={filters} setFilterValue={this.setFilterValue} tournament={tournament}/>
         {this.renderMatches(groupStageMatches, 'Alkulohkojen ottelut', tournament.playoffMatches.length)}
         {this.renderGroupTables()}
         {this.renderMatches(filteredPlayoffMatches, 'Jatko-ottelut', filteredPlayoffMatches.length)}
@@ -89,38 +90,9 @@ export default class TournamentPage extends React.PureComponent {
     return googleMapsUrl ? <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="sub-title__location">{location}</a> : location
   }
 
-  renderFilters = () => {
-    const { filters: { ageGroupId: filterAgeGroupId, clubId: filterClubId }, tournament: { ageGroups, groups, clubs, teams, fields } } = this.state
-    return (
-      <div className="filters">
-        {this.renderFilter('ageGroupId', ageGroups, 'Sarja')}
-        {this.renderFilter('groupId', groups.filter(group => !filterAgeGroupId || group.ageGroupId === filterAgeGroupId), 'Lohko')}
-        {this.renderFilter('clubId', clubs, 'Seura')}
-        {this.renderFilter('teamId', teams.filter(team => !filterClubId || team.clubId === filterClubId), 'Joukkue')}
-        {this.renderFilter('fieldId', fields, 'Kenttä')}
-      </div>
-    )
-  }
-
-  renderFilter = (key, items, defaultText) => {
-    if (items.length > 1) {
-      return (
-        <select id={`filter-${key}`} className="filter" onChange={this.setFilterValue(key)}>
-          <option>{defaultText}</option>
-          {items.map(item => {
-            const { id, name } = item
-            return <option key={id} value={id}>{name}</option>
-          })}
-        </select>
-      )
-    }
-  }
-
-  setFilterValue = key => {
-    return event => {
-      const filters = { ...this.state.filters, [key]: parseInt(event.target.value) }
-      this.setState({ filters })
-    }
+  setFilterValue = key => event => {
+    const filters = { ...this.state.filters, [key]: parseInt(event.target.value) }
+    this.setState({ filters })
   }
 
   renderMatches = (matches, title, showTitle) => {

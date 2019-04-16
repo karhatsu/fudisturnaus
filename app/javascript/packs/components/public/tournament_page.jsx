@@ -69,7 +69,7 @@ export default class TournamentPage extends React.PureComponent {
     return (
       <div>
         <Filters filters={filters} setFilterValue={this.setFilterValue} tournament={tournament}/>
-        {this.renderMatches(groupStageMatches, 'Alkulohkojen ottelut', tournament.playoffMatches.length)}
+        {this.renderMatches(groupStageMatches, 'Alkulohkojen ottelut', tournament.playoffMatches.length, true)}
         {this.renderGroupTables()}
         {this.renderMatches(filteredPlayoffMatches, 'Jatko-ottelut', filteredPlayoffMatches.length)}
       </div>
@@ -95,7 +95,7 @@ export default class TournamentPage extends React.PureComponent {
     this.setState({ filters })
   }
 
-  renderMatches = (matches, title, showTitle) => {
+  renderMatches = (matches, title, showTitle, showEmptyError = false) => {
     const { official, renderMatch } = this.props
     const { filters, tournament: { days, fields } } = this.state
     return (
@@ -108,6 +108,7 @@ export default class TournamentPage extends React.PureComponent {
           renderMatch={renderMatch}
           selectedClubId={filters.clubId}
           selectedTeamId={filters.teamId}
+          showEmptyError={showEmptyError}
           tournamentDays={days}
           tournamentId={this.props.tournamentId}
         />

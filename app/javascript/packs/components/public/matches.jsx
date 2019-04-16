@@ -10,6 +10,7 @@ export default class Matches extends React.PureComponent {
     renderMatch: PropTypes.func.isRequired,
     selectedClubId: PropTypes.number,
     selectedTeamId: PropTypes.number,
+    showEmptyError: PropTypes.bool,
     tournamentDays: PropTypes.number.isRequired,
     tournamentId: PropTypes.number.isRequired,
   }
@@ -20,6 +21,9 @@ export default class Matches extends React.PureComponent {
 
   render() {
     const matchesByDate = this.groupByDate()
+    if(Object.keys(matchesByDate).length === 0 && this.props.showEmptyError) {
+      return <div className="message message--error">Ei yhtään ottelua, muuta hakuehtoja</div>
+    }
     return (
       <div className="matches">
         {Object.keys(matchesByDate).map(date => this.renderDate(matchesByDate, date))}

@@ -10,6 +10,8 @@ class Team < ApplicationRecord
 
   before_destroy :check_usage
 
+  delegate :age_group_id, to: :group
+
   def group_results(teams = nil)
     TeamGroupResults.new self, teams
   end

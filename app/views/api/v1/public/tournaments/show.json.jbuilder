@@ -35,6 +35,6 @@ json.groups @tournament.groups do |group|
     json.(team, :id, :club_id)
   end
 end
-json.teams @tournament.teams, :id, :name, :club_id
+json.teams @tournament.teams, :id, :name, :club_id, :group_id, :age_group_id
 json.clubs @tournament.clubs, :id, :name
 json.fields @tournament.fields, :id, :name

@@ -94,12 +94,11 @@ describe 'tournament page', type: :system do
 
         select club2.name, from: 'filter-clubId'
         expect_match_count 2
-
         select team4.name, from: 'filter-teamId'
         expect_one_match team4, team5
-
-        select 'Seura', from: 'filter-clubId'
         select 'Joukkue', from: 'filter-teamId'
+        select 'Seura', from: 'filter-clubId'
+
         select group1.name, from: 'filter-groupId'
         expect_match_count 2
       end

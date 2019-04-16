@@ -28,11 +28,11 @@ export default class TournamentPage extends React.PureComponent {
     this.state = {
       error: false,
       filters: {
-        ageGroupId: null,
-        clubId: null,
-        fieldId: null,
-        groupId: null,
-        teamId: null,
+        ageGroupId: 0,
+        clubId: 0,
+        fieldId: 0,
+        groupId: 0,
+        teamId: 0,
       },
       tournament: undefined,
     }

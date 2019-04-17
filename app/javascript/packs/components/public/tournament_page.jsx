@@ -64,8 +64,8 @@ export default class TournamentPage extends React.PureComponent {
       const msg = this.props.official ? 'Aloita syöttämällä turnauksen tiedot' : 'Turnauksen otteluohjelmaa ei ole vielä julkistettu'
       return <div className="message message--error">{msg}</div>
     }
-    const groupStageMatches = tournament.groupStageMatches.filter(this.isFilterMatch)
-    const filteredPlayoffMatches = tournament.playoffMatches.filter(this.isFilterMatch)
+    const groupStageMatches = tournament.groupStageMatches.filter(this.isFilterGroupStageMatch)
+    const filteredPlayoffMatches = tournament.playoffMatches.filter(this.isFilterPlayoffMatch)
     return (
       <div>
         <Filters filters={filters} setFilterValue={this.setFilterValue} tournament={tournament}/>
@@ -116,12 +116,22 @@ export default class TournamentPage extends React.PureComponent {
     )
   }
 
-  isFilterMatch = match => {
+  isFilterGroupStageMatch = match => {
     const { filters } = this.state
     const { ageGroupId, fieldId, groupId, homeTeam, awayTeam } = match
     return (!filters.ageGroupId || filters.ageGroupId === ageGroupId)
       && (!filters.fieldId || filters.fieldId === fieldId)
       && (!filters.groupId || filters.groupId === groupId)
+      && (!filters.clubId || filters.clubId === homeTeam.clubId || filters.clubId === awayTeam.clubId)
+      && (!filters.teamId || filters.teamId === homeTeam.id || filters.teamId === awayTeam.id)
+  }
+
+  isFilterPlayoffMatch = match => {
+    const { filters } = this.state
+    const { ageGroupId, fieldId, homeTeam, awayTeam, homeTeamOriginId, awayTeamOriginId } = match
+    return (!filters.ageGroupId || filters.ageGroupId === ageGroupId)
+      && (!filters.fieldId || filters.fieldId === fieldId)
+      && (!filters.groupId || filters.groupId === homeTeamOriginId || filters.groupId === awayTeamOriginId)
       && (!filters.clubId || (homeTeam && filters.clubId === homeTeam.clubId) || (awayTeam && filters.clubId === awayTeam.clubId))
       && (!filters.teamId || (homeTeam && filters.teamId === homeTeam.id) || (awayTeam && filters.teamId === awayTeam.id))
   }

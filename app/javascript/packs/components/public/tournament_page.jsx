@@ -143,15 +143,15 @@ export default class TournamentPage extends React.PureComponent {
       return (
         <React.Fragment>
           <div className="title-2">Sarjataulukot</div>
-          <div className="group-results row">{filteredGroups.map(this.renderGroup)}</div>
+          <div className="group-results row">{filteredGroups.map(group => this.renderGroup(group, filteredGroups.length))}</div>
         </React.Fragment>
       )
     }
   }
 
-  renderGroup = group => {
-    const { filters, tournament: { groups } } = this.state
-    return <GroupResults filters={filters} group={group} groupsCount={groups.length} key={group.id}/>
+  renderGroup = (group, groupsCount) => {
+    const { filters } = this.state
+    return <GroupResults filters={filters} group={group} groupsCount={groupsCount} key={group.id}/>
   }
 
   isFilterGroup = group => {

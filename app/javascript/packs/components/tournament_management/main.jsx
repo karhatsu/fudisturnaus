@@ -456,7 +456,7 @@ export default class TournamentManagementPage extends React.PureComponent {
         <React.Fragment>
           <div className="title-2">Takaisin tulosten syöttöön</div>
           <div className="tournament-management__section">
-            <Link to={to}>Takaisin tulosten syöttöön</Link>
+            <Link to={to} className="back-link">&lt;- Takaisin tulosten syöttöön</Link>
           </div>
         </React.Fragment>
       )

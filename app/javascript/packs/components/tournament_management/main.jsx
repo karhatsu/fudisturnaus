@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import * as clipboard from 'clipboard-polyfill'
 
 import { fetchTournament, updateTournament } from './api_client'
 import Title from '../components/title'
@@ -15,6 +14,7 @@ import Team from './team'
 import Lottery from './lottery'
 import AccessContext from '../util/access_context'
 import { getName } from '../util/util'
+import OfficialLinkCopy from './official_link_copy'
 
 export default class TournamentManagementPage extends React.PureComponent {
   static propTypes = {
@@ -34,7 +34,6 @@ export default class TournamentManagementPage extends React.PureComponent {
     super(props)
     this.state = {
       error: false,
-      officialLinkCopied: false,
       tournament: undefined,
     }
   }
@@ -74,8 +73,8 @@ export default class TournamentManagementPage extends React.PureComponent {
         {this.renderLotterySection()}
         <div className="title-2">Jatko-ottelut</div>
         {this.renderPlayoffMatchesSection()}
-        <div className="title-2">Toimitsijan linkki</div>
-        {this.renderOfficialLink()}
+        <div className="title-2">Toimitsijan linkit</div>
+        {this.renderOfficialLinks()}
         {this.renderBackLink()}
       </div>
     )
@@ -441,33 +440,13 @@ export default class TournamentManagementPage extends React.PureComponent {
     }
   }
 
-  renderOfficialLink() {
-    const successFeedbackStyle = this.state.officialLinkCopied ? undefined :  { display: 'none' }
-    const errorFeedbackStyle = this.state.officialLinkCopyError ? undefined :  { display: 'none' }
+  renderOfficialLinks() {
     return (
-      <div className="tournament-management__section official-link">
-        <div className="official-link__copy" onClick={this.copyOfficialLink}>Kopioi linkki</div>
-        <div className="official-link__feedback" style={successFeedbackStyle}>Linkki kopioitu leikepöydälle</div>
-        <div className="official-link__error" style={errorFeedbackStyle}>Selaimesi ei tue linkin kopiointia</div>
-      </div>
+      <React.Fragment>
+        <OfficialLinkCopy accessKey={this.state.tournament.accessKey} namespace="official" text="Kopioi hallintalinkki (kaikki oikeudet)"/>
+        <OfficialLinkCopy accessKey={this.state.tournament.resultsAccessKey} namespace="results" text="Kopioi linkki tulosten syöttöön"/>
+      </React.Fragment>
     )
-  }
-
-  copyOfficialLink = () => {
-    const location = window.location
-    const port = location.port ? `:${location.port}` : ''
-    const url = `${location.protocol}//${location.hostname}${port}/official/${this.state.tournament.accessKey}`
-    clipboard.writeText(url).then(() => {
-      this.setState({ officialLinkCopied: true })
-      setTimeout(() => {
-        this.setState({ officialLinkCopied: false })
-      }, 5000)
-    }).catch(() => {
-      this.setState({ officialLinkCopyError: true })
-      setTimeout(() => {
-        this.setState({ officialLinkCopyError: false })
-      }, 5000)
-    })
   }
 
   renderBackLink() {

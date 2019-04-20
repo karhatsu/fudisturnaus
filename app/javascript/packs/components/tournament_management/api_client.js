@@ -185,6 +185,8 @@ function buildHeaders(accessContext) {
   const headers = { 'Content-Type': 'application/json' }
   if (accessContext.officialAccessKey) {
     headers['X-Access-Key'] = accessContext.officialAccessKey
+  } else if (accessContext.resultsAccessKey) {
+    headers['X-Results-Access-Key'] = accessContext.resultsAccessKey
   } else if (accessContext.adminSessionKey) {
     headers['X-Session-Key'] = accessContext.adminSessionKey
   }

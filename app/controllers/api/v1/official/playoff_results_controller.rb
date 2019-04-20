@@ -13,6 +13,10 @@ class Api::V1::Official::PlayoffResultsController < Api::V1::Official::OfficialB
 
   private
 
+  def allow_results_access_key?
+    true
+  end
+
   def find_and_verity_match
     @match = PlayoffMatch.find(params[:match_id])
     render status: 400, json: { error: 'Match not found' } unless @match

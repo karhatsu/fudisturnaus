@@ -165,12 +165,12 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   renderManagementLink() {
-    if (this.props.official) {
-      const { match: { params: { accessKey } } } = this.props
+    const { match } = this.props
+    if (match && match.params.accessKey) {
       return (
         <div>
           <div className="title-2">Turnauksen hallinta</div>
-          <div className="management-link"><Link to={`/official/${accessKey}/management`}>Muokkaa turnauksen asetuksia</Link></div>
+          <div className="management-link"><Link to={`/official/${match.params.accessKey}/management`}>Muokkaa turnauksen asetuksia</Link></div>
         </div>
       )
     }

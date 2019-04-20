@@ -13,6 +13,10 @@ class Api::V1::Official::GroupStageResultsController < Api::V1::Official::Offici
 
   private
 
+  def allow_results_access_key?
+    true
+  end
+
   def find_and_verity_match
     @match = GroupStageMatch.find(params[:match_id])
     render status: 400, json: { error: 'Match not found' } unless @match

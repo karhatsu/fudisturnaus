@@ -31,6 +31,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :results do
+    get ':results_access_key' => 'results#index'
+  end
+
   namespace :official do
     get ':access_key/management' => 'official#index'
     get ':access_key' => 'official#index'

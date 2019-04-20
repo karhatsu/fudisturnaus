@@ -27,7 +27,7 @@ export default class GroupResults extends React.PureComponent {
           <table>
             <thead>
               <tr>
-                <th colSpan={7}>{ageGroup.name} {name}</th>
+                <th colSpan={7} className="group-results__title">{ageGroup.name} {name}</th>
               </tr>
               <tr>
                 <th/>

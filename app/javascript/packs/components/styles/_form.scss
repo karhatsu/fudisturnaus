@@ -35,12 +35,12 @@ $inputHeight: 16px;
 
 .official-link {
   .official-link__copy {
+    color: $green;
     cursor: pointer;
     display: inline-block;
   }
 
   .official-link__feedback {
-    color: $green;
     display: inline-block;
     margin-left: 8px;
   }

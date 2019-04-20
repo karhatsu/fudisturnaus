@@ -12,7 +12,7 @@ describe 'official', type: :system do
       expect(page).to have_current_path '/'
       visit "/official/#{tournament.access_key}"
       expect(page).to have_current_path "/official/#{tournament.access_key}"
-      expect(page.find('.title .title__text').text).to eql tournament.name
+      expect(page).to have_xpath("(//span[contains(@class, 'title__text')])[text()='#{tournament.name}']")
     end
   end
 

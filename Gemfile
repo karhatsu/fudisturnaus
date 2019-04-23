@@ -63,6 +63,7 @@ end
 
 group :production do
   gem 'redis', '~> 4.0'
+  gem 'sendgrid-ruby'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -36,3 +36,7 @@ yarn-debug.log*
 .yarn-integrity
 
 .env
+
+.idea
+.generators
+.rakeTasks

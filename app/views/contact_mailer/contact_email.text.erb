@@ -1,0 +1,15 @@
+Nimi:
+<%= @name %>
+
+Yhteystiedot:
+<%= @contact_info %>
+
+Viesti:
+<%= @message %>
+
+<% if @tournament %>
+Turnauksen tiedot:
+<%= @tournament.name %>
+<%= @tournament.location %>
+<%= @tournament.start_date %>
+<% end %>

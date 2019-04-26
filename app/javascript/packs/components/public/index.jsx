@@ -3,6 +3,6 @@ import TournamentList from './tournament_list'
 
 export default class Index extends React.PureComponent {
   render() {
-    return <TournamentList buildLink={id => `/tournaments/${id}`} title="fudisturnaus.com"/>
+    return <TournamentList buildLink={id => `/tournaments/${id}`} showInfo={true} title="fudisturnaus.com"/>
   }
 }

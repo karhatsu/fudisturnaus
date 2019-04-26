@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { endOfDay, isBefore, isSameDay, parseISO } from 'date-fns'
 
 import { fetchTournaments } from './api_client'
@@ -11,6 +12,7 @@ export default class TournamentList extends React.PureComponent {
   static propTypes = {
     buildLink: PropTypes.func.isRequired,
     children: PropTypes.arrayOf(PropTypes.element),
+    showInfo: PropTypes.bool,
     title: PropTypes.string.isRequired,
   }
 
@@ -27,8 +29,22 @@ export default class TournamentList extends React.PureComponent {
     return (
       <div>
         <Title loading={!error && !tournaments} text={this.props.title}/>
+        {this.props.showInfo && this.renderInfo()}
         {this.renderContent()}
         {this.props.children}
+      </div>
+    )
+  }
+
+  renderInfo() {
+    return (
+      <div>
+        <div className="title-2">Mikä fudisturnaus.com?</div>
+        <div className="info-box">
+          <Link to="/info" className="info-box__link">
+            Tarvitsetko tulospalvelun omalle junnuturnauksellesi? Lue lisää täältä.
+          </Link>
+        </div>
       </div>
     )
   }

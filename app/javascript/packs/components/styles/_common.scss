@@ -9,6 +9,20 @@ body {
   padding: 8px;
 }
 
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li:before {
+  content: '⚽';
+}
+
+li {
+  list-style: none;
+  margin-bottom: 8px;
+}
+
 .loading {
   margin-top: 16px;
 }

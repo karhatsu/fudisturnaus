@@ -1,6 +1,10 @@
 @import 'variables';
 @import 'shared';
 
+.info-box {
+  @include white-box(false);
+}
+
 .tournament-links {
   margin-top: 16px;
 }

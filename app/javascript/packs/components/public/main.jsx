@@ -6,11 +6,13 @@ import Index from './index'
 import TournamentPage from './tournament_page'
 import PropTypes from 'prop-types'
 import Match from './match'
+import Info from './info'
 
 export default class Main extends React.PureComponent {
   render() {
     return (
       <div>
+        <Route path="/info" component={Info}/>
         <Route path="/tournaments/:id" component={TournamentPageWrapper} />
         <Route path="/" exact component={Index} />
       </div>

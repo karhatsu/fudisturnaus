@@ -36,7 +36,18 @@ export default class Info extends React.PureComponent {
           Palvelu on ainakin tällä hetkellä täysin ilmainen. Mikäli palvelu muuttuu jossain vaiheessa maksulliseksi,
           se ei aiheuta olemassa oleviin turnauksiin mitään veloituksia.
         </div>
+        <div className="title-2">Miten saamme palvelun käyttöön?</div>
+        <div className="info-box">
+          <a className="info-box__link" onClick={this.sendEmail}>
+            Laita sähköpostia, niin hoidetaan asia saman tien kuntoon.
+          </a>
+        </div>
       </div>
     )
+  }
+
+  sendEmail = () => {
+    const email = ['com', '.', 'karhatsu', '@', 'henri'].reverse().join('')
+    window.location.href = `mailto:${email}?subject=fudisturnaus.com`
   }
 }

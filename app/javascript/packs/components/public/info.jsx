@@ -1,5 +1,6 @@
 import React from 'react'
 import Title from '../components/title'
+import ContactForm from './contact_form'
 
 export default class Info extends React.PureComponent {
   render() {
@@ -38,16 +39,9 @@ export default class Info extends React.PureComponent {
         </div>
         <div className="title-2">Miten saamme palvelun käyttöön?</div>
         <div className="info-box">
-          <a className="info-box__link" onClick={this.sendEmail}>
-            Laita sähköpostia, niin hoidetaan asia saman tien kuntoon.
-          </a>
+          <ContactForm/>
         </div>
       </div>
     )
-  }
-
-  sendEmail = () => {
-    const email = ['com', '.', 'karhatsu', '@', 'henri'].reverse().join('')
-    window.location.href = `mailto:${email}?subject=fudisturnaus.com`
   }
 }

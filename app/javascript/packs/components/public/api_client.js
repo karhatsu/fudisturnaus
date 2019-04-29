@@ -1,3 +1,5 @@
+import { handleConnectionErrorOnSave, handleSaveResponse } from '../util/api_util'
+
 export function fetchTournaments(callback) {
   fetch('/api/v1/public/tournaments')
     .then(response => response.json())
@@ -17,4 +19,14 @@ export function fetchTournament(id, callback) {
       callback(true)
 
     })
+}
+
+export function sendContactRequest(data, callback) {
+  fetch('/api/v1/public/contacts', {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: { 'Content-Type': 'application/json' },
+  }).then(response => {
+    handleSaveResponse(response, callback)
+  }).catch(() => handleConnectionErrorOnSave(callback))
 }

@@ -5,6 +5,10 @@ $inputHeight: 16px;
   @include white-box();
 }
 
+.form__intro {
+  margin: 8px 0 16px;
+}
+
 .form__field {
   .label {
     font-size: 14px;
@@ -121,4 +125,15 @@ $inputHeight: 16px;
 .form-error {
   color: $red;
   font-weight: 600;
+}
+
+textarea {
+  padding: 8px;
+  width: 95%;
+}
+
+@media only screen and (min-width: 48em) {
+  textarea {
+    width: auto;
+  }
 }

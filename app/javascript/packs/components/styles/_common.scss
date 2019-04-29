@@ -39,8 +39,16 @@ li {
   padding: 8px;
 }
 
+.message--standalone {
+  margin-top: 0;
+}
+
 .message--error {
   background-color: #ff554b;
+}
+
+.message--success {
+  background-color: $green;
 }
 
 .footer {

@@ -11,6 +11,6 @@ export default class FormErrors extends React.PureComponent {
     if (!errors.length) {
       return null
     }
-    return <div className="form-error">{errors.join('. ')}.</div>
+    return <div className="form-error">{errors.join('. ')}{errors.length > 1 ? '.' : ''}</div>
   }
 }

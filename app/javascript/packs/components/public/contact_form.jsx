@@ -4,6 +4,9 @@ import Button from '../form/button'
 import { sendContactRequest } from './api_client'
 import FormErrors from '../form/form_errors'
 
+const genericIntro = 'Lähettäkää alla oleva lomake, niin hoidetaan asia kuntoon saman tien.'
+const tournamentIntro = 'Jos tiedätte jo turnauksen tarkemmat tiedot, voitte täyttää ne valmiiksi tähän.'
+
 export default class ContactForm extends React.PureComponent {
   constructor(props) {
     super(props)
@@ -14,6 +17,10 @@ export default class ContactForm extends React.PureComponent {
         name: '',
         contactInfo: '',
         message: '',
+        tournamentName: '',
+        tournamentStartDate: '',
+        tournamentDays: 1,
+        tournamentLocation: '',
       },
     }
   }
@@ -29,10 +36,15 @@ export default class ContactForm extends React.PureComponent {
     return (
       <form className="form form--vertical">
         <FormErrors errors={this.state.errors}/>
-        {this.renderIntro()}
-        {this.renderTournamentField('Nimi', 'name', 'Oma nimesi')}
-        {this.renderTournamentField('Yhteystieto', 'contactInfo', 'Esim. sähköposti tai puhelin')}
+        {this.renderIntro(genericIntro)}
+        {this.renderField('Nimi', 'name', 'text', 'Oma nimesi')}
+        {this.renderField('Yhteystieto', 'contactInfo', 'text', 'Esim. sähköposti tai puhelin')}
         {this.renderMessageField()}
+        {this.renderIntro(tournamentIntro)}
+        {this.renderField('Turnauksen nimi', 'tournamentName', 'text')}
+        {this.renderField('Pvm', 'tournamentStartDate', 'date')}
+        {this.renderField('Kesto (pv)', 'tournamentDays', 'number')}
+        {this.renderField('Paikka (kentän nimi)', 'tournamentLocation', 'text')}
         <div className="form__buttons">
           <Button label="Lähetä" onClick={this.submit} type="primary" disabled={!this.canSubmit()}/>
         </div>
@@ -40,21 +52,16 @@ export default class ContactForm extends React.PureComponent {
     )
   }
 
-  renderIntro() {
-    return (
-      <div className="form__intro">
-        Lähetä alla oleva lomake, niin hoidetaan asia kuntoon saman tien. Voit myös kysyä lomakkeen avulla, jos jokin
-        asia mietityttää.
-      </div>
-    )
+  renderIntro(text) {
+    return <div className="form__intro">{text}</div>
   }
 
-  renderTournamentField(label, field, placeholder) {
+  renderField(label, field, type, placeholder) {
     return <TextField
       label={label}
       onChange={this.setValue(field)}
       placeholder={placeholder}
-      type="text"
+      type={type}
       value={this.state.form[field]}/>
   }
 
@@ -73,8 +80,8 @@ export default class ContactForm extends React.PureComponent {
   }
 
   canSubmit = () => {
-    const { form: { name, contactInfo, message } } = this.state
-    return !!name && !!contactInfo && !!message
+    const { form: { name, contactInfo } } = this.state
+    return !!name && !!contactInfo
   }
 
   submit = () => {

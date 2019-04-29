@@ -7,9 +7,10 @@ Yhteystiedot:
 Viesti:
 <%= @message %>
 
-<% if @tournament %>
+<% unless @tournament_name.blank? %>
 Turnauksen tiedot:
-<%= @tournament.name %>
-<%= @tournament.location %>
-<%= @tournament.start_date %>
+Nimi: <%= @tournament_name %>
+Paikka: <%= @tournament_location %>
+Pvm: <%= @tournament_start_date %>
+Pv: <%= @tournament_days %>
 <% end %>

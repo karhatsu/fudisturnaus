@@ -87,8 +87,8 @@ export default class TournamentManagementPage extends React.PureComponent {
   fetchTournamentData = () => {
     fetchTournament(this.context, this.getTournamentId(), (err, tournament) => {
       if (tournament) {
-        const { teams } = tournament
-        this.setState({ tournament: { ...tournament, teams: teams.sort(this.getComparator('teams')) } })
+        const teams = [...tournament.teams]
+        this.setState({ tournament: { ...tournament, teams: teams.sort(this.getComparator(tournament, 'teams')) } })
       } else if (err && !this.state.tournament) {
         this.setState({ error: true })
       }
@@ -378,14 +378,15 @@ export default class TournamentManagementPage extends React.PureComponent {
   }
 
   onItemSave = itemName => data => {
-    const items = [...this.state.tournament[itemName]]
+    const tournament = { ...this.state.tournament }
+    const items = [...tournament[itemName]]
     const itemIndex = items.findIndex(item => item.id === data.id)
     if (itemIndex !== -1) {
       items[itemIndex] = { ...items[itemIndex], ...data }
     } else {
       items.push(data)
     }
-    this.setState({ tournament: { ...this.state.tournament, [itemName]: items.sort(this.getComparator(itemName)) } })
+    this.setState({ tournament: { ...tournament, [itemName]: items.sort(this.getComparator(tournament, itemName)) } })
   }
 
   onItemDelete = itemName => id => {
@@ -395,24 +396,21 @@ export default class TournamentManagementPage extends React.PureComponent {
     this.setState({ tournament: { ...this.state.tournament, [itemName]: items } })
   }
 
-  getComparator = itemName => {
-    const { tournament } = this.state
+  getComparator = (tournament, itemName) => {
     switch (itemName) {
       case 'ageGroups':
       case 'fields':
         return (a, b) => a.name.localeCompare(b.name)
       case 'teams':
         return (a, b) => {
-          if (tournament) {
-            const { ageGroups, groups } = tournament
-            const ageGroupCompare = getName(ageGroups, a.ageGroupId).localeCompare(getName(ageGroups, b.ageGroupId))
-            if (ageGroupCompare !== 0) {
-              return ageGroupCompare
-            }
-            const groupCompare = getName(groups, a.groupId).localeCompare(getName(groups, b.groupId))
-            if (groupCompare !== 0) {
-              return groupCompare
-            }
+          const { ageGroups, groups } = tournament
+          const ageGroupCompare = getName(ageGroups, a.ageGroupId).localeCompare(getName(ageGroups, b.ageGroupId))
+          if (ageGroupCompare !== 0) {
+            return ageGroupCompare
+          }
+          const groupCompare = getName(groups, a.groupId).localeCompare(getName(groups, b.groupId))
+          if (groupCompare !== 0) {
+            return groupCompare
           }
           return a.name.localeCompare(b.name)
         }

@@ -26,6 +26,10 @@ const linkTexts = {
     description: 'Tällä linkillä pääsee syöttämään tuloksia. Voit jakaa sen esim. turnauksen tuomareille.',
     title: 'Kopioi linkki tulosten syöttöön',
   },
+  publicLink: {
+    description: 'Tällä linkillä pääsee katsomaan tuloksia. Voit jakaa sen kenelle tahansa, esim. turnaukseen osallistuville joukkueille.',
+    title: 'Kopioi julkinen linkki',
+  },
 }
 /* eslint-enable max-len */
 
@@ -86,8 +90,8 @@ export default class TournamentManagementPage extends React.PureComponent {
         {this.renderLotterySection()}
         <div className="title-2">Jatko-ottelut</div>
         {this.renderPlayoffMatchesSection()}
-        <div className="title-2">Toimitsijan linkit</div>
-        {this.renderOfficialLinks()}
+        <div className="title-2">Turnauksen linkit</div>
+        {this.renderTournamentLinks()}
         {this.renderBackLink()}
       </div>
     )
@@ -451,22 +455,25 @@ export default class TournamentManagementPage extends React.PureComponent {
     }
   }
 
-  renderOfficialLinks() {
+  renderTournamentLinks() {
     const { tournament } = this.state
-    const { accessKey, resultsAccessKey } = linkTexts
+    const { accessKey, resultsAccessKey, publicLink } = linkTexts
     return (
       <React.Fragment>
         <OfficialLinkCopy
-          accessKey={tournament.accessKey}
           description={accessKey.description}
-          namespace="official"
+          path={`/official/${tournament.accessKey}`}
           title={accessKey.title}
         />
         <OfficialLinkCopy
-          accessKey={tournament.resultsAccessKey}
           description={resultsAccessKey.description}
-          namespace="results"
+          path={`/results/${tournament.resultsAccessKey}`}
           title={resultsAccessKey.title}
+        />
+        <OfficialLinkCopy
+          description={publicLink.description}
+          path={`/tournaments/${tournament.id}`}
+          title={publicLink.title}
         />
       </React.Fragment>
     )

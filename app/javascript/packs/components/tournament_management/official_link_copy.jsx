@@ -5,9 +5,8 @@ import Button from '../form/button'
 
 export default class OfficialLinkCopy extends React.PureComponent {
   static propTypes = {
-    accessKey: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    namespace: PropTypes.string.isRequired,
+    path: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
   }
 
@@ -37,7 +36,7 @@ export default class OfficialLinkCopy extends React.PureComponent {
   copyOfficialLink = () => {
     const location = window.location
     const port = location.port ? `:${location.port}` : ''
-    const url = `${location.protocol}//${location.hostname}${port}/${this.props.namespace}/${this.props.accessKey}`
+    const url = `${location.protocol}//${location.hostname}${port}${this.props.path}`
     clipboard.writeText(url).then(() => {
       this.setState({ officialLinkCopied: true })
       setTimeout(() => {

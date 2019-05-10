@@ -270,7 +270,7 @@ describe 'official', type: :system do
   end
 
   def submit
-    page.find('.button--primary').click
+    page.find('form .button--primary').click
   end
 
   def expect_item_title(section_name, title, index = 0)

@@ -16,6 +16,19 @@ import AccessContext from '../util/access_context'
 import { getName } from '../util/util'
 import OfficialLinkCopy from './official_link_copy'
 
+/* eslint-disable max-len */
+const linkTexts = {
+  accessKey: {
+    description: 'Tällä linkillä pääsee hallinnoimaan turnauksen kaikkia asetuksia sekä syöttämään tuloksia. Jaa se vain turnauksen toimihenkilöille.',
+    title: 'Kopioi linkki hallintasivuille',
+  },
+  resultsAccessKey: {
+    description: 'Tällä linkillä pääsee syöttämään tuloksia. Voit jakaa sen esim. turnauksen tuomareille.',
+    title: 'Kopioi linkki tulosten syöttöön',
+  },
+}
+/* eslint-enable max-len */
+
 export default class TournamentManagementPage extends React.PureComponent {
   static propTypes = {
     match: PropTypes.shape({
@@ -439,10 +452,22 @@ export default class TournamentManagementPage extends React.PureComponent {
   }
 
   renderOfficialLinks() {
+    const { tournament } = this.state
+    const { accessKey, resultsAccessKey } = linkTexts
     return (
       <React.Fragment>
-        <OfficialLinkCopy accessKey={this.state.tournament.accessKey} namespace="official" text="Kopioi hallintalinkki (kaikki oikeudet)"/>
-        <OfficialLinkCopy accessKey={this.state.tournament.resultsAccessKey} namespace="results" text="Kopioi linkki tulosten syöttöön"/>
+        <OfficialLinkCopy
+          accessKey={tournament.accessKey}
+          description={accessKey.description}
+          namespace="official"
+          title={accessKey.title}
+        />
+        <OfficialLinkCopy
+          accessKey={tournament.resultsAccessKey}
+          description={resultsAccessKey.description}
+          namespace="results"
+          title={resultsAccessKey.title}
+        />
       </React.Fragment>
     )
   }

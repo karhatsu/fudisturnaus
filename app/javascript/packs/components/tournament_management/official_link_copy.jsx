@@ -1,12 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import * as clipboard from 'clipboard-polyfill'
+import Button from '../form/button'
 
 export default class OfficialLinkCopy extends React.PureComponent {
   static propTypes = {
     accessKey: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
     namespace: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
   }
 
   constructor(props) {
@@ -21,10 +23,13 @@ export default class OfficialLinkCopy extends React.PureComponent {
     const successFeedbackStyle = this.state.officialLinkCopied ? undefined :  { display: 'none' }
     const errorFeedbackStyle = this.state.officialLinkCopyError ? undefined :  { display: 'none' }
     return (
-      <div className="tournament-management__section official-link">
-        <div className="official-link__copy" onClick={this.copyOfficialLink}>{this.props.text}</div>
-        <div className="official-link__feedback" style={successFeedbackStyle}>Linkki kopioitu leikepöydälle</div>
-        <div className="official-link__error" style={errorFeedbackStyle}>Selaimesi ei tue linkin kopiointia</div>
+      <div className="tournament-management__section">
+        <div className="official-link">
+          <Button onClick={this.copyOfficialLink} label={this.props.title} type="primary" />
+          <div className="official-link__description">{this.props.description}</div>
+          <div className="message message--success" style={successFeedbackStyle}>Linkki kopioitu leikepöydälle</div>
+          <div className="message message--error" style={errorFeedbackStyle}>Selaimesi ei tue linkin kopiointia</div>
+        </div>
       </div>
     )
   }

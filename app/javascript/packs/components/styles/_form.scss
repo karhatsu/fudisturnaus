@@ -38,21 +38,10 @@ $inputHeight: 16px;
 }
 
 .official-link {
-  .official-link__copy {
-    color: $green;
-    cursor: pointer;
-    display: inline-block;
-  }
+  margin: 8px;
 
-  .official-link__feedback {
-    display: inline-block;
-    margin-left: 8px;
-  }
-
-  .official-link__error {
-    color: $red;
-    display: inline-block;
-    margin-left: 8px;
+  .official-link__description {
+    margin: 8px 0 0;
   }
 }
 

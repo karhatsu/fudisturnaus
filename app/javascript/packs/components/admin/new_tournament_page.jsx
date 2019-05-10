@@ -26,16 +26,16 @@ export default class NewTournamentPage extends React.PureComponent {
   }
 
   onSave = (data, callback) => {
-    createTournament(this.context, data, errors => {
+    createTournament(this.context, data, (errors, response) => {
       if (errors) {
         callback(errors)
       } else {
-        this.goToIndex()
+        this.goToTournamentPage(response.id)
       }
     })
   }
 
-  goToIndex = () => {
-    this.props.history.push('/admin')
+  goToTournamentPage = id => {
+    this.props.history.push(`/admin/tournaments/${id}`)
   }
 }

@@ -1,9 +1,7 @@
 class Api::V1::Admin::TournamentsController < Api::V1::Admin::AdminBaseController
   def create
     @tournament = Tournament.new tournament_params
-    if @tournament.save
-      render status: 201, body: nil
-    else
+    unless @tournament.save
       render status: 400, json: { errors: @tournament.errors.full_messages }
     end
   end

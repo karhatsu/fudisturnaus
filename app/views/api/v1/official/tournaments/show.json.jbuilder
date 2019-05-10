@@ -6,7 +6,7 @@ json.clubs @clubs, partial: 'api/v1/official/clubs/club', as: :club
 
 json.groups @tournament.groups do |group|
   json.partial! 'api/v1/official/groups/group', group: group
-  if group.results_in_all_matches? && group.has_equal_rankings? || group.lottery_done?
+  if group.group_stage_matches.length > 0 && group.results_in_all_matches? && group.has_equal_rankings? || group.lottery_done?
     json.results group.results, :ranking, :team_name, :team_id, :lot
   end
 end

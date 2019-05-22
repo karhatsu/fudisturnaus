@@ -1,4 +1,4 @@
-import { handleConnectionErrorOnSave, handleSaveResponse } from '../util/api_util'
+import { handleApiConnectionError, handleApiResponse } from '../util/api_util'
 
 export function loginToAdmin(username, password, callback) {
   fetch('/api/v1/admin/admin_sessions', {
@@ -15,7 +15,7 @@ export function loginToAdmin(username, password, callback) {
     } else {
       callback('Odottamaton virhe')
     }
-  }).catch(() => handleConnectionErrorOnSave(callback))
+  }).catch(() => handleApiConnectionError(callback))
 }
 
 export function createTournament(accessContext, data, callback) {
@@ -24,8 +24,8 @@ export function createTournament(accessContext, data, callback) {
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ tournament: data }),
   }).then(response => {
-    handleSaveResponse(response, callback)
-  }).catch(() => handleConnectionErrorOnSave(callback))
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
 }
 
 export function fetchClubs(accessContext, callback) {
@@ -33,8 +33,8 @@ export function fetchClubs(accessContext, callback) {
     method: 'GET',
     headers: buildHeaders(accessContext),
   }).then(response => {
-    handleSaveResponse(response, callback)
-  }).catch(() => handleConnectionErrorOnSave(callback))
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
 }
 
 export function updateClub(accessContext, id, data, callback) {
@@ -43,8 +43,8 @@ export function updateClub(accessContext, id, data, callback) {
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ club: data }),
   }).then(response => {
-    handleSaveResponse(response, callback)
-  }).catch(() => handleConnectionErrorOnSave(callback))
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
 }
 
 function buildHeaders(accessContext) {

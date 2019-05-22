@@ -1,4 +1,4 @@
-import { handleConnectionErrorOnSave, handleSaveResponse } from '../util/api_util'
+import { handleApiConnectionError, handleApiResponse } from '../util/api_util'
 
 export function fetchTournaments(callback) {
   fetch('/api/v1/public/tournaments')
@@ -27,6 +27,6 @@ export function sendContactRequest(data, callback) {
     body: JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },
   }).then(response => {
-    handleSaveResponse(response, callback)
-  }).catch(() => handleConnectionErrorOnSave(callback))
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
 }

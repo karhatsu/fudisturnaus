@@ -1,6 +1,6 @@
 const unexpectedErrorMsg = 'Odottamaton virhe, yritä uudestaan. Jos ongelma ei poistu, ota yhteys palvelun ylläpitoon.'
 
-export function handleSaveResponse(response, callback) {
+export function handleApiResponse(response, callback) {
   if (response.status === 201) {
     callback()
   } else if (response.ok) {
@@ -14,6 +14,6 @@ export function handleSaveResponse(response, callback) {
   }
 }
 
-export function handleConnectionErrorOnSave(callback) {
+export function handleApiConnectionError(callback) {
   callback(['Yhteysvirhe, yritä uudestaan'])
 }

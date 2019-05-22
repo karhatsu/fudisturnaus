@@ -1,5 +1,5 @@
 import { matchTypes } from '../util/enums'
-import { handleConnectionErrorOnSave, handleSaveResponse } from '../util/api_util'
+import { handleApiConnectionError, handleApiResponse } from '../util/api_util'
 
 export function saveResult(accessContext, tournamentId, type, matchId, homeGoals, awayGoals, penalties, callback) {
   const typePath = type === matchTypes.playoff ? 'playoff_results' : 'group_stage_results'
@@ -10,8 +10,8 @@ export function saveResult(accessContext, tournamentId, type, matchId, homeGoals
       match: { homeGoals, awayGoals, penalties },
     }),
   }).then(response => {
-    handleSaveResponse(response, callback)
-  }).catch(() => handleConnectionErrorOnSave(callback))
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
 }
 
 export function fetchTournament(accessContext, id, callback) {
@@ -21,7 +21,7 @@ export function fetchTournament(accessContext, id, callback) {
   })
     .then(response => response.json())
     .then(tournament => callback(null, tournament))
-    .catch(() => handleConnectionErrorOnSave(callback))
+    .catch(() => handleApiConnectionError(callback))
 }
 
 export function updateTournament(accessContext, id, data, callback) {
@@ -30,8 +30,8 @@ export function updateTournament(accessContext, id, data, callback) {
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ tournament: data }),
   }).then(response => {
-    handleSaveResponse(response, callback)
-  }).catch(() => handleConnectionErrorOnSave(callback))
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
 }
 
 export function saveField(accessContext, tournamentId, id, name, callback) {
@@ -42,8 +42,8 @@ export function saveField(accessContext, tournamentId, id, name, callback) {
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ field: { name } }),
   }).then(response => {
-    handleSaveResponse(response, callback)
-  }).catch(() => handleConnectionErrorOnSave(callback))
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
 }
 
 export function deleteField(accessContext, tournamentId, id, callback) {
@@ -51,8 +51,8 @@ export function deleteField(accessContext, tournamentId, id, callback) {
     method: 'DELETE',
     headers: buildHeaders(accessContext),
   }).then(response => {
-    handleSaveResponse(response, callback)
-  }).catch(() => handleConnectionErrorOnSave(callback))
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
 }
 
 export function saveAgeGroup(accessContext, tournamentId, id, data, callback) {
@@ -63,8 +63,8 @@ export function saveAgeGroup(accessContext, tournamentId, id, data, callback) {
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ ageGroup: data }),
   }).then(response => {
-    handleSaveResponse(response, callback)
-  }).catch(() => handleConnectionErrorOnSave(callback))
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
 }
 
 export function deleteAgeGroup(accessContext, tournamentId, id, callback) {
@@ -72,8 +72,8 @@ export function deleteAgeGroup(accessContext, tournamentId, id, callback) {
     method: 'DELETE',
     headers: buildHeaders(accessContext),
   }).then(response => {
-    handleSaveResponse(response, callback)
-  }).catch(() => handleConnectionErrorOnSave(callback))
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
 }
 
 export function saveGroup(accessContext, tournamentId, id, data, callback) {
@@ -84,8 +84,8 @@ export function saveGroup(accessContext, tournamentId, id, data, callback) {
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ group: data }),
   }).then(response => {
-    handleSaveResponse(response, callback)
-  }).catch(() => handleConnectionErrorOnSave(callback))
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
 }
 
 export function deleteGroup(accessContext, tournamentId, id, callback) {
@@ -93,8 +93,8 @@ export function deleteGroup(accessContext, tournamentId, id, callback) {
     method: 'DELETE',
     headers: buildHeaders(accessContext),
   }).then(response => {
-    handleSaveResponse(response, callback)
-  }).catch(() => handleConnectionErrorOnSave(callback))
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
 }
 
 export function createClub(accessContext, name, callback) {
@@ -104,8 +104,8 @@ export function createClub(accessContext, name, callback) {
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ name }),
   }).then(response => {
-    handleSaveResponse(response, callback)
-  }).catch(() => handleConnectionErrorOnSave(callback))
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
 }
 
 export function saveTeam(accessContext, tournamentId, id, data, callback) {
@@ -116,8 +116,8 @@ export function saveTeam(accessContext, tournamentId, id, data, callback) {
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ team: data }),
   }).then(response => {
-    handleSaveResponse(response, callback)
-  }).catch(() => handleConnectionErrorOnSave(callback))
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
 }
 
 export function deleteTeam(accessContext, tournamentId, id, callback) {
@@ -125,8 +125,8 @@ export function deleteTeam(accessContext, tournamentId, id, callback) {
     method: 'DELETE',
     headers: buildHeaders(accessContext),
   }).then(response => {
-    handleSaveResponse(response, callback)
-  }).catch(() => handleConnectionErrorOnSave(callback))
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
 }
 
 export function saveGroupStageMatch(accessContext, tournamentId, id, data, callback) {
@@ -137,8 +137,8 @@ export function saveGroupStageMatch(accessContext, tournamentId, id, data, callb
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ groupStageMatch: data }),
   }).then(response => {
-    handleSaveResponse(response, callback)
-  }).catch(() => handleConnectionErrorOnSave(callback))
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
 }
 
 export function deleteGroupStageMatch(accessContext, tournamentId, id, callback) {
@@ -146,8 +146,8 @@ export function deleteGroupStageMatch(accessContext, tournamentId, id, callback)
     method: 'DELETE',
     headers: buildHeaders(accessContext),
   }).then(response => {
-    handleSaveResponse(response, callback)
-  }).catch(() => handleConnectionErrorOnSave(callback))
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
 }
 
 export function savePlayoffMatch(accessContext, tournamentId, id, data, callback) {
@@ -158,8 +158,8 @@ export function savePlayoffMatch(accessContext, tournamentId, id, data, callback
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ playoffMatch: data }),
   }).then(response => {
-    handleSaveResponse(response, callback)
-  }).catch(() => handleConnectionErrorOnSave(callback))
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
 }
 
 export function deletePlayoffMatch(accessContext, tournamentId, id, callback) {
@@ -167,8 +167,8 @@ export function deletePlayoffMatch(accessContext, tournamentId, id, callback) {
     method: 'DELETE',
     headers: buildHeaders(accessContext),
   }).then(response => {
-    handleSaveResponse(response, callback)
-  }).catch(() => handleConnectionErrorOnSave(callback))
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
 }
 
 export function saveLottery(accessContext, tournamentId, groupId, data, callback) {
@@ -177,8 +177,8 @@ export function saveLottery(accessContext, tournamentId, groupId, data, callback
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ teams: data }),
   }).then(response => {
-    handleSaveResponse(response, callback)
-  }).catch(() => handleConnectionErrorOnSave(callback))
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
 }
 
 function buildHeaders(accessContext) {

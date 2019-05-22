@@ -28,6 +28,25 @@ export function createTournament(accessContext, data, callback) {
   }).catch(() => handleConnectionErrorOnSave(callback))
 }
 
+export function fetchClubs(accessContext, callback) {
+  fetch('/api/v1/admin/clubs', {
+    method: 'GET',
+    headers: buildHeaders(accessContext),
+  }).then(response => {
+    handleSaveResponse(response, callback)
+  }).catch(() => handleConnectionErrorOnSave(callback))
+}
+
+export function updateClub(accessContext, id, data, callback) {
+  fetch(`/api/v1/admin/clubs/${id}`, {
+    method: 'PUT',
+    headers: buildHeaders(accessContext),
+    body: JSON.stringify({ club: data }),
+  }).then(response => {
+    handleSaveResponse(response, callback)
+  }).catch(() => handleConnectionErrorOnSave(callback))
+}
+
 function buildHeaders(accessContext) {
   return {
     'Content-Type': 'application/json',

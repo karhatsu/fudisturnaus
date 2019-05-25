@@ -30,6 +30,7 @@ export default class TournamentPage extends React.PureComponent {
       filters: {
         ageGroupId: 0,
         clubId: 0,
+        day: 0,
         fieldId: 0,
         groupId: 0,
         teamId: 0,
@@ -118,28 +119,30 @@ export default class TournamentPage extends React.PureComponent {
 
   isFilterGroupStageMatch = match => {
     const { filters } = this.state
-    const { ageGroupId, fieldId, groupId, homeTeam, awayTeam } = match
+    const { ageGroupId, day, fieldId, groupId, homeTeam, awayTeam } = match
     return (!filters.ageGroupId || filters.ageGroupId === ageGroupId)
       && (!filters.fieldId || filters.fieldId === fieldId)
       && (!filters.groupId || filters.groupId === groupId)
       && (!filters.clubId || filters.clubId === homeTeam.clubId || filters.clubId === awayTeam.clubId)
       && (!filters.teamId || filters.teamId === homeTeam.id || filters.teamId === awayTeam.id)
+      && (!filters.day || filters.day === day)
   }
 
   isFilterPlayoffMatch = match => {
     const { filters } = this.state
-    const { ageGroupId, fieldId, homeTeam, awayTeam, homeTeamOriginId, awayTeamOriginId } = match
+    const { ageGroupId, day, fieldId, homeTeam, awayTeam, homeTeamOriginId, awayTeamOriginId } = match
     return (!filters.ageGroupId || filters.ageGroupId === ageGroupId)
       && (!filters.fieldId || filters.fieldId === fieldId)
       && (!filters.groupId || filters.groupId === homeTeamOriginId || filters.groupId === awayTeamOriginId)
       && (!filters.clubId || (homeTeam && filters.clubId === homeTeam.clubId) || (awayTeam && filters.clubId === awayTeam.clubId))
       && (!filters.teamId || (homeTeam && filters.teamId === homeTeam.id) || (awayTeam && filters.teamId === awayTeam.id))
+      && (!filters.day || filters.day === day)
   }
 
   renderGroupTables = () => {
-    const { tournament: { calculateGroupTables, groups } } = this.state
+    const { filters, tournament: { calculateGroupTables, groups } } = this.state
     const filteredGroups = groups.filter(this.isFilterGroup)
-    if (calculateGroupTables && filteredGroups.length) {
+    if (calculateGroupTables && filteredGroups.length && !filters.day) {
       return (
         <React.Fragment>
           <div className="title-2">Sarjataulukot</div>

@@ -19,6 +19,7 @@ class PlayoffMatch < ApplicationRecord
   validate :draw_not_allowed
   validate :teams_are_required
 
+  delegate :tournament, to: :age_group
   delegate :tournament_id, to: :age_group
 
   def populate_next_round_playoff_matches
@@ -51,6 +52,10 @@ class PlayoffMatch < ApplicationRecord
       end
     end
     changed_matches
+  end
+
+  def day
+    (start_time.to_date - tournament.start_date).to_i + 1
   end
 
   private

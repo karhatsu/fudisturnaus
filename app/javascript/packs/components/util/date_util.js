@@ -8,6 +8,10 @@ export function formatTournamentDates(startDate, endDate) {
   return dates.join(' - ')
 }
 
+export function resolveDate(baseDate, increment) {
+  return format(addDays(parse(baseDate), increment), 'dd.MM.yyyy')
+}
+
 export function formatDate(date) {
   return format(parse(date), 'dd.MM.yyyy')
 }

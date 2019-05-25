@@ -1,11 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { resolveDate, resolveWeekDay } from '../util/date_util'
 
 export default class Filters extends React.PureComponent {
   static propTypes = {
     filters: PropTypes.shape({
       ageGroupId: PropTypes.number,
       clubId: PropTypes.number,
+      day: PropTypes.number,
       fieldId: PropTypes.number,
       groupId: PropTypes.number,
       teamId: PropTypes.number,
@@ -14,8 +16,10 @@ export default class Filters extends React.PureComponent {
     tournament: PropTypes.shape({
       ageGroups: PropTypes.array.isRequired,
       clubs: PropTypes.array.isRequired,
+      days: PropTypes.number.isRequired,
       fields: PropTypes.array.isRequired,
       groups: PropTypes.array.isRequired,
+      startDate: PropTypes.string.isRequired,
       teams: PropTypes.array.isRequired,
     }).isRequired,
   }
@@ -27,6 +31,7 @@ export default class Filters extends React.PureComponent {
         {this.renderFilter('groupId', this.resolveGroups(), 'Lohko')}
         {this.renderFilter('clubId', this.resolveClubs(), 'Seura')}
         {this.renderFilter('teamId', this.resolveTeams(), 'Joukkue')}
+        {this.renderFilter('day', this.resolveDays(), 'Pvm')}
         {this.renderFilter('fieldId', this.resolveFields(), 'Kenttä')}
       </div>
     )
@@ -76,6 +81,13 @@ export default class Filters extends React.PureComponent {
     return clubs.filter(club => {
       return (!ageGroupId || teams.find(team => team.clubId === club.id && team.ageGroupId === ageGroupId)) &&
         (!filterGroup || filterGroup.teams.find(team => team.clubId === club.id))
+    })
+  }
+
+  resolveDays = () => {
+    const { tournament: { days: daysCount, startDate } } = this.props
+    return new Array(daysCount).fill(undefined).map((none, index) => {
+      return { id: index + 1, name: `${resolveWeekDay(startDate, index)} ${resolveDate(startDate, index)}` }
     })
   }
 

@@ -12,6 +12,7 @@ class GroupStageMatch < ApplicationRecord
 
   delegate :age_group, to: :group
   delegate :age_group_id, to: :group
+  delegate :tournament, to: :group
 
   def tournament_id
     group.age_group.tournament_id
@@ -20,6 +21,10 @@ class GroupStageMatch < ApplicationRecord
   def populate_first_round_playoff_matches
     return group.populate_first_round_playoff_matches if home_goals && away_goals
     []
+  end
+
+  def day
+    (start_time.to_date - tournament.start_date).to_i + 1
   end
 
   private

@@ -195,8 +195,8 @@ export default class PlayoffMatch extends React.PureComponent {
           <div className="form__field">
             <select value={this.state.form[field]} onChange={this.changeValue(field)}>
               <option>- Ottelun -</option>
-              <option value={-2}>Voittaja</option>
-              <option value={-1}>Häviäjä</option>
+              <option value={-1}>Voittaja</option>
+              <option value={-2}>Häviäjä</option>
             </select>
           </div>
         )

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { resolveDate, resolveWeekDay } from '../util/date_util'
+import { getName } from '../util/util'
 
 export default class Filters extends React.PureComponent {
   static propTypes = {
@@ -25,10 +26,11 @@ export default class Filters extends React.PureComponent {
   }
 
   render() {
+    const ageGroups = this.resolveAgeGroups()
     return (
       <div className="filters">
-        {this.renderFilter('ageGroupId', this.resolveAgeGroups(), 'Sarja')}
-        {this.renderFilter('groupId', this.resolveGroups(), 'Lohko')}
+        {this.renderFilter('ageGroupId', ageGroups, 'Sarja')}
+        {this.renderFilter('groupId', this.resolveGroups(), 'Lohko', this.resolveGroupName)}
         {this.renderFilter('clubId', this.resolveClubs(), 'Seura')}
         {this.renderFilter('teamId', this.resolveTeams(), 'Joukkue')}
         {this.renderFilter('day', this.resolveDays(), 'Pvm')}
@@ -37,18 +39,28 @@ export default class Filters extends React.PureComponent {
     )
   }
 
-  renderFilter = (key, items, defaultText) => {
+  renderFilter = (key, items, defaultText, nameCallback) => {
     if (items.length > 1) {
       return (
         <select id={`filter-${key}`} className="filter" onChange={this.props.setFilterValue(key)} value={this.props.filters[key]}>
           <option value={0}>{defaultText}</option>
           {items.map(item => {
             const { id, name } = item
-            return <option key={id} value={id}>{name}</option>
+            return <option key={id} value={id}>{nameCallback ? nameCallback(item) : name}</option>
           })}
         </select>
       )
     }
+  }
+
+  resolveGroupName = group => {
+    const { filters, tournament: { ageGroups } } = this.props
+    const { ageGroupId, name } = group
+    if (filters.ageGroupId || ageGroups.length === 1) {
+      return name
+    }
+    const ageGroupName = getName(ageGroups, ageGroupId)
+    return `${name} (${ageGroupName})`
   }
 
   resolveAgeGroups = () => {

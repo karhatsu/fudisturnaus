@@ -10,6 +10,13 @@ class Api::V1::Admin::ClubsController < Api::V1::Admin::AdminBaseController
     end
   end
 
+  def destroy
+    @club = Club.find params[:id]
+    unless @club.destroy
+      render status: 400, json: { errors: @club.errors.full_messages }
+    end
+  end
+
   private
 
   def club_params

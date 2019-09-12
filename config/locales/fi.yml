@@ -5,6 +5,8 @@ fi:
     attributes:
       age_group:
         name: Sarjan nimi
+      club:
+        teams: Joukkueet
       field:
         name: Kentän nimi
       group:

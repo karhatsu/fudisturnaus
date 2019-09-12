@@ -4,7 +4,7 @@ import AccessContext from '../util/access_context'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
 import Button from '../form/button'
-import { updateClub } from './api_client'
+import { deleteClub, updateClub } from './api_client'
 
 export default class ClubForm extends React.PureComponent {
   static propTypes = {
@@ -12,6 +12,7 @@ export default class ClubForm extends React.PureComponent {
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
     }).isRequired,
+    onClubDelete: PropTypes.func.isRequired,
     onClubSave: PropTypes.func.isRequired,
   }
 
@@ -50,6 +51,7 @@ export default class ClubForm extends React.PureComponent {
           <div className="form__buttons">
             <Button label="Tallenna" onClick={this.submit} type="primary" disabled={!this.canSubmit()}/>
             <Button label="Peruuta" onClick={this.cancel} type="normal"/>
+            <Button label="Poista" onClick={this.delete} type="danger"/>
           </div>
         </div>
       </form>
@@ -84,6 +86,17 @@ export default class ClubForm extends React.PureComponent {
 
   cancel = () => {
     this.setState({ formOpen: false, errors: [] })
+  }
+
+  delete = () => {
+    const { club, onClubDelete } = this.props
+    deleteClub(this.context, club.id, errors => {
+      if (errors) {
+        this.setState({ errors })
+      } else {
+        onClubDelete(club.id)
+      }
+    })
   }
 
   componentDidUpdate(prevProps, prevState) {

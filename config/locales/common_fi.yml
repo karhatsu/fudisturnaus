@@ -5,7 +5,7 @@ fi:
         record_invalid: 'Validointi epäonnistui: %{errors}'
         restrict_dependent_destroy:
           has_one: Ei voida poistaa mallia koska tästä riippuvainen %{record} löytyy
-          has_many: Ei voida poistaa mallia koska tästä riippuvaisia %{record} löytyy
+          has_many: Ei voida poistaa mallia koska tästä riippuvaisia malleja (%{record}) löytyy
   date:
     abbr_day_names:
       - su

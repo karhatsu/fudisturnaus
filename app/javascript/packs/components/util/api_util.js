@@ -1,7 +1,7 @@
 const unexpectedErrorMsg = 'Odottamaton virhe, yritä uudestaan. Jos ongelma ei poistu, ota yhteys palvelun ylläpitoon.'
 
 export function handleApiResponse(response, callback) {
-  if (response.status === 201) {
+  if (response.status === 201 || response.status === 204) {
     callback()
   } else if (response.ok) {
     response.json().then(data => {

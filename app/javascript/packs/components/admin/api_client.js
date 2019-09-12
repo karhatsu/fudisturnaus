@@ -28,6 +28,15 @@ export function createTournament(accessContext, data, callback) {
   }).catch(() => handleApiConnectionError(callback))
 }
 
+export function deleteClub(accessContext, id, callback) {
+  fetch(`/api/v1/admin/clubs/${id}`, {
+    method: 'DELETE',
+    headers: buildHeaders(accessContext),
+  }).then(response => {
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
+}
+
 export function fetchClubs(accessContext, callback) {
   fetch('/api/v1/admin/clubs', {
     method: 'GET',

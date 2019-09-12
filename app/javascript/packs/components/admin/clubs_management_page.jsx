@@ -22,7 +22,7 @@ export default class ClubsManagementPage extends React.PureComponent {
         <Title iconLink="/admin" loading={!this.state.clubs.length} text="Seurat"/>
         <div className="tournament-management__section">
           <FormErrors errors={this.state.errors}/>
-          {this.state.clubs.map(club => <ClubForm key={club.id} club={club} onClubSave={this.onClubSave}/>)}
+          {this.state.clubs.map(club => <ClubForm key={club.id} club={club} onClubDelete={this.onClubDelete} onClubSave={this.onClubSave}/>)}
         </div>
       </div>
     )
@@ -36,6 +36,13 @@ export default class ClubsManagementPage extends React.PureComponent {
         this.setState({ errors: [], clubs: response.clubs })
       }
     })
+  }
+
+  onClubDelete = id => {
+    const clubs = [...this.state.clubs]
+    const clubIndex = clubs.findIndex(club => club.id === id)
+    clubs.splice(clubIndex, 1)
+    this.setState({ clubs })
   }
 
   onClubSave = data => {

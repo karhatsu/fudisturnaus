@@ -13,6 +13,7 @@ export default class GroupLottery extends React.PureComponent {
     group: PropTypes.shape({
       ageGroupId: PropTypes.number.isRequired,
       id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
       results: PropTypes.arrayOf(PropTypes.shape({
         ranking: PropTypes.number.isRequired,
         teamId: PropTypes.number.isRequired,

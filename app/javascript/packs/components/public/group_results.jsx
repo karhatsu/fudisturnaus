@@ -9,6 +9,7 @@ export default class GroupResults extends React.PureComponent {
       ageGroup: PropTypes.shape({
         name: PropTypes.string.isRequired,
       }).isRequired,
+      name: PropTypes.string.isRequired,
       results: PropTypes.arrayOf(PropTypes.shape({
         teamName: PropTypes.string.isRequired,
       })).isRequired,

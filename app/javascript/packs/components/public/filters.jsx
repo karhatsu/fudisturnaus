@@ -13,6 +13,7 @@ export default class Filters extends React.PureComponent {
       groupId: PropTypes.number,
       teamId: PropTypes.number,
     }).isRequired,
+    resetFilters: PropTypes.func.isRequired,
     setFilterValue: PropTypes.func.isRequired,
     tournament: PropTypes.shape({
       ageGroups: PropTypes.array.isRequired,
@@ -35,6 +36,7 @@ export default class Filters extends React.PureComponent {
         {this.renderFilter('teamId', this.resolveTeams(), 'Joukkue')}
         {this.renderFilter('day', this.resolveDays(), 'Pvm')}
         {this.renderFilter('fieldId', this.resolveFields(), 'Kenttä')}
+        {this.renderResetLink()}
       </div>
     )
   }
@@ -115,5 +117,12 @@ export default class Filters extends React.PureComponent {
   resolveFields = () => {
     const { tournament: { fields } } = this.props
     return fields
+  }
+
+  renderResetLink = () => {
+    const { filters, resetFilters } = this.props
+    if (Object.keys(filters).some(key => filters[key] > 0)) {
+      return <div onClick={resetFilters} className="filters__reset-link">Näytä kaikki ottelut</div>
+    }
   }
 }

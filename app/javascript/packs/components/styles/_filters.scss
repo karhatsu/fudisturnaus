@@ -5,9 +5,16 @@
   @include white-box(false, 32px);
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 select.filter {
   color: $black;
   margin: 4px 8px;
+}
+
+.filters__reset-link {
+  color: $green;
+  cursor: pointer;
+  margin-left: auto;
 }

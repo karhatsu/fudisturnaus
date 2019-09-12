@@ -11,6 +11,15 @@ import Title from '../components/title'
 import { fetchTournament } from './api_client'
 import Filters from './filters'
 
+const defaultFilters = {
+  ageGroupId: 0,
+  clubId: 0,
+  day: 0,
+  fieldId: 0,
+  groupId: 0,
+  teamId: 0,
+}
+
 export default class TournamentPage extends React.PureComponent {
   static propTypes = {
     match: PropTypes.shape({
@@ -27,14 +36,7 @@ export default class TournamentPage extends React.PureComponent {
     super(props)
     this.state = {
       error: false,
-      filters: {
-        ageGroupId: 0,
-        clubId: 0,
-        day: 0,
-        fieldId: 0,
-        groupId: 0,
-        teamId: 0,
-      },
+      filters: defaultFilters,
       tournament: undefined,
     }
   }
@@ -69,7 +71,7 @@ export default class TournamentPage extends React.PureComponent {
     const filteredPlayoffMatches = tournament.playoffMatches.filter(this.isFilterPlayoffMatch)
     return (
       <div>
-        <Filters filters={filters} setFilterValue={this.setFilterValue} tournament={tournament}/>
+        <Filters filters={filters} resetFilters={this.resetFilters} setFilterValue={this.setFilterValue} tournament={tournament}/>
         {this.renderMatches(groupStageMatches, 'Alkulohkojen ottelut', tournament.playoffMatches.length, true)}
         {this.renderGroupTables()}
         {this.renderMatches(filteredPlayoffMatches, 'Jatko-ottelut', filteredPlayoffMatches.length)}
@@ -89,6 +91,10 @@ export default class TournamentPage extends React.PureComponent {
     const { tournament: { address, location } } = this.state
     const googleMapsUrl = address ? `https://www.google.com/maps/place/${address.split(' ').join('+')}` : undefined
     return googleMapsUrl ? <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="sub-title__location">{location}</a> : location
+  }
+
+  resetFilters = () => {
+    this.setState({ filters: defaultFilters })
   }
 
   setFilterValue = key => event => {

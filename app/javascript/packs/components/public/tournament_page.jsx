@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import queryString from 'query-string'
 
 import Loading from '../components/loading'
 import Matches from './matches'
@@ -22,6 +23,12 @@ const defaultFilters = {
 
 export default class TournamentPage extends React.PureComponent {
   static propTypes = {
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
+    location: PropTypes.shape({
+      search: PropTypes.string.isRequired,
+    }).isRequired,
     match: PropTypes.shape({
       params: PropTypes.shape({
         accessKey: PropTypes.string,
@@ -34,9 +41,13 @@ export default class TournamentPage extends React.PureComponent {
 
   constructor(props) {
     super(props)
+    const queryParams = queryString.parse(props.location.search)
+    Object.keys(queryParams).forEach(queryParam => {
+      queryParams[queryParam] = parseInt(queryParams[queryParam])
+    })
     this.state = {
       error: false,
-      filters: defaultFilters,
+      filters: { ...defaultFilters, ...queryParams },
       tournament: undefined,
     }
   }
@@ -95,11 +106,23 @@ export default class TournamentPage extends React.PureComponent {
 
   resetFilters = () => {
     this.setState({ filters: defaultFilters })
+    this.props.history.push({ search: '' })
   }
 
   setFilterValue = key => event => {
     const filters = { ...this.state.filters, [key]: parseInt(event.target.value) }
     this.setState({ filters })
+    this.props.history.push({ search: this.buildQueryParams(filters) })
+  }
+
+  buildQueryParams = filters => {
+    const validFilters = {}
+    Object.keys(filters).forEach(filter => {
+      if (filters[filter] > 0) {
+        validFilters[filter] = filters[filter]
+      }
+    })
+    return queryString.stringify(validFilters)
   }
 
   renderMatches = (matches, title, showTitle, showEmptyError = false) => {

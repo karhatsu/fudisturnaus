@@ -31,7 +31,7 @@ class TournamentPageWrapper extends React.PureComponent {
 
   render() {
     const { match: { params: { id } } } = this.props
-    return <TournamentPage editable={false} official={false} renderMatch={props => <Match {...props}/>} tournamentId={parseInt(id)}/>
+    return <TournamentPage {...this.props} editable={false} official={false} renderMatch={props => <Match {...props}/>} tournamentId={parseInt(id)}/>
   }
 }
 

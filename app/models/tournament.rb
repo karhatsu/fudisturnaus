@@ -16,6 +16,7 @@ class Tournament < ApplicationRecord
   validates :equal_points_rule, inclusion: { in: [EQUAL_POINTS_RULE_ALL_MATCHES_FIRST, EQUAL_POINTS_RULE_MUTUAL_MATCHES_FIRST] }
 
   before_create :generate_access_keys
+  around_update :check_match_dates
 
   default_scope { order('start_date DESC') }
 
@@ -68,5 +69,16 @@ class Tournament < ApplicationRecord
   def generate_access_keys
     self.access_key = SecureRandom.hex
     self.results_access_key = SecureRandom.hex
+  end
+
+  def check_match_dates
+    date_diff = (start_date - start_date_was).to_i
+    yield
+    if date_diff != 0
+      (group_stage_matches + playoff_matches).each do |match|
+        match.start_time = match.start_time + date_diff.days
+        match.save!
+      end
+    end
   end
 end

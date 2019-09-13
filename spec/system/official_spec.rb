@@ -127,20 +127,20 @@ describe 'official', type: :system do
     it 'works' do
       edit_item 'tournament', 0
       form_inputs[0].fill_in with: 'New name'
-      form_inputs[1].fill_in with: '25/05/2019' # still Sat
+      form_inputs[1].fill_in with: '20/05/2019' # Mon
       form_inputs[2].fill_in with: '2'
       form_inputs[3].fill_in with: 'Test city'
       form_inputs[4].fill_in with: 'Street 10'
       form_inputs[5].fill_in with: '60'
       submit
-      expect_item_title 'tournament', 'New name, 25.05.2019 - 26.05.2019, Test city, Street 10'
+      expect_item_title 'tournament', 'New name, 20.05.2019 - 21.05.2019, Test city, Street 10'
 
       edit_item 'fields', 0
       form_inputs[0].fill_in with: 'Grass'
       submit
       expect_item_title 'fields', 'Grass'
-      expect_item_title 'group-stage-matches', 'Grass | la 10:00 | A (P10) | Team 1 - Team 2'
-      expect_item_title 'playoff-matches', 'Grass | la 12:00 | P10 | Final'
+      expect_item_title 'group-stage-matches', 'Grass | ma 10:00 | A (P10) | Team 1 - Team 2'
+      expect_item_title 'playoff-matches', 'Grass | ma 12:00 | P10 | Final'
 
       edit_item 'age-groups', 0
       form_inputs[0].fill_in with: 'T08'
@@ -148,36 +148,36 @@ describe 'official', type: :system do
       expect_item_title 'age-groups', 'T08'
       expect_item_title 'groups', 'A (T08)'
       expect_section_title 'teams', 'A (T08)'
-      expect_item_title 'group-stage-matches', 'Grass | la 10:00 | A (T08) | Team 1 - Team 2'
-      expect_item_title 'playoff-matches', 'Grass | la 12:00 | T08 | Final'
+      expect_item_title 'group-stage-matches', 'Grass | ma 10:00 | A (T08) | Team 1 - Team 2'
+      expect_item_title 'playoff-matches', 'Grass | ma 12:00 | T08 | Final'
 
       edit_item 'groups', 0
       form_inputs[0].fill_in with: 'B'
       submit
       expect_item_title 'groups', 'B (T08)'
       expect_section_title 'teams', 'B (T08)'
-      expect_item_title 'group-stage-matches', 'Grass | la 10:00 | B (T08) | Team 1 - Team 2'
+      expect_item_title 'group-stage-matches', 'Grass | ma 10:00 | B (T08) | Team 1 - Team 2'
 
       edit_item 'teams', 0
       form_inputs[0].fill_in with: 'FC Team'
       submit
       expect_item_title 'teams', 'FC Team'
-      expect_item_title 'group-stage-matches', 'Grass | la 10:00 | B (T08) | FC Team - Team 2'
+      expect_item_title 'group-stage-matches', 'Grass | ma 10:00 | B (T08) | FC Team - Team 2'
 
       edit_item 'group-stage-matches', 0
-      form_selects[1].select 'su'
+      form_selects[1].select 'ti'
       form_inputs[0].fill_in with: '11:00'
       form_selects[3].select 'Team 2'
       form_selects[4].select 'FC Team'
       submit
-      expect_item_title 'group-stage-matches', 'Grass | su 11:00 | B (T08) | Team 2 - FC Team'
+      expect_item_title 'group-stage-matches', 'Grass | ti 11:00 | B (T08) | Team 2 - FC Team'
 
       edit_item 'playoff-matches', 0
-      form_selects[2].select 'su'
+      form_selects[2].select 'ti'
       form_inputs[0].fill_in with: '13:00'
       form_inputs[1].fill_in with: 'Grande Finale'
       submit
-      expect_item_title 'playoff-matches', 'Grass | su 13:00 | T08 | Grande Finale'
+      expect_item_title 'playoff-matches', 'Grass | ti 13:00 | T08 | Grande Finale'
     end
   end
 

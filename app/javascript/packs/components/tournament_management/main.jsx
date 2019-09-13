@@ -115,8 +115,7 @@ export default class TournamentManagementPage extends React.PureComponent {
   onSave = (form, callback) => {
     updateTournament(this.context, this.getTournamentId(), form, (errors, data) => {
       callback(errors, data)
-      const { tournament } = this.state
-      this.setState({ tournament: { ...tournament, ...data } })
+      this.fetchTournamentData()
     })
   }
 

@@ -28,21 +28,15 @@ export default class TournamentFields extends React.PureComponent {
     super(props)
     this.state = {
       errors: [],
-      formOpen: false,
+      formOpen: !props.tournament,
       form: {
-        name: undefined,
-        startDate: undefined,
-        days: undefined,
-        location: undefined,
-        address: undefined,
-        matchMinutes: undefined,
+        name: '',
+        startDate: '',
+        days: '',
+        location: '',
+        address: '',
+        matchMinutes: '',
       },
-    }
-  }
-
-  componentWillMount() {
-    if (!this.props.tournament) {
-      this.openForm()
     }
   }
 
@@ -110,19 +104,11 @@ export default class TournamentFields extends React.PureComponent {
   }
 
   openForm = () => {
-    const { tournament } = this.props
-    if (tournament) {
-      const { name, startDate, days, location, address, matchMinutes, equalPointsRule } = tournament
-      this.setState({
-        formOpen: true,
-        form: { name, startDate, days, location, address: address || '', matchMinutes, equalPointsRule },
-      })
-    } else {
-      this.setState({
-        formOpen: true,
-        form: { name: '', startDate: '', days: 1, location: '', address: '', matchMinutes: 45, equalPointsRule: 0 },
-      })
-    }
+    const { tournament: { name, startDate, days, location, address, matchMinutes, equalPointsRule } } = this.props
+    this.setState({
+      formOpen: true,
+      form: { name, startDate, days, location, address: address || '', matchMinutes, equalPointsRule },
+    })
   }
 
   cancel = () => {

@@ -38,4 +38,8 @@ export default class NewTournamentPage extends React.PureComponent {
   goToTournamentPage = id => {
     this.props.history.push(`/admin/tournaments/${id}`)
   }
+
+  goToIndex = () => {
+    this.props.history.push('/admin')
+  }
 }

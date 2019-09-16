@@ -3,6 +3,9 @@ require 'securerandom'
 class Tournament < ApplicationRecord
   EQUAL_POINTS_RULE_ALL_MATCHES_FIRST = 0
   EQUAL_POINTS_RULE_MUTUAL_MATCHES_FIRST = 1
+  VISIBILITY_ONLY_TITLE = 0
+  VISIBILITY_TEAMS = 1
+  VISIBILITY_ALL = 2
 
   has_many :age_groups, -> {order(:name)}
   has_many :groups, -> {order(:name)}, through: :age_groups
@@ -14,6 +17,7 @@ class Tournament < ApplicationRecord
   validates :location, presence: true
   validates :match_minutes, numericality: { only_integer: true, greater_than_or_equal_to: 15, less_than_or_equal_to: 180 }
   validates :equal_points_rule, inclusion: { in: [EQUAL_POINTS_RULE_ALL_MATCHES_FIRST, EQUAL_POINTS_RULE_MUTUAL_MATCHES_FIRST] }
+  validates :visibility, inclusion: { in: [VISIBILITY_ONLY_TITLE, VISIBILITY_TEAMS, VISIBILITY_ALL] }
 
   before_create :generate_access_keys
   around_update :check_match_dates

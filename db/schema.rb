@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_20_091752) do
+ActiveRecord::Schema.define(version: 2019_09_16_115336) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(version: 2019_04_20_091752) do
     t.integer "match_minutes", default: 45, null: false
     t.integer "equal_points_rule", default: 0, null: false
     t.string "results_access_key"
+    t.integer "visibility", default: 2, null: false
   end
 
   add_foreign_key "age_groups", "tournaments"

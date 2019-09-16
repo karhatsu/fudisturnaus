@@ -19,6 +19,7 @@ export default class TournamentFields extends React.PureComponent {
       days: PropTypes.number.isRequired,
       matchMinutes: PropTypes.number.isRequired,
       equalPointsRule: PropTypes.number.isRequired,
+      visibility: PropTypes.oneOf([0, 1, 2]).isRequired,
     }),
   }
 
@@ -36,6 +37,7 @@ export default class TournamentFields extends React.PureComponent {
         location: '',
         address: '',
         matchMinutes: '',
+        visibility: '',
       },
     }
   }
@@ -60,6 +62,7 @@ export default class TournamentFields extends React.PureComponent {
         {this.renderTournamentField('Osoite', 'text', 'address', 'Esim. Tanhuantie 4-6, 00940 Helsinki')}
         {this.renderTournamentField('Otteluiden välinen aika (min)', 'number', 'matchMinutes')}
         {this.renderEqualPointsRuleField()}
+        {this.renderVisibilityField()}
         {this.renderTournamentFormButtons()}
       </form>
     )
@@ -77,6 +80,21 @@ export default class TournamentFields extends React.PureComponent {
           <select onChange={this.setValue('equalPointsRule')} value={this.state.form.equalPointsRule}>
             <option value={0}>Kaikki ottelut (maaliero, tehdyt maalit), keskinäiset ottelut, arpa</option>
             <option value={1}>Keskinäiset ottelut, kaikki ottelut (maaliero, tehdyt maalit), arpa</option>
+          </select>
+        </div>
+      </div>
+    )
+  }
+
+  renderVisibilityField() {
+    return (
+      <div className="form__field">
+        <div className="label">Turnauksen näkyvyys</div>
+        <div className="">
+          <select onChange={this.setValue('visibility')} value={this.state.form.visibility}>
+            <option value={0}>Turnauksen perustiedot</option>
+            <option value={1}>Turnauksen perustiedot, sarjat ja joukkueet</option>
+            <option value={2}>Turnauksen koko otteluohjelma</option>
           </select>
         </div>
       </div>
@@ -104,10 +122,10 @@ export default class TournamentFields extends React.PureComponent {
   }
 
   openForm = () => {
-    const { tournament: { name, startDate, days, location, address, matchMinutes, equalPointsRule } } = this.props
+    const { tournament: { name, startDate, days, location, address, matchMinutes, equalPointsRule, visibility } } = this.props
     this.setState({
       formOpen: true,
-      form: { name, startDate, days, location, address: address || '', matchMinutes, equalPointsRule },
+      form: { name, startDate, days, location, address: address || '', matchMinutes, equalPointsRule, visibility },
     })
   }
 

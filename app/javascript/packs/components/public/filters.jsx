@@ -30,22 +30,24 @@ export default class Filters extends React.PureComponent {
     const ageGroups = this.resolveAgeGroups()
     return (
       <div className="filters">
-        {this.renderFilter('ageGroupId', ageGroups, 'Sarja')}
-        {this.renderFilter('groupId', this.resolveGroups(), 'Lohko', this.resolveGroupName)}
-        {this.renderFilter('clubId', this.resolveClubs(), 'Seura')}
-        {this.renderFilter('teamId', this.resolveTeams(), 'Joukkue')}
-        {this.renderFilter('day', this.resolveDays(), 'Päivä')}
-        {this.renderFilter('fieldId', this.resolveFields(), 'Kenttä')}
+        {this.renderFilter('ageGroupId', ageGroups, 'Sarja', 'Kaikki sarjat')}
+        {this.renderFilter('groupId', this.resolveGroups(), 'Lohko', 'Kaikki lohkot', this.resolveGroupName)}
+        {this.renderFilter('clubId', this.resolveClubs(), 'Seura', 'Kaikki seurat')}
+        {this.renderFilter('teamId', this.resolveTeams(), 'Joukkue', 'Kaikki joukkueet')}
+        {this.renderFilter('day', this.resolveDays(), 'Päivä', 'Kaikki päivät')}
+        {this.renderFilter('fieldId', this.resolveFields(), 'Kenttä', 'Kaikki kentät')}
         {this.renderResetLink()}
       </div>
     )
   }
 
-  renderFilter = (key, items, defaultText, nameCallback) => {
+  renderFilter = (key, items, defaultText, selectedText, nameCallback) => {
     if (items.length > 1) {
+      const { filters, setFilterValue } = this.props
+      const title = filters[key] > 0 ? selectedText : defaultText
       return (
-        <select id={`filter-${key}`} className="filter" onChange={this.props.setFilterValue(key)} value={this.props.filters[key]}>
-          <option value={0}>{defaultText}</option>
+        <select id={`filter-${key}`} className="filter" onChange={setFilterValue(key)} value={filters[key]}>
+          <option value={0}>{title}</option>
           {items.map(item => {
             const { id, name } = item
             return <option key={id} value={id}>{nameCallback ? nameCallback(item) : name}</option>

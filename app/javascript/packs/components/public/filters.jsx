@@ -34,7 +34,7 @@ export default class Filters extends React.PureComponent {
         {this.renderFilter('groupId', this.resolveGroups(), 'Lohko', this.resolveGroupName)}
         {this.renderFilter('clubId', this.resolveClubs(), 'Seura')}
         {this.renderFilter('teamId', this.resolveTeams(), 'Joukkue')}
-        {this.renderFilter('day', this.resolveDays(), 'Pvm')}
+        {this.renderFilter('day', this.resolveDays(), 'Päivä')}
         {this.renderFilter('fieldId', this.resolveFields(), 'Kenttä')}
         {this.renderResetLink()}
       </div>

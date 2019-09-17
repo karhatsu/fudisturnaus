@@ -44,7 +44,7 @@ li {
 }
 
 .message--error {
-  background-color: #ff554b;
+  background-color: $red-light;
 }
 
 .message--success {
@@ -59,4 +59,27 @@ li {
   a {
     color: $white;
   }
+}
+
+.badge {
+  border: 1px solid $white;
+  border-radius: 2px;
+  color: $white;
+  display: inline-block;
+  font-size: 12px;
+  line-height: 12px;
+  padding: 4px;
+  margin: 0 8px;
+}
+
+.badge--0 {
+  background-color: $red-light;
+}
+
+.badge--1 {
+  background-color: $yellow;
+}
+
+.badge--2 {
+  background-color: $green;
 }

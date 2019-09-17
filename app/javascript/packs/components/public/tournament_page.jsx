@@ -11,6 +11,7 @@ import { formatTournamentDates } from '../util/date_util'
 import Title from '../components/title'
 import { fetchTournament } from './api_client'
 import Filters from './filters'
+import VisibilityBadge from '../tournament_management/visibility_badge'
 
 const defaultFilters = {
   ageGroupId: 0,
@@ -53,12 +54,15 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   render() {
+    const { official } = this.props
     const { error, tournament } = this.state
-    const iconLink = this.props.official ? null : '/'
+    const iconLink = official ? null : '/'
     const title = tournament ? tournament.name : 'fudisturnaus.com'
     return (
       <div>
-        <Title iconLink={iconLink} loading={!tournament && !error} text={title}/>
+        <Title iconLink={iconLink} loading={!tournament && !error} text={title}>
+          {official && tournament && <VisibilityBadge visibility={tournament.visibility}/>}
+        </Title>
         {this.renderSubTitle()}
         {this.renderContent()}
         {this.renderManagementLink()}

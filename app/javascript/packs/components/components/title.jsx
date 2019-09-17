@@ -6,6 +6,7 @@ const emoji = '⚽'
 
 export default class Title extends React.PureComponent {
   static propTypes = {
+    children: PropTypes.element,
     iconLink: PropTypes.string,
     loading: PropTypes.bool.isRequired,
     text: PropTypes.string.isRequired,
@@ -16,6 +17,7 @@ export default class Title extends React.PureComponent {
       <div className="title">
         {this.renderEmoji()}
         <span className="title__text">{this.props.text}</span>
+        {this.props.children}
       </div>
     )
   }

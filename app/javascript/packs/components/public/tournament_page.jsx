@@ -11,7 +11,15 @@ import { formatTournamentDates } from '../util/date_util'
 import Title from '../components/title'
 import { fetchTournament } from './api_client'
 import Filters from './filters'
+import SeriesAndTeams from './series_and_teams'
 import VisibilityBadge from '../tournament_management/visibility_badge'
+
+export const officialLevels = {
+  none: 0,
+  results: 1,
+  full: 2,
+}
+const { none, results, full } = officialLevels
 
 const defaultFilters = {
   ageGroupId: 0,
@@ -35,7 +43,7 @@ export default class TournamentPage extends React.PureComponent {
         accessKey: PropTypes.string,
       }).isRequired,
     }),
-    official: PropTypes.bool.isRequired,
+    officialLevel: PropTypes.oneOf([none, results, full]).isRequired,
     renderMatch: PropTypes.func.isRequired,
     tournamentId: PropTypes.number.isRequired,
   }
@@ -54,34 +62,84 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   render() {
-    const { official } = this.props
+    const { officialLevel } = this.props
     const { error, tournament } = this.state
-    const iconLink = official ? null : '/'
+    const iconLink = officialLevel === officialLevels.none ? '/' : null
     const title = tournament ? tournament.name : 'fudisturnaus.com'
     return (
       <div>
         <Title iconLink={iconLink} loading={!tournament && !error} text={title}>
-          {official && tournament && <VisibilityBadge visibility={tournament.visibility}/>}
+          {officialLevel === officialLevels.full && tournament && <VisibilityBadge visibility={tournament.visibility}/>}
         </Title>
         {this.renderSubTitle()}
         {this.renderContent()}
-        {this.renderManagementLink()}
       </div>
     )
   }
 
   renderContent() {
-    const { error, filters, tournament } = this.state
+    const { error, tournament } = this.state
     if (error) {
       return <div className="message message--error">Virhe haettaessa turnauksen tietoja. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.</div>
     }
     if (!tournament) {
       return <Loading/>
     }
-    if (!tournament.groupStageMatches.length) {
-      const msg = this.props.official ? 'Aloita syöttämällä turnauksen tiedot' : 'Turnauksen otteluohjelmaa ei ole vielä julkistettu'
-      return <div className="message message--error">{msg}</div>
+    switch (this.props.officialLevel) {
+      case officialLevels.full:
+        return this.renderFullOfficialContent()
+      case officialLevels.results:
+        return this.renderResultsOfficialContent()
+      default:
+        return this.renderPublicContent()
     }
+  }
+
+  renderFullOfficialContent() {
+    return (
+      <div>
+        {this.renderManagementLink()}
+        <div className="title-2">Tulosten tallentaminen</div>
+        {this.renderFullOfficialMatchContent()}
+      </div>
+    )
+  }
+
+  renderFullOfficialMatchContent() {
+    if (this.state.tournament.visibility === 2 && this.tournamentHasMatches()) {
+      return this.renderMatchContent()
+    } else {
+      const msg = 'Kun olet julkaissut turnauksen otteluohjelman, pääset tässä tallentamaan otteluiden tuloksia.'
+      return <div className="message message--warning">{msg}</div>
+    }
+  }
+
+  renderResultsOfficialContent() {
+    if (this.state.tournament.visibility === 2 && this.tournamentHasMatches()) {
+      return this.renderMatchContent()
+    }
+    const msg = 'Kun turnauksen otteluohjelma julkaistaan, pääset tällä sivulla tallentamaan otteluiden tuloksia.'
+    return <div className="message message--warning">{msg}</div>
+  }
+
+  renderPublicContent() {
+    const { tournament } = this.state
+    if (tournament.visibility === 0) {
+      const msg = 'Turnauksen osallistujia ja otteluohjelmaa ei ole vielä julkaistu'
+      return <div className="message message--warning">{msg}</div>
+    } else if (tournament.visibility === 1 || !this.tournamentHasMatches()) {
+      return <SeriesAndTeams tournament={tournament}/>
+    } else {
+      return this.renderMatchContent()
+    }
+  }
+
+  tournamentHasMatches = () => {
+    return this.state.tournament.groupStageMatches.length > 0
+  }
+
+  renderMatchContent() {
+    const { filters, tournament } = this.state
     const groupStageMatches = tournament.groupStageMatches.filter(this.isFilterGroupStageMatch)
     const filteredPlayoffMatches = tournament.playoffMatches.filter(this.isFilterPlayoffMatch)
     return (
@@ -130,13 +188,13 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   renderMatches = (matches, title, showTitle, showEmptyError = false) => {
-    const { official, renderMatch } = this.props
+    const { officialLevel, renderMatch } = this.props
     const { filters, tournament: { days, fields } } = this.state
     return (
       <div>
         {showTitle ? <div className="title-2">{title}</div> : ''}
         <Matches
-          editable={official}
+          editable={officialLevel !== officialLevels.none}
           fieldsCount={fields.length}
           matches={matches}
           renderMatch={renderMatch}

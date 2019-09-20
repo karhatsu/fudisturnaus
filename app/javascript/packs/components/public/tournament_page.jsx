@@ -13,6 +13,9 @@ import { fetchTournament } from './api_client'
 import Filters from './filters'
 import SeriesAndTeams from './series_and_teams'
 import VisibilityBadge from '../tournament_management/visibility_badge'
+import { visibilityTypes } from '../util/enums'
+
+const { onlyTitle, teams, all } = visibilityTypes
 
 export const officialLevels = {
   none: 0,
@@ -106,7 +109,7 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   renderFullOfficialMatchContent() {
-    if (this.state.tournament.visibility === 2 && this.tournamentHasMatches()) {
+    if (this.state.tournament.visibility === all && this.tournamentHasMatches()) {
       return this.renderMatchContent()
     } else {
       const msg = 'Kun olet julkaissut turnauksen otteluohjelman, pääset tässä tallentamaan otteluiden tuloksia.'
@@ -115,7 +118,7 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   renderResultsOfficialContent() {
-    if (this.state.tournament.visibility === 2 && this.tournamentHasMatches()) {
+    if (this.state.tournament.visibility === all && this.tournamentHasMatches()) {
       return this.renderMatchContent()
     }
     const msg = 'Kun turnauksen otteluohjelma julkaistaan, pääset tällä sivulla tallentamaan otteluiden tuloksia.'
@@ -124,10 +127,10 @@ export default class TournamentPage extends React.PureComponent {
 
   renderPublicContent() {
     const { tournament } = this.state
-    if (tournament.visibility === 0) {
+    if (tournament.visibility === onlyTitle) {
       const msg = 'Turnauksen osallistujia ja otteluohjelmaa ei ole vielä julkaistu'
       return <div className="message message--warning">{msg}</div>
-    } else if (tournament.visibility === 1 || !this.tournamentHasMatches()) {
+    } else if (tournament.visibility === teams || !this.tournamentHasMatches()) {
       return <SeriesAndTeams tournament={tournament}/>
     } else {
       return this.renderMatchContent()

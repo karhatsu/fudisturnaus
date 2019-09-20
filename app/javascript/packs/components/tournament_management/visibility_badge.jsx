@@ -1,9 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { visibilityTypes } from '../util/enums'
+
+const { onlyTitle, teams, all } = visibilityTypes
 
 export default class VisibilityBadge extends React.PureComponent {
   static propTypes = {
-    visibility: PropTypes.oneOf([0, 1, 2]).isRequired,
+    visibility: PropTypes.oneOf([onlyTitle, teams, all]).isRequired,
   }
 
   render() {
@@ -13,11 +16,11 @@ export default class VisibilityBadge extends React.PureComponent {
 
   resolveText = visibility => {
     switch (visibility) {
-      case 0:
+      case onlyTitle:
         return 'Vain perustiedot julkaistu'
-      case 1:
+      case teams:
         return 'Sarjat ja joukkueet julkaistu'
-      case 2:
+      case all:
         return 'Koko otteluohjelma julkaistu'
     }
   }

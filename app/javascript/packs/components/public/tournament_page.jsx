@@ -103,7 +103,7 @@ export default class TournamentPage extends React.PureComponent {
     return (
       <div className="tournament-page__full-official">
         <div className="title-1">Turnauksen hallinta</div>
-        <div className="management-link"><Link to={`/official/${accessKey}/management`}>Muokkaa turnauksen asetuksia</Link></div>
+        <div className="management-link"><Link to={`/official/${accessKey}/management`}>Muokkaa turnauksen asetuksia ja otteluohjelmaa</Link></div>
         <div className="title-1">Tulosten tallentaminen</div>
         {this.renderFullOfficialMatchContent()}
       </div>

@@ -33,11 +33,12 @@ export default class TournamentFields extends React.PureComponent {
       form: {
         name: '',
         startDate: '',
-        days: '',
+        days: 1,
         location: '',
         address: '',
-        matchMinutes: '',
-        visibility: '',
+        matchMinutes: 45,
+        equalPointsRule: 0,
+        visibility: 0,
       },
     }
   }

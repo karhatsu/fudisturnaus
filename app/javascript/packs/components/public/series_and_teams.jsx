@@ -27,7 +27,7 @@ export default class SeriesAndTeams extends React.PureComponent {
 
   renderAgeGroup = ageGroup => {
     const { id, name } = ageGroup
-    const ageGroupTitle = this.props.tournament.ageGroups.length === 1 ? 'Ilmoittautuneet joukkueet' : name
+    const ageGroupTitle = this.oneAgeGroup() ? 'Ilmoittautuneet joukkueet' : name
     return (
       <div key={id}>
         <div className="title-2">{ageGroupTitle}</div>
@@ -39,7 +39,8 @@ export default class SeriesAndTeams extends React.PureComponent {
   renderTeams = ageGroupId => {
     const teams = this.props.tournament.teams.filter(team => team.ageGroupId === ageGroupId)
     if (!teams.length) {
-      return <div>Sarjaan ei ole vielä ilmoittautunut yhtään joukkuetta</div>
+      const msg = `${this.oneAgeGroup() ? 'Turnaukseen' : 'Sarjaan'} ei ole ilmoittautunut vielä yhtään joukkuetta`
+      return <div>{msg}</div>
     }
     return teams.map(this.renderTeam)
   }
@@ -47,5 +48,9 @@ export default class SeriesAndTeams extends React.PureComponent {
   renderTeam = team => {
     const { id, name } = team
     return <div key={id} className="series-and-teams__team">{name}</div>
+  }
+
+  oneAgeGroup = () => {
+    return this.props.tournament.ageGroups.length === 1
   }
 }

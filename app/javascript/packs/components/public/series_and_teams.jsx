@@ -19,7 +19,7 @@ export default class SeriesAndTeams extends React.PureComponent {
   render() {
     return (
       <div className="series-and-teams">
-        <div className="message message--warning">Turnauksen otteluohjelma julkaistaan myöhemmin</div>
+        <div className="message message--warning message--full-page">Turnauksen otteluohjelma julkaistaan myöhemmin</div>
         {this.props.tournament.ageGroups.map(this.renderAgeGroup)}
       </div>
     )

@@ -124,14 +124,14 @@ export default class TournamentPage extends React.PureComponent {
       return this.renderMatchContent()
     }
     const msg = 'Kun turnauksen otteluohjelma julkaistaan, pääset tällä sivulla tallentamaan otteluiden tuloksia.'
-    return <div className="message message--warning">{msg}</div>
+    return <div className="message message--warning message--full-page">{msg}</div>
   }
 
   renderPublicContent() {
     const { tournament } = this.state
     if (tournament.visibility === onlyTitle) {
       const msg = 'Turnauksen osallistujia ja otteluohjelmaa ei ole vielä julkaistu'
-      return <div className="message message--warning">{msg}</div>
+      return <div className="message message--warning message--full-page">{msg}</div>
     } else if (tournament.visibility === teams || !this.tournamentHasMatches()) {
       return <SeriesAndTeams tournament={tournament}/>
     } else {

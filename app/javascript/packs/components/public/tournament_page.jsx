@@ -99,10 +99,12 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   renderFullOfficialContent() {
+    const { match: { params : { accessKey } } } = this.props
     return (
-      <div>
-        {this.renderManagementLink()}
-        <div className="title-2">Tulosten tallentaminen</div>
+      <div className="tournament-page__full-official">
+        <div className="title-1">Turnauksen hallinta</div>
+        <div className="management-link"><Link to={`/official/${accessKey}/management`}>Muokkaa turnauksen asetuksia</Link></div>
+        <div className="title-1">Tulosten tallentaminen</div>
         {this.renderFullOfficialMatchContent()}
       </div>
     )
@@ -259,18 +261,6 @@ export default class TournamentPage extends React.PureComponent {
       && (!filters.groupId || filters.groupId === groupId)
       && (!filters.clubId || teams.findIndex(team => team.clubId === filters.clubId) !== -1)
       && (!filters.teamId || teams.findIndex(team => team.id === filters.teamId) !== -1)
-  }
-
-  renderManagementLink() {
-    const { match } = this.props
-    if (match && match.params.accessKey) {
-      return (
-        <div>
-          <div className="title-2">Turnauksen hallinta</div>
-          <div className="management-link"><Link to={`/official/${match.params.accessKey}/management`}>Muokkaa turnauksen asetuksia</Link></div>
-        </div>
-      )
-    }
   }
 
   componentDidMount() {

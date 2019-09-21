@@ -1,7 +1,7 @@
 import React from 'react'
 import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
-import SeriesAndTeams from './series_and_teams'
+import SeriesAndTeams from '../../packs/components/public/series_and_teams'
 
 Enzyme.configure({ adapter: new Adapter() })
 

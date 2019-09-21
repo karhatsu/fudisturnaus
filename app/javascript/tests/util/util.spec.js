@@ -1,4 +1,4 @@
-import { buildTournamentFromSocketData } from './util'
+import { buildTournamentFromSocketData } from '../../packs/components/util/util'
 
 describe('util', () => {
   describe('buildTournamentFromSocketData', () => {

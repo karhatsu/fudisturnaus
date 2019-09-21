@@ -1,0 +1,10 @@
+@import 'variables';
+@import 'shared';
+
+.series-and-teams__age-group {
+  @include white-box(false);
+}
+
+.series-and-teams__team {
+  margin: 4px 0;
+}

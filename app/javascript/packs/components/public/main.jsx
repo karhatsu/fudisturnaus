@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter, Route } from 'react-router-dom'
 import '../styles/application.scss'
 import Index from './index'
-import TournamentPage from './tournament_page'
+import TournamentPage, { officialLevels } from './tournament_page'
 import PropTypes from 'prop-types'
 import Match from './match'
 import Info from './info'
@@ -31,7 +31,14 @@ class TournamentPageWrapper extends React.PureComponent {
 
   render() {
     const { match: { params: { id } } } = this.props
-    return <TournamentPage {...this.props} editable={false} official={false} renderMatch={props => <Match {...props}/>} tournamentId={parseInt(id)}/>
+    return (
+      <TournamentPage
+        {...this.props}
+        officialLevel={officialLevels.none}
+        renderMatch={props => <Match {...props}/>}
+        tournamentId={parseInt(id)}
+      />
+    )
   }
 }
 

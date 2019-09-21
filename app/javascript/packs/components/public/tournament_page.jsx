@@ -11,6 +11,18 @@ import { formatTournamentDates } from '../util/date_util'
 import Title from '../components/title'
 import { fetchTournament } from './api_client'
 import Filters from './filters'
+import SeriesAndTeams from './series_and_teams'
+import VisibilityBadge from '../tournament_management/visibility_badge'
+import { visibilityTypes } from '../util/enums'
+
+const { onlyTitle, teams, all } = visibilityTypes
+
+export const officialLevels = {
+  none: 0,
+  results: 1,
+  full: 2,
+}
+const { none, results, full } = officialLevels
 
 const defaultFilters = {
   ageGroupId: 0,
@@ -34,7 +46,7 @@ export default class TournamentPage extends React.PureComponent {
         accessKey: PropTypes.string,
       }).isRequired,
     }),
-    official: PropTypes.bool.isRequired,
+    officialLevel: PropTypes.oneOf([none, results, full]).isRequired,
     renderMatch: PropTypes.func.isRequired,
     tournamentId: PropTypes.number.isRequired,
   }
@@ -53,31 +65,86 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   render() {
+    const { officialLevel } = this.props
     const { error, tournament } = this.state
-    const iconLink = this.props.official ? null : '/'
+    const iconLink = officialLevel === officialLevels.none ? '/' : null
     const title = tournament ? tournament.name : 'fudisturnaus.com'
     return (
       <div>
-        <Title iconLink={iconLink} loading={!tournament && !error} text={title}/>
+        <Title iconLink={iconLink} loading={!tournament && !error} text={title}>
+          {officialLevel === officialLevels.full && tournament ? <VisibilityBadge visibility={tournament.visibility}/> : undefined}
+        </Title>
         {this.renderSubTitle()}
         {this.renderContent()}
-        {this.renderManagementLink()}
       </div>
     )
   }
 
   renderContent() {
-    const { error, filters, tournament } = this.state
+    const { error, tournament } = this.state
     if (error) {
       return <div className="message message--error">Virhe haettaessa turnauksen tietoja. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.</div>
     }
     if (!tournament) {
       return <Loading/>
     }
-    if (!tournament.groupStageMatches.length) {
-      const msg = this.props.official ? 'Aloita syöttämällä turnauksen tiedot' : 'Turnauksen otteluohjelmaa ei ole vielä julkistettu'
-      return <div className="message message--error">{msg}</div>
+    switch (this.props.officialLevel) {
+      case officialLevels.full:
+        return this.renderFullOfficialContent()
+      case officialLevels.results:
+        return this.renderResultsOfficialContent()
+      default:
+        return this.renderPublicContent()
     }
+  }
+
+  renderFullOfficialContent() {
+    const { match: { params : { accessKey } } } = this.props
+    return (
+      <div className="tournament-page__full-official">
+        <div className="title-1">Turnauksen hallinta</div>
+        <div className="management-link"><Link to={`/official/${accessKey}/management`}>Muokkaa turnauksen asetuksia ja otteluohjelmaa</Link></div>
+        <div className="title-1">Tulosten tallentaminen</div>
+        {this.renderFullOfficialMatchContent()}
+      </div>
+    )
+  }
+
+  renderFullOfficialMatchContent() {
+    if (this.state.tournament.visibility === all && this.tournamentHasMatches()) {
+      return this.renderMatchContent()
+    } else {
+      const msg = 'Kun olet julkaissut turnauksen otteluohjelman, pääset tässä tallentamaan otteluiden tuloksia.'
+      return <div className="message message--warning">{msg}</div>
+    }
+  }
+
+  renderResultsOfficialContent() {
+    if (this.state.tournament.visibility === all && this.tournamentHasMatches()) {
+      return this.renderMatchContent()
+    }
+    const msg = 'Kun turnauksen otteluohjelma julkaistaan, pääset tällä sivulla tallentamaan otteluiden tuloksia.'
+    return <div className="message message--warning message--full-page">{msg}</div>
+  }
+
+  renderPublicContent() {
+    const { tournament } = this.state
+    if (tournament.visibility === onlyTitle) {
+      const msg = 'Turnauksen osallistujia ja otteluohjelmaa ei ole vielä julkaistu'
+      return <div className="message message--warning message--full-page">{msg}</div>
+    } else if (tournament.visibility === teams || !this.tournamentHasMatches()) {
+      return <SeriesAndTeams tournament={tournament}/>
+    } else {
+      return this.renderMatchContent()
+    }
+  }
+
+  tournamentHasMatches = () => {
+    return this.state.tournament.groupStageMatches.length > 0
+  }
+
+  renderMatchContent() {
+    const { filters, tournament } = this.state
     const groupStageMatches = tournament.groupStageMatches.filter(this.isFilterGroupStageMatch)
     const filteredPlayoffMatches = tournament.playoffMatches.filter(this.isFilterPlayoffMatch)
     return (
@@ -126,13 +193,13 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   renderMatches = (matches, title, showTitle, showEmptyError = false) => {
-    const { official, renderMatch } = this.props
+    const { officialLevel, renderMatch } = this.props
     const { filters, tournament: { days, fields } } = this.state
     return (
       <div>
         {showTitle ? <div className="title-2">{title}</div> : ''}
         <Matches
-          editable={official}
+          editable={officialLevel !== officialLevels.none}
           fieldsCount={fields.length}
           matches={matches}
           renderMatch={renderMatch}
@@ -194,18 +261,6 @@ export default class TournamentPage extends React.PureComponent {
       && (!filters.groupId || filters.groupId === groupId)
       && (!filters.clubId || teams.findIndex(team => team.clubId === filters.clubId) !== -1)
       && (!filters.teamId || teams.findIndex(team => team.id === filters.teamId) !== -1)
-  }
-
-  renderManagementLink() {
-    const { match } = this.props
-    if (match && match.params.accessKey) {
-      return (
-        <div>
-          <div className="title-2">Turnauksen hallinta</div>
-          <div className="management-link"><Link to={`/official/${match.params.accessKey}/management`}>Muokkaa turnauksen asetuksia</Link></div>
-        </div>
-      )
-    }
   }
 
   componentDidMount() {

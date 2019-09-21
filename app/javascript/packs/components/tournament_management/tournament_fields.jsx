@@ -5,6 +5,9 @@ import AccessContext from '../util/access_context'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
 import Button from '../form/button'
+import { visibilityTypes } from '../util/enums'
+
+const { onlyTitle, teams, all } = visibilityTypes
 
 export default class TournamentFields extends React.PureComponent {
   static propTypes = {
@@ -19,6 +22,7 @@ export default class TournamentFields extends React.PureComponent {
       days: PropTypes.number.isRequired,
       matchMinutes: PropTypes.number.isRequired,
       equalPointsRule: PropTypes.number.isRequired,
+      visibility: PropTypes.oneOf([onlyTitle, teams, all]).isRequired,
     }),
   }
 
@@ -32,10 +36,12 @@ export default class TournamentFields extends React.PureComponent {
       form: {
         name: '',
         startDate: '',
-        days: '',
+        days: 1,
         location: '',
         address: '',
-        matchMinutes: '',
+        matchMinutes: 45,
+        equalPointsRule: 0,
+        visibility: onlyTitle,
       },
     }
   }
@@ -60,6 +66,7 @@ export default class TournamentFields extends React.PureComponent {
         {this.renderTournamentField('Osoite', 'text', 'address', 'Esim. Tanhuantie 4-6, 00940 Helsinki')}
         {this.renderTournamentField('Otteluiden välinen aika (min)', 'number', 'matchMinutes')}
         {this.renderEqualPointsRuleField()}
+        {this.renderVisibilityField()}
         {this.renderTournamentFormButtons()}
       </form>
     )
@@ -77,6 +84,21 @@ export default class TournamentFields extends React.PureComponent {
           <select onChange={this.setValue('equalPointsRule')} value={this.state.form.equalPointsRule}>
             <option value={0}>Kaikki ottelut (maaliero, tehdyt maalit), keskinäiset ottelut, arpa</option>
             <option value={1}>Keskinäiset ottelut, kaikki ottelut (maaliero, tehdyt maalit), arpa</option>
+          </select>
+        </div>
+      </div>
+    )
+  }
+
+  renderVisibilityField() {
+    return (
+      <div className="form__field">
+        <div className="label">Turnauksen näkyvyys</div>
+        <div className="">
+          <select onChange={this.setValue('visibility')} value={this.state.form.visibility}>
+            <option value={onlyTitle}>Turnauksen perustiedot</option>
+            <option value={teams}>Turnauksen perustiedot, sarjat ja joukkueet</option>
+            <option value={all}>Turnauksen koko otteluohjelma</option>
           </select>
         </div>
       </div>
@@ -104,10 +126,10 @@ export default class TournamentFields extends React.PureComponent {
   }
 
   openForm = () => {
-    const { tournament: { name, startDate, days, location, address, matchMinutes, equalPointsRule } } = this.props
+    const { tournament: { name, startDate, days, location, address, matchMinutes, equalPointsRule, visibility } } = this.props
     this.setState({
       formOpen: true,
-      form: { name, startDate, days, location, address: address || '', matchMinutes, equalPointsRule },
+      form: { name, startDate, days, location, address: address || '', matchMinutes, equalPointsRule, visibility },
     })
   }
 

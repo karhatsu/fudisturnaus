@@ -28,7 +28,7 @@ export default class ContactForm extends React.PureComponent {
   render() {
     if (this.state.submitted) {
       return (
-        <div className="message message--success message--standalone">
+        <div className="message message--success message--no-margins">
           Kiitos yhteydenotosta. Palaamme asiaan pian!
         </div>
       )

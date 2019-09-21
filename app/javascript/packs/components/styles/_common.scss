@@ -35,16 +35,24 @@ li {
   background-color: $white;
   border-radius: 4px;
   color: $white;
-  margin-top: 16px;
+  margin-top: 8px;
   padding: 8px;
 }
 
-.message--standalone {
+.message--full-page {
+  margin-top: 16px;
+}
+
+.message--no-margins {
   margin-top: 0;
 }
 
 .message--error {
-  background-color: #ff554b;
+  background-color: $red-light;
+}
+
+.message--warning {
+  background-color: $yellow;
 }
 
 .message--success {
@@ -59,4 +67,27 @@ li {
   a {
     color: $white;
   }
+}
+
+.badge {
+  border: 1px solid $white;
+  border-radius: 2px;
+  color: $white;
+  display: inline-block;
+  font-size: 12px;
+  line-height: 12px;
+  padding: 4px;
+  margin: 0 8px;
+}
+
+.badge--0 {
+  background-color: $red-light;
+}
+
+.badge--1 {
+  background-color: $yellow;
+}
+
+.badge--2 {
+  background-color: $green;
 }

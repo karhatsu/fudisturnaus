@@ -24,7 +24,7 @@ describe 'official', type: :system do
     end
 
     it 'works for new items' do
-      click_link 'Muokkaa turnauksen asetuksia'
+      click_link 'Muokkaa turnauksen asetuksia ja otteluohjelmaa'
 
       add_new_item 'fields'
       form_inputs[0].fill_in with: 'Field 1'

@@ -36,3 +36,11 @@ def expect_group_table_row(index, ranking, team_name, matches = 0, wins = 0, dra
   expect(cols[6].text).to eql "#{goals_for}-#{goals_against}"
   expect(cols[7].text.to_i).to eql points
 end
+
+def expect_message(type, text)
+  expect(page.find("div.message.message--#{type}").text).to eql text
+end
+
+def expect_no_message(type)
+  expect(page).to have_no_xpath("//div[contains(@class, 'message--#{type}')]")
+end

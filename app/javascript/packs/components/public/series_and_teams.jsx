@@ -4,15 +4,15 @@ import PropTypes from 'prop-types'
 export default class SeriesAndTeams extends React.PureComponent {
   static propTypes = {
     tournament: PropTypes.shape({
-      ageGroups: PropTypes.arrayOf({
+      ageGroups: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
-      }).isRequired,
-      teams: PropTypes.arrayOf({
+      })).isRequired,
+      teams: PropTypes.arrayOf(PropTypes.shape({
         ageGroupId: PropTypes.number.isRequired,
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
-      }).isRequired,
+      })).isRequired,
     }).isRequired,
   }
 

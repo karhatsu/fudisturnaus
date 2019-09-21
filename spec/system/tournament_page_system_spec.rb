@@ -22,7 +22,7 @@ describe 'tournament page', type: :system do
     expect(page.find('.sub-title').text).to eql "#{location}, #{formatted_date}"
     expect(page.find('.sub-title a').text).to eql location
     expect(page.find('.sub-title a')[:href]).to eql "https://www.google.com/maps/place/#{address.gsub(' ', '+')}"
-    expect(page.find('.message.message--error').text).to eql 'Turnauksen otteluohjelmaa ei ole vielä julkistettu'
+    expect_message 'warning', 'Turnauksen otteluohjelma julkaistaan myöhemmin'
   end
 
   describe 'when matches added' do

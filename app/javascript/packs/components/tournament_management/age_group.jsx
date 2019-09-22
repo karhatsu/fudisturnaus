@@ -97,7 +97,9 @@ export default class AgeGroup extends React.PureComponent {
 
   submit = () => {
     const { ageGroup, onAgeGroupSave, tournamentId } = this.props
-    saveAgeGroup(this.context, tournamentId, ageGroup ? ageGroup.id : undefined, this.state.form, (errors, data) => {
+    const { form } = this.state
+    form.name = form.name.trim()
+    saveAgeGroup(this.context, tournamentId, ageGroup ? ageGroup.id : undefined, form, (errors, data) => {
       if (errors) {
         this.setState({ errors })
       } else {

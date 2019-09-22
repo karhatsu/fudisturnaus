@@ -162,7 +162,9 @@ export default class Team extends React.PureComponent {
 
   submit = () => {
     const { team, onTeamSave, tournamentId } = this.props
-    saveTeam(this.context, tournamentId, team ? team.id : undefined, this.state.form, (errors, data) => {
+    const { form } = this.state
+    form.name = form.name.trim()
+    saveTeam(this.context, tournamentId, team ? team.id : undefined, form, (errors, data) => {
       if (errors) {
         this.setState({ errors })
       } else {
@@ -190,7 +192,7 @@ export default class Team extends React.PureComponent {
 
   saveClub = () => {
     const { clubName } = this.state
-    createClub(this.context, clubName, (errors, data) => {
+    createClub(this.context, clubName.trim(), (errors, data) => {
       if (errors) {
         this.setState({ errors })
       } else {

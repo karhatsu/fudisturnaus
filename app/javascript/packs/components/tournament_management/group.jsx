@@ -103,7 +103,9 @@ export default class Group extends React.PureComponent {
 
   submit = () => {
     const { group, onGroupSave, tournamentId } = this.props
-    saveGroup(this.context, tournamentId, group ? group.id : undefined, this.state.form, (errors, data) => {
+    const { form } = this.state
+    form.name = form.name.trim()
+    saveGroup(this.context, tournamentId, group ? group.id : undefined, form, (errors, data) => {
       if (errors) {
         this.setState({ errors })
       } else {

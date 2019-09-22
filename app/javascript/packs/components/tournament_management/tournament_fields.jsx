@@ -149,7 +149,11 @@ export default class TournamentFields extends React.PureComponent {
   }
 
   submit = () => {
-    this.props.onSave(this.state.form, errors => {
+    const { form } = this.state
+    form.name = form.name.trim()
+    form.location = form.location.trim()
+    form.address = form.address.trim()
+    this.props.onSave(form, errors => {
       if (errors) {
         this.setState({ errors })
       } else {

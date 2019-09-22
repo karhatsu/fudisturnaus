@@ -76,7 +76,7 @@ export default class Field extends React.PureComponent {
   submit = () => {
     const { field, onFieldSave, tournamentId } = this.props
     const { name } = this.state
-    saveField(this.context, tournamentId, field ? field.id : undefined, name, (errors, data) => {
+    saveField(this.context, tournamentId, field ? field.id : undefined, name.trim(), (errors, data) => {
       if (errors) {
         this.setState({ errors })
       } else {

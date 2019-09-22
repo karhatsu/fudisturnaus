@@ -134,8 +134,13 @@ export default class Team extends React.PureComponent {
 
   changeValue = field => event => {
     const { form } = this.state
+    let { form: { name } } = this.state
     const value = event.target.value
-    this.setState({ form: { ...form, [field]: value } }, () => {
+    if (field === 'clubId') {
+      const clubName = getName(this.props.clubs, parseInt(value))
+      name = `${clubName} `
+    }
+    this.setState({ form: { ...form, name, [field]: value } }, () => {
       if (field === 'clubId') {
         if (value === NEW_CLUB_ID && this.clubNameFieldRed) {
           this.clubNameFieldRed.current.focus()
@@ -184,12 +189,13 @@ export default class Team extends React.PureComponent {
   }
 
   saveClub = () => {
-    createClub(this.context, this.state.clubName, (errors, data) => {
+    const { clubName } = this.state
+    createClub(this.context, clubName, (errors, data) => {
       if (errors) {
         this.setState({ errors })
       } else {
         const { form } = this.state
-        this.setState({ errors: [], clubName: '', form: { ...form, clubId: data.id } })
+        this.setState({ errors: [], clubName: '', form: { ...form, clubId: data.id, name: `${clubName} ` } })
         this.props.onClubSave(data)
         if (this.nameFieldRed) {
           this.nameFieldRed.current.focus()

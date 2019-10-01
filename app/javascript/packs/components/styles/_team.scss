@@ -1,0 +1,18 @@
+@import 'variables';
+@import 'shared';
+
+.team {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.team--selected {
+  color: $green;
+}
+
+.team__logo {
+  height: 14px;
+  width: 14px;
+  margin-right: 4px;
+}

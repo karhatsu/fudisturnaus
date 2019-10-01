@@ -5,6 +5,7 @@ import { resolveColStyles } from '../util/util'
 
 export default class Matches extends React.PureComponent {
   static propTypes = {
+    clubs: PropTypes.array.isRequired,
     editable: PropTypes.bool.isRequired,
     fieldsCount: PropTypes.number.isRequired,
     matches: PropTypes.array.isRequired,
@@ -61,8 +62,8 @@ export default class Matches extends React.PureComponent {
   }
 
   renderMatch = match => {
-    const { renderMatch, selectedClubId, selectedTeamId, tournamentDays, tournamentId } = this.props
-    const matchProps = { match, selectedClubId, selectedTeamId, tournamentDays, tournamentId }
+    const { clubs, renderMatch, selectedClubId, selectedTeamId, tournamentDays, tournamentId } = this.props
+    const matchProps = { clubs, match, selectedClubId, selectedTeamId, tournamentDays, tournamentId }
     return (
       <div className={resolveColStyles(this.props.fieldsCount)} key={match.id}>
         {renderMatch(matchProps)}

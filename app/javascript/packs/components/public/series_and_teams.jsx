@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Team from './team'
 import { getName } from '../util/util'
 
 export default class SeriesAndTeams extends React.PureComponent {
@@ -9,6 +10,9 @@ export default class SeriesAndTeams extends React.PureComponent {
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
       })).isRequired,
+      clubs: PropTypes.arrayOf(PropTypes.shape({
+        logoUrl: PropTypes.string,
+      })).isRequired,
       groups: PropTypes.arrayOf(PropTypes.shape({
         ageGroupId: PropTypes.number.isRequired,
         id: PropTypes.number.isRequired,
@@ -16,6 +20,7 @@ export default class SeriesAndTeams extends React.PureComponent {
       })).isRequired,
       teams: PropTypes.arrayOf(PropTypes.shape({
         ageGroupId: PropTypes.number.isRequired,
+        clubId: PropTypes.number.isRequired,
         groupId: PropTypes.number.isRequired,
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
@@ -53,10 +58,11 @@ export default class SeriesAndTeams extends React.PureComponent {
   }
 
   renderTeam = (team, showGroupName) => {
-    const { groupId, id, name: teamName } = team
-    const groupName = getName(this.props.tournament.groups, groupId)
+    const { tournament: { clubs, groups } } = this.props
+    const { clubId, groupId, id, name: teamName } = team
+    const groupName = getName(groups, groupId)
     const name = showGroupName ? `${teamName} (${groupName})` : teamName
-    return <div key={id} className="series-and-teams__team">{name}</div>
+    return <div className="series-and-teams__team" key={id}><Team clubId={clubId} clubs={clubs} name={name}/></div>
   }
 
   oneAgeGroup = () => {

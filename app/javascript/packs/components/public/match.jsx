@@ -1,9 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { formatMatchTime } from '../util/date_util'
+import Team from './team'
 
 export default class Match extends React.PureComponent {
   static propTypes = {
+    clubs: PropTypes.arrayOf(PropTypes.shape({
+      logoUrl: PropTypes.string,
+    })).isRequired,
     match: PropTypes.shape({
       id: PropTypes.number.isRequired,
       type: PropTypes.string.isRequired,
@@ -86,13 +90,10 @@ export default class Match extends React.PureComponent {
   }
 
   renderTeam = team => {
-    if (!team) return <span className="match__team-name">?</span>
-    const { selectedClubId, selectedTeamId } = this.props
-    const classes = ['match__team-name']
-    if (team.id === selectedTeamId || team.clubId === selectedClubId) {
-      classes.push('match__team-name--selected')
-    }
-    return <span className={classes.join(' ')}>{team.name}</span>
+    if (!team) return <span>?</span>
+    const { clubs, selectedClubId, selectedTeamId } = this.props
+    const selected = team.id === selectedTeamId || team.clubId === selectedClubId
+    return <Team clubId={team.clubId} clubs={clubs} name={team.name} selected={selected} />
   }
 
   renderResult() {

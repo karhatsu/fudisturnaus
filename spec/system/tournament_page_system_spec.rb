@@ -105,7 +105,8 @@ describe 'tournament page', type: :system do
 
       def expect_one_match(home_team, away_team)
         expect_match_count 1
-        expect(page.find('.match .match__teams').text).to eql "#{home_team.name}-#{away_team.name}"
+        expect(page.all('.match .match__teams .team')[0].text).to eql home_team.name
+        expect(page.all('.match .match__teams .team')[1].text).to eql away_team.name
       end
 
       def expect_match_count(expected_count)

@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { resolveColStyles } from '../util/util'
+import Team from './team'
 
 export default class GroupResults extends React.PureComponent {
   static propTypes = {
+    clubs: PropTypes.array.isRequired,
     filters: PropTypes.object.isRequired,
     group: PropTypes.shape({
       ageGroup: PropTypes.shape({
@@ -51,12 +53,15 @@ export default class GroupResults extends React.PureComponent {
   }
 
   renderGroupResultRow = (allResults, teamGroupResults, index) => {
-    const { ranking, teamName, lot, matches, wins, draws, losses, goalsFor, goalsAgainst, points } = teamGroupResults
+    const { clubId, ranking, teamName, lot, matches, wins, draws, losses, goalsFor, goalsAgainst, points } = teamGroupResults
     const rankingText = index > 0 && ranking === allResults[index - 1].ranking ? '' : `${ranking}.`
+    const team = `${teamName}${typeof lot === 'number' ? ` (arpa: ${lot})` : ''}`
     return (
       <tr key={teamName} className={this.resolveTeamClasses(teamGroupResults)}>
         <td>{rankingText}</td>
-        <td className="group-results__team-name">{teamName}{typeof lot === 'number' ? ` (arpa: ${lot})` : ''}</td>
+        <td className="group-results__team-name">
+          <Team clubId={clubId} clubs={this.props.clubs} name={team} />
+        </td>
         <td>{matches}</td>
         <td>{wins}</td>
         <td>{draws}</td>

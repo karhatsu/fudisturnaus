@@ -194,11 +194,12 @@ export default class TournamentPage extends React.PureComponent {
 
   renderMatches = (matches, title, showTitle, showEmptyError = false) => {
     const { officialLevel, renderMatch } = this.props
-    const { filters, tournament: { days, fields } } = this.state
+    const { filters, tournament: { clubs, days, fields } } = this.state
     return (
       <div>
         {showTitle ? <div className="title-2">{title}</div> : ''}
         <Matches
+          clubs={clubs}
           editable={officialLevel !== officialLevels.none}
           fieldsCount={fields.length}
           matches={matches}
@@ -249,8 +250,8 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   renderGroup = (group, groupsCount) => {
-    const { filters } = this.state
-    return <GroupResults filters={filters} group={group} groupsCount={groupsCount} key={group.id}/>
+    const { filters, tournament: { clubs } } = this.state
+    return <GroupResults clubs={clubs} filters={filters} group={group} groupsCount={groupsCount} key={group.id}/>
   }
 
   isFilterGroup = group => {

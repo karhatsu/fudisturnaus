@@ -11,7 +11,7 @@ describe('SeriesAndTeams', () => {
 
   describe('when no age groups', () => {
     beforeEach(() => {
-      tournament = { ageGroups: [], groups: [], teams: [] }
+      tournament = { ageGroups: [], clubs: [], groups: [], teams: [] }
       component = shallow(<SeriesAndTeams tournament={tournament}/>)
     })
 
@@ -26,7 +26,7 @@ describe('SeriesAndTeams', () => {
 
   describe('when one age group without teams', () => {
     beforeEach(() => {
-      tournament = { ageGroups: [{ id: 1, name: 'T07' }], groups: [], teams: [] }
+      tournament = { ageGroups: [{ id: 1, name: 'T07' }], clubs: [], groups: [], teams: [] }
       component = shallow(<SeriesAndTeams tournament={tournament}/>)
     })
 
@@ -43,12 +43,13 @@ describe('SeriesAndTeams', () => {
     beforeEach(() => {
       tournament = {
         ageGroups: [{ id: 1, name: 'T07' }],
+        clubs: [],
         groups: [
           { ageGroupId: 1, id: 20, name: 'A' }
         ],
         teams: [
-          { ageGroupId: 1, groupId: 20, id: 10, name: 'FC Team 1' },
-          { ageGroupId: 1, groupId: 20, id: 11, name: 'SC Team 1' }
+          { ageGroupId: 1, clubId: 100, groupId: 20, id: 10, name: 'FC Team 1' },
+          { ageGroupId: 1, clubId: 100, groupId: 20, id: 11, name: 'SC Team 1' }
         ],
       }
       component = shallow(<SeriesAndTeams tournament={tournament}/>)
@@ -61,8 +62,8 @@ describe('SeriesAndTeams', () => {
     it('renders teams for the age group without group name', () => {
       const teams = component.find('.series-and-teams__team')
       expect(teams.length).toEqual(2)
-      expect(teams.at(0).text()).toEqual('FC Team 1')
-      expect(teams.at(1).text()).toEqual('SC Team 1')
+      expect(teams.at(0).find('Team').prop('name')).toEqual('FC Team 1')
+      expect(teams.at(1).find('Team').prop('name')).toEqual('SC Team 1')
     })
   })
 
@@ -73,14 +74,15 @@ describe('SeriesAndTeams', () => {
           { id: 1, name: 'T07' },
           { id: 2, name: 'T08' }
         ],
+        clubs: [],
         groups: [
           { ageGroupId: 1, id: 10, name: 'A' },
           { ageGroupId: 1, id: 11, name: 'B' }
         ],
         teams: [
-          { ageGroupId: 1, groupId: 10, id: 10, name: 'FC Team 1' },
-          { ageGroupId: 1, groupId: 11, id: 11, name: 'SC Team 1' },
-          { ageGroupId: 5, groupId: 10, id: 12, name: 'SC Team 2' }
+          { ageGroupId: 1, clubId: 100, groupId: 10, id: 10, name: 'FC Team 1' },
+          { ageGroupId: 1, clubId: 100, groupId: 11, id: 11, name: 'SC Team 1' },
+          { ageGroupId: 5, clubId: 100, groupId: 10, id: 12, name: 'SC Team 2' }
         ],
       }
       component = shallow(<SeriesAndTeams tournament={tournament}/>)
@@ -98,8 +100,8 @@ describe('SeriesAndTeams', () => {
       expect(ageGroups.length).toEqual(2)
       const teams = ageGroups.at(0).find('.series-and-teams__team')
       expect(teams.length).toEqual(2)
-      expect(teams.at(0).text()).toEqual('FC Team 1 (A)')
-      expect(teams.at(1).text()).toEqual('SC Team 1 (B)')
+      expect(teams.at(0).find('Team').prop('name')).toEqual('FC Team 1 (A)')
+      expect(teams.at(1).find('Team').prop('name')).toEqual('SC Team 1 (B)')
     })
 
     it('renders age group level message about no teams', () => {

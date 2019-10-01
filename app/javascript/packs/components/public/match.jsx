@@ -73,7 +73,7 @@ export default class Match extends React.PureComponent {
   renderPlayoffMatchTitle = (homeTeam, awayTeam, title) => {
     if (title) {
       const text = homeTeam || awayTeam ? `${title}:` : title
-      return <span className="match__playoff-title">{text}</span>
+      return <div className="match__playoff-title">{text}</div>
     }
   }
 

@@ -5,11 +5,13 @@ import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
 import Button from '../form/button'
 import { deleteClub, updateClub } from './api_client'
+import Team from '../public/team'
 
 export default class ClubForm extends React.PureComponent {
   static propTypes = {
     club: PropTypes.shape({
       id: PropTypes.number.isRequired,
+      logoUrl: PropTypes.string,
       name: PropTypes.string.isRequired,
     }).isRequired,
     onClubDelete: PropTypes.func.isRequired,
@@ -23,9 +25,11 @@ export default class ClubForm extends React.PureComponent {
     this.state = {
       formOpen: false,
       name: undefined,
+      logoUrl: undefined,
       errors: [],
     }
     this.nameFieldRed = React.createRef()
+    this.logoUrlFieldRed = React.createRef()
   }
 
   render() {
@@ -38,8 +42,8 @@ export default class ClubForm extends React.PureComponent {
   }
 
   renderName() {
-    const { club: { name } } = this.props
-    return <div className="tournament-item__title"><span onClick={this.openForm}>{name}</span></div>
+    const { club } = this.props
+    return <div className="tournament-item__title" onClick={this.openForm}><Team club={club} name={club.name}/></div>
   }
 
   renderForm() {
@@ -47,7 +51,8 @@ export default class ClubForm extends React.PureComponent {
       <form className="form form--horizontal">
         <FormErrors errors={this.state.errors}/>
         <div className="tournament-item__form">
-          <TextField ref={this.nameFieldRed} onChange={this.changeName} value={this.state.name}/>
+          <TextField ref={this.nameFieldRed} onChange={this.changeValue('name')} value={this.state.name}/>
+          <TextField ref={this.logoUrlFieldRed} placeholder="Logo URL" onChange={this.changeValue('logoUrl')} value={this.state.logoUrl}/>
           <div className="form__buttons">
             <Button label="Tallenna" onClick={this.submit} type="primary" disabled={!this.canSubmit()}/>
             <Button label="Peruuta" onClick={this.cancel} type="normal"/>
@@ -59,12 +64,12 @@ export default class ClubForm extends React.PureComponent {
   }
 
   openForm = () => {
-    const { club: { name } } = this.props
-    this.setState({ formOpen: true, name })
+    const { club: { logoUrl, name } } = this.props
+    this.setState({ formOpen: true, logoUrl, name })
   }
 
-  changeName = event => {
-    this.setState({ name: event.target.value })
+  changeValue = field => event => {
+    this.setState({ [field]: event.target.value })
   }
 
   canSubmit = () => {
@@ -73,8 +78,8 @@ export default class ClubForm extends React.PureComponent {
 
   submit = () => {
     const { club, onClubSave } = this.props
-    const { name } = this.state
-    updateClub(this.context, club.id, { name }, (errors, data) => {
+    const { name, logoUrl } = this.state
+    updateClub(this.context, club.id, { name, logoUrl }, (errors, data) => {
       if (errors) {
         this.setState({ errors })
       } else {

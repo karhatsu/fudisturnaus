@@ -3,24 +3,34 @@ import PropTypes from 'prop-types'
 
 export default class Team extends React.PureComponent {
   static propTypes = {
-    clubId: PropTypes.number.isRequired,
+    clubId: PropTypes.number,
+    club: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      logoUrl: PropTypes.string,
+    }),
     clubs: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
       logoUrl: PropTypes.string,
-    }),).isRequired,
+    })),
     name: PropTypes.string.isRequired,
     selected: PropTypes.bool,
   }
 
   render() {
-    const { clubId, clubs, name } = this.props
-    const club = clubs.find(c => c.id === clubId)
+    const { name } = this.props
+    const club = this.findClub()
     return (
       <div className={this.resolveClassNames()}>
         {this.renderLogo(club)}
         <span className="team__name">{name}</span>
       </div>
     )
+  }
+
+  findClub = () => {
+    const { clubId, club, clubs } = this.props
+    if (club) return club
+    return clubs.find(c => c.id === clubId)
   }
 
   resolveClassNames = () => {

@@ -65,7 +65,7 @@ export default class ClubForm extends React.PureComponent {
 
   openForm = () => {
     const { club: { logoUrl, name } } = this.props
-    this.setState({ formOpen: true, logoUrl, name })
+    this.setState({ formOpen: true, logoUrl: logoUrl || '', name })
   }
 
   changeValue = field => event => {

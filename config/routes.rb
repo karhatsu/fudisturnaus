@@ -29,6 +29,7 @@ Rails.application.routes.draw do
         resources :admin_sessions, only: :create
         resources :clubs, only: [:index, :update, :destroy]
         resources :tournaments, only: :create
+        resource :cache, only: :update
       end
     end
   end

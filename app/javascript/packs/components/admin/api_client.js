@@ -56,6 +56,15 @@ export function updateClub(accessContext, id, data, callback) {
   }).catch(() => handleApiConnectionError(callback))
 }
 
+export function refreshCache(accessContext, callback) {
+  fetch('/api/v1/admin/cache', {
+    method: 'PUT',
+    headers: buildHeaders(accessContext),
+  }).then(response => {
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
+}
+
 function buildHeaders(accessContext) {
   return {
     'Content-Type': 'application/json',

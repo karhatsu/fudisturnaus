@@ -20,10 +20,10 @@ export default class Team extends React.PureComponent {
     const { name } = this.props
     const club = this.findClub()
     return (
-      <div className={this.resolveClassNames()}>
+      <span className={this.resolveClassNames()}>
         {this.renderLogo(club)}
         <span className="team__name">{name}</span>
-      </div>
+      </span>
     )
   }
 

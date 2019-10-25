@@ -41,7 +41,7 @@ export default class AdminLoginPage extends React.PureComponent {
   }
 
   renderField(label, field, type) {
-    return <TextField label={label} onChange={this.setValue(field)} type={type} value={this.state[field]}/>
+    return <TextField field={field} label={label} onChange={this.setValue(field)} type={type} value={this.state[field]}/>
   }
 
   renderSubmitButton() {

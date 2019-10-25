@@ -15,8 +15,10 @@ export default class Title extends React.PureComponent {
   render() {
     return (
       <div className="title">
-        {this.renderEmoji()}
-        <span className="title__text">{this.props.text}</span>
+        <div>
+          {this.renderEmoji()}
+          <span className="title__text">{this.props.text}</span>
+        </div>
         {this.props.children}
       </div>
     )

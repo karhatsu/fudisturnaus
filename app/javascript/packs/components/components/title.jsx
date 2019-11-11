@@ -41,4 +41,20 @@ export default class Title extends React.PureComponent {
     }
     return emojiClasses.join(' ')
   }
+
+  componentDidMount() {
+    this.changeBrowserTitle()
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.text !== this.props.text) {
+      this.changeBrowserTitle()
+    }
+  }
+
+  changeBrowserTitle() {
+    const { text } = this.props
+    const titleText = text.indexOf('fudisturnaus.com') !== -1 ? text : `${text} - fudisturnaus.com`
+    document.title = `${emoji} ${titleText}`
+  }
 }

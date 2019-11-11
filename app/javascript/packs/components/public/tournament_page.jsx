@@ -14,6 +14,7 @@ import Filters from './filters'
 import SeriesAndTeams from './series_and_teams'
 import VisibilityBadge from '../tournament_management/visibility_badge'
 import { visibilityTypes } from '../util/enums'
+import InfoBox from './info_box'
 
 const { onlyTitle, teams, all } = visibilityTypes
 
@@ -153,6 +154,7 @@ export default class TournamentPage extends React.PureComponent {
         {this.renderMatches(groupStageMatches, 'Alkulohkojen ottelut', tournament.playoffMatches.length, true)}
         {this.renderGroupTables()}
         {this.renderMatches(filteredPlayoffMatches, 'Jatko-ottelut', filteredPlayoffMatches.length)}
+        <InfoBox/>
       </div>
     )
   }

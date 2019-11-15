@@ -8,6 +8,7 @@ export default class Match extends React.PureComponent {
     clubs: PropTypes.arrayOf(PropTypes.shape({
       logoUrl: PropTypes.string,
     })).isRequired,
+    fieldsCount: PropTypes.number.isRequired,
     match: PropTypes.shape({
       id: PropTypes.number.isRequired,
       type: PropTypes.string.isRequired,
@@ -62,10 +63,11 @@ export default class Match extends React.PureComponent {
   }
 
   renderMatchInfo = (tournamentDays, startTime, field, ageGroup, group) => {
+    const fieldName = this.props.fieldsCount > 1 ? `${field.name}, ` : ''
     return (
       <div>
         <span className="match__start-time">{formatMatchTime(tournamentDays, startTime)}</span>
-        <span className="match__details">{field.name}, {ageGroup.name}{group ? `, ${group.name}` : ''}</span>
+        <span className="match__details">{fieldName}{ageGroup.name}{group ? `, ${group.name}` : ''}</span>
       </div>
     )
   }

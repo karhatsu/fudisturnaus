@@ -49,7 +49,7 @@ describe 'tournament page', type: :system do
 
     it 'shows match info' do
       visit "/tournaments/#{tournament.id}"
-      expect_match_info match1_start_time, field1.name, age_group.name, group1.name, team1.name, team2.name
+      expect_match_info match1_start_time, age_group.name, group1.name, team1.name, team2.name
     end
 
     it 'shows group tables' do
@@ -87,6 +87,8 @@ describe 'tournament page', type: :system do
       it 'shows correct matches based on selection' do
         visit "/tournaments/#{tournament.id}"
         expect_match_count 3
+
+        expect_match_info match1_start_time, age_group.name, group1.name, team1.name, team2.name, field1.name
 
         select field2.name, from: 'filter-fieldId'
         expect_one_match team3, team1

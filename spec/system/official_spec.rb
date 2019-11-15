@@ -92,17 +92,17 @@ describe 'official', type: :system do
 
       click_link 'Takaisin tulosten syöttöön'
       expect_match_info_for_added_match
-      expect_playoff_match_info '13:00', 'Field 1', 'T11', 'Finaali', 1
-      expect_playoff_match_info '13:45', 'Field 1', 'T11', 'Superfinaali', 2
+      expect_playoff_match_info '13:00', 'T11', 'Finaali', nil, 1
+      expect_playoff_match_info '13:45', 'T11', 'Superfinaali', nil, 2
 
       visit "/tournaments/#{@tournament.id}"
       expect_match_info_for_added_match
-      expect_playoff_match_info '13:00', 'Field 1', 'T11', 'Finaali', 1
-      expect_playoff_match_info '13:45', 'Field 1', 'T11', 'Superfinaali', 2
+      expect_playoff_match_info '13:00', 'T11', 'Finaali', nil, 1
+      expect_playoff_match_info '13:45', 'T11', 'Superfinaali', nil, 2
     end
 
     def expect_match_info_for_added_match
-      expect_match_info '11:30', 'Field 1', 'T11', 'Group A', 'FC Brown', 'SC Lions Green'
+      expect_match_info '11:30', 'T11', 'Group A', 'FC Brown', 'SC Lions Green'
     end
   end
 
@@ -251,7 +251,7 @@ describe 'official', type: :system do
       submit
       expect_item_title 'group-stage-matches', 'Field 1 | pe 12:00 | Group B (P11) | Team 1 - Team 2'
       click_link 'Takaisin tulosten syöttöön'
-      expect_match_info 'pe 12:00', 'Field 1', 'P11', 'Group B', 'Team 1', 'Team 2'
+      expect_match_info 'pe 12:00', 'P11', 'Group B', 'Team 1', 'Team 2'
     end
   end
 

@@ -62,8 +62,8 @@ export default class Matches extends React.PureComponent {
   }
 
   renderMatch = match => {
-    const { clubs, renderMatch, selectedClubId, selectedTeamId, tournamentDays, tournamentId } = this.props
-    const matchProps = { clubs, match, selectedClubId, selectedTeamId, tournamentDays, tournamentId }
+    const { clubs, fieldsCount, renderMatch, selectedClubId, selectedTeamId, tournamentDays, tournamentId } = this.props
+    const matchProps = { clubs, fieldsCount, match, selectedClubId, selectedTeamId, tournamentDays, tournamentId }
     return (
       <div className={resolveColStyles(this.props.fieldsCount)} key={match.id}>
         {renderMatch(matchProps)}

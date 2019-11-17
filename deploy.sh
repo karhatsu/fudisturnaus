@@ -2,8 +2,6 @@
 set -e
 
 yarn run lint
-yarn run test
-bundle exec rspec spec/models
-bundle exec rspec spec/system
+./run-tests.sh
 git push heroku master
 heroku run rake db:migrate

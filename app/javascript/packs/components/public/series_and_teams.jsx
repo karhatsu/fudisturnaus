@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Team from './team'
-import { getName } from '../util/util'
 
 export default class SeriesAndTeams extends React.PureComponent {
   static propTypes = {
@@ -43,33 +42,39 @@ export default class SeriesAndTeams extends React.PureComponent {
     return (
       <div className="series-and-teams__age-group" key={id}>
         <div className="title-2">{ageGroupTitle}</div>
-        <div className="series-and-teams__age-group-teams">{this.renderTeams(id)}</div>
+        <div className="series-and-teams__groups">{this.renderGroups(id)}</div>
       </div>
     )
   }
 
-  renderTeams = ageGroupId => {
-    const teams = this.props.tournament.teams.filter(team => team.ageGroupId === ageGroupId)
-    if (!teams.length) {
+  renderGroups = ageGroupId => {
+    const ageGroupTeams = this.props.tournament.teams.filter(team => team.ageGroupId === ageGroupId)
+    if (!ageGroupTeams.length) {
       const msg = `${this.oneAgeGroup() ? 'Turnaukseen' : 'Sarjaan'} ei ole ilmoittautunut vielä yhtään joukkuetta`
-      return <div className="series-and-teams__age-group-no-teams">{msg}</div>
+      return <div className="series-and-teams__no-teams">{msg}</div>
     }
-    return teams.map(team => this.renderTeam(team, this.multipleGroupsInAgeGroup(ageGroupId)))
+    const groups = this.props.tournament.groups.filter(group => group.ageGroupId === ageGroupId)
+    return groups.map(group => this.renderGroup(group, groups.length > 1))
   }
 
-  renderTeam = (team, showGroupName) => {
-    const { tournament: { clubs, groups } } = this.props
-    const { clubId, groupId, id, name: teamName } = team
-    const groupName = getName(groups, groupId)
-    const name = showGroupName ? `${teamName} (${groupName})` : teamName
-    return <div className="series-and-teams__team" key={id}><Team clubId={clubId} clubs={clubs} name={name}/></div>
+  renderGroup = (group, multipleGroups) => {
+    const teams = this.props.tournament.teams.filter(team => team.groupId === group.id)
+    if (!teams.length) return
+    return (
+      <div className="series-and-teams__group" key={group.id}>
+        {multipleGroups && <div className="series-and-teams__group-title">{group.name}</div>}
+        {teams.map(this.renderTeam)}
+      </div>
+    )
+  }
+
+  renderTeam = (team) => {
+    const { tournament: { clubs } } = this.props
+    const { clubId, id, name: teamName } = team
+    return <div className="series-and-teams__team" key={id}><Team clubId={clubId} clubs={clubs} name={teamName}/></div>
   }
 
   oneAgeGroup = () => {
     return this.props.tournament.ageGroups.length === 1
-  }
-
-  multipleGroupsInAgeGroup = ageGroupId => {
-    return this.props.tournament.groups.filter(group => group.ageGroupId === ageGroupId).length > 1
   }
 }

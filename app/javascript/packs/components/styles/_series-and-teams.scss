@@ -1,10 +1,23 @@
 @import 'variables';
 @import 'shared';
 
-.series-and-teams__age-group-teams {
+.series-and-teams__groups {
   @include white-box(false);
 }
 
 .series-and-teams__team {
   margin: 6px 0;
+}
+
+.series-and-teams__group {
+  margin: 16px 0 0;
+
+  &:first-of-type {
+    margin: 0;
+  }
+}
+
+.series-and-teams__group-title {
+  font-size: 14px;
+  font-weight: 600;
 }

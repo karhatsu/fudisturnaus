@@ -35,7 +35,7 @@ describe('SeriesAndTeams', () => {
     })
 
     it('renders tournament level message about no teams', () => {
-      expect(component.find('.series-and-teams__age-group-no-teams').text()).toEqual('Turnaukseen ei ole ilmoittautunut vielä yhtään joukkuetta')
+      expect(component.find('.series-and-teams__no-teams').text()).toEqual('Turnaukseen ei ole ilmoittautunut vielä yhtään joukkuetta')
     })
   })
 
@@ -64,6 +64,7 @@ describe('SeriesAndTeams', () => {
       expect(teams.length).toEqual(2)
       expect(teams.at(0).find('Team').prop('name')).toEqual('FC Team 1')
       expect(teams.at(1).find('Team').prop('name')).toEqual('SC Team 1')
+      expect(component.find('.series-and-teams__group-title')).toHaveLength(0)
     })
   })
 
@@ -77,7 +78,8 @@ describe('SeriesAndTeams', () => {
         clubs: [],
         groups: [
           { ageGroupId: 1, id: 10, name: 'A' },
-          { ageGroupId: 1, id: 11, name: 'B' }
+          { ageGroupId: 1, id: 11, name: 'B' },
+          { ageGroupId: 1, id: 12, name: 'C' }
         ],
         teams: [
           { ageGroupId: 1, clubId: 100, groupId: 10, id: 10, name: 'FC Team 1' },
@@ -88,25 +90,37 @@ describe('SeriesAndTeams', () => {
       component = shallow(<SeriesAndTeams tournament={tournament}/>)
     })
 
-    it('renders age groups names as titles', () => {
-      const titles = component.find('.series-and-teams__age-group .title-2')
-      expect(titles.length).toEqual(2)
-      expect(titles.at(0).text()).toEqual('T07')
-      expect(titles.at(1).text()).toEqual('T08')
-    })
-
-    it('renders teams with group names for the age group having them', () => {
+    it('renders age group names as titles', () => {
       const ageGroups = component.find('.series-and-teams__age-group')
       expect(ageGroups.length).toEqual(2)
-      const teams = ageGroups.at(0).find('.series-and-teams__team')
-      expect(teams.length).toEqual(2)
-      expect(teams.at(0).find('Team').prop('name')).toEqual('FC Team 1 (A)')
-      expect(teams.at(1).find('Team').prop('name')).toEqual('SC Team 1 (B)')
+      expect(ageGroups.at(0).find('.title-2').text()).toEqual('T07')
+      expect(ageGroups.at(1).find('.title-2').text()).toEqual('T08')
+    })
+
+    it('renders age group with those groups that have teams', () => {
+      const ageGroupsWithTeams = component.find('.series-and-teams__age-group').at(0)
+      const groups = ageGroupsWithTeams.find('.series-and-teams__group')
+      expect(groups.length).toEqual(2)
+      expect(groups.at(0).find('.series-and-teams__group-title').text()).toEqual('A')
+      expect(groups.at(1).find('.series-and-teams__group-title').text()).toEqual('B')
+    })
+
+    it('renders team names inside the groups', () => {
+      const ageGroupsWithTeams = component.find('.series-and-teams__age-group').at(0)
+      const groups = ageGroupsWithTeams.find('.series-and-teams__group')
+      const group1Teams = groups.at(0).find('.series-and-teams__team')
+      expect(group1Teams.length).toEqual(2)
+      expect(group1Teams.at(0).find('Team').prop('name')).toEqual('FC Team 1')
+      expect(group1Teams.at(1).find('Team').prop('name')).toEqual('SC Team 2')
+      const group2Teams = groups.at(1).find('.series-and-teams__team')
+      expect(group2Teams.length).toEqual(1)
+      expect(group2Teams.at(0).find('Team').prop('name')).toEqual('SC Team 1')
     })
 
     it('renders age group level message about no teams', () => {
-      const ageGroups = component.find('.series-and-teams__age-group')
-      expect(ageGroups.at(1).find('.series-and-teams__age-group-no-teams').text()).toEqual('Sarjaan ei ole ilmoittautunut vielä yhtään joukkuetta')
+      const ageGroupWithoutTeams = component.find('.series-and-teams__age-group').at(1)
+      const noTeamsMsg = 'Sarjaan ei ole ilmoittautunut vielä yhtään joukkuetta'
+      expect(ageGroupWithoutTeams.find('.series-and-teams__no-teams').text()).toEqual(noTeamsMsg)
     })
   })
 })

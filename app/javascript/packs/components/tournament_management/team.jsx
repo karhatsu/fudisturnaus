@@ -136,9 +136,11 @@ export default class Team extends React.PureComponent {
     const { form } = this.state
     let { form: { name } } = this.state
     const value = event.target.value
-    if (field === 'clubId' && !name) {
+    if (field === 'clubId' && !name && parseInt(value) > 0) {
       const clubName = getName(this.props.clubs, parseInt(value))
-      name = `${clubName} `
+      if (clubName.indexOf('Tuntematon') === -1) {
+        name = `${clubName} `
+      }
     }
     this.setState({ form: { ...form, name, [field]: value } }, () => {
       if (field === 'clubId') {

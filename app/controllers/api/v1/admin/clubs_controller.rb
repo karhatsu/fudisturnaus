@@ -20,6 +20,6 @@ class Api::V1::Admin::ClubsController < Api::V1::Admin::AdminBaseController
   private
 
   def club_params
-    params.require(:club).permit(:name, :logo_url)
+    params.require(:club).permit(:name, :logo_url, :alias)
   end
 end

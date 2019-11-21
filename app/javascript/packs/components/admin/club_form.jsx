@@ -10,6 +10,7 @@ import Team from '../public/team'
 export default class ClubForm extends React.PureComponent {
   static propTypes = {
     club: PropTypes.shape({
+      alias: PropTypes.string,
       id: PropTypes.number.isRequired,
       logoUrl: PropTypes.string,
       name: PropTypes.string.isRequired,
@@ -26,10 +27,10 @@ export default class ClubForm extends React.PureComponent {
       formOpen: false,
       name: undefined,
       logoUrl: undefined,
+      alias: undefined,
       errors: [],
     }
     this.nameFieldRed = React.createRef()
-    this.logoUrlFieldRed = React.createRef()
   }
 
   render() {
@@ -52,7 +53,8 @@ export default class ClubForm extends React.PureComponent {
         <FormErrors errors={this.state.errors}/>
         <div className="tournament-item__form">
           <TextField ref={this.nameFieldRed} onChange={this.changeValue('name')} value={this.state.name}/>
-          <TextField ref={this.logoUrlFieldRed} placeholder="Logo URL" onChange={this.changeValue('logoUrl')} value={this.state.logoUrl}/>
+          <TextField placeholder="Logo URL" onChange={this.changeValue('logoUrl')} value={this.state.logoUrl}/>
+          <TextField placeholder="Alias" onChange={this.changeValue('alias')} value={this.state.alias}/>
           <div className="form__buttons">
             <Button label="Tallenna" onClick={this.submit} type="primary" disabled={!this.canSubmit()}/>
             <Button label="Peruuta" onClick={this.cancel} type="normal"/>
@@ -64,8 +66,8 @@ export default class ClubForm extends React.PureComponent {
   }
 
   openForm = () => {
-    const { club: { logoUrl, name } } = this.props
-    this.setState({ formOpen: true, logoUrl: logoUrl || '', name })
+    const { club: { alias, logoUrl, name } } = this.props
+    this.setState({ formOpen: true, logoUrl: logoUrl || '', name, alias: alias || ''  })
   }
 
   changeValue = field => event => {
@@ -78,8 +80,8 @@ export default class ClubForm extends React.PureComponent {
 
   submit = () => {
     const { club, onClubSave } = this.props
-    const { name, logoUrl } = this.state
-    updateClub(this.context, club.id, { name, logoUrl }, (errors, data) => {
+    const { name, logoUrl, alias } = this.state
+    updateClub(this.context, club.id, { name, logoUrl, alias }, (errors, data) => {
       if (errors) {
         this.setState({ errors })
       } else {

@@ -74,7 +74,9 @@ export default class TournamentList extends React.PureComponent {
       return (
         <React.Fragment>
           <div className="title-2">{title}</div>
-          {tournaments.map(this.renderTournament)}
+          <div className="row">
+            {tournaments.map(this.renderTournament)}
+          </div>
         </React.Fragment>
       )
     }
@@ -82,7 +84,11 @@ export default class TournamentList extends React.PureComponent {
 
   renderTournament = tournament => {
     const { id } = tournament
-    return <TournamentLinkBox key={id} to={this.props.buildLink(id)} tournament={tournament}/>
+    return (
+      <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3" key={id}>
+        <TournamentLinkBox to={this.props.buildLink(id)} tournament={tournament}/>
+      </div>
+    )
   }
 
   componentDidMount() {

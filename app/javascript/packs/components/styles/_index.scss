@@ -25,4 +25,13 @@ a.tournament-link {
     font-size: 14px;
     font-weight: 600;
   }
+
+  &:hover {
+    background-color: $green;
+    color: $white;
+
+    .tournament-link__tournament-name {
+      color: $white;
+    }
+  }
 }

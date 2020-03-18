@@ -9,7 +9,7 @@ class Tournament < ApplicationRecord
 
   has_many :age_groups, -> {order(:name)}
   has_many :groups, -> {order(:name)}, through: :age_groups
-  has_many :fields, -> {order(:name)}
+  has_many :fields, -> {order(:name)}, dependent: :destroy
 
   validates :name, presence: true
   validates :start_date, presence: true

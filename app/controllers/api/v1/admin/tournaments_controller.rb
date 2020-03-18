@@ -6,6 +6,15 @@ class Api::V1::Admin::TournamentsController < Api::V1::Admin::AdminBaseControlle
     end
   end
 
+  def destroy
+    tournament = Tournament.find(params[:id])
+    if tournament.destroy
+      render status: 204, body: nil
+    else
+      render status: 400, json: { errors: ['Turnausta ei voi poistaa'] }
+    end
+  end
+
   private
 
   def tournament_params

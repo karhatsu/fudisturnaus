@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 import { fetchTournament, updateTournament } from './api_client'
+import { deleteTournament } from '../admin/api_client'
 import Title from '../components/title'
 import TournamentFields from './tournament_fields'
 import AgeGroup from './age_group'
@@ -16,6 +17,8 @@ import AccessContext from '../util/access_context'
 import { getName } from '../util/util'
 import OfficialLinkCopy from './official_link_copy'
 import VisibilityBadge from './visibility_badge'
+import Button from '../form/button'
+import FormErrors from '../form/form_errors'
 
 /* eslint-disable max-len */
 const linkTexts = {
@@ -36,6 +39,9 @@ const linkTexts = {
 
 export default class TournamentManagementPage extends React.PureComponent {
   static propTypes = {
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
     match: PropTypes.shape({
       params: PropTypes.shape({
         id: PropTypes.string,
@@ -51,6 +57,7 @@ export default class TournamentManagementPage extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
+      deleteErrors: [],
       error: false,
       tournament: undefined,
     }
@@ -95,6 +102,7 @@ export default class TournamentManagementPage extends React.PureComponent {
         {this.renderPlayoffMatchesSection()}
         <div className="title-2">Turnauksen linkit</div>
         {this.renderTournamentLinks()}
+        {this.renderDeleteButton()}
         {this.renderBackLink()}
       </div>
     )
@@ -479,6 +487,30 @@ export default class TournamentManagementPage extends React.PureComponent {
         />
       </React.Fragment>
     )
+  }
+
+  renderDeleteButton() {
+    if (!this.props.official) {
+      return (
+        <React.Fragment>
+          <div className="title-2">Poista turnaus</div>
+          <div className="tournament-management__section">
+            <FormErrors errors={this.state.deleteErrors} />
+            <Button onClick={this.deleteTournament} label="Poista turnaus" type="danger" />
+          </div>
+        </React.Fragment>
+      )
+    }
+  }
+
+  deleteTournament = () => {
+    deleteTournament(this.context, this.getTournamentId(), errors => {
+      if (errors) {
+        this.setState({ deleteErrors: errors })
+      } else {
+        this.props.history.push('/admin')
+      }
+    })
   }
 
   renderBackLink() {

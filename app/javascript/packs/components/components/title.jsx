@@ -55,6 +55,6 @@ export default class Title extends React.PureComponent {
   changeBrowserTitle() {
     const { text } = this.props
     const titleText = text.indexOf('fudisturnaus.com') !== -1 ? text : `${text} - fudisturnaus.com`
-    document.title = `${emoji} ${titleText}`
+    document.title = titleText
   }
 }

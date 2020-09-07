@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_21_135821) do
+ActiveRecord::Schema.define(version: 2020_09_07_052241) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(version: 2019_11_21_135821) do
     t.integer "equal_points_rule", default: 0, null: false
     t.string "results_access_key"
     t.integer "visibility", default: 2, null: false
+    t.boolean "cancelled", default: false, null: false
   end
 
   add_foreign_key "age_groups", "tournaments"

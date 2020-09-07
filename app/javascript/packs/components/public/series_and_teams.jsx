@@ -9,6 +9,7 @@ export default class SeriesAndTeams extends React.PureComponent {
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
       })).isRequired,
+      cancelled: PropTypes.bool.isRequired,
       clubs: PropTypes.arrayOf(PropTypes.shape({
         logoUrl: PropTypes.string,
       })).isRequired,
@@ -30,10 +31,16 @@ export default class SeriesAndTeams extends React.PureComponent {
   render() {
     return (
       <div className="series-and-teams">
-        <div className="message message--warning message--full-page">Turnauksen otteluohjelma julkaistaan myöhemmin</div>
+        {this.renderInfo()}
         {this.props.tournament.ageGroups.map(this.renderAgeGroup)}
       </div>
     )
+  }
+
+  renderInfo = () => {
+    if (!this.props.tournament.cancelled) {
+      return <div className="message message--warning message--full-page">Turnauksen otteluohjelma julkaistaan myöhemmin</div>
+    }
   }
 
   renderAgeGroup = ageGroup => {

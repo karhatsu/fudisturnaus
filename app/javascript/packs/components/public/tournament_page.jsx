@@ -73,12 +73,23 @@ export default class TournamentPage extends React.PureComponent {
     return (
       <div>
         <Title iconLink={iconLink} loading={!tournament && !error} text={title}>
-          {officialLevel === officialLevels.full && tournament ? <VisibilityBadge visibility={tournament.visibility}/> : undefined}
+          {this.renderTitleBadge()}
         </Title>
         {this.renderSubTitle()}
         {this.renderContent()}
       </div>
     )
+  }
+
+  renderTitleBadge() {
+    const { tournament } = this.state
+    if (!tournament) return
+    const { officialLevel } = this.props
+    if (tournament.cancelled) {
+      return <div className="badge badge--0">Turnaus peruttu</div>
+    } else if (officialLevel === officialLevels.full && tournament) {
+      return <VisibilityBadge visibility={tournament.visibility}/>
+    }
   }
 
   renderContent() {

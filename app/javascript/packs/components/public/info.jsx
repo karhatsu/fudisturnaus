@@ -33,10 +33,7 @@ export default class Info extends React.PureComponent {
           </ul>
         </div>
         <div className="title-2">Paljonko palvelun käyttö maksaa?</div>
-        <div className="info-box">
-          Palvelu on ainakin tällä hetkellä täysin ilmainen. Mikäli palvelu muuttuu jossain vaiheessa maksulliseksi,
-          se ei aiheuta olemassa oleviin turnauksiin mitään veloituksia.
-        </div>
+        <div className="info-box">Palvelu on ilmainen.</div>
         <div className="title-2">Miten saamme palvelun käyttöön?</div>
         <div className="info-box">
           <ContactForm/>

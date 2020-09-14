@@ -11,22 +11,38 @@ describe('SeriesAndTeams', () => {
 
   describe('when no age groups', () => {
     beforeEach(() => {
-      tournament = { ageGroups: [], clubs: [], groups: [], teams: [] }
-      component = shallow(<SeriesAndTeams tournament={tournament}/>)
+      tournament = { ageGroups: [], cancelled: false, clubs: [], groups: [], teams: [] }
     })
 
-    it('renders message about matches', () => {
-      expect(component.find('.message.message--warning').text()).toEqual('Turnauksen otteluohjelma julkaistaan myöhemmin')
+    describe('and the tournament is not cancelled', () => {
+      beforeEach(() => {
+        component = shallow(<SeriesAndTeams tournament={tournament}/>)
+      })
+
+      it('renders message about matches', () => {
+        expect(component.find('.message.message--warning').text()).toEqual('Turnauksen otteluohjelma julkaistaan myöhemmin')
+      })
+
+      it('does not render age groups', () => {
+        expect(component.find('.series-and-teams__age-group')).toHaveLength(0)
+      })
     })
 
-    it('does not render age groups', () => {
-      expect(component.find('.series-and-teams__age-group')).toHaveLength(0)
+    describe('and the tournament is cancelled', () => {
+      beforeEach(() => {
+        tournament.cancelled = true
+        component = shallow(<SeriesAndTeams tournament={tournament}/>)
+      })
+
+      it('does not render message about matches', () => {
+        expect(component.find('.message.message--warning')).toHaveLength(0)
+      })
     })
   })
 
   describe('when one age group without teams', () => {
     beforeEach(() => {
-      tournament = { ageGroups: [{ id: 1, name: 'T07' }], clubs: [], groups: [], teams: [] }
+      tournament = { ageGroups: [{ id: 1, name: 'T07' }], cancelled: false, clubs: [], groups: [], teams: [] }
       component = shallow(<SeriesAndTeams tournament={tournament}/>)
     })
 
@@ -43,6 +59,7 @@ describe('SeriesAndTeams', () => {
     beforeEach(() => {
       tournament = {
         ageGroups: [{ id: 1, name: 'T07' }],
+        cancelled: false,
         clubs: [],
         groups: [
           { ageGroupId: 1, id: 20, name: 'A' }
@@ -75,6 +92,7 @@ describe('SeriesAndTeams', () => {
           { id: 1, name: 'T07' },
           { id: 2, name: 'T08' }
         ],
+        cancelled: false,
         clubs: [],
         groups: [
           { ageGroupId: 1, id: 10, name: 'A' },

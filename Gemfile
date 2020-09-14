@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.6.5'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.3'
+gem 'rails', '6.0.3.3'
 # Use Puma as the app server
 gem 'puma', '~> 3.12'
 # Use SassC for stylesheets
@@ -49,7 +49,7 @@ group :development do
 end
 
 group :test do
-  gem 'sqlite3', '~> 1.3.6'
+  gem 'sqlite3'
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'

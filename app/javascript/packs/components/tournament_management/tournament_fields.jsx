@@ -6,6 +6,7 @@ import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
 import Button from '../form/button'
 import { visibilityTypes } from '../util/enums'
+import VisibilityBadge from './visibility_badge'
 
 const { onlyTitle, teams, all } = visibilityTypes
 
@@ -115,11 +116,14 @@ export default class TournamentFields extends React.PureComponent {
   }
 
   renderTournamentReadOnlyFields() {
-    const { tournament: { name, startDate, endDate, location, address } } = this.props
+    const { tournament: { name, startDate, endDate, location, address, visibility } } = this.props
     return (
       <div className="tournament-item">
         <div className="tournament-item__title tournament-item__title--existing">
-          <span onClick={this.openForm}>{name}, {formatTournamentDates(startDate, endDate)}, {location}, {address || '(ei osoitetta)'}</span>
+          <span onClick={this.openForm}>
+            {name}, {formatTournamentDates(startDate, endDate)}, {location}, {address || '(ei osoitetta)'}
+            {visibility !== visibilityTypes.all && <VisibilityBadge visibility={visibility}/>}
+          </span>
         </div>
       </div>
     )

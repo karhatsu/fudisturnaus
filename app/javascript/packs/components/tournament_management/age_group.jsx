@@ -35,10 +35,22 @@ export default class AgeGroup extends React.PureComponent {
   }
 
   render() {
+    const showInstructions = this.state.formOpen && !this.props.ageGroup
     return (
       <div className="tournament-item">
         {this.state.formOpen && this.renderForm()}
+        {showInstructions && this.renderInstructions()}
         {!this.state.formOpen && this.renderName()}
+      </div>
+    )
+  }
+
+  renderInstructions() {
+    return (
+      <div className="tournament-item__instructions">
+        Jos ikäluokan eri tasoilla on omat jatkopelit, lisää jokaiselle tasolle oma sarja (esim. &quot;P07 haaste&quot;).
+        Jos taas ikäluokalla ei ole jatkopelejä, lisää sarja ilman tasoa (esim. &quot;T12&quot;) ja
+        määritä tasot omiin lohkoihin alempana.
       </div>
     )
   }

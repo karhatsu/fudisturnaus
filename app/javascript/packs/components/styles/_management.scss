@@ -32,6 +32,10 @@
 .tournament-item {
   margin: 8px;
 
+  &__instructions {
+    font-style: italic;
+  }
+
   .tournament-item__title {
     color: $green;
 

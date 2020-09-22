@@ -187,7 +187,7 @@ export default class TournamentManagementPage extends React.PureComponent {
   renderCannotAddGroups = () => {
     return (
       <div className="tournament-item">
-        Et voi lisätä lohkoja ennen kuin olet lisännyt vähintään yhden sarjan.
+        Voit lisätä lohkoja, kun olet lisännyt vähintään yhden sarjan.
       </div>
     )
   }
@@ -227,7 +227,7 @@ export default class TournamentManagementPage extends React.PureComponent {
   renderCannotAddTeams = () => {
     return (
       <div className="tournament-item">
-        Et voi lisätä joukkueita ennen kuin olet lisännyt vähintään yhden lohkon.
+        Voit lisätä joukkueita, kun olet lisännyt yhden lohkon.
       </div>
     )
   }
@@ -306,7 +306,7 @@ export default class TournamentManagementPage extends React.PureComponent {
   renderCannotAddGroupStageMatches = () => {
     return (
       <div className="tournament-item">
-        Et voi lisätä otteluita ennen kuin olet lisännyt vähintään yhden kentän ja vähintään kaksi joukkuetta.
+        Voit lisätä otteluita, kun olet lisännyt vähintään yhden kentän ja vähintään kaksi joukkuetta.
       </div>
     )
   }

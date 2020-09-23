@@ -117,12 +117,14 @@ export default class TournamentFields extends React.PureComponent {
 
   renderTournamentReadOnlyFields() {
     const { tournament: { name, startDate, endDate, location, address, visibility } } = this.props
+    const showBadge = visibility !== visibilityTypes.all
+    const texts = [name, formatTournamentDates(startDate, endDate), location, address || '(ei osoitetta)']
     return (
       <div className="tournament-item">
-        <div className="tournament-item__title tournament-item__title--existing">
-          <span onClick={this.openForm}>
-            {name}, {formatTournamentDates(startDate, endDate)}, {location}, {address || '(ei osoitetta)'}
-            {visibility !== visibilityTypes.all && <VisibilityBadge visibility={visibility}/>}
+        <div className="tournament-item__title tournament-item__title--existing" >
+          <span onClick={this.openForm} className={showBadge ? 'tournament-item__title--with-badge' : ''}>
+            <span>{texts.join(', ')}</span>
+            {showBadge && <VisibilityBadge visibility={visibility}/>}
           </span>
         </div>
       </div>

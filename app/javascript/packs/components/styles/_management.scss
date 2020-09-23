@@ -39,13 +39,15 @@
   .tournament-item__title {
     color: $green;
 
+    &--with-badge {
+      span {
+        margin-right: 4px;
+      }
+    }
+
     span {
       cursor: pointer;
     }
-  }
-
-  .badge {
-    margin-left: 4px;
   }
 }
 

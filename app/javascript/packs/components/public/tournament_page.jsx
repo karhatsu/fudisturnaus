@@ -72,9 +72,7 @@ export default class TournamentPage extends React.PureComponent {
     const title = tournament ? tournament.name : 'fudisturnaus.com'
     return (
       <div>
-        <Title iconLink={iconLink} loading={!tournament && !error} text={title}>
-          {this.renderTitleBadge()}
-        </Title>
+        <Title iconLink={iconLink} loading={!tournament && !error} text={title} />
         {this.renderSubTitle()}
         {this.renderContent()}
       </div>
@@ -114,7 +112,10 @@ export default class TournamentPage extends React.PureComponent {
     const { match: { params : { accessKey } } } = this.props
     return (
       <div className="tournament-page__full-official">
-        <div className="title-1">Turnauksen hallinta</div>
+        <div className="title-1">
+          Turnauksen hallinta
+          {this.renderTitleBadge()}
+        </div>
         <div className="management-link"><Link to={`/official/${accessKey}/management`}>Muokkaa turnauksen asetuksia ja otteluohjelmaa</Link></div>
         <div className="title-1">Tulosten tallentaminen</div>
         {this.renderFullOfficialMatchContent()}

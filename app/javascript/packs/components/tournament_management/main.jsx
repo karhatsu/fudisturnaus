@@ -16,7 +16,6 @@ import Lottery from './lottery'
 import AccessContext from '../util/access_context'
 import { getName } from '../util/util'
 import OfficialLinkCopy from './official_link_copy'
-import VisibilityBadge from './visibility_badge'
 import Button from '../form/button'
 import FormErrors from '../form/form_errors'
 
@@ -69,9 +68,7 @@ export default class TournamentManagementPage extends React.PureComponent {
     const title = `${titlePrefix} - Hallintasivut`
     return (
       <div>
-        <Title iconLink={this.props.titleIconLink} loading={!tournament && !error} text={title}>
-          {tournament && <VisibilityBadge visibility={tournament.visibility}/>}
-        </Title>
+        <Title iconLink={this.props.titleIconLink} loading={!tournament && !error} text={title}/>
         {this.renderContent()}
       </div>
     )

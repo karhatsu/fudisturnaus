@@ -13,6 +13,7 @@ export default class TournamentList extends React.PureComponent {
     buildLink: PropTypes.func.isRequired,
     children: PropTypes.arrayOf(PropTypes.element),
     showInfo: PropTypes.bool,
+    showTestTournaments: PropTypes.bool.isRequired,
     title: PropTypes.string.isRequired,
   }
 
@@ -92,10 +93,11 @@ export default class TournamentList extends React.PureComponent {
   }
 
   componentDidMount() {
-    fetchTournaments((err, tournaments) => {
+    fetchTournaments((err, data) => {
       if (err) {
         this.setState({ error: true })
       } else {
+        const tournaments = this.props.showTestTournaments ? data : data.filter(t => !t.test)
         this.setState({ tournaments })
       }
     })

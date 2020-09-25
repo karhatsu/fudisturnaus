@@ -68,6 +68,7 @@ export default class TournamentFields extends React.PureComponent {
         {this.renderTournamentField('Otteluiden välinen aika (min)', 'number', 'matchMinutes')}
         {this.renderEqualPointsRuleField()}
         {this.renderVisibilityField()}
+        {this.renderTestCheckbox()}
         {this.renderTournamentFormButtons()}
       </form>
     )
@@ -104,6 +105,19 @@ export default class TournamentFields extends React.PureComponent {
         </div>
       </div>
     )
+  }
+
+  renderTestCheckbox() {
+    if (!this.props.tournament) {
+      return (
+        <div className="form__field">
+          <div className="label">Testiturnaus</div>
+          <div>
+            <input type="checkbox" onChange={this.setValue('test')} />
+          </div>
+        </div>
+      )
+    }
   }
 
   renderTournamentFormButtons() {

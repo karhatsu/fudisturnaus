@@ -17,6 +17,7 @@ export default class ContactForm extends React.PureComponent {
         name: '',
         contactInfo: '',
         message: '',
+        tournamentOrganizer: '',
         tournamentName: '',
         tournamentStartDate: '',
         tournamentDays: 1,
@@ -41,6 +42,7 @@ export default class ContactForm extends React.PureComponent {
         {this.renderField('Yhteystieto', 'contactInfo', 'text', 'Esim. sähköposti tai puhelin')}
         {this.renderMessageField()}
         {this.renderIntro(tournamentIntro)}
+        {this.renderField('Turnauksen järjestävä seura', 'tournamentOrganizer', 'text')}
         {this.renderField('Turnauksen nimi', 'tournamentName', 'text')}
         {this.renderField('Pvm', 'tournamentStartDate', 'date')}
         {this.renderField('Kesto (pv)', 'tournamentDays', 'number')}

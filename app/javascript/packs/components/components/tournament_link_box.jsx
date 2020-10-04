@@ -7,6 +7,9 @@ export default class TournamentLinkBox extends React.PureComponent {
   static propTypes = {
     to: PropTypes.string.isRequired,
     tournament: PropTypes.shape({
+      club: PropTypes.shape({
+        logoUrl: PropTypes.string,
+      }),
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
       location: PropTypes.string.isRequired,
@@ -17,13 +20,26 @@ export default class TournamentLinkBox extends React.PureComponent {
   }
 
   render() {
-    const { to, tournament: { id, name, location, startDate, endDate, test } } = this.props
+    const { to, tournament: { club, id, name, location, startDate, endDate, test } } = this.props
     const tournamentName = test ? `${name} (testi)` : name
     return (
       <Link to={to} key={id} className="tournament-link">
-        <div className="tournament-link__tournament-name">{tournamentName}</div>
-        <div className="tournament-link__other-info">{location}, {formatTournamentDates(startDate, endDate)}</div>
+        {this.renderOrganizerLogo(club)}
+        <div className="tournament-link__texts">
+          <div className="tournament-link__tournament-name">{tournamentName}</div>
+          <div className="tournament-link__other-info">{location}, {formatTournamentDates(startDate, endDate)}</div>
+        </div>
       </Link>
     )
+  }
+
+  renderOrganizerLogo(club) {
+    if (club && club.logoUrl) {
+      return (
+        <div className="tournament-link__club-logo">
+          <img src={club.logoUrl} />
+        </div>
+      )
+    }
   }
 }

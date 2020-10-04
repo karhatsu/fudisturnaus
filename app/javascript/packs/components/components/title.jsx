@@ -7,6 +7,9 @@ const emoji = '⚽'
 export default class Title extends React.PureComponent {
   static propTypes = {
     children: PropTypes.element,
+    club: PropTypes.shape({
+      logoUrl: PropTypes.string,
+    }),
     iconLink: PropTypes.string,
     loading: PropTypes.bool.isRequired,
     text: PropTypes.string.isRequired,
@@ -18,6 +21,7 @@ export default class Title extends React.PureComponent {
         <div>
           {this.renderEmoji()}
           <span className="title__text">{this.props.text}</span>
+          {this.renderClubLogo()}
         </div>
         {this.props.children}
       </div>
@@ -40,6 +44,13 @@ export default class Title extends React.PureComponent {
       emojiClasses.push('title__emoji--loading')
     }
     return emojiClasses.join(' ')
+  }
+
+  renderClubLogo() {
+    const { club } = this.props
+    if (club && club.logoUrl) {
+      return <img src={club.logoUrl} className="title__club-logo" />
+    }
   }
 
   componentDidMount() {

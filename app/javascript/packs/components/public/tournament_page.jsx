@@ -70,9 +70,10 @@ export default class TournamentPage extends React.PureComponent {
     const { error, tournament } = this.state
     const iconLink = officialLevel === officialLevels.none ? '/' : null
     const title = tournament ? tournament.name : 'fudisturnaus.com'
+    const club = tournament ? tournament.club : undefined
     return (
       <div>
-        <Title iconLink={iconLink} loading={!tournament && !error} text={title} />
+        <Title iconLink={iconLink} loading={!tournament && !error} text={title} club={club} />
         {this.renderSubTitle()}
         {this.renderContent()}
       </div>

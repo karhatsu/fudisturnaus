@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_25_063526) do
+ActiveRecord::Schema.define(version: 2020_10_03_090953) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -117,6 +117,8 @@ ActiveRecord::Schema.define(version: 2020_09_25_063526) do
     t.integer "visibility", default: 2, null: false
     t.boolean "cancelled", default: false, null: false
     t.boolean "test", default: false, null: false
+    t.bigint "club_id"
+    t.index ["club_id"], name: "index_tournaments_on_club_id"
   end
 
   add_foreign_key "age_groups", "tournaments"
@@ -131,4 +133,5 @@ ActiveRecord::Schema.define(version: 2020_09_25_063526) do
   add_foreign_key "playoff_matches", "teams", column: "home_team_id"
   add_foreign_key "teams", "clubs"
   add_foreign_key "teams", "groups"
+  add_foreign_key "tournaments", "clubs"
 end

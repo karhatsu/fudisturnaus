@@ -15,16 +15,33 @@
   margin-top: 16px;
 }
 
-a.tournament-link {
-  @include white-box(true);
-  display: block;
-  text-decoration: none;
+.tournament-link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 
-  .tournament-link__tournament-name {
+  &__club-logo {
+    img {
+      height: 30px;
+      margin-right: 6px;
+    }
+  }
+
+  &__texts {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__tournament-name {
     color: $green;
     font-size: 14px;
     font-weight: 600;
   }
+}
+
+a.tournament-link {
+  @include white-box(true);
+  text-decoration: none;
 
   &:hover {
     background-color: $green;

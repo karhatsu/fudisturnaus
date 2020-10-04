@@ -7,6 +7,7 @@ class Tournament < ApplicationRecord
   VISIBILITY_TEAMS = 1
   VISIBILITY_ALL = 2
 
+  belongs_to :club, optional: true
   has_many :age_groups, -> {order(:name)}
   has_many :groups, -> {order(:name)}, through: :age_groups
   has_many :fields, -> {order(:name)}, dependent: :destroy

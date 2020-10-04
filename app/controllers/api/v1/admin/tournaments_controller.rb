@@ -18,6 +18,6 @@ class Api::V1::Admin::TournamentsController < Api::V1::Admin::AdminBaseControlle
   private
 
   def tournament_params
-    params.require(:tournament).permit(:name, :location, :address, :start_date, :days, :match_minutes, :visibility, :test)
+    params.require(:tournament).permit(:name, :location, :address, :start_date, :days, :match_minutes, :visibility, :test, :club_id)
   end
 end

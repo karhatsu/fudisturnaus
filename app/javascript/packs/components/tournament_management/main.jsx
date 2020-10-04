@@ -81,7 +81,7 @@ export default class TournamentManagementPage extends React.PureComponent {
       <div>
         <div className="title-2">Perustiedot</div>
         <div className="tournament-management__section tournament-management__section--tournament">
-          <TournamentFields onSave={this.onSave} tournament={tournament}/>
+          <TournamentFields clubs={tournament.clubs} onSave={this.onSave} tournament={tournament}/>
         </div>
         <div className="title-2">Kentät</div>
         {this.renderFieldsSection()}

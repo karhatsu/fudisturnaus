@@ -73,21 +73,26 @@ export default class TournamentPage extends React.PureComponent {
     const club = tournament ? tournament.club : undefined
     return (
       <div>
-        <Title iconLink={iconLink} loading={!tournament && !error} text={title} club={club} />
+        <Title iconLink={iconLink} loading={!tournament && !error} text={title} club={club}>
+          {this.renderCancelledBadge()}
+        </Title>
         {this.renderSubTitle()}
         {this.renderContent()}
       </div>
     )
   }
 
-  renderTitleBadge() {
+  renderVisibilityBadge() {
     const { tournament } = this.state
-    if (!tournament) return
-    const { officialLevel } = this.props
-    if (tournament.cancelled) {
-      return <div className="badge badge--0">Turnaus peruttu</div>
-    } else if (officialLevel === officialLevels.full && tournament) {
+    if (tournament && !tournament.cancelled && this.props.officialLevel === officialLevels.full) {
       return <VisibilityBadge visibility={tournament.visibility}/>
+    }
+  }
+
+  renderCancelledBadge() {
+    const { tournament } = this.state
+    if (tournament && tournament.cancelled) {
+      return <div className="badge badge--0">Turnaus peruttu</div>
     }
   }
 
@@ -115,7 +120,7 @@ export default class TournamentPage extends React.PureComponent {
       <div className="tournament-page__full-official">
         <div className="title-1">
           Turnauksen hallinta
-          {this.renderTitleBadge()}
+          {this.renderVisibilityBadge()}
         </div>
         <div className="management-link"><Link to={`/official/${accessKey}/management`}>Muokkaa turnauksen asetuksia ja otteluohjelmaa</Link></div>
         <div className="title-1">Tulosten tallentaminen</div>

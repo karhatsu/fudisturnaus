@@ -79,11 +79,7 @@ $inputHeight: 16px;
   }
 
   .form__field {
-    .label {
-      margin-top: 8px;
-    }
-
-    input {
+    .label, input, select {
       margin-top: 8px;
     }
   }

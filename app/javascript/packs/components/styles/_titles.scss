@@ -25,18 +25,23 @@
     }
   }
 
-  .title__emoji {
+  &__emoji {
     text-decoration: none;
     position: absolute;
+
+    &--loading {
+      animation: spin 2s linear infinite;
+    }
   }
 
-  .title__emoji--loading {
-    animation: spin 2s linear infinite;
-  }
-
-  .title__text {
+  &__text {
     font-weight: 600;
     padding-left: 32px;
+  }
+
+  &__club-logo {
+    height: 20px;
+    margin-left: 6px;
   }
 }
 

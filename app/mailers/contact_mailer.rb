@@ -8,6 +8,8 @@ class ContactMailer < ApplicationMailer
     @tournament_start_date = tournament_start_date
     @tournament_days = tournament_days
     @tournament_location = tournament_location
-    mail to: ENV['EMAIL_ADDRESS'], subject: "#{DOMAIN} - yhteydenotto"
+    system_email = ENV['EMAIL_ADDRESS']
+    reply_to = contact_info.index('@') ? contact_info : system_email
+    mail to: system_email, reply_to: reply_to, subject: "#{DOMAIN} - yhteydenotto"
   end
 end

@@ -10,6 +10,7 @@ class ContactMailer < ApplicationMailer
     @tournament_location = tournament_location
     system_email = ENV['EMAIL_ADDRESS']
     reply_to = contact_info.index('@') ? contact_info : system_email
-    mail to: system_email, reply_to: reply_to, subject: "#{DOMAIN} - yhteydenotto"
+    subject = @tournament_name.blank? ? 'yhteydenotto' : @tournament_name
+    mail to: system_email, reply_to: reply_to, subject: "#{DOMAIN} - #{subject}"
   end
 end

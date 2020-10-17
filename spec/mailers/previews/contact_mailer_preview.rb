@@ -8,4 +8,8 @@ class ContactMailerPreview < ActionMailer::Preview
     ContactMailer.contact_email('Some User', 'some.user@test.com', 'Hello, I am interested in the service.',
                                 'Test club', 'Test tournament', '2019-07-01', 2, 'Test field')
   end
+
+  def system_email
+    ContactMailer.system_email('Test email', ['Message 1', 'Message 2'].join("\n"))
+  end
 end

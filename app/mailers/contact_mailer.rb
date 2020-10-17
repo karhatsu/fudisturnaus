@@ -13,4 +13,9 @@ class ContactMailer < ApplicationMailer
     subject = @tournament_name.blank? ? 'yhteydenotto' : @tournament_name
     mail to: system_email, reply_to: reply_to, subject: "#{DOMAIN} - #{subject}"
   end
+
+  def system_email(subject, message)
+    @message = message
+    mail to: ENV['EMAIL_ADDRESS'], subject: subject
+  end
 end

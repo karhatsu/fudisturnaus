@@ -49,6 +49,7 @@ Rails.application.routes.draw do
   end
 
   resources :tournaments, only: :show
+  get 't/:id', to: 'tournaments#show'
 
   root to: 'home#index'
   get '*path', to: "home#index"

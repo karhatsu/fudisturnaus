@@ -13,6 +13,7 @@ export default class Main extends React.PureComponent {
     return (
       <div>
         <Route path="/info" component={Info}/>
+        <Route path="/t/:key" component={TournamentPageWrapper} />
         <Route path="/tournaments/:key" component={TournamentPageWrapper} />
         <Route path="/" exact component={Index} />
       </div>

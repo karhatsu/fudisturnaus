@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { endOfDay, isBefore, isSameDay, parseISO } from 'date-fns'
+import { addDays, endOfDay, endOfWeek, isAfter, isBefore, isSameDay, parseISO } from 'date-fns'
 
 import { fetchTournaments } from './api_client'
 import Loading from '../components/loading'
@@ -46,28 +46,45 @@ export default class TournamentList extends React.PureComponent {
     } else if (!tournaments.length) {
       return <div className="message message--error">Ei turnauksia</div>
     }
-    const upcomingTournaments = this.findUpcomingTournaments(tournaments)
-    const currentTournaments = this.findCurrentTournaments(tournaments)
-    const pastTournaments = this.findPastTournaments(tournaments)
+    const groups = this.groupTournaments(tournaments)
     return (
       <div className="tournament-links">
-        {this.renderTournaments(currentTournaments, 'Turnaukset tänään')}
-        {this.renderTournaments(upcomingTournaments, 'Tulevat turnaukset')}
-        {this.renderTournaments(pastTournaments, 'Päättyneet turnaukset')}
+        {this.renderTournaments(groups.today, 'Turnaukset tänään')}
+        {this.renderTournaments(groups.thisWeek, 'Turnaukset tällä viikolla')}
+        {this.renderTournaments(groups.nextWeek, 'Turnaukset ensi viikolla')}
+        {this.renderTournaments(groups.later, 'Turnaukset myöhemmin')}
+        {this.renderTournaments(groups.past, 'Päättyneet turnaukset')}
       </div>
     )
   }
 
-  findUpcomingTournaments = tournaments => {
-    return tournaments.filter(t => isBefore(new Date(), parseISO(t.startDate))).sort((a, b) => parseISO(a.startDate) - parseISO(b.startDate))
+  groupTournaments = tournaments => {
+    const groups = { today: [], thisWeek: [], nextWeek: [], later: [], past: [] }
+    tournaments.forEach(tournament => {
+      const startDate = parseISO(tournament.startDate)
+      const endDate = parseISO(tournament.endDate)
+      if (isBefore(endOfDay(endDate), new Date())) {
+        groups.past.push(tournament)
+      } else if (isSameDay(startDate, new Date()) || isSameDay(endDate, new Date())) {
+        groups.today.push(tournament)
+      } else if (isBefore(startDate, endOfWeek(new Date(), { weekStartsOn: 1 }))) {
+        groups.thisWeek.unshift(tournament)
+      } else if (isBefore(startDate, endOfWeek(addDays(new Date(), 7), { weekStartsOn: 1 }))) {
+        groups.nextWeek.unshift(tournament)
+      } else {
+        groups.later.unshift(tournament)
+      }
+    })
+    return groups
   }
 
-  findCurrentTournaments = tournaments => {
-    return tournaments.filter(t => isSameDay(parseISO(t.startDate), new Date()) || isSameDay(parseISO(t.endDate), new Date()))
-  }
-
-  findPastTournaments = tournaments => {
-    return tournaments.filter(t => isBefore(endOfDay(parseISO(t.endDate)), new Date()))
+  findThisWeekTournaments = tournaments => {
+    return tournaments
+      .filter(t => {
+        const startDate = parseISO(t.startDate)
+        return isAfter(startDate, new Date()) && isBefore(startDate, addDays(new Date(), 7))
+      })
+      .sort((a, b) => parseISO(a.startDate) - parseISO(b.startDate))
   }
 
   renderTournaments = (tournaments, title) => {

@@ -87,7 +87,7 @@ export default class TournamentList extends React.PureComponent {
     const { id } = tournament
     return (
       <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3" key={id}>
-        <TournamentLinkBox to={this.props.buildLink(id)} tournament={tournament}/>
+        <TournamentLinkBox to={this.props.buildLink(tournament)} tournament={tournament}/>
       </div>
     )
   }

@@ -1,7 +1,10 @@
 class TournamentsController < ApplicationController
   def show
-    @tournament = Tournament.where(id: params[:id]).first
-    return render 'home/not_found' unless @tournament
-    render 'home/index'
+    begin
+      @tournament = Tournament.friendly.find(params[:id])
+      render 'home/index'
+    rescue ActiveRecord::RecordNotFound
+      render 'home/not_found'
+    end
   end
 end

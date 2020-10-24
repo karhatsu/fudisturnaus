@@ -10,14 +10,13 @@ export function fetchTournaments(callback) {
     })
 }
 
-export function fetchTournament(id, callback) {
-  fetch(`/api/v1/public/tournaments/${id}`)
+export function fetchTournament(key, callback) {
+  fetch(`/api/v1/public/tournaments/${key}`)
     .then(response => response.json())
     .then(tournament => callback(null, tournament))
     .catch(err => {
       console.error(err) // eslint-disable-line no-console
       callback(true)
-
     })
 }
 

@@ -13,7 +13,7 @@ export default class Main extends React.PureComponent {
     return (
       <div>
         <Route path="/info" component={Info}/>
-        <Route path="/tournaments/:id" component={TournamentPageWrapper} />
+        <Route path="/tournaments/:key" component={TournamentPageWrapper} />
         <Route path="/" exact component={Index} />
       </div>
     )
@@ -24,19 +24,19 @@ class TournamentPageWrapper extends React.PureComponent {
   static propTypes = {
     match: PropTypes.shape({
       params: PropTypes.shape({
-        id: PropTypes.string.isRequired,
+        key: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired,
   }
 
   render() {
-    const { match: { params: { id } } } = this.props
+    const { match: { params: { key } } } = this.props
     return (
       <TournamentPage
         {...this.props}
         officialLevel={officialLevels.none}
         renderMatch={props => <Match {...props}/>}
-        tournamentId={parseInt(id)}
+        tournamentKey={key}
       />
     )
   }

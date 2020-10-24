@@ -17,7 +17,7 @@ describe 'tournament page', type: :system do
     expect(page.find('.tournament-link__tournament-name').text).to eql name
     expect(page.find('.tournament-link__other-info').text).to eql "#{location}, #{formatted_date}"
     click_link name
-    expect(page).to have_current_path("/tournaments/#{tournament.id}")
+    expect(page).to have_current_path("/t/#{tournament.slug}")
     expect(page.find('.title__text').text).to eql name
     expect(page.find('.sub-title').text).to eql "#{location}, #{formatted_date}"
     expect(page.find('.sub-title a').text).to eql location

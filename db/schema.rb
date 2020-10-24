@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_03_090953) do
+ActiveRecord::Schema.define(version: 2020_10_24_075821) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,17 @@ ActiveRecord::Schema.define(version: 2020_10_03_090953) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["tournament_id"], name: "index_fields_on_tournament_id"
+  end
+
+  create_table "friendly_id_slugs", force: :cascade do |t|
+    t.string "slug", null: false
+    t.integer "sluggable_id", null: false
+    t.string "sluggable_type", limit: 50
+    t.string "scope"
+    t.datetime "created_at"
+    t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
+    t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
+    t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
   end
 
   create_table "group_stage_matches", force: :cascade do |t|
@@ -118,7 +129,9 @@ ActiveRecord::Schema.define(version: 2020_10_03_090953) do
     t.boolean "cancelled", default: false, null: false
     t.boolean "test", default: false, null: false
     t.bigint "club_id"
+    t.string "slug"
     t.index ["club_id"], name: "index_tournaments_on_club_id"
+    t.index ["slug"], name: "index_tournaments_on_slug", unique: true
   end
 
   add_foreign_key "age_groups", "tournaments"

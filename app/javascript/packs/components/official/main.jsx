@@ -45,7 +45,7 @@ export default class OfficialMain extends React.PureComponent {
         {...routeProps}
         officialLevel={officialLevel}
         renderMatch={props => <EditableMatch {...props}/>}
-        tournamentId={tournamentId}
+        tournamentKey={tournamentId}
       />
     )
   }

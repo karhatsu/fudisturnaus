@@ -49,7 +49,7 @@ export default class TournamentPage extends React.PureComponent {
     }),
     officialLevel: PropTypes.oneOf([none, results, full]).isRequired,
     renderMatch: PropTypes.func.isRequired,
-    tournamentId: PropTypes.number.isRequired,
+    tournamentKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   }
 
   constructor(props) {
@@ -214,7 +214,7 @@ export default class TournamentPage extends React.PureComponent {
 
   renderMatches = (matches, title, showTitle, showEmptyError = false) => {
     const { officialLevel, renderMatch } = this.props
-    const { filters, tournament: { clubs, days, fields } } = this.state
+    const { filters, tournament: { clubs, days, fields, id } } = this.state
     return (
       <div>
         {showTitle ? <div className="title-2">{title}</div> : ''}
@@ -228,7 +228,7 @@ export default class TournamentPage extends React.PureComponent {
           selectedTeamId={filters.teamId}
           showEmptyError={showEmptyError}
           tournamentDays={days}
-          tournamentId={this.props.tournamentId}
+          tournamentId={id}
         />
       </div>
     )
@@ -286,7 +286,6 @@ export default class TournamentPage extends React.PureComponent {
 
   componentDidMount() {
     this.fetchTournamentData()
-    this.subscribeToResultsChannel()
     document.addEventListener('visibilitychange', this.handleVisibilityChange)
   }
 
@@ -301,18 +300,18 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   fetchTournamentData = () => {
-    const { tournamentId } = this.props
-    fetchTournament(tournamentId, (err, tournament) => {
+    const { tournamentKey } = this.props
+    fetchTournament(tournamentKey, (err, tournament) => {
       if (tournament) {
         this.setState({ tournament })
+        this.subscribeToResultsChannel(tournament.id)
       } else if (err && !this.state.tournament) {
         this.setState({ error: true })
       }
     })
   }
 
-  subscribeToResultsChannel = () => {
-    const { tournamentId } = this.props
+  subscribeToResultsChannel = tournamentId => {
     // eslint-disable-next-line no-undef
     App.cable.subscriptions.create({
       channel: 'ResultsChannel',

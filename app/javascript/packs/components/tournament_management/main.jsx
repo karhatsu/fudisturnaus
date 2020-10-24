@@ -479,7 +479,7 @@ export default class TournamentManagementPage extends React.PureComponent {
         />
         <OfficialLinkCopy
           description={publicLink.description}
-          path={`/tournaments/${tournament.id}`}
+          path={`/t/${tournament.slug}`}
           title={publicLink.title}
         />
       </React.Fragment>

@@ -6,6 +6,6 @@ class Api::V1::Public::TournamentsController < ApplicationController
   end
 
   def show
-    @tournament = Tournament.find(params[:id]).public_data
+    @tournament = Tournament.friendly.find(params[:id]).public_data
   end
 end

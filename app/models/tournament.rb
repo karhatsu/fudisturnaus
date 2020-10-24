@@ -1,11 +1,15 @@
 require 'securerandom'
 
 class Tournament < ApplicationRecord
+  extend FriendlyId
+
   EQUAL_POINTS_RULE_ALL_MATCHES_FIRST = 0
   EQUAL_POINTS_RULE_MUTUAL_MATCHES_FIRST = 1
   VISIBILITY_ONLY_TITLE = 0
   VISIBILITY_TEAMS = 1
   VISIBILITY_ALL = 2
+
+  friendly_id :name, use: :slugged
 
   belongs_to :club, optional: true
   has_many :age_groups, -> {order(:name)}

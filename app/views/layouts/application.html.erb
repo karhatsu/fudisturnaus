@@ -14,7 +14,9 @@
     <%= javascript_pack_tag 'application' %>
     <%= stylesheet_pack_tag 'application' %>
 
+    <% if Rails.env.production? %>
     <script data-ad-client="ca-pub-3948131044642474" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <% end %>
   </head>
 
   <body>

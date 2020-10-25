@@ -89,9 +89,14 @@ export default class PlayoffMatch extends React.PureComponent {
     let text = '+ Lisää uusi jatko-ottelu'
     if (playoffMatch) {
       const { ageGroupId, fieldId, startTime, title } = playoffMatch
-      const time = formatMatchTime(tournamentDays, startTime)
-      const fieldName = getName(fields, fieldId)
-      text = `${fieldName} | ${time} | ${getName(ageGroups, ageGroupId)} | ${title}`
+      const textElements = []
+      if (fields.length > 1) {
+        textElements.push(getName(fields, fieldId))
+      }
+      textElements.push(formatMatchTime(tournamentDays, startTime))
+      textElements.push(getName(ageGroups, ageGroupId))
+      textElements.push(title)
+      text = textElements.join(' | ')
     }
     return <div className={resolveTournamentItemClasses(playoffMatch)}><span onClick={this.openForm}>{text}</span></div>
   }
@@ -104,7 +109,7 @@ export default class PlayoffMatch extends React.PureComponent {
         <FormErrors errors={this.state.errors}/>
         <div className="tournament-item__form">
           <IdNameSelect field="ageGroupId" formData={form} items={ageGroups} label="- Sarja -" onChange={this.changeValue('ageGroupId')}/>
-          <IdNameSelect field="fieldId" formData={form} items={this.props.fields} label="- Kenttä -" onChange={this.setField}/>
+          {this.buildFieldsDropDown()}
           {this.buildDayDropDown()}
           {this.renderStartTimeField()}
           {this.renderTitleField()}
@@ -116,6 +121,13 @@ export default class PlayoffMatch extends React.PureComponent {
         </div>
       </form>
     )
+  }
+
+  buildFieldsDropDown() {
+    const { fields } = this.props
+    if (fields.length > 1) {
+      return <IdNameSelect field="fieldId" formData={this.state.form} items={fields} label="- Kenttä -" onChange={this.setField}/>
+    }
   }
 
   buildDayDropDown() {
@@ -215,7 +227,7 @@ export default class PlayoffMatch extends React.PureComponent {
   }
 
   openForm = () => {
-    const { playoffMatch, tournamentDate } = this.props
+    const { fields, playoffMatch, tournamentDate } = this.props
     this.setState({
       formOpen: true,
       form: {
@@ -223,7 +235,7 @@ export default class PlayoffMatch extends React.PureComponent {
         awayTeamOrigin: playoffMatch ? this.buildOrigin(playoffMatch.awayTeamOriginType, playoffMatch.awayTeamOriginId) : undefined,
         awayTeamOriginRule: playoffMatch ? playoffMatch.awayTeamOriginRule : undefined,
         day: playoffMatch ? resolveDay(tournamentDate, playoffMatch.startTime) : 1,
-        fieldId: playoffMatch ? playoffMatch.fieldId : undefined,
+        fieldId: playoffMatch ? playoffMatch.fieldId : fields.length === 1 ? fields[0].id : undefined,
         homeTeamOrigin: playoffMatch ? this.buildOrigin(playoffMatch.homeTeamOriginType, playoffMatch.homeTeamOriginId) : undefined,
         homeTeamOriginRule: playoffMatch ? playoffMatch.homeTeamOriginRule : undefined,
         startTime: playoffMatch ? formatTime(playoffMatch.startTime) : '',

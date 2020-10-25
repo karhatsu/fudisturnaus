@@ -76,24 +76,24 @@ export default class GroupStageMatch extends React.PureComponent {
     let text = '+ Lisää uusi alkulohkon ottelu'
     if (groupStageMatch) {
       const { ageGroupId, awayTeamId, fieldId, groupId, homeTeamId, startTime } = groupStageMatch
-      const time = formatMatchTime(tournamentDays, startTime)
-      const fieldName = getName(fields, fieldId)
-      const groupName = getName(groups, groupId)
-      const ageGroupName = getName(ageGroups, ageGroupId)
-      const homeTeamName = getName(teams, homeTeamId)
-      const awayTeamName = getName(teams, awayTeamId)
-      text = `${fieldName} | ${time} | ${groupName} (${ageGroupName}) | ${homeTeamName} - ${awayTeamName}`
+      const textElements = []
+      if (fields.length > 1) {
+        textElements.push(getName(fields, fieldId))
+      }
+      textElements.push(formatMatchTime(tournamentDays, startTime))
+      textElements.push(`${getName(groups, groupId)} (${getName(ageGroups, ageGroupId)})`)
+      textElements.push(`${getName(teams, homeTeamId)} - ${getName(teams, awayTeamId)}`)
+      text = textElements.join(' | ')
     }
     return <div className={resolveTournamentItemClasses(groupStageMatch)}><span onClick={this.openForm}>{text}</span></div>
   }
 
   renderForm() {
-    const { fields } = this.props
     return (
       <form className="form form--horizontal">
         <FormErrors errors={this.state.errors}/>
         <div className="tournament-item__form">
-          <IdNameSelect field="fieldId" formData={this.state.form} items={fields} label="- Kenttä -" onChange={this.setField}/>
+          {this.buildFieldsDropDown()}
           {this.buildDayDropDown()}
           {this.renderStartTimeField()}
           {this.buildGroupDropDown()}
@@ -103,6 +103,13 @@ export default class GroupStageMatch extends React.PureComponent {
         </div>
       </form>
     )
+  }
+
+  buildFieldsDropDown() {
+    const { fields } = this.props
+    if (fields.length > 1) {
+      return <IdNameSelect field="fieldId" formData={this.state.form} items={fields} label="- Kenttä -" onChange={this.setField}/>
+    }
   }
 
   buildTeamDropDown(field, label) {
@@ -153,13 +160,13 @@ export default class GroupStageMatch extends React.PureComponent {
   }
 
   openForm = () => {
-    const { groupStageMatch, tournamentDate } = this.props
+    const { fields, groupStageMatch, tournamentDate } = this.props
     this.setState({
       formOpen: true,
       form: {
         awayTeamId: groupStageMatch ? groupStageMatch.awayTeamId : undefined,
         day: groupStageMatch ? resolveDay(tournamentDate, groupStageMatch.startTime) : 1,
-        fieldId: groupStageMatch ? groupStageMatch.fieldId : undefined,
+        fieldId: groupStageMatch ? groupStageMatch.fieldId : fields.length === 1 ? fields[0].id : undefined,
         groupId: groupStageMatch ? groupStageMatch.groupId : undefined,
         homeTeamId: groupStageMatch ? groupStageMatch.homeTeamId : undefined,
         startTime: groupStageMatch ? formatTime(groupStageMatch.startTime) : '',

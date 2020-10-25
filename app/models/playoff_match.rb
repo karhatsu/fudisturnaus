@@ -16,6 +16,7 @@ class PlayoffMatch < ApplicationRecord
   validates :title, presence: true
   validates :home_team_origin_rule, numericality: { only_integer: true, allow_nil: false }
   validates :away_team_origin_rule, numericality: { only_integer: true, allow_nil: false }
+  validate :no_same_teams
   validate :draw_not_allowed
   validate :teams_are_required
 
@@ -59,6 +60,12 @@ class PlayoffMatch < ApplicationRecord
   end
 
   private
+
+  def no_same_teams
+    if home_team_origin_id == away_team_origin_id && home_team_origin_rule == away_team_origin_rule
+      errors.add :base, 'Koti- ja vierasjoukkue eivät voi olla samoja'
+    end
+  end
 
   def draw_not_allowed
     errors.add :base, 'Jatko-ottelu ei voi päättyä tasan' if home_goals && away_goals && home_goals == away_goals

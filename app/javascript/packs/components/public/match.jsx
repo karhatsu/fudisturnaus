@@ -101,7 +101,7 @@ export default class Match extends React.PureComponent {
   renderResult() {
     const { match: { homeGoals, awayGoals, penalties } } = this.props
     if (homeGoals || homeGoals === 0) {
-      return <span>{homeGoals} - {awayGoals}{penalties ? ' rp' : ''}</span>
+      return `${homeGoals} - ${awayGoals}${penalties ? ' rp' : ''}`
     }
   }
 

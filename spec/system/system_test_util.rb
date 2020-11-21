@@ -30,7 +30,7 @@ def expect_playoff_match_info(start_time, age_group_name, title, field_name = ni
 end
 
 def expect_result(match_index, result)
-  expect(page).to have_xpath("(//div[contains(@class, 'match__result')])[#{match_index + 1}]/span[normalize-space()='#{result}']")
+  expect(page).to have_xpath("(//div[contains(@class, 'match__result')])[#{match_index + 1}][normalize-space()='#{result}']")
 end
 
 def expect_group_table_row(index, ranking, team_name, matches = 0, wins = 0, draws = 0, losses = 0, goals_for = 0, goals_against = 0, points = 0)

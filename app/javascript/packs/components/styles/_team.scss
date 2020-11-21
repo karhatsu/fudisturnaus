@@ -1,11 +1,15 @@
 @import 'variables';
 @import 'shared';
 
-.team--selected {
-  color: $green;
-}
+.team {
+  white-space: nowrap;
 
-.team__logo {
-  height: 14px;
-  margin-right: 4px;
+  &--selected {
+    color: $green;
+  }
+
+  &__logo {
+    height: 14px;
+    margin-right: 4px;
+  }
 }

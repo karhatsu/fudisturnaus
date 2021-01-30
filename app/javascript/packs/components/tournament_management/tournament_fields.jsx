@@ -16,6 +16,7 @@ export default class TournamentFields extends React.PureComponent {
     onCancel: PropTypes.func,
     onSave: PropTypes.func.isRequired,
     tournament: PropTypes.shape({
+      cancelled: PropTypes.bool.isRequired,
       clubId: PropTypes.number,
       name: PropTypes.string.isRequired,
       location: PropTypes.string.isRequired,
@@ -37,6 +38,7 @@ export default class TournamentFields extends React.PureComponent {
       errors: [],
       formOpen: !props.tournament,
       form: {
+        cancelled: false,
         clubId: undefined,
         name: '',
         startDate: '',
@@ -72,7 +74,8 @@ export default class TournamentFields extends React.PureComponent {
         {this.renderTournamentField('Otteluiden välinen aika (min)', 'number', 'matchMinutes')}
         {this.renderEqualPointsRuleField()}
         {this.renderVisibilityField()}
-        {this.renderTestCheckbox()}
+        {this.props.tournament && this.renderCheckbox('Peruttu', 'cancelled')}
+        {!this.props.tournament && this.renderCheckbox('Testiturnaus', 'test')}
         {this.renderTournamentFormButtons()}
       </form>
     )
@@ -128,17 +131,15 @@ export default class TournamentFields extends React.PureComponent {
     )
   }
 
-  renderTestCheckbox() {
-    if (!this.props.tournament) {
-      return (
-        <div className="form__field">
-          <div className="label">Testiturnaus</div>
-          <div>
-            <input type="checkbox" onChange={this.setValue('test')} />
-          </div>
+  renderCheckbox(label, field) {
+    return (
+      <div className="form__field">
+        <div className="label">{label}</div>
+        <div>
+          <input type="checkbox" onChange={this.setCheckboxValue(field)} checked={this.state.form[field]} />
         </div>
-      )
-    }
+      </div>
+    )
   }
 
   renderTournamentFormButtons() {
@@ -167,10 +168,10 @@ export default class TournamentFields extends React.PureComponent {
   }
 
   openForm = () => {
-    const { tournament: { name, startDate, days, location, address, matchMinutes, equalPointsRule, visibility, clubId } } = this.props
+    const { tournament: { name, startDate, days, location, address, matchMinutes, equalPointsRule, visibility, clubId, cancelled } } = this.props
     this.setState({
       formOpen: true,
-      form: { name, startDate, days, location, address: address || '', matchMinutes, equalPointsRule, visibility, clubId },
+      form: { name, startDate, days, location, address: address || '', matchMinutes, equalPointsRule, visibility, clubId, cancelled },
     })
   }
 
@@ -184,6 +185,11 @@ export default class TournamentFields extends React.PureComponent {
     this.setState({ form: { ...form, [field]: event.target.value } })
   }
 
+  setCheckboxValue = field => event => {
+    const { form } = this.state
+    this.setState({ form: { ...form, [field]: event.target.checked } })
+  }
+
   canSubmit = () => {
     const { form: { days, name, startDate, location } } = this.state
     return parseInt(days) >= 1 && !!name && !!startDate && !!location
@@ -194,6 +200,7 @@ export default class TournamentFields extends React.PureComponent {
     form.name = form.name.trim()
     form.location = form.location.trim()
     form.address = form.address.trim()
+    console.log('c', form.cancelled)
     this.props.onSave(form, errors => {
       if (errors) {
         this.setState({ errors })

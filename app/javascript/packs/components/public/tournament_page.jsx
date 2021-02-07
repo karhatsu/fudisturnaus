@@ -15,6 +15,7 @@ import SeriesAndTeams from './series_and_teams'
 import VisibilityBadge from '../tournament_management/visibility_badge'
 import { visibilityTypes } from '../util/enums'
 import InfoBox from './info_box'
+import IframeTitle from './iframe_title'
 
 const { onlyTitle, teams, all } = visibilityTypes
 
@@ -73,6 +74,7 @@ export default class TournamentPage extends React.PureComponent {
     const club = tournament ? tournament.club : undefined
     return (
       <div>
+        <IframeTitle />
         <Title iconLink={iconLink} loading={!tournament && !error} text={title} club={club}>
           {this.renderCancelledBadge()}
         </Title>

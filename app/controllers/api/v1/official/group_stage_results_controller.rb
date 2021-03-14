@@ -31,14 +31,14 @@ class Api::V1::Official::GroupStageResultsController < Api::V1::Official::Offici
     group_results = @match.group.results
     ActionCable.server.broadcast(
         "results#{@tournament.id}",
-        groupId: @match.group_id,
-        groupStageMatch: {
+        { groupId: @match.group_id,
+          groupStageMatch: {
             id: @match.id,
             homeGoals: @match.home_goals,
             awayGoals: @match.away_goals,
-        },
-        groupResults: group_results.map do |result|
-          {
+          },
+          groupResults: group_results.map do |result|
+            {
               ranking: result.ranking,
               teamName: result.team_name,
               teamId: result.team_id,
@@ -49,23 +49,24 @@ class Api::V1::Official::GroupStageResultsController < Api::V1::Official::Offici
               goalsFor: result.goals_for,
               goalsAgainst: result.goals_against,
               points: result.points
-          }
-        end,
-        resolvedPlayoffMatches: playoff_matches.map do |match|
-          {
+            }
+          end,
+          resolvedPlayoffMatches: playoff_matches.map do |match|
+            {
               id: match.id,
               homeTeam: match.home_team ? {
-                  id: match.home_team.id,
-                  name: match.home_team.name,
-                  clubId: match.home_team.club_id
+                id: match.home_team.id,
+                name: match.home_team.name,
+                clubId: match.home_team.club_id
               } : nil,
               awayTeam: match.away_team ? {
-                  id: match.away_team.id,
-                  name: match.away_team.name,
-                  clubId: match.away_team.club_id
+                id: match.away_team.id,
+                name: match.away_team.name,
+                clubId: match.away_team.club_id
               } : nil
-          }
-        end
+            }
+          end
+        }
     )
   end
 end

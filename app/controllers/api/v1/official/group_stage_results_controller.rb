@@ -42,6 +42,7 @@ class Api::V1::Official::GroupStageResultsController < Api::V1::Official::Offici
               ranking: result.ranking,
               teamName: result.team_name,
               teamId: result.team_id,
+              clubId: result.club_id,
               matches: result.matches,
               wins: result.wins,
               draws: result.draws,

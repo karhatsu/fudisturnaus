@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_10_090110) do
+ActiveRecord::Schema.define(version: 2021_08_10_090713) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -101,12 +101,14 @@ ActiveRecord::Schema.define(version: 2021_08_10_090110) do
     t.boolean "penalties", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "playoff_group_id"
     t.index ["age_group_id"], name: "index_playoff_matches_on_age_group_id"
     t.index ["away_team_id"], name: "index_playoff_matches_on_away_team_id"
     t.index ["away_team_origin_type", "away_team_origin_id"], name: "index_playoff_matches_on_away_team_origin"
     t.index ["field_id"], name: "index_playoff_matches_on_field_id"
     t.index ["home_team_id"], name: "index_playoff_matches_on_home_team_id"
     t.index ["home_team_origin_type", "home_team_origin_id"], name: "index_playoff_matches_on_home_team_origin"
+    t.index ["playoff_group_id"], name: "index_playoff_matches_on_playoff_group_id"
   end
 
   create_table "teams", force: :cascade do |t|
@@ -151,6 +153,7 @@ ActiveRecord::Schema.define(version: 2021_08_10_090110) do
   add_foreign_key "groups", "age_groups"
   add_foreign_key "playoff_groups", "age_groups"
   add_foreign_key "playoff_matches", "fields"
+  add_foreign_key "playoff_matches", "playoff_groups"
   add_foreign_key "playoff_matches", "teams", column: "away_team_id"
   add_foreign_key "playoff_matches", "teams", column: "home_team_id"
   add_foreign_key "teams", "clubs"

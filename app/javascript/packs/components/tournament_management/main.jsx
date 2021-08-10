@@ -18,6 +18,7 @@ import { getName } from '../util/util'
 import OfficialLinkCopy from './official_link_copy'
 import Button from '../form/button'
 import FormErrors from '../form/form_errors'
+import Message from '../components/message'
 
 /* eslint-disable max-len */
 const linkTexts = {
@@ -77,8 +78,10 @@ export default class TournamentManagementPage extends React.PureComponent {
   renderContent() {
     const { tournament } = this.state
     if (!tournament) return null
+    const { visibility } = tournament
     return (
       <div>
+        {visibility < 2 && <Message type="warning">Kun haluat julkaista otteluohjelman, muokkaa turnauksen perustietoja</Message>}
         <div className="title-2">Perustiedot</div>
         <div className="tournament-management__section tournament-management__section--tournament">
           <TournamentFields clubs={tournament.clubs} onSave={this.onSave} tournament={tournament}/>

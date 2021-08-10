@@ -98,6 +98,8 @@ export default class TournamentManagementPage extends React.PureComponent {
         {this.renderGroupStageMatchesSection()}
         <div className="title-2">Tasatilanteen ratkaisu arvalla</div>
         {this.renderLotterySection()}
+        <div className="title-2">Jatkolohkot</div>
+        {this.renderPlayoffGroupsSection()}
         <div className="title-2">Jatko-ottelut</div>
         {this.renderPlayoffMatchesSection()}
         <div className="title-2">Turnauksen linkit</div>
@@ -179,7 +181,9 @@ export default class TournamentManagementPage extends React.PureComponent {
     return (
       <div className="tournament-management__section tournament-management__section--groups">
         {ageGroups.length > 0 ? this.renderGroups() : this.renderCannotAddGroups()}
-        {ageGroups.length > 0 && <Group ageGroups={ageGroups} onGroupSave={this.onItemSave('groups')} tournamentId={id}/>}
+        {ageGroups.length > 0 && (
+          <Group ageGroups={ageGroups} onGroupSave={this.onItemSave('groups')} tournamentId={id} type="group" />
+        )}
       </div>
     )
   }
@@ -202,6 +206,7 @@ export default class TournamentManagementPage extends React.PureComponent {
         onGroupDelete={this.onItemDelete('groups')}
         onGroupSave={this.onItemSave('groups')}
         tournamentId={this.getTournamentId()}
+        type="group"
       />
     })
   }
@@ -347,6 +352,45 @@ export default class TournamentManagementPage extends React.PureComponent {
     const index = groups.findIndex(group => group.id === groupId)
     groups[index] = { ...groups[index], results: data.results }
     this.setState({ tournament: { ...this.state.tournament, groups } })
+  }
+
+  renderPlayoffGroupsSection() {
+    const { tournament: { ageGroups, id } } = this.state
+    return (
+      <div className="tournament-management__section">
+        <div className="tournament-item">
+          Jos jatko-otteluista halutaan laskea sarjataulukot, luo sitä varten jatkolohko.
+          Mikäli jatko-ottelut pelataan playoff-tyyppisesti, ei jatkolohkoja tarvita.
+        </div>
+        {ageGroups.length > 0 ? this.renderPlayoffGroups() : this.renderCannotAddPlayoffGroups()}
+        {ageGroups.length > 0 && (
+          <Group ageGroups={ageGroups} onGroupSave={this.onItemSave('playoffGroups')} tournamentId={id} type="playoffGroup" />
+        )}
+      </div>
+    )
+  }
+
+  renderCannotAddPlayoffGroups = () => {
+    return (
+      <div className="tournament-item">
+        Voit lisätä jatkolohkoja, kun olet lisännyt vähintään yhden sarjan.
+      </div>
+    )
+  }
+
+  renderPlayoffGroups() {
+    const { tournament: { ageGroups, playoffGroups } } = this.state
+    return playoffGroups.map(playoffGroup => {
+      return <Group
+        key={playoffGroup.id}
+        ageGroups={ageGroups}
+        group={playoffGroup}
+        onGroupDelete={this.onItemDelete('playoffGroups')}
+        onGroupSave={this.onItemSave('playoffGroups')}
+        type="playoffGroup"
+        tournamentId={this.getTournamentId()}
+      />
+    })
   }
 
   renderPlayoffMatchesSection() {

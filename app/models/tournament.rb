@@ -14,6 +14,7 @@ class Tournament < ApplicationRecord
   belongs_to :club, optional: true
   has_many :age_groups, -> {order(:name)}
   has_many :groups, -> {order(:name)}, through: :age_groups
+  has_many :playoff_groups, -> {order(:name)}, through: :age_groups
   has_many :fields, -> {order(:name)}, dependent: :destroy
 
   validates :name, presence: true

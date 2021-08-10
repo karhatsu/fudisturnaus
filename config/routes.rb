@@ -19,6 +19,7 @@ Rails.application.routes.draw do
             put 'lottery' => 'lotteries#update'
           end
           resources :group_stage_matches, only: [:create, :update, :destroy]
+          resources :playoff_groups, only: [:create, :update, :destroy]
           resources :playoff_matches, only: [:create, :update, :destroy]
           resources :teams, only: [:create, :update, :destroy]
         end

@@ -47,7 +47,7 @@ export default class TournamentFields extends React.PureComponent {
         address: '',
         matchMinutes: 45,
         equalPointsRule: 0,
-        visibility: onlyTitle,
+        visibility: teams,
       },
     }
   }

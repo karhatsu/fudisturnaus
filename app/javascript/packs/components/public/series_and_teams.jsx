@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Team from './team'
+import Message from '../components/message'
 
 export default class SeriesAndTeams extends React.PureComponent {
   static propTypes = {
@@ -39,7 +40,7 @@ export default class SeriesAndTeams extends React.PureComponent {
 
   renderInfo = () => {
     if (!this.props.tournament.cancelled) {
-      return <div className="message message--warning message--full-page">Turnauksen otteluohjelma julkaistaan myöhemmin</div>
+      return <Message type="warning" fullPage={true}>Turnauksen otteluohjelma julkaistaan myöhemmin</Message>
     }
   }
 

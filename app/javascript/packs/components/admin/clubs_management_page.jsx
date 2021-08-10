@@ -4,6 +4,7 @@ import { fetchClubs, refreshCache } from './api_client'
 import FormErrors from '../form/form_errors'
 import ClubForm from './club_form'
 import Title from '../components/title'
+import Message from '../components/message'
 
 export default class ClubsManagementPage extends React.PureComponent {
   static contextType = AccessContext
@@ -60,7 +61,7 @@ export default class ClubsManagementPage extends React.PureComponent {
     const messageType = cacheRefreshResponse === 'Done' ? 'success' : (cacheRefreshResponse ? 'error' : undefined)
     return (
       <div className="tournament-management__section">
-        {cacheRefreshResponse && <div className={`message message--${messageType}`}>{cacheRefreshResponse}</div>}
+        {cacheRefreshResponse && <Message type={messageType}>{cacheRefreshResponse}</Message>}
         <a href="#" onClick={this.refreshCache}>Refresh cache</a>
       </div>
     )

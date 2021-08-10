@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import * as clipboard from 'clipboard-polyfill'
 import Button from '../form/button'
+import Message from '../components/message'
 
 export default class OfficialLinkCopy extends React.PureComponent {
   static propTypes = {
@@ -26,8 +27,8 @@ export default class OfficialLinkCopy extends React.PureComponent {
         <div className="official-link">
           <Button onClick={this.copyOfficialLink} label={this.props.title} type="primary" />
           <div className="official-link__description">{this.props.description}</div>
-          <div className="message message--success" style={successFeedbackStyle}>Linkki kopioitu leikepöydälle</div>
-          <div className="message message--error" style={errorFeedbackStyle}>Selaimesi ei tue linkin kopiointia</div>
+          <Message type="success" style={successFeedbackStyle}>Linkki kopioitu leikepöydälle</Message>
+          <Message type="error" style={errorFeedbackStyle}>Selaimesi ei tue linkin kopiointia</Message>
         </div>
       </div>
     )

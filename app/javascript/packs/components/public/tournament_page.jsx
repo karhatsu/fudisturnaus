@@ -16,6 +16,7 @@ import VisibilityBadge from '../tournament_management/visibility_badge'
 import { visibilityTypes } from '../util/enums'
 import InfoBox from './info_box'
 import IframeTitle from './iframe_title'
+import Message from '../components/message'
 
 const { onlyTitle, teams, all } = visibilityTypes
 
@@ -101,7 +102,7 @@ export default class TournamentPage extends React.PureComponent {
   renderContent() {
     const { error, tournament } = this.state
     if (error) {
-      return <div className="message message--error">Virhe haettaessa turnauksen tietoja. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.</div>
+      return <Message type="error">Virhe haettaessa turnauksen tietoja. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.</Message>
     }
     if (!tournament) {
       return <Loading/>
@@ -136,7 +137,7 @@ export default class TournamentPage extends React.PureComponent {
       return this.renderMatchContent()
     } else {
       const msg = 'Kun olet julkaissut turnauksen otteluohjelman, pääset tässä tallentamaan otteluiden tuloksia.'
-      return <div className="message message--warning">{msg}</div>
+      return <Message type="warning">{msg}</Message>
     }
   }
 
@@ -145,14 +146,14 @@ export default class TournamentPage extends React.PureComponent {
       return this.renderMatchContent()
     }
     const msg = 'Kun turnauksen otteluohjelma julkaistaan, pääset tällä sivulla tallentamaan otteluiden tuloksia.'
-    return <div className="message message--warning message--full-page">{msg}</div>
+    return <Message type="warning" fullPage={true}>{msg}</Message>
   }
 
   renderPublicContent() {
     const { tournament } = this.state
     if (tournament.visibility === onlyTitle) {
       const msg = 'Turnauksen osallistujia ja otteluohjelmaa ei ole vielä julkaistu'
-      return <div className="message message--warning message--full-page">{msg}</div>
+      return <Message type="warning" fullPage={true}>{msg}</Message>
     } else if (tournament.visibility === teams || !this.tournamentHasMatches()) {
       return <SeriesAndTeams tournament={tournament}/>
     } else {

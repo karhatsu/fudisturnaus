@@ -3,6 +3,7 @@ import TextField from '../form/text_field'
 import Button from '../form/button'
 import { sendContactRequest } from './api_client'
 import FormErrors from '../form/form_errors'
+import Message from '../components/message'
 
 const genericIntro = 'Lähettäkää alla oleva lomake, niin hoidetaan asia kuntoon saman tien.'
 const tournamentIntro = 'Jos tiedätte jo turnauksen tarkemmat tiedot, voitte täyttää ne valmiiksi tähän.'
@@ -28,11 +29,7 @@ export default class ContactForm extends React.PureComponent {
 
   render() {
     if (this.state.submitted) {
-      return (
-        <div className="message message--success message--no-margins">
-          Kiitos yhteydenotosta. Palaamme asiaan pian!
-        </div>
-      )
+      return <Message type="success" noMargins={true}>Kiitos yhteydenotosta. Palaamme asiaan pian!</Message>
     }
     return (
       <form className="form form--vertical">

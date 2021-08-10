@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import isSameDay from 'date-fns/isSameDay'
 import { resolveColStyles } from '../util/util'
+import Message from '../components/message'
 
 export default class Matches extends React.PureComponent {
   static propTypes = {
@@ -24,7 +25,7 @@ export default class Matches extends React.PureComponent {
   render() {
     const matchesByStartTime = this.groupByStartTime()
     if(Object.keys(matchesByStartTime).length === 0 && this.props.showEmptyError) {
-      return <div className="message message--error">Ei yhtään ottelua, muuta hakuehtoja</div>
+      return <Message type="error">Ei yhtään ottelua, muuta hakuehtoja</Message>
     }
     return (
       <div className="matches">

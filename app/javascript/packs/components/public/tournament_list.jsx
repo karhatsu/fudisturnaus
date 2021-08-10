@@ -7,6 +7,7 @@ import Loading from '../components/loading'
 import Title from '../components/title'
 import TournamentLinkBox from '../components/tournament_link_box'
 import InfoBox from './info_box'
+import Message from '../components/message'
 
 export default class TournamentList extends React.PureComponent {
   static propTypes = {
@@ -40,11 +41,11 @@ export default class TournamentList extends React.PureComponent {
   renderContent() {
     const { error, tournaments } = this.state
     if (error) {
-      return <div className="message message--error">Virhe haettaessa turnauksia. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.</div>
+      return <Message type="error">Virhe haettaessa turnauksia. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.</Message>
     } else if (!tournaments) {
       return <Loading/>
     } else if (!tournaments.length) {
-      return <div className="message message--error">Ei turnauksia</div>
+      return <Message type="error">Ei turnauksia</Message>
     }
     const groups = this.groupTournaments(tournaments)
     return (

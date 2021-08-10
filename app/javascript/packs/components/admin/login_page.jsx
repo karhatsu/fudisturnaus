@@ -4,6 +4,7 @@ import { loginToAdmin } from './api_client'
 import Title from '../components/title'
 import TextField from '../form/text_field'
 import Button from '../form/button'
+import Message from '../components/message'
 
 export default class AdminLoginPage extends React.PureComponent {
   static propTypes = {
@@ -36,7 +37,7 @@ export default class AdminLoginPage extends React.PureComponent {
   renderError() {
     const { error } = this.state
     if (error) {
-      return <div className="message message--error">{error}</div>
+      return <Message type="error">{error}</Message>
     }
   }
 

@@ -20,7 +20,10 @@ describe('SeriesAndTeams', () => {
       })
 
       it('renders message about matches', () => {
-        expect(component.find('.message.message--warning').text()).toEqual('Turnauksen otteluohjelma julkaistaan myöhemmin')
+        const message = component.find('Message')
+        expect(message.prop('type')).toEqual('warning')
+        expect(message.prop('fullPage')).toEqual(true)
+        expect(message.prop('children')).toEqual('Turnauksen otteluohjelma julkaistaan myöhemmin')
       })
 
       it('does not render age groups', () => {

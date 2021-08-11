@@ -23,6 +23,11 @@ export default class PlayoffMatch extends React.PureComponent {
       name: PropTypes.string.isRequired,
       ageGroupId: PropTypes.number.isRequired,
     })),
+    playoffGroups: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      ageGroupId: PropTypes.number.isRequired,
+    })).isRequired,
     playoffMatch: PropTypes.shape({
       ageGroupId: PropTypes.number.isRequired,
       awayTeamOriginId: PropTypes.number.isRequired,
@@ -33,6 +38,7 @@ export default class PlayoffMatch extends React.PureComponent {
       homeTeamOriginType: PropTypes.string.isRequired,
       homeTeamOriginRule: PropTypes.number.isRequired,
       id: PropTypes.number.isRequired,
+      playoffGroupId: PropTypes.number,
       startTime: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
     }),
@@ -67,6 +73,7 @@ export default class PlayoffMatch extends React.PureComponent {
         fieldId: undefined,
         homeTeamOrigin: undefined,
         homeTeamOriginRule: undefined,
+        playoffGroupId: undefined,
         startTime: undefined,
         title: undefined,
       },
@@ -85,10 +92,10 @@ export default class PlayoffMatch extends React.PureComponent {
   }
 
   renderName() {
-    const { ageGroups, fields, playoffMatch, tournamentDays } = this.props
+    const { ageGroups, fields, playoffGroups, playoffMatch, tournamentDays } = this.props
     let text = '+ Lisää uusi jatko-ottelu'
     if (playoffMatch) {
-      const { ageGroupId, fieldId, startTime, title } = playoffMatch
+      const { ageGroupId, fieldId, startTime, title, playoffGroupId } = playoffMatch
       const textElements = []
       if (fields.length > 1) {
         textElements.push(getName(fields, fieldId))
@@ -96,6 +103,10 @@ export default class PlayoffMatch extends React.PureComponent {
       textElements.push(formatMatchTime(tournamentDays, startTime))
       textElements.push(getName(ageGroups, ageGroupId))
       textElements.push(title)
+      if (playoffGroupId) {
+        const playoffGroup = playoffGroups.find(g => g.id === playoffGroupId)
+        textElements.push(playoffGroup.name)
+      }
       text = textElements.join(' | ')
     }
     return <div className={resolveTournamentItemClasses(playoffMatch)}><span onClick={this.openForm}>{text}</span></div>
@@ -117,6 +128,7 @@ export default class PlayoffMatch extends React.PureComponent {
           {this.renderRuleField('home')}
           {this.renderSourceField('away', 'Vieras')}
           {this.renderRuleField('away')}
+          {this.renderPlayoffGroupsDropDown()}
           {this.renderButtons()}
         </div>
       </form>
@@ -216,6 +228,23 @@ export default class PlayoffMatch extends React.PureComponent {
     }
   }
 
+  renderPlayoffGroupsDropDown() {
+    const { playoffGroups } = this.props
+    if (playoffGroups.length) {
+      return (
+        <div className="form__field">
+          <select onChange={this.changeValue('playoffGroupId')} value={this.state.form.playoffGroupId || ''}>
+            <option>- Jatkolohko -</option>
+            {playoffGroups.map(playoffGroup => {
+              const { id, name } = playoffGroup
+              return <option key={id} value={id}>{name}</option>
+            })}
+          </select>
+        </div>
+      )
+    }
+  }
+
   renderButtons() {
     return (
       <div className="form__buttons">
@@ -238,6 +267,7 @@ export default class PlayoffMatch extends React.PureComponent {
         fieldId: playoffMatch ? playoffMatch.fieldId : fields.length === 1 ? fields[0].id : undefined,
         homeTeamOrigin: playoffMatch ? this.buildOrigin(playoffMatch.homeTeamOriginType, playoffMatch.homeTeamOriginId) : undefined,
         homeTeamOriginRule: playoffMatch ? playoffMatch.homeTeamOriginRule : undefined,
+        playoffGroupId: playoffMatch ? playoffMatch.playoffGroupId : undefined,
         startTime: playoffMatch ? formatTime(playoffMatch.startTime) : '',
         title: playoffMatch ? playoffMatch.title : '',
       },
@@ -276,7 +306,18 @@ export default class PlayoffMatch extends React.PureComponent {
   submit = () => {
     const { playoffMatch, onPlayoffMatchSave, tournamentId, tournamentDate } = this.props
     const { form } = this.state
-    const { ageGroupId, awayTeamOrigin, awayTeamOriginRule, fieldId, day, homeTeamOrigin, homeTeamOriginRule, startTime, title } = form
+    const {
+      ageGroupId,
+      awayTeamOrigin,
+      awayTeamOriginRule,
+      fieldId,
+      day,
+      homeTeamOrigin,
+      homeTeamOriginRule,
+      playoffGroupId,
+      startTime,
+      title,
+    } = form
     const id = playoffMatch ? playoffMatch.id : undefined
     const data = {
       ageGroupId,
@@ -287,6 +328,7 @@ export default class PlayoffMatch extends React.PureComponent {
       homeTeamOriginId: this.parseOriginId(homeTeamOrigin),
       homeTeamOriginType: this.parseOriginType(homeTeamOrigin),
       homeTeamOriginRule,
+      playoffGroupId,
       startTime: addDays(parseFromTimeZone(parseISO(`${tournamentDate}T${startTime}`), { timeZone: 'Europe/Helsinki' }), day - 1),
       title,
     }

@@ -394,7 +394,7 @@ export default class TournamentManagementPage extends React.PureComponent {
   }
 
   renderPlayoffMatchesSection() {
-    const { tournament: { ageGroups, days, fields, groups, playoffMatches, teams, id, matchMinutes } } = this.state
+    const { tournament: { ageGroups, days, fields, groups, playoffGroups, playoffMatches, teams, id, matchMinutes } } = this.state
     const ageGroupsIdsWithTables = ageGroups.filter(ageGroup => ageGroup.calculateGroupTables).map(ageGroup => ageGroup.id)
     const groupIdsWithTables = groups.filter(group => ageGroupsIdsWithTables.includes(group.ageGroupId)).map(group => group.id)
     const teamsWithTables = teams.filter(team => groupIdsWithTables.includes(team.groupId))
@@ -406,6 +406,7 @@ export default class TournamentManagementPage extends React.PureComponent {
           ageGroups={ageGroups}
           fields={fields}
           groups={groups}
+          playoffGroups={playoffGroups}
           playoffMatches={playoffMatches}
           onPlayoffMatchSave={this.onItemSave('playoffMatches')}
           matchMinutes={matchMinutes}
@@ -428,13 +429,14 @@ export default class TournamentManagementPage extends React.PureComponent {
   }
 
   renderPlayoffMatches() {
-    const { tournament: { ageGroups, days, fields, groups, playoffMatches, teams, matchMinutes } } = this.state
+    const { tournament: { ageGroups, days, fields, groups, playoffGroups, playoffMatches, teams, matchMinutes } } = this.state
     return playoffMatches.map(playoffMatch => {
       return <PlayoffMatch
         ageGroups={ageGroups}
         key={playoffMatch.id}
         fields={fields}
         groups={groups}
+        playoffGroups={playoffGroups}
         playoffMatch={playoffMatch}
         playoffMatches={playoffMatches}
         onPlayoffMatchDelete={this.onItemDelete('playoffMatches')}

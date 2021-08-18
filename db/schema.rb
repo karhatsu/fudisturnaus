@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_24_075821) do
+ActiveRecord::Schema.define(version: 2021_08_10_090713) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,6 +75,14 @@ ActiveRecord::Schema.define(version: 2020_10_24_075821) do
     t.index ["age_group_id"], name: "index_groups_on_age_group_id"
   end
 
+  create_table "playoff_groups", force: :cascade do |t|
+    t.bigint "age_group_id", null: false
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["age_group_id"], name: "index_playoff_groups_on_age_group_id"
+  end
+
   create_table "playoff_matches", force: :cascade do |t|
     t.bigint "age_group_id", null: false
     t.bigint "field_id", null: false
@@ -93,12 +101,14 @@ ActiveRecord::Schema.define(version: 2020_10_24_075821) do
     t.boolean "penalties", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "playoff_group_id"
     t.index ["age_group_id"], name: "index_playoff_matches_on_age_group_id"
     t.index ["away_team_id"], name: "index_playoff_matches_on_away_team_id"
     t.index ["away_team_origin_type", "away_team_origin_id"], name: "index_playoff_matches_on_away_team_origin"
     t.index ["field_id"], name: "index_playoff_matches_on_field_id"
     t.index ["home_team_id"], name: "index_playoff_matches_on_home_team_id"
     t.index ["home_team_origin_type", "home_team_origin_id"], name: "index_playoff_matches_on_home_team_origin"
+    t.index ["playoff_group_id"], name: "index_playoff_matches_on_playoff_group_id"
   end
 
   create_table "teams", force: :cascade do |t|
@@ -140,8 +150,9 @@ ActiveRecord::Schema.define(version: 2020_10_24_075821) do
   add_foreign_key "group_stage_matches", "groups"
   add_foreign_key "group_stage_matches", "teams", column: "away_team_id"
   add_foreign_key "group_stage_matches", "teams", column: "home_team_id"
-  add_foreign_key "groups", "age_groups"
+  add_foreign_key "playoff_groups", "age_groups"
   add_foreign_key "playoff_matches", "fields"
+  add_foreign_key "playoff_matches", "playoff_groups"
   add_foreign_key "playoff_matches", "teams", column: "away_team_id"
   add_foreign_key "playoff_matches", "teams", column: "home_team_id"
   add_foreign_key "teams", "clubs"

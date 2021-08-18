@@ -29,6 +29,7 @@ class Api::V1::Official::GroupStageResultsController < Api::V1::Official::Offici
 
   def broadcast_result(playoff_matches)
     group_results = @match.group.results
+    playoff_groups = playoff_matches.select {|m| m.playoff_group_id}.map {|m| m.playoff_group}.uniq
     ActionCable.server.broadcast(
         "results#{@tournament.id}",
         { groupId: @match.group_id,
@@ -65,6 +66,26 @@ class Api::V1::Official::GroupStageResultsController < Api::V1::Official::Offici
                 name: match.away_team.name,
                 clubId: match.away_team.club_id
               } : nil
+            }
+          end,
+          playoffGroups: playoff_groups.map do |playoff_group|
+            {
+              id: playoff_group.id,
+              results: playoff_group.results.map do |result|
+                {
+                  ranking: result.ranking,
+                  teamName: result.team_name,
+                  teamId: result.team_id,
+                  clubId: result.club_id,
+                  matches: result.matches,
+                  wins: result.wins,
+                  draws: result.draws,
+                  losses: result.losses,
+                  goalsFor: result.goals_for,
+                  goalsAgainst: result.goals_against,
+                  points: result.points
+                }
+              end
             }
           end
         }

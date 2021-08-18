@@ -93,9 +93,9 @@ RSpec.describe Team, type: :model do
 
               it 'calculates results only from the matches of the given teams' do
                 teams = [team2, team3, team4]
-                expect_group_result team2.reload.group_results(teams), 2, 0, 1, 1, 2, 5, 1
-                expect_group_result team3.reload.group_results(teams), 2, 0, 1, 1, 4, 5, 1
-                expect_group_result team4.reload.group_results(teams), 2, 2, 0, 0, 8, 4, 6
+                expect_group_result team2.reload.group_results(false, teams), 2, 0, 1, 1, 2, 5, 1
+                expect_group_result team3.reload.group_results(false, teams), 2, 0, 1, 1, 4, 5, 1
+                expect_group_result team4.reload.group_results(false, teams), 2, 2, 0, 0, 8, 4, 6
               end
             end
           end

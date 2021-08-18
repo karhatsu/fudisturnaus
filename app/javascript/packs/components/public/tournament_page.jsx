@@ -175,6 +175,7 @@ export default class TournamentPage extends React.PureComponent {
         {this.renderMatches(groupStageMatches, 'Alkulohkojen ottelut', tournament.playoffMatches.length, true)}
         {this.renderGroupTables()}
         {this.renderMatches(filteredPlayoffMatches, 'Jatko-ottelut', filteredPlayoffMatches.length)}
+        {this.renderPlayoffGroupTables()}
         <InfoBox/>
       </div>
     )
@@ -272,6 +273,19 @@ export default class TournamentPage extends React.PureComponent {
     }
   }
 
+  renderPlayoffGroupTables = () => {
+    const { filters, tournament: { calculateGroupTables, playoffGroups } } = this.state
+    const filteredGroups = playoffGroups.filter(this.isFilterGroup)
+    if (calculateGroupTables && filteredGroups.length && !filters.day) {
+      return (
+        <>
+          <div className="title-2">Jatkolohkot</div>
+          <div className="group-results row">{filteredGroups.map(group => this.renderGroup(group, filteredGroups.length))}</div>
+        </>
+      )
+    }
+  }
+
   renderGroup = (group, groupsCount) => {
     const { filters, tournament: { clubs } } = this.state
     return <GroupResults clubs={clubs} filters={filters} group={group} groupsCount={groupsCount} key={group.id}/>
@@ -279,12 +293,12 @@ export default class TournamentPage extends React.PureComponent {
 
   isFilterGroup = group => {
     const { filters } = this.state
-    const { ageGroupId, id: groupId, teams, results } = group
+    const { ageGroupId, id: groupId, results } = group
     return results.length
       && (!filters.ageGroupId || filters.ageGroupId === ageGroupId)
       && (!filters.groupId || filters.groupId === groupId)
-      && (!filters.clubId || teams.findIndex(team => team.clubId === filters.clubId) !== -1)
-      && (!filters.teamId || teams.findIndex(team => team.id === filters.teamId) !== -1)
+      && (!filters.clubId || results.findIndex(team => team.clubId === filters.clubId) !== -1)
+      && (!filters.teamId || results.findIndex(team => team.teamId === filters.teamId) !== -1)
   }
 
   componentDidMount() {

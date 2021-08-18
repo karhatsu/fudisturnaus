@@ -76,8 +76,8 @@ export function deleteAgeGroup(accessContext, tournamentId, id, callback) {
   }).catch(() => handleApiConnectionError(callback))
 }
 
-export function saveGroup(accessContext, tournamentId, id, data, callback) {
-  const url = `/api/v1/official/tournaments/${tournamentId}/groups` + (id ? `/${id}` : '')
+export function saveGroup(accessContext, pathType, tournamentId, id, data, callback) {
+  const url = `/api/v1/official/tournaments/${tournamentId}/${pathType}` + (id ? `/${id}` : '')
   const method = id ? 'PATCH' : 'POST'
   fetch(url, {
     method,
@@ -88,8 +88,8 @@ export function saveGroup(accessContext, tournamentId, id, data, callback) {
   }).catch(() => handleApiConnectionError(callback))
 }
 
-export function deleteGroup(accessContext, tournamentId, id, callback) {
-  fetch(`/api/v1/official/tournaments/${tournamentId}/groups/${id}`, {
+export function deleteGroup(accessContext, pathType, tournamentId, id, callback) {
+  fetch(`/api/v1/official/tournaments/${tournamentId}/${pathType}/${id}`, {
     method: 'DELETE',
     headers: buildHeaders(accessContext),
   }).then(response => {

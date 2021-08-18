@@ -9,6 +9,7 @@ class PlayoffMatch < ApplicationRecord
   belongs_to :away_team_origin, polymorphic: true
   belongs_to :home_team, class_name: 'Team', optional: true
   belongs_to :away_team, class_name: 'Team', optional: true
+  belongs_to :playoff_group, optional: true
 
   has_many :playoff_matches_as_home_team, as: :home_team_origin, class_name: 'PlayoffMatch'
   has_many :playoff_matches_as_away_team, as: :away_team_origin, class_name: 'PlayoffMatch'
@@ -68,7 +69,7 @@ class PlayoffMatch < ApplicationRecord
   end
 
   def draw_not_allowed
-    errors.add :base, 'Jatko-ottelu ei voi päättyä tasan' if home_goals && away_goals && home_goals == away_goals
+    errors.add :base, 'Jatko-ottelu ei voi päättyä tasan' if !playoff_group_id && home_goals && away_goals && home_goals == away_goals
   end
 
   def teams_are_required

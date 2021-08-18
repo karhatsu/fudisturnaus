@@ -98,6 +98,8 @@ export default class TournamentManagementPage extends React.PureComponent {
         {this.renderGroupStageMatchesSection()}
         <div className="title-2">Tasatilanteen ratkaisu arvalla</div>
         {this.renderLotterySection()}
+        <div className="title-2">Jatkolohkot</div>
+        {this.renderPlayoffGroupsSection()}
         <div className="title-2">Jatko-ottelut</div>
         {this.renderPlayoffMatchesSection()}
         <div className="title-2">Turnauksen linkit</div>
@@ -179,7 +181,9 @@ export default class TournamentManagementPage extends React.PureComponent {
     return (
       <div className="tournament-management__section tournament-management__section--groups">
         {ageGroups.length > 0 ? this.renderGroups() : this.renderCannotAddGroups()}
-        {ageGroups.length > 0 && <Group ageGroups={ageGroups} onGroupSave={this.onItemSave('groups')} tournamentId={id}/>}
+        {ageGroups.length > 0 && (
+          <Group ageGroups={ageGroups} onGroupSave={this.onItemSave('groups')} tournamentId={id} type="group" />
+        )}
       </div>
     )
   }
@@ -202,6 +206,7 @@ export default class TournamentManagementPage extends React.PureComponent {
         onGroupDelete={this.onItemDelete('groups')}
         onGroupSave={this.onItemSave('groups')}
         tournamentId={this.getTournamentId()}
+        type="group"
       />
     })
   }
@@ -349,8 +354,47 @@ export default class TournamentManagementPage extends React.PureComponent {
     this.setState({ tournament: { ...this.state.tournament, groups } })
   }
 
+  renderPlayoffGroupsSection() {
+    const { tournament: { ageGroups, id } } = this.state
+    return (
+      <div className="tournament-management__section">
+        <div className="tournament-item">
+          Jos jatko-otteluista halutaan laskea sarjataulukot, luo sitä varten jatkolohko.
+          Mikäli jatko-ottelut pelataan playoff-tyyppisesti, ei jatkolohkoja tarvita.
+        </div>
+        {ageGroups.length > 0 ? this.renderPlayoffGroups() : this.renderCannotAddPlayoffGroups()}
+        {ageGroups.length > 0 && (
+          <Group ageGroups={ageGroups} onGroupSave={this.onItemSave('playoffGroups')} tournamentId={id} type="playoffGroup" />
+        )}
+      </div>
+    )
+  }
+
+  renderCannotAddPlayoffGroups = () => {
+    return (
+      <div className="tournament-item">
+        Voit lisätä jatkolohkoja, kun olet lisännyt vähintään yhden sarjan.
+      </div>
+    )
+  }
+
+  renderPlayoffGroups() {
+    const { tournament: { ageGroups, playoffGroups } } = this.state
+    return playoffGroups.map(playoffGroup => {
+      return <Group
+        key={playoffGroup.id}
+        ageGroups={ageGroups}
+        group={playoffGroup}
+        onGroupDelete={this.onItemDelete('playoffGroups')}
+        onGroupSave={this.onItemSave('playoffGroups')}
+        type="playoffGroup"
+        tournamentId={this.getTournamentId()}
+      />
+    })
+  }
+
   renderPlayoffMatchesSection() {
-    const { tournament: { ageGroups, days, fields, groups, playoffMatches, teams, id, matchMinutes } } = this.state
+    const { tournament: { ageGroups, days, fields, groups, playoffGroups, playoffMatches, teams, id, matchMinutes } } = this.state
     const ageGroupsIdsWithTables = ageGroups.filter(ageGroup => ageGroup.calculateGroupTables).map(ageGroup => ageGroup.id)
     const groupIdsWithTables = groups.filter(group => ageGroupsIdsWithTables.includes(group.ageGroupId)).map(group => group.id)
     const teamsWithTables = teams.filter(team => groupIdsWithTables.includes(team.groupId))
@@ -362,6 +406,7 @@ export default class TournamentManagementPage extends React.PureComponent {
           ageGroups={ageGroups}
           fields={fields}
           groups={groups}
+          playoffGroups={playoffGroups}
           playoffMatches={playoffMatches}
           onPlayoffMatchSave={this.onItemSave('playoffMatches')}
           matchMinutes={matchMinutes}
@@ -384,13 +429,14 @@ export default class TournamentManagementPage extends React.PureComponent {
   }
 
   renderPlayoffMatches() {
-    const { tournament: { ageGroups, days, fields, groups, playoffMatches, teams, matchMinutes } } = this.state
+    const { tournament: { ageGroups, days, fields, groups, playoffGroups, playoffMatches, teams, matchMinutes } } = this.state
     return playoffMatches.map(playoffMatch => {
       return <PlayoffMatch
         ageGroups={ageGroups}
         key={playoffMatch.id}
         fields={fields}
         groups={groups}
+        playoffGroups={playoffGroups}
         playoffMatch={playoffMatch}
         playoffMatches={playoffMatches}
         onPlayoffMatchDelete={this.onItemDelete('playoffMatches')}
@@ -442,6 +488,7 @@ export default class TournamentManagementPage extends React.PureComponent {
           return a.name.localeCompare(b.name)
         }
       case 'groups':
+      case 'playoffGroups':
         return (a, b) => {
           const { ageGroups } = tournament
           const ageGroupCompare = getName(ageGroups, a.ageGroupId).localeCompare(getName(ageGroups, b.ageGroupId))

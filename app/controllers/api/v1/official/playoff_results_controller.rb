@@ -28,6 +28,7 @@ class Api::V1::Official::PlayoffResultsController < Api::V1::Official::OfficialB
   end
 
   def broadcast_result(playoff_matches)
+    playoff_group = @match.playoff_group
     ActionCable.server.broadcast(
         "results#{@tournament.id}",
         {
@@ -51,7 +52,25 @@ class Api::V1::Official::PlayoffResultsController < Api::V1::Official::OfficialB
                 clubId: match.away_team.club_id
               } : nil
             }
-          end
+          end,
+          playoffGroups: playoff_group ? [{
+            id: playoff_group.id,
+            results: playoff_group.results.map do |result|
+              {
+                ranking: result.ranking,
+                teamName: result.team_name,
+                teamId: result.team_id,
+                clubId: result.club_id,
+                matches: result.matches,
+                wins: result.wins,
+                draws: result.draws,
+                losses: result.losses,
+                goalsFor: result.goals_for,
+                goalsAgainst: result.goals_against,
+                points: result.points
+              }
+            end
+          }] : []
         }
     )
   end

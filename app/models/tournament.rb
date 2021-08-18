@@ -14,6 +14,7 @@ class Tournament < ApplicationRecord
   belongs_to :club, optional: true
   has_many :age_groups, -> {order(:name)}
   has_many :groups, -> {order(:name)}, through: :age_groups
+  has_many :playoff_groups, -> {order(:name)}, through: :age_groups
   has_many :fields, -> {order(:name)}, dependent: :destroy
 
   validates :name, presence: true
@@ -47,14 +48,14 @@ class Tournament < ApplicationRecord
 
   def group_stage_matches
     age_groups
-        .includes(groups: [group_stage_matches: :field])
+        .includes(groups: [group_stage_matches: [:field, :home_team, :away_team]])
         .flat_map { |ag| ag.groups.flat_map &:group_stage_matches }
         .sort { |a, b| [a.start_time, a.field.name] <=> [b.start_time, b.field.name] }
   end
 
   def playoff_matches
     age_groups
-        .includes(playoff_matches: :field)
+        .includes(playoff_matches: [:field, :home_team, :away_team])
         .flat_map(&:playoff_matches)
         .sort { |a, b| [a.start_time, a.field.name] <=> [b.start_time, b.field.name] }
   end
@@ -71,7 +72,16 @@ class Tournament < ApplicationRecord
           ]
         ],
         fields: [],
-        groups: [teams: :club]
+        groups: [teams: :club],
+        playoff_groups: [
+          :age_group,
+          playoff_matches: [
+            :home_team_origin,
+            :away_team_origin,
+            home_team: [:playoff_home_matches, :playoff_away_matches],
+            away_team: [:playoff_home_matches, :playoff_away_matches]
+          ]
+        ]
       }
       Tournament.where('id=?', id).includes(includes).first
     end

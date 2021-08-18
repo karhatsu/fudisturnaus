@@ -1,7 +1,10 @@
 class Api::V1::Official::TournamentsController < Api::V1::Official::OfficialBaseController
   def show
     includes = {
-        age_groups: [groups: [:age_group, :teams, group_stage_matches: [:field, :home_team, :away_team]]],
+        age_groups: [
+          groups: [:age_group, :teams, group_stage_matches: [:field, :home_team, :away_team]],
+          playoff_groups: :age_group,
+        ],
         groups: [teams: :club]
     }
     @tournament = Tournament.where(id: tournament_id).includes(includes).first

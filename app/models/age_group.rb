@@ -1,6 +1,7 @@
 class AgeGroup < ApplicationRecord
   belongs_to :tournament, touch: true
   has_many :groups, -> {order(:name)}
+  has_many :playoff_groups, -> {order(:name)}
   has_many :playoff_matches
 
   validates :name, presence: true

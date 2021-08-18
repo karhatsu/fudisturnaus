@@ -13,6 +13,10 @@ end
 
 json.group_stage_matches @tournament.group_stage_matches, partial: 'api/v1/official/group_stage_matches/group_stage_match', as: :group_stage_match
 
+json.playoff_groups @tournament.playoff_groups do |group|
+  json.partial! 'api/v1/official/groups/group', group: group
+end
+
 json.playoff_matches @tournament.playoff_matches, partial: 'api/v1/official/playoff_matches/playoff_match', as: :playoff_match
 
 json.fields @tournament.fields, partial: 'api/v1/official/fields/field', as: :field

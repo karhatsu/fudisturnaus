@@ -18,6 +18,7 @@ export default class Group extends React.PureComponent {
     }),
     onGroupDelete: PropTypes.func,
     onGroupSave: PropTypes.func.isRequired,
+    type: PropTypes.oneOf(['group', 'playoffGroup']).isRequired,
     tournamentId: PropTypes.number.isRequired,
   }
 
@@ -46,8 +47,9 @@ export default class Group extends React.PureComponent {
   }
 
   renderName() {
-    const { ageGroups, group } = this.props
-    const text = group ? `${group.name} (${getName(ageGroups, group.ageGroupId)})` : '+ Lisää uusi lohko'
+    const { ageGroups, group, type } = this.props
+    const title = type === 'playoffGroup' ? 'jatkolohko' : 'lohko'
+    const text = group ? `${group.name} (${getName(ageGroups, group.ageGroupId)})` : `+ Lisää uusi ${title}`
     return <div className={resolveTournamentItemClasses(group)}><span onClick={this.editGroup}>{text}</span></div>
   }
 
@@ -105,7 +107,7 @@ export default class Group extends React.PureComponent {
     const { group, onGroupSave, tournamentId } = this.props
     const { form } = this.state
     form.name = form.name.trim()
-    saveGroup(this.context, tournamentId, group ? group.id : undefined, form, (errors, data) => {
+    saveGroup(this.context, this.pathType(), tournamentId, group ? group.id : undefined, form, (errors, data) => {
       if (errors) {
         this.setState({ errors })
       } else {
@@ -121,7 +123,7 @@ export default class Group extends React.PureComponent {
 
   delete = () => {
     const { group: { id }, onGroupDelete, tournamentId } = this.props
-    deleteGroup(this.context, tournamentId, id, (errors) => {
+    deleteGroup(this.context, this.pathType(), tournamentId, id, (errors) => {
       if (errors) {
         this.setState({ errors })
       } else {
@@ -129,5 +131,9 @@ export default class Group extends React.PureComponent {
         onGroupDelete(id)
       }
     })
+  }
+
+  pathType = () => {
+    return this.props.type === 'playoffGroup' ? 'playoff_groups' : 'groups'
   }
 }

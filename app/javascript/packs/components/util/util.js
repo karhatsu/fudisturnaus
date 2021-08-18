@@ -1,7 +1,7 @@
 import { addMinutes, differenceInCalendarDays, format, parseISO } from 'date-fns'
 
 export function buildTournamentFromSocketData(oldTournament, data) {
-  const { groupId, groupStageMatch, playoffMatch, groupResults, resolvedPlayoffMatches } = data
+  const { groupId, groupStageMatch, playoffMatch, groupResults, resolvedPlayoffMatches, playoffGroups } = data
   const tournament = { ...oldTournament }
   if (groupStageMatch) {
     const { id, homeGoals, awayGoals } = groupStageMatch
@@ -15,6 +15,11 @@ export function buildTournamentFromSocketData(oldTournament, data) {
   }
   if (resolvedPlayoffMatches) {
     tournament.playoffMatches = updatePlayoffMatches(tournament.playoffMatches, resolvedPlayoffMatches)
+  }
+  if (playoffGroups) {
+    playoffGroups.forEach(playoffGroup => {
+      tournament.playoffGroups = updateGroupResults(tournament.playoffGroups, playoffGroup.id, playoffGroup.results)
+    })
   }
   return tournament
 }

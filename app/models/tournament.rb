@@ -48,14 +48,14 @@ class Tournament < ApplicationRecord
 
   def group_stage_matches
     age_groups
-        .includes(groups: [group_stage_matches: :field])
+        .includes(groups: [group_stage_matches: [:field, :home_team, :away_team]])
         .flat_map { |ag| ag.groups.flat_map &:group_stage_matches }
         .sort { |a, b| [a.start_time, a.field.name] <=> [b.start_time, b.field.name] }
   end
 
   def playoff_matches
     age_groups
-        .includes(playoff_matches: :field)
+        .includes(playoff_matches: [:field, :home_team, :away_team])
         .flat_map(&:playoff_matches)
         .sort { |a, b| [a.start_time, a.field.name] <=> [b.start_time, b.field.name] }
   end
@@ -72,7 +72,14 @@ class Tournament < ApplicationRecord
           ]
         ],
         fields: [],
-        groups: [teams: :club]
+        groups: [teams: :club],
+        playoff_groups: [
+          :age_group,
+          playoff_matches: [
+            home_team: [:playoff_home_matches, :playoff_away_matches],
+            away_team: [:playoff_home_matches, :playoff_away_matches]
+          ]
+        ]
       }
       Tournament.where('id=?', id).includes(includes).first
     end

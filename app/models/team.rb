@@ -3,6 +3,8 @@ class Team < ApplicationRecord
   belongs_to :group, touch: true
   has_many :group_stage_home_matches, foreign_key: :home_team_id, class_name: 'GroupStageMatch'
   has_many :group_stage_away_matches, foreign_key: :away_team_id, class_name: 'GroupStageMatch'
+  has_many :playoff_home_matches, foreign_key: :home_team_id, class_name: 'PlayoffMatch'
+  has_many :playoff_away_matches, foreign_key: :away_team_id, class_name: 'PlayoffMatch'
 
   validates :name, presence: true
   validates :group_stage_number, numericality: { only_integer: true, greater_than_or_equal_to: 1, allow_nil: true }
@@ -12,8 +14,8 @@ class Team < ApplicationRecord
 
   delegate :age_group_id, to: :group
 
-  def group_results(teams = nil)
-    TeamGroupResults.new self, teams
+  def group_results(playoff = false, teams = nil)
+    TeamGroupResults.new self, playoff, teams
   end
 
   private

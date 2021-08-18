@@ -150,7 +150,6 @@ ActiveRecord::Schema.define(version: 2021_08_10_090713) do
   add_foreign_key "group_stage_matches", "groups"
   add_foreign_key "group_stage_matches", "teams", column: "away_team_id"
   add_foreign_key "group_stage_matches", "teams", column: "home_team_id"
-  add_foreign_key "groups", "age_groups"
   add_foreign_key "playoff_groups", "age_groups"
   add_foreign_key "playoff_matches", "fields"
   add_foreign_key "playoff_matches", "playoff_groups"

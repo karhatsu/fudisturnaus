@@ -9,9 +9,12 @@ class PlayoffGroup < ApplicationRecord
   delegate :equal_points_rule, to: :age_group
 
   def results
+    calculate_group_results teams, true
+  end
+
+  def teams
     home_teams = playoff_matches.map(&:home_team)
     away_teams = playoff_matches.map(&:away_team)
-    teams = (home_teams + away_teams).uniq.select {|t| t}
-    calculate_group_results teams, true
+    (home_teams + away_teams).uniq.select {|t| t}
   end
 end

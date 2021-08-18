@@ -28,13 +28,10 @@ end
 
 json.age_groups @tournament.age_groups, :id, :name
 json.groups @tournament.groups do |group|
-  json.(group, :id, :name, :age_group_id)
-  json.age_group group.age_group, :name
-  # update Api::V1::Official::GroupStageResultsController if more fields are added
-  json.results group.results, :ranking, :team_name, :team_id, :club_id, :matches, :wins, :draws, :losses, :goals_for, :goals_against, :points, :lot
-  json.teams group.teams do |team|
-    json.(team, :id, :club_id)
-  end
+  json.partial! 'group', group: group
+end
+json.playoff_groups @tournament.playoff_groups do |playoff_group|
+  json.partial! 'group', group: playoff_group
 end
 json.teams @tournament.teams, :id, :name, :club_id, :group_id, :age_group_id
 json.clubs @tournament.clubs, :id, :name, :logo_url

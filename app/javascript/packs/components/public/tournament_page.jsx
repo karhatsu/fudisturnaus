@@ -175,6 +175,7 @@ export default class TournamentPage extends React.PureComponent {
         {this.renderMatches(groupStageMatches, 'Alkulohkojen ottelut', tournament.playoffMatches.length, true)}
         {this.renderGroupTables()}
         {this.renderMatches(filteredPlayoffMatches, 'Jatko-ottelut', filteredPlayoffMatches.length)}
+        {this.renderPlayoffGroupTables()}
         <InfoBox/>
       </div>
     )
@@ -268,6 +269,19 @@ export default class TournamentPage extends React.PureComponent {
           <div className="title-2">Sarjataulukot</div>
           <div className="group-results row">{filteredGroups.map(group => this.renderGroup(group, filteredGroups.length))}</div>
         </React.Fragment>
+      )
+    }
+  }
+
+  renderPlayoffGroupTables = () => {
+    const { filters, tournament: { calculateGroupTables, playoffGroups } } = this.state
+    const filteredGroups = playoffGroups.filter(this.isFilterGroup)
+    if (calculateGroupTables && filteredGroups.length && !filters.day) {
+      return (
+        <>
+          <div className="title-2">Jatkolohkot</div>
+          <div className="group-results row">{filteredGroups.map(group => this.renderGroup(group, filteredGroups.length))}</div>
+        </>
       )
     }
   }

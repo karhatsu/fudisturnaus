@@ -236,7 +236,7 @@ export default class PlayoffMatch extends React.PureComponent {
       return (
         <div className="form__field">
           <select onChange={this.changeValue('playoffGroupId')} value={this.state.form.playoffGroupId || ''}>
-            <option>- Jatkolohko -</option>
+            <option value="">- Jatkolohko -</option>
             {groups.map(playoffGroup => {
               const { id, name } = playoffGroup
               return <option key={id} value={id}>{name}</option>

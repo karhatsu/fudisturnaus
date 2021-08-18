@@ -69,7 +69,7 @@ class PlayoffMatch < ApplicationRecord
   end
 
   def draw_not_allowed
-    errors.add :base, 'Jatko-ottelu ei voi päättyä tasan' if home_goals && away_goals && home_goals == away_goals
+    errors.add :base, 'Jatko-ottelu ei voi päättyä tasan' if !playoff_group_id && home_goals && away_goals && home_goals == away_goals
   end
 
   def teams_are_required

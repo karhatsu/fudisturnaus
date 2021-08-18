@@ -76,6 +76,8 @@ class Tournament < ApplicationRecord
         playoff_groups: [
           :age_group,
           playoff_matches: [
+            :home_team_origin,
+            :away_team_origin,
             home_team: [:playoff_home_matches, :playoff_away_matches],
             away_team: [:playoff_home_matches, :playoff_away_matches]
           ]

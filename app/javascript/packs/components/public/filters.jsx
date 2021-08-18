@@ -96,7 +96,7 @@ export default class Filters extends React.PureComponent {
     const filterGroup = groupId ? groups.find(group => group.id === groupId) : null
     return clubs.filter(club => {
       return (!ageGroupId || teams.find(team => team.clubId === club.id && team.ageGroupId === ageGroupId)) &&
-        (!filterGroup || filterGroup.teams.find(team => team.clubId === club.id))
+        (!filterGroup || filterGroup.results.find(team => team.clubId === club.id))
     })
   }
 

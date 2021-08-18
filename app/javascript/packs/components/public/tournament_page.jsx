@@ -293,12 +293,12 @@ export default class TournamentPage extends React.PureComponent {
 
   isFilterGroup = group => {
     const { filters } = this.state
-    const { ageGroupId, id: groupId, teams, results } = group
+    const { ageGroupId, id: groupId, results } = group
     return results.length
       && (!filters.ageGroupId || filters.ageGroupId === ageGroupId)
       && (!filters.groupId || filters.groupId === groupId)
-      && (!filters.clubId || teams.findIndex(team => team.clubId === filters.clubId) !== -1)
-      && (!filters.teamId || teams.findIndex(team => team.id === filters.teamId) !== -1)
+      && (!filters.clubId || results.findIndex(team => team.clubId === filters.clubId) !== -1)
+      && (!filters.teamId || results.findIndex(team => team.teamId === filters.teamId) !== -1)
   }
 
   componentDidMount() {

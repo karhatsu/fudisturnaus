@@ -488,6 +488,7 @@ export default class TournamentManagementPage extends React.PureComponent {
           return a.name.localeCompare(b.name)
         }
       case 'groups':
+      case 'playoffGroups':
         return (a, b) => {
           const { ageGroups } = tournament
           const ageGroupCompare = getName(ageGroups, a.ageGroupId).localeCompare(getName(ageGroups, b.ageGroupId))

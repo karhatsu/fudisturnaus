@@ -230,12 +230,14 @@ export default class PlayoffMatch extends React.PureComponent {
 
   renderPlayoffGroupsDropDown() {
     const { playoffGroups } = this.props
-    if (playoffGroups.length) {
+    const { ageGroupId } = this.state.form
+    const groups = ageGroupId && playoffGroups.filter(g => g.ageGroupId === parseInt(ageGroupId))
+    if (groups?.length) {
       return (
         <div className="form__field">
           <select onChange={this.changeValue('playoffGroupId')} value={this.state.form.playoffGroupId || ''}>
             <option>- Jatkolohko -</option>
-            {playoffGroups.map(playoffGroup => {
+            {groups.map(playoffGroup => {
               const { id, name } = playoffGroup
               return <option key={id} value={id}>{name}</option>
             })}

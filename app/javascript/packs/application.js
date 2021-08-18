@@ -7,7 +7,7 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-import PublicMain from './components/public/main'
+import PublicMain from '../src/public/main'
 import WebpackerReact from 'webpacker-react'
 
 WebpackerReact.setup({ PublicMain })

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { addDays, parseISO } from 'date-fns'
-import { parseFromTimeZone } from 'date-fns-timezone'
+import { addDays } from 'date-fns'
+import { zonedTimeToUtc } from 'date-fns-tz'
 import { deletePlayoffMatch, savePlayoffMatch } from './api_client'
 import AccessContext from '../util/access_context'
 import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util/date_util'
@@ -331,7 +331,7 @@ export default class PlayoffMatch extends React.PureComponent {
       homeTeamOriginType: this.parseOriginType(homeTeamOrigin),
       homeTeamOriginRule,
       playoffGroupId,
-      startTime: addDays(parseFromTimeZone(parseISO(`${tournamentDate}T${startTime}`), { timeZone: 'Europe/Helsinki' }), day - 1),
+      startTime: addDays(zonedTimeToUtc(`${tournamentDate} ${startTime}`, 'Europe/Helsinki'), day - 1),
       title,
     }
     savePlayoffMatch(this.context, tournamentId, id, data, (errors, data) => {

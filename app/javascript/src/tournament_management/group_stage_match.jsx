@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { addDays, parseISO } from 'date-fns'
-import { parseFromTimeZone } from 'date-fns-timezone'
+import { addDays } from 'date-fns'
+import { zonedTimeToUtc } from 'date-fns-tz'
 import { deleteGroupStageMatch, saveGroupStageMatch } from './api_client'
 import AccessContext from '../util/access_context'
 import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util/date_util'
-import { resolveTournamentItemClasses, resolveSuggestedTime, getName } from '../util/util'
+import { getName, resolveSuggestedTime, resolveTournamentItemClasses } from '../util/util'
 import IdNameSelect from '../form/id_name_select'
 import { idNamePropType } from '../util/custom_prop_types'
 import FormErrors from '../form/form_errors'
@@ -205,7 +205,7 @@ export default class GroupStageMatch extends React.PureComponent {
   submit = () => {
     const { groupStageMatch, onGroupStageMatchSave, tournamentId, tournamentDate } = this.props
     const { form: { day, startTime } } = this.state
-    const isoStartTime = addDays(parseFromTimeZone(parseISO(`${tournamentDate}T${startTime}`), { timeZone: 'Europe/Helsinki' }), day - 1)
+    const isoStartTime = addDays(zonedTimeToUtc(`${tournamentDate} ${startTime}`, 'Europe/Helsinki'), day - 1)
     const form = { ...this.state.form, startTime: isoStartTime }
     const id = groupStageMatch ? groupStageMatch.id : undefined
     saveGroupStageMatch(this.context, tournamentId, id, form, (errors, data) => {

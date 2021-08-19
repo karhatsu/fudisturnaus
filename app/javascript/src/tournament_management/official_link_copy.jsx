@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import * as clipboard from 'clipboard-polyfill'
 import Button from '../form/button'
 import Message from '../components/message'
+import { buildUrl } from '../util/url_util'
 
 export default class OfficialLinkCopy extends React.PureComponent {
   static propTypes = {
@@ -35,9 +36,7 @@ export default class OfficialLinkCopy extends React.PureComponent {
   }
 
   copyOfficialLink = () => {
-    const location = window.location
-    const port = location.port ? `:${location.port}` : ''
-    const url = `${location.protocol}//${location.hostname}${port}${this.props.path}`
+    const url = buildUrl(this.props.path)
     clipboard.writeText(url).then(() => {
       this.setState({ officialLinkCopied: true })
       setTimeout(() => {

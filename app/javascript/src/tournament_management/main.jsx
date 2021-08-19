@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import * as clipboard from 'clipboard-polyfill'
 
 import { fetchTournament, updateTournament } from './api_client'
 import { deleteTournament } from '../admin/api_client'
@@ -19,6 +20,7 @@ import OfficialLinkCopy from './official_link_copy'
 import Button from '../form/button'
 import FormErrors from '../form/form_errors'
 import Message from '../components/message'
+import { buildUrl } from '../util/url_util'
 
 /* eslint-disable max-len */
 const linkTexts = {
@@ -60,6 +62,7 @@ export default class TournamentManagementPage extends React.PureComponent {
       deleteErrors: [],
       error: false,
       tournament: undefined,
+      emailCopied: false,
     }
   }
 
@@ -104,6 +107,7 @@ export default class TournamentManagementPage extends React.PureComponent {
         {this.renderPlayoffMatchesSection()}
         <div className="title-2">Turnauksen linkit</div>
         {this.renderTournamentLinks()}
+        {this.renderEmailContent()}
         {this.renderDeleteButton()}
         {this.renderBackLink()}
       </div>
@@ -534,6 +538,42 @@ export default class TournamentManagementPage extends React.PureComponent {
         />
       </React.Fragment>
     )
+  }
+
+  renderEmailContent() {
+    if (!this.props.official) {
+      const { emailCopied } = this.state
+      return (
+        <>
+          <div className="title-2">Sähköposti</div>
+          <div className="tournament-management__section">
+            <Button onClick={this.copyEmailContent} label="Kopioi teksti" type="primary" />
+            {emailCopied && <Message type="success">Sähköposti kopioitu leikepöydälle</Message>}
+          </div>
+        </>
+      )
+    }
+  }
+
+  copyEmailContent = () => {
+    const { tournament } = this.state
+    const email = `Moikka!
+
+Tällä linkillä pääset syöttämään turnauksen sarjat ja ottelut:
+${buildUrl(`/official/${tournament.accessKey}`)}
+
+Tätä linkkiä voit jakaa osallistuville joukkueille:
+${buildUrl(`/t/${tournament.slug}`)}
+
+Laita viestiä jos tarvitset lisäohjeita, niin autan mielelläni.
+
+Henri`
+    clipboard.writeText(email).then(() => {
+      this.setState({ emailCopied: true })
+      setTimeout(() => {
+        this.setState({ emailCopied: false })
+      }, 5000)
+    }).catch(console.error)
   }
 
   renderDeleteButton() {

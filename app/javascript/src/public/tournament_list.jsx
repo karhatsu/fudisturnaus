@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { addDays, endOfDay, endOfWeek, isAfter, isBefore, isSameDay, parseISO } from 'date-fns'
+import { addDays, endOfDay, endOfWeek, isBefore, isSameDay, parseISO } from 'date-fns'
 
 import { fetchTournaments } from './api_client'
 import Loading from '../components/loading'
@@ -69,23 +69,25 @@ export default class TournamentList extends React.PureComponent {
       } else if (isSameDay(startDate, new Date()) || isSameDay(endDate, new Date())) {
         groups.today.push(tournament)
       } else if (isBefore(startDate, endOfWeek(new Date(), { weekStartsOn: 1 }))) {
-        groups.thisWeek.unshift(tournament)
+        groups.thisWeek.push(tournament)
       } else if (isBefore(startDate, endOfWeek(addDays(new Date(), 7), { weekStartsOn: 1 }))) {
-        groups.nextWeek.unshift(tournament)
+        groups.nextWeek.push(tournament)
       } else {
-        groups.later.unshift(tournament)
+        groups.later.push(tournament)
       }
     })
+    groups.thisWeek.sort(this.sortByAscendingDate)
+    groups.nextWeek.sort(this.sortByAscendingDate)
+    groups.later.sort(this.sortByAscendingDate)
     return groups
   }
 
-  findThisWeekTournaments = tournaments => {
-    return tournaments
-      .filter(t => {
-        const startDate = parseISO(t.startDate)
-        return isAfter(startDate, new Date()) && isBefore(startDate, addDays(new Date(), 7))
-      })
-      .sort((a, b) => parseISO(a.startDate) - parseISO(b.startDate))
+  sortByAscendingDate = (a, b) => {
+    const timeCompare = a.startDate.localeCompare(b.startDate)
+    if (timeCompare !== 0) {
+      return timeCompare
+    }
+    return a.name.localeCompare(b.name)
   }
 
   renderTournaments = (tournaments, title) => {

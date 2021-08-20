@@ -70,7 +70,7 @@ export default class EditableMatch extends Match {
         </div>
         {this.renderPenaltiesField()}
         <div className="match__buttons">
-          <Button onClick={this.saveResult} label="&#x2713;" type="primary" size="small" />
+          <Button onClick={this.saveResult} label="&#x2713;" type="primary" size="small" disabled={!this.canSubmit()} />
           <Button onClick={this.cancel} label="&#x2715;" type="normal" size="small" />
         </div>
       </form>
@@ -102,19 +102,35 @@ export default class EditableMatch extends Match {
   onClick = () => {
     const { match: { homeTeam, awayTeam, homeGoals, awayGoals, penalties } } = this.props
     if (!this.state.formOpen && homeTeam && awayTeam) {
-      this.setState({ formOpen: true, homeGoals, awayGoals, penalties })
+      this.setState({
+        formOpen: true,
+        homeGoals: this.initialValue(homeGoals),
+        awayGoals: this.initialValue(awayGoals),
+        initialHomeGoals: this.initialValue(homeGoals),
+        initialAwayGoals: this.initialValue(awayGoals),
+        penalties,
+      })
     }
+  }
+
+  initialValue = value => value !== null ? value.toString() : ''
+
+  canSubmit = () => {
+    const { homeGoals, awayGoals, initialHomeGoals, initialAwayGoals } = this.state
+    const changed = homeGoals !== initialHomeGoals || awayGoals !== initialAwayGoals
+    const both = (homeGoals === '' && awayGoals === '') || (this.isNumber(homeGoals) && this.isNumber(awayGoals))
+    return changed && both
+  }
+
+  isNumber = value => {
+    return parseInt(value).toString() === value
   }
 
   cancel = () => {
     this.setState({ formOpen: false, errors: [] })
   }
 
-  setGoals = name => {
-    return event => {
-      this.setState({ [name]: parseInt(event.target.value) })
-    }
-  }
+  setGoals = name => event => this.setState({ [name]: event.target.value })
 
   setPenalties = event => {
     this.setState({ penalties: event.target.checked })
@@ -123,7 +139,7 @@ export default class EditableMatch extends Match {
   saveResult = () => {
     const { match: { id, type }, tournamentId } = this.props
     const { homeGoals, awayGoals, penalties } = this.state
-    saveResult(this.context, tournamentId, type, id, homeGoals, awayGoals, penalties, (errors) => {
+    saveResult(this.context, tournamentId, type, id, parseInt(homeGoals), parseInt(awayGoals), penalties, (errors) => {
       if (errors) {
         this.setState({ errors })
       } else {

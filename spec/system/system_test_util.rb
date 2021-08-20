@@ -5,7 +5,7 @@ def fill_result(match_index, home_goals, away_goals, penalties = false)
   if penalties
     page.find('.match__penalties input').check
   end
-  page.all('.match__button')[0].click
+  page.find('.match__buttons .button--primary').native.send_keys(:return)
 end
 
 def expect_match_info(start_time, age_group_name, group_name, home_team_name, away_team_name, field_name = nil, index = 0)

@@ -62,7 +62,7 @@ export default class EditableMatch extends Match {
 
   renderForm() {
     return (
-      <div>
+      <form>
         <div className="match__result-fields">
           {this.renderGoalsField('homeGoals')}
           <span className="match__goals-separator">-</span>
@@ -73,7 +73,7 @@ export default class EditableMatch extends Match {
           <Button onClick={this.saveResult} label="&#x2713;" type="primary" size="small" />
           <Button onClick={this.cancel} label="&#x2715;" type="normal" size="small" />
         </div>
-      </div>
+      </form>
     )
   }
 

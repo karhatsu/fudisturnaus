@@ -52,25 +52,35 @@ $inputHeight: 16px;
   cursor: pointer;
   padding: 8px 16px;
   -webkit-appearance: none;
+
+  &:hover {
+    border-width: 2px;
+    padding: 7px 15px;
+  }
+
+  &--primary {
+    border: 1px solid $green;
+
+    &:disabled {
+      border: 1px solid $gray;
+      cursor: not-allowed;
+
+      &:hover {
+        border-width: 1px;
+        padding: 8px 16px;
+      }
+    }
+  }
+
+  &--danger {
+    border: 1px solid $red;
+  }
 }
 
 .form__buttons {
   .button {
     margin-right: 8px;
   }
-}
-
-.button--primary {
-  border: 1px solid $green;
-}
-
-.button--primary:disabled {
-  border: 1px solid $gray;
-  cursor: not-allowed;
-}
-
-.button--danger {
-  border: 1px solid $red;
 }
 
 .form--vertical {

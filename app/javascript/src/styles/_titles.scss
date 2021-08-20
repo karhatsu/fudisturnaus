@@ -58,6 +58,8 @@
 .title-1, .title-2 {
   font-weight: 600;
   margin-top: 32px;
+  display: flex;
+  align-items: center;
 }
 
 .title-1 {
@@ -65,15 +67,7 @@
   line-height: 20px;
 
   .badge {
-    margin: 8px 0;
-  }
-
-  @media only screen and (min-width: 48em) {
-    display: flex;
-
-    .badge {
-      margin: 0 8px;
-    }
+    margin-left: 8px;
   }
 }
 

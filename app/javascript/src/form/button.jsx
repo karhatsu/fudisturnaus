@@ -6,6 +6,7 @@ export default class Button extends React.PureComponent {
     disabled: PropTypes.bool,
     onClick: PropTypes.func.isRequired,
     label: PropTypes.string.isRequired,
+    size: PropTypes.oneOf(['small']),
     type: PropTypes.oneOf(['primary', 'normal', 'danger']).isRequired,
   }
 
@@ -19,14 +20,12 @@ export default class Button extends React.PureComponent {
   }
 
   classNames = () => {
-    switch (this.props.type) {
-      case 'primary':
-        return 'button button--primary'
-      case 'danger':
-        return 'button button--danger'
-      default:
-        return 'button'
-    }
+    const { size, type } = this.props
+    const classes = ['button']
+    if (size === 'small') classes.push('button--small')
+    if (type === 'primary') classes.push('button--primary')
+    else if (type === 'danger') classes.push('button--danger')
+    return classes.join(' ')
   }
 
   onClick = event => {

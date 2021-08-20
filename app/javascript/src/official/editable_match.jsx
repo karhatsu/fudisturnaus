@@ -4,6 +4,7 @@ import Match from '../public/match'
 import { matchTypes } from '../util/enums'
 import { saveResult } from '../tournament_management/api_client'
 import AccessContext from '../util/access_context'
+import Button from '../form/button'
 
 export default class EditableMatch extends Match {
   static propTypes = {
@@ -69,8 +70,8 @@ export default class EditableMatch extends Match {
         </div>
         {this.renderPenaltiesField()}
         <div className="match__buttons">
-          <input type="button" value="&#x2705;" onClick={this.saveResult} className="match__button"/>
-          <input type="button" value="&#x274C;" onClick={this.cancel} className="match__button"/>
+          <Button onClick={this.saveResult} label="&#x2713;" type="primary" size="small" />
+          <Button onClick={this.cancel} label="&#x2715;" type="normal" size="small" />
         </div>
       </div>
     )

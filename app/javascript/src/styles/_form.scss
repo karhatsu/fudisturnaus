@@ -75,6 +75,14 @@ $inputHeight: 16px;
   &--danger {
     border: 1px solid $red;
   }
+
+  &--small {
+    padding: 4px 8px;
+
+    &:hover {
+      padding: 3px 7px;
+    }
+  }
 }
 
 .form__buttons {

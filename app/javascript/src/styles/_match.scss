@@ -91,16 +91,10 @@
   .match__buttons {
     margin-top: 4px;
     text-align: right;
-  }
 
-  .match__button {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 1px;
-    margin-left: 16px;
-    outline: none;
+    .button:first-child {
+      margin-right: 8px;
+    }
   }
 }
 

@@ -7,29 +7,29 @@
 
 .match-time-row {
   margin-top: 16px;
-}
 
-.match-time-row--new-date {
-  margin-top: 48px;
+  &--new-date {
+    margin-top: 48px;
+  }
 }
 
 .match {
   @include white-box(false);
 
-  .match--editable {
+  &--editable {
     cursor: pointer;
   }
 
-  .match__row1 {
+  &__row1 {
     display: flex;
     flex-direction: row;
   }
 
-  .match__matchInfo {
+  &__matchInfo {
     flex-grow: 1;
   }
 
-  .match__teams {
+  &__teams {
     font-size: 16px;
     font-weight: 600;
     margin-top: 4px;
@@ -37,21 +37,21 @@
     flex-wrap: wrap;
   }
 
-  .match__teams-separator, .match__goals-separator {
+  &__teams-separator, &__goals-separator {
     margin: 0 4px;
   }
 
-  .match__playoff-title {
+  &__playoff-title {
     margin-right: 4px;
   }
 
-  .match__start-time {
+  &__start-time {
     color: $green;
     font-weight: 600;
     margin-right: 4px;
   }
 
-  .match__result {
+  &__result {
     color: $green;
     font-size: 16px;
     font-weight: 600;
@@ -62,15 +62,15 @@
     margin-left: 4px;
   }
 
-  .match__no-result {
+  &__no-result {
     color: $red;
   }
 
-  .match__result-fields {
+  &__result-fields {
     text-align: right;
   }
 
-  .match__goals-field {
+  &__goals-field {
     font-size: 14px;
     text-align: center;
     width: 20px;
@@ -84,11 +84,11 @@
     }
   }
 
-  .match__penalties {
+  &__penalties {
     text-align: right;
   }
 
-  .match__buttons {
+  &__buttons {
     margin-top: 4px;
     text-align: right;
 
@@ -96,8 +96,8 @@
       margin-right: 8px;
     }
   }
-}
 
-.match--editable {
-  @include white-box(true);
+  &--editable {
+    @include white-box(true);
+  }
 }

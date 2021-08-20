@@ -64,9 +64,9 @@ export default class EditableMatch extends Match {
     return (
       <form>
         <div className="match__result-fields">
-          {this.renderGoalsField('homeGoals')}
+          {this.renderGoalsField('homeGoals', 1)}
           <span className="match__goals-separator">-</span>
-          {this.renderGoalsField('awayGoals')}
+          {this.renderGoalsField('awayGoals', 2)}
         </div>
         {this.renderPenaltiesField()}
         <div className="match__buttons">
@@ -77,10 +77,10 @@ export default class EditableMatch extends Match {
     )
   }
 
-  renderGoalsField(name) {
+  renderGoalsField(name, tabIndex) {
     const goals = this.state[name]
     const value = goals || goals === 0 ? goals : ''
-    return <input type="number" value={value} onChange={this.setGoals(name)} className="match__goals-field"/>
+    return <input type="number" value={value} onChange={this.setGoals(name)} className="match__goals-field" tabIndex={tabIndex} />
   }
 
   renderPenaltiesField() {

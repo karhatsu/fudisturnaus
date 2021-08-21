@@ -42,6 +42,7 @@ export default class EditableMatch extends Match {
   constructor(props) {
     super(props)
     this.state = { formOpen: false, errors: [] }
+    this.homeGoalsRef = React.createRef()
   }
 
   resolveMainClasses() {
@@ -64,7 +65,7 @@ export default class EditableMatch extends Match {
     return (
       <form>
         <div className="match__result-fields">
-          {this.renderGoalsField('homeGoals', 1)}
+          {this.renderGoalsField('homeGoals', 1, this.homeGoalsRef)}
           <span className="match__goals-separator">-</span>
           {this.renderGoalsField('awayGoals', 2)}
         </div>
@@ -77,10 +78,19 @@ export default class EditableMatch extends Match {
     )
   }
 
-  renderGoalsField(name, tabIndex) {
+  renderGoalsField(name, tabIndex, ref) {
     const goals = this.state[name]
     const value = goals || goals === 0 ? goals : ''
-    return <input type="number" value={value} onChange={this.setGoals(name)} className="match__goals-field" tabIndex={tabIndex} />
+    return (
+      <input
+        type="number"
+        value={value}
+        onChange={this.setGoals(name)}
+        className="match__goals-field"
+        tabIndex={tabIndex}
+        ref={ref}
+      />
+    )
   }
 
   renderPenaltiesField() {
@@ -146,5 +156,11 @@ export default class EditableMatch extends Match {
         this.setState({ formOpen: false, errors: [] })
       }
     })
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevState.formOpen && this.state.formOpen) {
+      this.homeGoalsRef.current.focus()
+    }
   }
 }

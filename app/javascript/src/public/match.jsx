@@ -43,13 +43,13 @@ export default class Match extends React.PureComponent {
     const { match: { startTime, field, homeTeam, awayTeam, title, ageGroup, group }, tournamentDays } = this.props
     return (
       <div className={this.resolveMainClasses()} onClick={this.onClick}>
-        <div className="match__row1">
-          <div className="match__matchInfo">
-            {this.renderMatchInfo(tournamentDays, startTime, field, ageGroup, group)}
-            <div className="match__teams">
-              {this.renderPlayoffMatchTitle(homeTeam, awayTeam, title)}
-              {this.renderTeams(homeTeam, awayTeam)}
-            </div>
+        <div className="match__row">
+          {this.renderMatchInfo(tournamentDays, startTime, field, ageGroup, group)}
+        </div>
+        <div className="match__row">
+          <div className="match__teams">
+            {this.renderPlayoffMatchTitle(homeTeam, awayTeam, title)}
+            {this.renderTeams(homeTeam, awayTeam)}
           </div>
           <div className="match__result">{this.renderResult()}</div>
         </div>

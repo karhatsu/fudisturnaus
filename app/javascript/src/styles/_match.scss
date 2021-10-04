@@ -20,13 +20,8 @@
     cursor: pointer;
   }
 
-  &__row1 {
+  &__row {
     display: flex;
-    flex-direction: row;
-  }
-
-  &__matchInfo {
-    flex-grow: 1;
   }
 
   &__teams {
@@ -35,6 +30,7 @@
     margin-top: 4px;
     display: flex;
     flex-wrap: wrap;
+    flex-grow: 1;
   }
 
   &__teams-separator, &__goals-separator {

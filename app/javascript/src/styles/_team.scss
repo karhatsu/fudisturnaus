@@ -2,7 +2,8 @@
 @import 'shared';
 
 .team {
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
 
   &--selected {
     color: $green;

@@ -119,6 +119,7 @@ export default class EditableMatch extends Match {
         initialHomeGoals: this.initialValue(homeGoals),
         initialAwayGoals: this.initialValue(awayGoals),
         penalties,
+        initialPenalties: penalties,
       })
     }
   }
@@ -126,8 +127,8 @@ export default class EditableMatch extends Match {
   initialValue = value => value !== null ? value.toString() : ''
 
   canSubmit = () => {
-    const { homeGoals, awayGoals, initialHomeGoals, initialAwayGoals } = this.state
-    const changed = homeGoals !== initialHomeGoals || awayGoals !== initialAwayGoals
+    const { homeGoals, awayGoals, penalties, initialHomeGoals, initialAwayGoals, initialPenalties } = this.state
+    const changed = homeGoals !== initialHomeGoals || awayGoals !== initialAwayGoals || penalties !== initialPenalties
     const both = (homeGoals === '' && awayGoals === '') || (this.isNumber(homeGoals) && this.isNumber(awayGoals))
     return changed && both
   }

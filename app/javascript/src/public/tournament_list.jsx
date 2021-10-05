@@ -49,12 +49,15 @@ export default class TournamentList extends React.PureComponent {
       return <Message type="error">Ei turnauksia</Message>
     }
     const groups = this.groupTournaments(tournaments)
+    const laterTitle = !groups.today.length && !groups.thisWeek.length && !groups.nextWeek.length
+      ? 'Tulevat turnaukset'
+      : 'Turnaukset myöhemmin'
     return (
       <div className="tournament-links">
         {this.renderTournaments(groups.today, 'Turnaukset tänään')}
         {this.renderTournaments(groups.thisWeek, 'Turnaukset tällä viikolla')}
         {this.renderTournaments(groups.nextWeek, 'Turnaukset ensi viikolla')}
-        {this.renderTournaments(groups.later, 'Turnaukset myöhemmin')}
+        {this.renderTournaments(groups.later, laterTitle)}
         {this.renderTournaments(groups.past, 'Päättyneet turnaukset')}
       </div>
     )

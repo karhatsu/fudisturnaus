@@ -7,6 +7,7 @@ import TournamentPage, { officialLevels } from './tournament_page'
 import PropTypes from 'prop-types'
 import Match from './match'
 import Info from './info'
+import TournamentsPage from './tournaments_page'
 
 export default class Main extends React.PureComponent {
   render() {
@@ -15,6 +16,7 @@ export default class Main extends React.PureComponent {
         <Route path="/info" component={Info}/>
         <Route path="/t/:key" component={TournamentPageWrapper} />
         <Route path="/tournaments/:key" component={TournamentPageWrapper} />
+        <Route path="/tournaments" component={TournamentsPage} />
         <Route path="/" exact component={Index} />
       </div>
     )

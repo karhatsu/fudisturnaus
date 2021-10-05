@@ -16,6 +16,7 @@ export default class TournamentList extends React.PureComponent {
     showInfo: PropTypes.bool,
     showTestTournaments: PropTypes.bool.isRequired,
     title: PropTypes.string.isRequired,
+    query: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   }
 
   constructor(props) {
@@ -113,7 +114,7 @@ export default class TournamentList extends React.PureComponent {
   }
 
   componentDidMount() {
-    fetchTournaments((err, data) => {
+    fetchTournaments(this.props.query || {}, (err, data) => {
       if (err) {
         this.setState({ error: true })
       } else {

@@ -1,7 +1,7 @@
 import { handleApiConnectionError, handleApiResponse } from '../util/api_util'
 
-export function fetchTournaments(callback) {
-  fetch('/api/v1/public/tournaments')
+export function fetchTournaments(query, callback) {
+  fetch(`/api/v1/public/tournaments?${new URLSearchParams(query).toString()}`)
     .then(response => response.json())
     .then(json => callback(null, json.tournaments))
     .catch(err => {

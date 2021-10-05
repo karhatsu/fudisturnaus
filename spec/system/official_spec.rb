@@ -137,6 +137,7 @@ describe 'official', type: :system do
       form_inputs[4].fill_in with: 'Street 10'
       form_inputs[5].fill_in with: '60'
       submit
+      sleep 0.2
       expect_item_title 'tournament', 'New name, 20.05.2019 - 21.05.2019, Test city, Street 10'
 
       edit_item 'fields', 0

@@ -1,6 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import '../styles/application.scss'
 import Index from './index'
 import TournamentPage, { officialLevels } from './tournament_page'
@@ -44,12 +43,3 @@ class TournamentPageWrapper extends React.PureComponent {
     )
   }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(
-    <BrowserRouter>
-      <Route path="/" component={Main} />
-    </BrowserRouter>,
-    document.getElementById('react-app'),
-  )
-})

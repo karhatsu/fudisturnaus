@@ -1,7 +1,6 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 
 import '../styles/application.scss'
 import TournamentPage, { officialLevels } from '../public/tournament_page'
@@ -50,18 +49,3 @@ export default class OfficialMain extends React.PureComponent {
     )
   }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  const node = document.getElementById('initial-data')
-  const props = JSON.parse(node.getAttribute('data'))
-  const { tournamentId } = props
-  ReactDOM.render(
-    <BrowserRouter>
-      <Switch>
-        <Route path="/official/:accessKey" render={routeProps => <OfficialMain {...routeProps} tournamentId={tournamentId} />}/>
-        <Route path="/results/:resultsAccessKey" render={routeProps => <OfficialMain {...routeProps} tournamentId={tournamentId} />}/>
-      </Switch>
-    </BrowserRouter>,
-    document.getElementById('official-app')
-  )
-})

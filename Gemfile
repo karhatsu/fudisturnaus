@@ -11,9 +11,7 @@ gem 'puma'
 gem 'sassc-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier'
-# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker'
-gem 'webpacker-react'
+gem 'jsbundling-rails'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'mini_racer', platforms: :ruby
 

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import queryString from 'query-string'
 
+import consumer from '../../channels/consumer'
 import Loading from '../components/loading'
 import Matches from './matches'
 import GroupResults from './group_results'
@@ -329,8 +330,7 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   subscribeToResultsChannel = tournamentId => {
-    // eslint-disable-next-line no-undef
-    App.cable.subscriptions.create({
+    consumer.subscriptions.create({
       channel: 'ResultsChannel',
       tournament_id: tournamentId,
     }, {

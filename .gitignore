@@ -40,3 +40,6 @@ yarn-debug.log*
 .idea
 .generators
 .rakeTasks
+
+/app/assets/builds/*
+!/app/assets/builds/.keep

@@ -8,6 +8,7 @@ const Index = () => {
     <TournamentList
       buildLink={buildLink}
       showInfo={true}
+      showSearch={true}
       showTestTournaments={false}
       title="fudisturnaus.com"
     />

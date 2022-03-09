@@ -9,6 +9,10 @@ $inputHeight: 16px;
   margin: 8px 0 16px;
 }
 
+.form--search {
+  margin-top: 24px;
+}
+
 .form__field {
   .label {
     font-size: 14px;
@@ -28,6 +32,12 @@ $inputHeight: 16px;
   select {
     height: 34px;
     -webkit-appearance: menulist-button;
+  }
+
+  &--long {
+    input {
+      width: 300px;
+    }
   }
 }
 

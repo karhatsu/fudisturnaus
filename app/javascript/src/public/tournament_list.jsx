@@ -18,9 +18,10 @@ const sortByAscendingDate = (a, b) => {
 }
 
 const TournamentList = props => {
-  const { buildLink, query, showInfo, showTestTournaments, title } = props
+  const { buildLink, query, showInfo, showSearch, showTestTournaments, title } = props
   const [error, setError] = useState(false)
   const [tournaments, setTournaments] = useState(undefined)
+  const [search, setSearch] = useState('')
 
   useEffect(() => {
     fetchTournaments(query || {}, (err, data) => {
@@ -42,7 +43,17 @@ const TournamentList = props => {
     )
   }, [buildLink])
 
-  const groupTournaments = () => {
+  const matchCaseInsensitive = useCallback((text) => new RegExp(search, 'i').test(text), [search])
+
+  const filterTournaments = useCallback(() => {
+    if (!search) return tournaments
+    return tournaments.filter(tournament => {
+      const { name, location, club } = tournament
+      return matchCaseInsensitive(name) || matchCaseInsensitive(location) || (club && matchCaseInsensitive(club.name))
+    })
+  }, [search, tournaments])
+
+  const groupTournaments = useCallback(tournaments => {
     const groups = { today: [], thisWeek: [], nextWeek: [], later: [], past: [] }
     tournaments.forEach(tournament => {
       const startDate = parseISO(tournament.startDate)
@@ -63,7 +74,7 @@ const TournamentList = props => {
     groups.nextWeek.sort(sortByAscendingDate)
     groups.later.sort(sortByAscendingDate)
     return groups
-  }
+  }, [sortByAscendingDate])
 
   const renderTournaments = (tournaments, title) => {
     if (tournaments.length) {
@@ -78,6 +89,17 @@ const TournamentList = props => {
     }
   }
 
+  const renderSearchBox = () => {
+    return (
+      <div className="form form--vertical form--search">
+        <div className="form__field form__field--long">
+          <div className="label">Etsi turnaus</div>
+          <input type="text" placeholder="Turnauksen nimi, paikka tai järjestäjä" value={search} onChange={e => setSearch(e.target.value)} />
+        </div>
+      </div>
+    )
+  }
+
   const renderContent = () => {
     if (error) {
       return <Message type="error">Virhe haettaessa turnauksia. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.</Message>
@@ -86,18 +108,21 @@ const TournamentList = props => {
     } else if (!tournaments.length) {
       return <Message type="error">Ei turnauksia</Message>
     }
-    const groups = groupTournaments()
+    const groups = groupTournaments(filterTournaments())
     const laterTitle = !groups.today.length && !groups.thisWeek.length && !groups.nextWeek.length
       ? 'Tulevat turnaukset'
       : 'Turnaukset myöhemmin'
     return (
-      <div className="tournament-links">
-        {renderTournaments(groups.today, 'Turnaukset tänään')}
-        {renderTournaments(groups.thisWeek, 'Turnaukset tällä viikolla')}
-        {renderTournaments(groups.nextWeek, 'Turnaukset ensi viikolla')}
-        {renderTournaments(groups.later, laterTitle)}
-        {renderTournaments(groups.past, 'Päättyneet turnaukset')}
-      </div>
+      <>
+        {showSearch && renderSearchBox()}
+        <div className="tournament-links">
+          {renderTournaments(groups.today, 'Turnaukset tänään')}
+          {renderTournaments(groups.thisWeek, 'Turnaukset tällä viikolla')}
+          {renderTournaments(groups.nextWeek, 'Turnaukset ensi viikolla')}
+          {renderTournaments(groups.later, laterTitle)}
+          {renderTournaments(groups.past, 'Päättyneet turnaukset')}
+        </div>
+      </>
     )
   }
 
@@ -115,6 +140,7 @@ TournamentList.propTypes = {
   buildLink: PropTypes.func.isRequired,
   children: PropTypes.arrayOf(PropTypes.element),
   showInfo: PropTypes.bool,
+  showSearch: PropTypes.bool,
   showTestTournaments: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   query: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),

@@ -3,10 +3,10 @@ require 'rails_helper'
 describe 'tournaments page', type: :system do
   before do
     driven_by :selenium, using: :headless_chrome
-    create :tournament, name: 'Autumn tournament 1', start_date: '2021-10-15'
-    create :tournament, name: 'Football event', start_date: '2021-10-16'
-    create :tournament, name: 'Autumn tournament 2', start_date: '2021-10-17'
-    create :tournament, name: 'Winter tournament', start_date: '2022-01-10'
+    create :tournament, name: 'Autumn tournament 1', start_date: '2031-10-15'
+    create :tournament, name: 'Football event', start_date: '2031-10-16'
+    create :tournament, name: 'Autumn tournament 2', start_date: '2031-10-17'
+    create :tournament, name: 'Winter tournament', start_date: '2032-01-10'
   end
 
   it 'lists all tournaments when no query params' do
@@ -20,12 +20,12 @@ describe 'tournaments page', type: :system do
   end
 
   it 'filters tournaments by dates and name' do
-    visit '/tournaments?name=tournament&since=2021-10-18&until=2022-01-10'
+    visit '/tournaments?name=tournament&since=2031-10-18&until=2032-01-10'
     expect_tournaments ['Winter tournament']
   end
 
   it 'filters tournaments by dates' do
-    visit '/tournaments?since=2021-10-16&until=2022-01-09'
+    visit '/tournaments?since=2031-10-16&until=2032-01-09'
     expect_tournaments ['Football event', 'Autumn tournament 2']
   end
 

@@ -1,6 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 
 import AdminLoginPage from './login_page'
 import AdminIndex from './index'
@@ -50,12 +49,3 @@ export default class AdminMain extends React.PureComponent {
     this.setState({ sessionKey })
   }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(
-    <BrowserRouter>
-      <Route path="/admin" component={AdminMain} />
-    </BrowserRouter>,
-    document.getElementById('admin-app'),
-  )
-})

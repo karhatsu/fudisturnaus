@@ -6,9 +6,10 @@
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
-        "plugin:jest/recommended"
+        "plugin:jest/recommended",
+        "plugin:react-hooks/recommended"
     ],
-    "parser": "babel-eslint",
+    "parser": "@babel/eslint-parser",
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": true

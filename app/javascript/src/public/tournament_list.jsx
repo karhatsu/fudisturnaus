@@ -51,7 +51,7 @@ const TournamentList = props => {
       const { name, location, club } = tournament
       return matchCaseInsensitive(name) || matchCaseInsensitive(location) || (club && matchCaseInsensitive(club.name))
     })
-  }, [search, tournaments])
+  }, [search, tournaments, matchCaseInsensitive])
 
   const groupTournaments = useCallback(tournaments => {
     const groups = { today: [], thisWeek: [], nextWeek: [], later: [], past: [] }
@@ -74,7 +74,7 @@ const TournamentList = props => {
     groups.nextWeek.sort(sortByAscendingDate)
     groups.later.sort(sortByAscendingDate)
     return groups
-  }, [sortByAscendingDate])
+  }, [])
 
   const renderTournaments = (tournaments, title) => {
     if (tournaments.length) {

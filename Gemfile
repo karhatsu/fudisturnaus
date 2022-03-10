@@ -1,19 +1,17 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.0.2'
+ruby '3.1.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '6.1.4'
+gem 'rails', '7.0.2.3'
 # Use Puma as the app server
 gem 'puma'
 # Use SassC for stylesheets
 gem 'sassc-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier'
-# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker'
-gem 'webpacker-react'
+gem 'jsbundling-rails'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'mini_racer', platforms: :ruby
 

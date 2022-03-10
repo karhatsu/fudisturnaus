@@ -9,5 +9,5 @@ Free result service for junior football tournaments (currently available only in
 ## Development
 
 ```bash
-foreman start -f Procfile.dev -p 3002
+./local.sh
 ```

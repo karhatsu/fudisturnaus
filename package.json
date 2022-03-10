@@ -21,6 +21,7 @@
     "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
     "babel-jest": "^27.5.1",

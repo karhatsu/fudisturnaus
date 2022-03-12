@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { deleteAgeGroup, saveAgeGroup } from './api_client'
 import AccessContext from '../util/access_context'
@@ -7,45 +7,20 @@ import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
 import Button from '../form/button'
 
-export default class AgeGroup extends React.PureComponent {
-  static propTypes = {
-    ageGroup: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      calculateGroupTables: PropTypes.bool.isRequired,
-    }),
-    onAgeGroupDelete: PropTypes.func,
-    onAgeGroupSave: PropTypes.func.isRequired,
-    tournamentId: PropTypes.number.isRequired,
-  }
+const AgeGroup = ({ ageGroup, onAgeGroupDelete, onAgeGroupSave, tournamentId }) => {
+  const accessContext = useContext(AccessContext)
+  const nameField = useRef()
+  const [formOpen, setFormOpen] = useState(false)
+  const [data, setData] = useState({})
+  const [errors, setErrors] = useState([])
 
-  static contextType = AccessContext
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      formOpen: false,
-      form: {
-        name: undefined,
-        calculateGroupTables: undefined,
-      },
-      errors: [],
+  useEffect(() => {
+    if (formOpen) {
+      nameField.current.focus()
     }
-    this.nameFieldRed = React.createRef()
-  }
+  }, [formOpen])
 
-  render() {
-    const showInstructions = this.state.formOpen && !this.props.ageGroup
-    return (
-      <div className="tournament-item">
-        {this.state.formOpen && this.renderForm()}
-        {showInstructions && this.renderInstructions()}
-        {!this.state.formOpen && this.renderName()}
-      </div>
-    )
-  }
-
-  renderInstructions() {
+  const renderInstructions = () => {
     return (
       <div className="tournament-item__instructions">
         Jos ikäluokan eri tasoilla on omat jatkopelit, lisää jokaiselle tasolle oma sarja (esim. &quot;P07 haaste&quot;).
@@ -55,91 +30,103 @@ export default class AgeGroup extends React.PureComponent {
     )
   }
 
-  renderName() {
-    const { ageGroup } = this.props
+  const renderName = () => {
     const text = ageGroup ? ageGroup.name : '+ Lisää uusi sarja'
-    return <div className={resolveTournamentItemClasses(ageGroup)}><span onClick={this.editAgeGroup}>{text}</span></div>
+    return <div className={resolveTournamentItemClasses(ageGroup)}><span onClick={editAgeGroup}>{text}</span></div>
   }
 
-  renderForm() {
-    const { form: { calculateGroupTables, name } } = this.state
+  const renderForm = () => {
+    const { calculateGroupTables, name } = data
     return (
       <form className="form form--horizontal">
-        <FormErrors errors={this.state.errors}/>
+        <FormErrors errors={errors}/>
         <div className="tournament-item__form">
-          <TextField ref={this.nameFieldRed} onChange={this.changeName} placeholder="Esim. P11 tai T09 Haaste" value={name}/>
+          <TextField ref={nameField} onChange={changeName} placeholder="Esim. P11 tai T09 Haaste" value={name}/>
           <div className="form__field">
-            <input type="checkbox" onChange={this.changeCalculateGroupTables} value={true} checked={!!calculateGroupTables}/>
+            <input type="checkbox" onChange={changeCalculateGroupTables} value={true} checked={!!calculateGroupTables}/>
             Laske sarjataulukot
           </div>
           <div className="form__buttons">
-            <Button label="Tallenna" onClick={this.submit} type="primary" disabled={!this.canSubmit()}/>
-            <Button label="Peruuta" onClick={this.cancel} type="normal"/>
-            {!!this.props.ageGroup && <Button type="danger" label="Poista" onClick={this.delete}/>}
+            <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()}/>
+            <Button label="Peruuta" onClick={cancel} type="normal"/>
+            {!!ageGroup && <Button type="danger" label="Poista" onClick={handleDelete}/>}
           </div>
         </div>
       </form>
     )
   }
 
-  editAgeGroup = () => {
-    const { ageGroup } = this.props
-    this.setState({
-      formOpen: true,
-      form: {
-        name: ageGroup ? ageGroup.name : '',
-        calculateGroupTables: ageGroup && ageGroup.calculateGroupTables,
-      },
+  const editAgeGroup = () => {
+    setData({
+      name: ageGroup ? ageGroup.name : '',
+      calculateGroupTables: ageGroup && ageGroup.calculateGroupTables,
     })
+    setFormOpen(true)
   }
 
-  changeName = event => {
-    const { form } = this.state
-    this.setState({ form: { ...form, name: event.target.value } })
+  const changeName = event => {
+    setData({ ...data, name: event.target.value })
   }
 
-  changeCalculateGroupTables = event => {
-    const { form } = this.state
-    this.setState({ form: { ...form, calculateGroupTables: event.target.checked } })
+  const changeCalculateGroupTables = event => {
+    setData({ ...data, calculateGroupTables: event.target.checked })
   }
 
-  canSubmit = () => {
-    return !!this.state.form.name
+  const canSubmit = () => {
+    return !!data.name
   }
 
-  submit = () => {
-    const { ageGroup, onAgeGroupSave, tournamentId } = this.props
-    const { form } = this.state
-    form.name = form.name.trim()
-    saveAgeGroup(this.context, tournamentId, ageGroup ? ageGroup.id : undefined, form, (errors, data) => {
+  const resetForm = () => {
+    setFormOpen(false)
+    setErrors([])
+  }
+
+  const submit = () => {
+    const trimmedData = { ...data, name: data.name.trim() }
+    saveAgeGroup(accessContext, tournamentId, ageGroup ? ageGroup.id : undefined, trimmedData, (errors, data) => {
       if (errors) {
-        this.setState({ errors })
+        setErrors(errors)
       } else {
-        this.setState({ formOpen: false, errors: [] })
+        resetForm()
         onAgeGroupSave(data)
       }
     })
   }
 
-  cancel = () => {
-    this.setState({ formOpen: false, errors: [] })
+  const cancel = () => {
+    resetForm()
   }
 
-  delete = () => {
-    const { ageGroup: { id }, onAgeGroupDelete, tournamentId } = this.props
-    deleteAgeGroup(this.context, tournamentId, id, (errors) => {
+  const handleDelete = () => {
+    deleteAgeGroup(accessContext, tournamentId, ageGroup.id, (errors) => {
       if (errors) {
-        this.setState({ errors })
+        setErrors(errors)
       } else {
-        this.setState({ formOpen: false, errors: [] })
-        onAgeGroupDelete(id)
+        resetForm()
+        onAgeGroupDelete(ageGroup.id)
       }
     })
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (!prevState.formOpen && this.state.formOpen && this.nameFieldRed) {
-      this.nameFieldRed.current.focus()
-    }
-  }
+  const showInstructions = formOpen && !ageGroup
+  return (
+    <div className="tournament-item">
+      {formOpen && renderForm()}
+      {showInstructions && renderInstructions()}
+      {!formOpen && renderName()}
+    </div>
+  )
 }
+
+AgeGroup.propTypes = {
+  ageGroup: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    calculateGroupTables: PropTypes.bool.isRequired,
+  }),
+  onAgeGroupDelete: PropTypes.func,
+  onAgeGroupSave: PropTypes.func.isRequired,
+  tournamentId: PropTypes.number.isRequired,
+}
+
+export default AgeGroup

@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import { useHistory, useParams } from 'react-router'
 import { Link } from 'react-router-dom'
 import * as clipboard from 'clipboard-polyfill'
 
@@ -39,47 +40,31 @@ const linkTexts = {
 }
 /* eslint-enable max-len */
 
-export default class TournamentManagementPage extends React.PureComponent {
-  static propTypes = {
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }).isRequired,
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        id: PropTypes.string,
-      }).isRequired,
-    }).isRequired,
-    official: PropTypes.bool.isRequired,
-    titleIconLink: PropTypes.string.isRequired,
-    tournamentId: PropTypes.number,
+const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => {
+  const history = useHistory()
+  const params = useParams()
+  const accessContext = useContext(AccessContext)
+  const [deleteErrors, setDeleteErrors] = useState([])
+  const [error, setError] = useState(false)
+  const [tournament, setTournament] = useState()
+  const [emailCopied, setEmailCopied] = useState(false)
+
+  const fetchTournamentData = () => {
+    fetchTournament(accessContext, getTournamentId(), (err, tournament) => {
+      if (tournament) {
+        const teams = [...tournament.teams]
+        setTournament({ ...tournament, teams: teams.sort(getComparator(tournament, 'teams')) })
+      } else if (err && !tournament) {
+        setError(true)
+      }
+    })
   }
 
-  static contextType = AccessContext
+  useEffect(() => {
+    fetchTournamentData()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      deleteErrors: [],
-      error: false,
-      tournament: undefined,
-      emailCopied: false,
-    }
-  }
-
-  render() {
-    const { error, tournament } = this.state
-    const titlePrefix = tournament ? tournament.name : 'fudisturnaus.com'
-    const title = `${titlePrefix} - Hallintasivut`
-    return (
-      <div>
-        <Title iconLink={this.props.titleIconLink} loading={!tournament && !error} text={title}/>
-        {this.renderContent()}
-      </div>
-    )
-  }
-
-  renderContent() {
-    const { tournament } = this.state
+  const renderContent = () => {
     if (!tournament) return null
     const { visibility } = tournament
     return (
@@ -87,112 +72,95 @@ export default class TournamentManagementPage extends React.PureComponent {
         {visibility < 2 && <Message type="warning">Kun haluat julkaista otteluohjelman, muokkaa turnauksen perustietoja</Message>}
         <div className="title-2">Perustiedot</div>
         <div className="tournament-management__section tournament-management__section--tournament">
-          <TournamentFields clubs={tournament.clubs} onSave={this.onSave} tournament={tournament}/>
+          <TournamentFields clubs={tournament.clubs} onSave={onSave} tournament={tournament}/>
         </div>
         <div className="title-2">Kentät</div>
-        {this.renderFieldsSection()}
+        {renderFieldsSection()}
         <div className="title-2">Sarjat</div>
-        {this.renderAgeGroupsSection()}
+        {renderAgeGroupsSection()}
         <div className="title-2">Lohkot</div>
-        {this.renderGroupsSection()}
+        {renderGroupsSection()}
         <div className="title-2">Joukkueet</div>
-        {this.renderTeamsSection()}
+        {renderTeamsSection()}
         <div className="title-2">Alkulohkojen ottelut</div>
-        {this.renderGroupStageMatchesSection()}
+        {renderGroupStageMatchesSection()}
         <div className="title-2">Tasatilanteen ratkaisu arvalla</div>
-        {this.renderLotterySection()}
+        {renderLotterySection()}
         <div className="title-2">Jatkolohkot</div>
-        {this.renderPlayoffGroupsSection()}
+        {renderPlayoffGroupsSection()}
         <div className="title-2">Jatko-ottelut</div>
-        {this.renderPlayoffMatchesSection()}
+        {renderPlayoffMatchesSection()}
         <div className="title-2">Turnauksen linkit</div>
-        {this.renderTournamentLinks()}
-        {this.renderEmailContent()}
-        {this.renderDeleteButton()}
-        {this.renderBackLink()}
+        {renderTournamentLinks()}
+        {renderEmailContent()}
+        {renderDeleteButton()}
+        {renderBackLink()}
       </div>
     )
   }
 
-  componentDidMount() {
-    this.fetchTournamentData()
-  }
-
-  fetchTournamentData = () => {
-    fetchTournament(this.context, this.getTournamentId(), (err, tournament) => {
-      if (tournament) {
-        const teams = [...tournament.teams]
-        this.setState({ tournament: { ...tournament, teams: teams.sort(this.getComparator(tournament, 'teams')) } })
-      } else if (err && !this.state.tournament) {
-        this.setState({ error: true })
-      }
-    })
-  }
-
-  onSave = (form, callback) => {
-    updateTournament(this.context, this.getTournamentId(), form, (errors, data) => {
+  const onSave = (form, callback) => {
+    updateTournament(accessContext, getTournamentId(), form, (errors, data) => {
       callback(errors, data)
-      this.fetchTournamentData()
+      fetchTournamentData()
     })
   }
 
-  renderFieldsSection() {
+  const renderFieldsSection = () => {
     return (
       <div className="tournament-management__section tournament-management__section--fields">
-        {this.renderFields()}
-        <Field onFieldSave={this.onItemSave('fields')} tournamentId={this.getTournamentId()}/>
+        {renderFields()}
+        <Field onFieldSave={onItemSave('fields')} tournamentId={getTournamentId()}/>
       </div>
     )
   }
 
-  renderFields() {
-    const { tournament: { fields } } = this.state
-    return fields.map(field => {
+  const renderFields = () => {
+    return tournament.fields.map(field => {
       return <Field
         key={field.id}
         field={field}
-        onFieldDelete={this.onItemDelete('fields')}
-        onFieldSave={this.onItemSave('fields')}
-        tournamentId={this.getTournamentId()}
+        onFieldDelete={onItemDelete('fields')}
+        onFieldSave={onItemSave('fields')}
+        tournamentId={getTournamentId()}
       />
     })
   }
 
-  renderAgeGroupsSection() {
+  const renderAgeGroupsSection = () => {
     return (
       <div className="tournament-management__section tournament-management__section--age-groups">
-        {this.renderAgeGroups()}
-        <AgeGroup onAgeGroupSave={this.onItemSave('ageGroups')} tournamentId={this.getTournamentId()}/>
+        {renderAgeGroups()}
+        <AgeGroup onAgeGroupSave={onItemSave('ageGroups')} tournamentId={getTournamentId()}/>
       </div>
     )
   }
 
-  renderAgeGroups() {
-    const { tournament: { ageGroups } } = this.state
-    return ageGroups.map(ageGroup => {
+  const renderAgeGroups = () => {
+    return tournament.ageGroups.map(ageGroup => {
       return <AgeGroup
         key={ageGroup.id}
         ageGroup={ageGroup}
-        onAgeGroupDelete={this.onItemDelete('ageGroups')}
-        onAgeGroupSave={this.onItemSave('ageGroups')}
-        tournamentId={this.getTournamentId()}
+        onAgeGroupDelete={onItemDelete('ageGroups')}
+        onAgeGroupSave={onItemSave('ageGroups')}
+        tournamentId={getTournamentId()}
       />
     })
   }
 
-  renderGroupsSection() {
-    const { tournament: { ageGroups, id } } = this.state
+  const renderGroupsSection = () => {
+    const { ageGroups, id } = tournament
     return (
       <div className="tournament-management__section tournament-management__section--groups">
-        {ageGroups.length > 0 ? this.renderGroups() : this.renderCannotAddGroups()}
+        {ageGroups.length > 0 ? renderGroups() : renderCannotAddGroups()}
         {ageGroups.length > 0 && (
-          <Group ageGroups={ageGroups} onGroupSave={this.onItemSave('groups')} tournamentId={id} type="group" />
+          <Group ageGroups={ageGroups} onGroupSave={onItemSave('groups')} tournamentId={id} type="group" />
         )}
       </div>
     )
   }
 
-  renderCannotAddGroups = () => {
+  const renderCannotAddGroups = () => {
     return (
       <div className="tournament-item">
         Voit lisätä lohkoja, kun olet lisännyt vähintään yhden sarjan.
@@ -200,40 +168,40 @@ export default class TournamentManagementPage extends React.PureComponent {
     )
   }
 
-  renderGroups() {
-    const { tournament: { ageGroups, groups } } = this.state
+  const renderGroups = () => {
+    const { ageGroups, groups } = tournament
     return groups.map(group => {
       return <Group
         key={group.id}
         ageGroups={ageGroups}
         group={group}
-        onGroupDelete={this.onItemDelete('groups')}
-        onGroupSave={this.onItemSave('groups')}
-        tournamentId={this.getTournamentId()}
+        onGroupDelete={onItemDelete('groups')}
+        onGroupSave={onItemSave('groups')}
+        tournamentId={getTournamentId()}
         type="group"
       />
     })
   }
 
-  renderTeamsSection() {
-    const { tournament: { ageGroups, clubs, groups, id } } = this.state
+  const renderTeamsSection = () => {
+    const { ageGroups, clubs, groups, id } = tournament
     const canAddTeams = groups.length > 0
     return (
       <div className="tournament-management__section tournament-management__section--teams">
-        {canAddTeams ? this.renderGroupTeams() : this.renderCannotAddTeams()}
+        {canAddTeams ? renderGroupTeams() : renderCannotAddTeams()}
         {canAddTeams && <Team
           ageGroups={ageGroups}
           clubs={clubs}
           groups={groups}
-          onClubSave={this.onClubSave}
-          onTeamSave={this.onItemSave('teams')}
+          onClubSave={onClubSave}
+          onTeamSave={onItemSave('teams')}
           tournamentId={id}
         />}
       </div>
     )
   }
 
-  renderCannotAddTeams = () => {
+  const renderCannotAddTeams = () => {
     return (
       <div className="tournament-item">
         Voit lisätä joukkueita, kun olet lisännyt yhden lohkon.
@@ -241,8 +209,8 @@ export default class TournamentManagementPage extends React.PureComponent {
     )
   }
 
-  renderGroupTeams() {
-    const { tournament: { ageGroups, groups, teams } } = this.state
+  const renderGroupTeams = () => {
+    const { ageGroups, groups, teams } = tournament
     const teamsByGroups = teams.reduce((groupTeams, team) => {
       const { groupId } = team
       const group = groups.find(g => g.id === groupId)
@@ -257,62 +225,62 @@ export default class TournamentManagementPage extends React.PureComponent {
       return (
         <div key={group}>
           <div className="tournament-management__section-title">{group}</div>
-          {this.renderTeams(teamsByGroups[group])}
+          {renderTeams(teamsByGroups[group])}
         </div>
       )
     })
   }
 
-  renderTeams(teams) {
-    const { tournament: { ageGroups, clubs, groups } } = this.state
+  const renderTeams = (teams) => {
+    const { ageGroups, clubs, groups } = tournament
     return teams.map(team => {
       return <Team
         key={team.id}
         ageGroups={ageGroups}
         clubs={clubs}
         groups={groups}
-        onClubSave={this.onClubSave}
-        onTeamDelete={this.onItemDelete('teams')}
-        onTeamSave={this.onItemSave('teams')}
+        onClubSave={onClubSave}
+        onTeamDelete={onItemDelete('teams')}
+        onTeamSave={onItemSave('teams')}
         team={team}
-        tournamentId={this.getTournamentId()}
+        tournamentId={getTournamentId()}
       />
     })
   }
 
-  onClubSave = data => {
-    const clubs = [...this.state.tournament.clubs]
+  const onClubSave = data => {
+    const clubs = [...tournament.clubs]
     const clubIndex = clubs.findIndex(club => club.id === data.id)
     if (clubIndex === -1) {
       clubs.push(data)
       clubs.sort((a, b) => a.name.localeCompare(b.name))
-      this.setState({ tournament: { ...this.state.tournament, clubs } })
+      setTournament({ ...tournament, clubs })
     }
   }
 
-  renderGroupStageMatchesSection() {
-    const { tournament: { ageGroups, days, fields, groups, groupStageMatches, teams, id, matchMinutes } } = this.state
+  const renderGroupStageMatchesSection = () => {
+    const { ageGroups, days, fields, groups, groupStageMatches, teams, id, matchMinutes } = tournament
     const canMatches = teams.length > 1 && fields.length > 0
     return (
       <div className="tournament-management__section tournament-management__section--group-stage-matches">
-        {canMatches ? this.renderGroupStageMatches() : this.renderCannotAddGroupStageMatches()}
+        {canMatches ? renderGroupStageMatches() : renderCannotAddGroupStageMatches()}
         {canMatches && <GroupStageMatch
           ageGroups={ageGroups}
           fields={fields}
           groups={groups}
           groupStageMatches={groupStageMatches}
-          onGroupStageMatchSave={this.onItemSave('groupStageMatches')}
+          onGroupStageMatchSave={onItemSave('groupStageMatches')}
           matchMinutes={matchMinutes}
           teams={teams}
           tournamentDays={days}
           tournamentId={id}
-          tournamentDate={this.state.tournament.startDate}
+          tournamentDate={tournament.startDate}
         />}
       </div>
     )
   }
 
-  renderCannotAddGroupStageMatches = () => {
+  const renderCannotAddGroupStageMatches = () => {
     return (
       <div className="tournament-item">
         Voit lisätä otteluita, kun olet lisännyt vähintään yhden kentän ja vähintään kaksi joukkuetta.
@@ -320,8 +288,8 @@ export default class TournamentManagementPage extends React.PureComponent {
     )
   }
 
-  renderGroupStageMatches() {
-    const { tournament: { ageGroups, days, fields, groups, groupStageMatches, teams, matchMinutes } } = this.state
+  const renderGroupStageMatches = () => {
+    const { ageGroups, days, fields, groups, groupStageMatches, teams, matchMinutes } = tournament
     return groupStageMatches.map(groupStageMatch => {
       return <GroupStageMatch
         key={groupStageMatch.id}
@@ -330,51 +298,51 @@ export default class TournamentManagementPage extends React.PureComponent {
         groups={groups}
         groupStageMatch={groupStageMatch}
         groupStageMatches={groupStageMatches}
-        onClubSave={this.onClubSave}
-        onGroupStageMatchDelete={this.onItemDelete('groupStageMatches')}
-        onGroupStageMatchSave={this.onItemSave('groupStageMatches')}
+        onClubSave={onClubSave}
+        onGroupStageMatchDelete={onItemDelete('groupStageMatches')}
+        onGroupStageMatchSave={onItemSave('groupStageMatches')}
         matchMinutes={matchMinutes}
         teams={teams}
         tournamentDays={days}
-        tournamentId={this.getTournamentId()}
-        tournamentDate={this.state.tournament.startDate}
+        tournamentId={getTournamentId()}
+        tournamentDate={tournament.startDate}
       />
     })
   }
 
-  renderLotterySection() {
-    const { tournament: { ageGroups, groups } } = this.state
+  const renderLotterySection = () => {
+    const { ageGroups, groups } = tournament
     return (
       <div className="tournament-management__section tournament-management__section--lottery">
-        <Lottery ageGroups={ageGroups} groups={groups} onLotterySave={this.onLotterySave} tournamentId={this.getTournamentId()}/>
+        <Lottery ageGroups={ageGroups} groups={groups} onLotterySave={onLotterySave} tournamentId={getTournamentId()}/>
       </div>
     )
   }
 
-  onLotterySave = (groupId, data) => {
-    const groups = [...this.state.tournament.groups]
+  const onLotterySave = (groupId, data) => {
+    const groups = [...tournament.groups]
     const index = groups.findIndex(group => group.id === groupId)
     groups[index] = { ...groups[index], results: data.results }
-    this.setState({ tournament: { ...this.state.tournament, groups } })
+    setTournament({ ...tournament, groups })
   }
 
-  renderPlayoffGroupsSection() {
-    const { tournament: { ageGroups, id } } = this.state
+  const renderPlayoffGroupsSection = () => {
+    const { ageGroups, id } = tournament
     return (
       <div className="tournament-management__section">
         <div className="tournament-item">
           Jos jatko-otteluista halutaan laskea sarjataulukot, luo sitä varten jatkolohko.
           Mikäli jatko-ottelut pelataan playoff-tyyppisesti, ei jatkolohkoja tarvita.
         </div>
-        {ageGroups.length > 0 ? this.renderPlayoffGroups() : this.renderCannotAddPlayoffGroups()}
+        {ageGroups.length > 0 ? renderPlayoffGroups() : renderCannotAddPlayoffGroups()}
         {ageGroups.length > 0 && (
-          <Group ageGroups={ageGroups} onGroupSave={this.onItemSave('playoffGroups')} tournamentId={id} type="playoffGroup" />
+          <Group ageGroups={ageGroups} onGroupSave={onItemSave('playoffGroups')} tournamentId={id} type="playoffGroup" />
         )}
       </div>
     )
   }
 
-  renderCannotAddPlayoffGroups = () => {
+  const renderCannotAddPlayoffGroups = () => {
     return (
       <div className="tournament-item">
         Voit lisätä jatkolohkoja, kun olet lisännyt vähintään yhden sarjan.
@@ -382,48 +350,48 @@ export default class TournamentManagementPage extends React.PureComponent {
     )
   }
 
-  renderPlayoffGroups() {
-    const { tournament: { ageGroups, playoffGroups } } = this.state
+  const renderPlayoffGroups = () => {
+    const { ageGroups, playoffGroups } = tournament
     return playoffGroups.map(playoffGroup => {
       return <Group
         key={playoffGroup.id}
         ageGroups={ageGroups}
         group={playoffGroup}
-        onGroupDelete={this.onItemDelete('playoffGroups')}
-        onGroupSave={this.onItemSave('playoffGroups')}
+        onGroupDelete={onItemDelete('playoffGroups')}
+        onGroupSave={onItemSave('playoffGroups')}
         type="playoffGroup"
-        tournamentId={this.getTournamentId()}
+        tournamentId={getTournamentId()}
       />
     })
   }
 
-  renderPlayoffMatchesSection() {
-    const { tournament: { ageGroups, days, fields, groups, playoffGroups, playoffMatches, teams, id, matchMinutes } } = this.state
+  const renderPlayoffMatchesSection = () => {
+    const { ageGroups, days, fields, groups, playoffGroups, playoffMatches, teams, id, matchMinutes } = tournament
     const ageGroupsIdsWithTables = ageGroups.filter(ageGroup => ageGroup.calculateGroupTables).map(ageGroup => ageGroup.id)
     const groupIdsWithTables = groups.filter(group => ageGroupsIdsWithTables.includes(group.ageGroupId)).map(group => group.id)
     const teamsWithTables = teams.filter(team => groupIdsWithTables.includes(team.groupId))
     const canAddMatches = teamsWithTables.length > 1 && fields.length > 0
     return (
       <div className="tournament-management__section tournament-management__section--playoff-matches">
-        {canAddMatches ? this.renderPlayoffMatches() : this.renderCannotAddPlayoffMatches()}
+        {canAddMatches ? renderPlayoffMatches() : renderCannotAddPlayoffMatches()}
         {canAddMatches && <PlayoffMatch
           ageGroups={ageGroups}
           fields={fields}
           groups={groups}
           playoffGroups={playoffGroups}
           playoffMatches={playoffMatches}
-          onPlayoffMatchSave={this.onItemSave('playoffMatches')}
+          onPlayoffMatchSave={onItemSave('playoffMatches')}
           matchMinutes={matchMinutes}
           teams={teams}
           tournamentDays={days}
           tournamentId={id}
-          tournamentDate={this.state.tournament.startDate}
+          tournamentDate={tournament.startDate}
         />}
       </div>
     )
   }
 
-  renderCannotAddPlayoffMatches = () => {
+  const renderCannotAddPlayoffMatches = () => {
     return (
       <div className="tournament-item">
         Jatko-otteluiden lisääminen vaatii vähintään yhden kentän sekä vähintään kaksi joukkuetta sarjassa,
@@ -432,8 +400,8 @@ export default class TournamentManagementPage extends React.PureComponent {
     )
   }
 
-  renderPlayoffMatches() {
-    const { tournament: { ageGroups, days, fields, groups, playoffGroups, playoffMatches, teams, matchMinutes } } = this.state
+  const renderPlayoffMatches = () => {
+    const { ageGroups, days, fields, groups, playoffGroups, playoffMatches, teams, matchMinutes } = tournament
     return playoffMatches.map(playoffMatch => {
       return <PlayoffMatch
         ageGroups={ageGroups}
@@ -443,19 +411,18 @@ export default class TournamentManagementPage extends React.PureComponent {
         playoffGroups={playoffGroups}
         playoffMatch={playoffMatch}
         playoffMatches={playoffMatches}
-        onPlayoffMatchDelete={this.onItemDelete('playoffMatches')}
-        onPlayoffMatchSave={this.onItemSave('playoffMatches')}
+        onPlayoffMatchDelete={onItemDelete('playoffMatches')}
+        onPlayoffMatchSave={onItemSave('playoffMatches')}
         matchMinutes={matchMinutes}
         teams={teams}
         tournamentDays={days}
-        tournamentId={this.getTournamentId()}
-        tournamentDate={this.state.tournament.startDate}
+        tournamentId={getTournamentId()}
+        tournamentDate={tournament.startDate}
       />
     })
   }
 
-  onItemSave = itemName => data => {
-    const tournament = { ...this.state.tournament }
+  const onItemSave = itemName => data => {
     const items = [...tournament[itemName]]
     const itemIndex = items.findIndex(item => item.id === data.id)
     if (itemIndex !== -1) {
@@ -463,17 +430,17 @@ export default class TournamentManagementPage extends React.PureComponent {
     } else {
       items.push(data)
     }
-    this.setState({ tournament: { ...tournament, [itemName]: items.sort(this.getComparator(tournament, itemName)) } })
+    setTournament({ ...tournament, [itemName]: items.sort(getComparator(tournament, itemName)) })
   }
 
-  onItemDelete = itemName => id => {
-    const items = [...this.state.tournament[itemName]]
+  const onItemDelete = itemName => id => {
+    const items = [...tournament[itemName]]
     const itemIndex = items.findIndex(item => item.id === id)
     items.splice(itemIndex, 1)
-    this.setState({ tournament: { ...this.state.tournament, [itemName]: items } })
+    setTournament({ ...tournament, [itemName]: items })
   }
 
-  getComparator = (tournament, itemName) => {
+  const getComparator = (tournament, itemName) => {
     switch (itemName) {
       case 'ageGroups':
       case 'fields':
@@ -516,8 +483,7 @@ export default class TournamentManagementPage extends React.PureComponent {
     }
   }
 
-  renderTournamentLinks() {
-    const { tournament } = this.state
+  const renderTournamentLinks = () => {
     const { accessKey, resultsAccessKey, publicLink } = linkTexts
     return (
       <React.Fragment>
@@ -540,14 +506,13 @@ export default class TournamentManagementPage extends React.PureComponent {
     )
   }
 
-  renderEmailContent() {
-    if (!this.props.official) {
-      const { emailCopied } = this.state
+  const renderEmailContent = () => {
+    if (!official) {
       return (
         <>
           <div className="title-2">Sähköposti</div>
           <div className="tournament-management__section">
-            <Button onClick={this.copyEmailContent} label="Kopioi teksti" type="primary" />
+            <Button onClick={copyEmailContent} label="Kopioi teksti" type="primary" />
             {emailCopied && <Message type="success">Sähköposti kopioitu leikepöydälle</Message>}
           </div>
         </>
@@ -555,8 +520,7 @@ export default class TournamentManagementPage extends React.PureComponent {
     }
   }
 
-  copyEmailContent = () => {
-    const { tournament } = this.state
+  const copyEmailContent = () => {
     const email = `Moikka!
 
 Tällä linkillä pääset syöttämään turnauksen sarjat ja ottelut:
@@ -569,40 +533,40 @@ Laita viestiä jos tarvitset lisäohjeita, niin autan mielelläni.
 
 Henri`
     clipboard.writeText(email).then(() => {
-      this.setState({ emailCopied: true })
+      setEmailCopied(true)
       setTimeout(() => {
-        this.setState({ emailCopied: false })
+        setEmailCopied(false)
       }, 5000)
     }).catch(console.error)
   }
 
-  renderDeleteButton() {
-    if (!this.props.official) {
+  const renderDeleteButton = () => {
+    if (!official) {
       return (
         <React.Fragment>
           <div className="title-2">Poista turnaus</div>
           <div className="tournament-management__section">
-            <FormErrors errors={this.state.deleteErrors} />
-            <Button onClick={this.deleteTournament} label="Poista turnaus" type="danger" />
+            <FormErrors errors={deleteErrors} />
+            <Button onClick={handleDelete} label="Poista turnaus" type="danger" />
           </div>
         </React.Fragment>
       )
     }
   }
 
-  deleteTournament = () => {
-    deleteTournament(this.context, this.getTournamentId(), errors => {
+  const handleDelete = () => {
+    deleteTournament(accessContext, getTournamentId(), errors => {
       if (errors) {
-        this.setState({ deleteErrors: errors })
+        setDeleteErrors(errors)
       } else {
-        this.props.history.push('/admin')
+        history.push('/admin')
       }
     })
   }
 
-  renderBackLink() {
-    if (this.props.official) {
-      const to = `/official/${this.state.tournament.accessKey}`
+  const renderBackLink = () => {
+    if (official) {
+      const to = `/official/${tournament.accessKey}`
       return (
         <React.Fragment>
           <div className="title-2">Takaisin tulosten syöttöön</div>
@@ -614,7 +578,32 @@ Henri`
     }
   }
 
-  getTournamentId = () => {
-    return this.props.tournamentId || parseInt(this.props.match.params.id)
+  const getTournamentId = () => {
+    return tournamentId || parseInt(params.id)
   }
+
+  const titlePrefix = tournament ? tournament.name : 'fudisturnaus.com'
+  const title = `${titlePrefix} - Hallintasivut`
+  return (
+    <div>
+      <Title iconLink={titleIconLink} loading={!tournament && !error} text={title}/>
+      {renderContent()}
+    </div>
+  )
 }
+
+TournamentManagementPage.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }).isRequired,
+  }).isRequired,
+  official: PropTypes.bool.isRequired,
+  titleIconLink: PropTypes.string.isRequired,
+  tournamentId: PropTypes.number,
+}
+
+export default TournamentManagementPage

@@ -3,47 +3,9 @@ import PropTypes from 'prop-types'
 import { resolveDate, resolveWeekDay } from '../util/date_util'
 import { getName } from '../util/util'
 
-export default class Filters extends React.PureComponent {
-  static propTypes = {
-    filters: PropTypes.shape({
-      ageGroupId: PropTypes.number,
-      clubId: PropTypes.number,
-      day: PropTypes.number,
-      fieldId: PropTypes.number,
-      groupId: PropTypes.number,
-      teamId: PropTypes.number,
-    }).isRequired,
-    resetFilters: PropTypes.func.isRequired,
-    setFilterValue: PropTypes.func.isRequired,
-    tournament: PropTypes.shape({
-      ageGroups: PropTypes.array.isRequired,
-      clubs: PropTypes.array.isRequired,
-      days: PropTypes.number.isRequired,
-      fields: PropTypes.array.isRequired,
-      groups: PropTypes.array.isRequired,
-      startDate: PropTypes.string.isRequired,
-      teams: PropTypes.array.isRequired,
-    }).isRequired,
-  }
-
-  render() {
-    const ageGroups = this.resolveAgeGroups()
-    return (
-      <div className="filters">
-        {this.renderFilter('ageGroupId', ageGroups, 'Sarja', 'Kaikki sarjat')}
-        {this.renderFilter('groupId', this.resolveGroups(), 'Lohko', 'Kaikki lohkot', this.resolveGroupName)}
-        {this.renderFilter('clubId', this.resolveClubs(), 'Seura', 'Kaikki seurat')}
-        {this.renderFilter('teamId', this.resolveTeams(), 'Joukkue', 'Kaikki joukkueet')}
-        {this.renderFilter('day', this.resolveDays(), 'Päivä', 'Kaikki päivät')}
-        {this.renderFilter('fieldId', this.resolveFields(), 'Kenttä', 'Kaikki kentät')}
-        {this.renderResetLink()}
-      </div>
-    )
-  }
-
-  renderFilter = (key, items, defaultText, selectedText, nameCallback) => {
+const Filters = ({ filters, resetFilters, setFilterValue, tournament }) => {
+  const renderFilter = (key, items, defaultText, selectedText, nameCallback) => {
     if (items.length > 1) {
-      const { filters, setFilterValue } = this.props
       const title = filters[key] > 0 ? selectedText : defaultText
       return (
         <select id={`filter-${key}`} className="filter" onChange={setFilterValue(key)} value={filters[key]}>
@@ -57,8 +19,8 @@ export default class Filters extends React.PureComponent {
     }
   }
 
-  resolveGroupName = group => {
-    const { filters, tournament: { ageGroups } } = this.props
+  const resolveGroupName = group => {
+    const { ageGroups } = tournament
     const { ageGroupId, name } = group
     if (filters.ageGroupId || ageGroups.length === 1) {
       return name
@@ -67,8 +29,9 @@ export default class Filters extends React.PureComponent {
     return `${name} (${ageGroupName})`
   }
 
-  resolveAgeGroups = () => {
-    const { filters: { clubId, groupId, teamId }, tournament: { ageGroups, teams } } = this.props
+  const resolveAgeGroups = () => {
+    const { clubId, groupId, teamId } = filters
+    const { ageGroups, teams } = tournament
     if (groupId > 0 || teamId > 0) {
       return []
     }
@@ -77,8 +40,9 @@ export default class Filters extends React.PureComponent {
     })
   }
 
-  resolveGroups = () => {
-    const { filters: { ageGroupId, clubId, teamId }, tournament: { groups, teams } } = this.props
+  const resolveGroups = () => {
+    const { ageGroupId, clubId, teamId } = filters
+    const { groups, teams } = tournament
     if (teamId > 0) {
       return []
     }
@@ -88,8 +52,9 @@ export default class Filters extends React.PureComponent {
     })
   }
 
-  resolveClubs = () => {
-    const { filters: { ageGroupId, groupId, teamId }, tournament: { clubs, groups, teams } } = this.props
+  const resolveClubs = () => {
+    const { ageGroupId, groupId, teamId } = filters
+    const { clubs, groups, teams } = tournament
     if (teamId > 0) {
       return []
     }
@@ -100,15 +65,16 @@ export default class Filters extends React.PureComponent {
     })
   }
 
-  resolveDays = () => {
-    const { tournament: { days: daysCount, startDate } } = this.props
+  const resolveDays = () => {
+    const { days: daysCount, startDate } = tournament
     return new Array(daysCount).fill(undefined).map((none, index) => {
       return { id: index + 1, name: `${resolveWeekDay(startDate, index)} ${resolveDate(startDate, index)}` }
     })
   }
 
-  resolveTeams = () => {
-    const { filters: { ageGroupId, groupId, clubId }, tournament: { teams } } = this.props
+  const resolveTeams = () => {
+    const { ageGroupId, groupId, clubId } = filters
+    const { teams } = tournament
     return teams.filter(team => {
       return (!ageGroupId || team.ageGroupId === ageGroupId) &&
         (!groupId || team.groupId === groupId) &&
@@ -116,15 +82,49 @@ export default class Filters extends React.PureComponent {
     })
   }
 
-  resolveFields = () => {
-    const { tournament: { fields } } = this.props
-    return fields
+  const resolveFields = () => {
+    return tournament.fields
   }
 
-  renderResetLink = () => {
-    const { filters, resetFilters } = this.props
+  const renderResetLink = () => {
     if (Object.keys(filters).some(key => filters[key] > 0)) {
       return <div onClick={resetFilters} className="filters__reset-link">Näytä kaikki ottelut</div>
     }
   }
+
+  return (
+    <div className="filters">
+      {renderFilter('ageGroupId', resolveAgeGroups(), 'Sarja', 'Kaikki sarjat')}
+      {renderFilter('groupId', resolveGroups(), 'Lohko', 'Kaikki lohkot', resolveGroupName)}
+      {renderFilter('clubId', resolveClubs(), 'Seura', 'Kaikki seurat')}
+      {renderFilter('teamId', resolveTeams(), 'Joukkue', 'Kaikki joukkueet')}
+      {renderFilter('day', resolveDays(), 'Päivä', 'Kaikki päivät')}
+      {renderFilter('fieldId', resolveFields(), 'Kenttä', 'Kaikki kentät')}
+      {renderResetLink()}
+    </div>
+  )
 }
+
+Filters.propTypes = {
+  filters: PropTypes.shape({
+    ageGroupId: PropTypes.number,
+    clubId: PropTypes.number,
+    day: PropTypes.number,
+    fieldId: PropTypes.number,
+    groupId: PropTypes.number,
+    teamId: PropTypes.number,
+  }).isRequired,
+  resetFilters: PropTypes.func.isRequired,
+  setFilterValue: PropTypes.func.isRequired,
+  tournament: PropTypes.shape({
+    ageGroups: PropTypes.array.isRequired,
+    clubs: PropTypes.array.isRequired,
+    days: PropTypes.number.isRequired,
+    fields: PropTypes.array.isRequired,
+    groups: PropTypes.array.isRequired,
+    startDate: PropTypes.string.isRequired,
+    teams: PropTypes.array.isRequired,
+  }).isRequired,
+}
+
+export default Filters

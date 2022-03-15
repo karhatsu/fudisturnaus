@@ -218,14 +218,13 @@ export default class TournamentPage extends React.PureComponent {
   }
 
   renderMatches = (matches, title, showTitle, showEmptyError = false) => {
-    const { officialLevel, renderMatch } = this.props
+    const { renderMatch } = this.props
     const { filters, tournament: { clubs, days, fields, id } } = this.state
     return (
       <div>
         {showTitle ? <div className="title-2">{title}</div> : ''}
         <Matches
           clubs={clubs}
-          editable={officialLevel !== officialLevels.none}
           fieldsCount={fields.length}
           matches={matches}
           renderMatch={renderMatch}

@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import { useHistory, useLocation, useParams } from 'react-router'
 import { Link } from 'react-router-dom'
 import queryString from 'query-string'
 
@@ -37,177 +38,178 @@ const defaultFilters = {
   teamId: 0,
 }
 
-export default class TournamentPage extends React.PureComponent {
-  static propTypes = {
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }).isRequired,
-    location: PropTypes.shape({
-      search: PropTypes.string.isRequired,
-    }).isRequired,
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        accessKey: PropTypes.string,
-      }).isRequired,
-    }),
-    officialLevel: PropTypes.oneOf([none, results, full]).isRequired,
-    renderMatch: PropTypes.func.isRequired,
-    tournamentKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  }
+const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
+  const { accessKey } = useParams()
+  const { search } = useLocation()
+  const history = useHistory()
+  const [error, setError] = useState(false)
+  const [tournament, setTournament] = useState()
+  const [subscribed, setSubscribed] = useState(false)
+  const [socketData, setSocketData] = useState()
+  const [filters, setFilters] = useState(defaultFilters)
 
-  constructor(props) {
-    super(props)
-    const queryParams = queryString.parse(props.location.search)
+  const fetchTournamentData = useCallback(() => {
+    fetchTournament(tournamentKey, (err, tournament) => {
+      if (tournament) {
+        setTournament(tournament)
+      } else if (err && !tournament) {
+        setError(true)
+      }
+    })
+  }, [tournamentKey])
+
+  const handleVisibilityChange = useCallback(() => {
+    if (document.visibilityState === 'visible') {
+      fetchTournamentData()
+    }
+  }, [fetchTournamentData])
+
+  useEffect(() => {
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    fetchTournamentData()
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
+  }, [fetchTournamentData, handleVisibilityChange])
+
+  useEffect(() => {
+    if (tournament && !subscribed) {
+      consumer.subscriptions.create({ channel: 'ResultsChannel', tournament_id: tournament.id }, { received: data => setSocketData(data) })
+      setSubscribed(true)
+    }
+  }, [tournament, subscribed])
+
+  useEffect(() => {
+    if (socketData) {
+      const newTournament = buildTournamentFromSocketData(tournament, socketData)
+      setSocketData()
+      setTournament(newTournament)
+    }
+  }, [tournament, socketData])
+
+  useEffect(() => {
+    const queryParams = queryString.parse(search)
     Object.keys(queryParams).forEach(queryParam => {
       queryParams[queryParam] = parseInt(queryParams[queryParam])
     })
-    this.state = {
-      error: false,
-      filters: { ...defaultFilters, ...queryParams },
-      tournament: undefined,
-    }
-  }
+    setFilters({ ...defaultFilters, ...queryParams })
+  }, [search])
 
-  render() {
-    const { officialLevel } = this.props
-    const { error, tournament } = this.state
-    const iconLink = officialLevel === officialLevels.none ? '/' : null
-    const title = tournament ? tournament.name : 'fudisturnaus.com'
-    const club = tournament ? tournament.club : undefined
-    return (
-      <div>
-        <IframeTitle />
-        <Title iconLink={iconLink} loading={!tournament && !error} text={title} club={club}>
-          {this.renderCancelledBadge()}
-        </Title>
-        {this.renderSubTitle()}
-        {this.renderContent()}
-      </div>
-    )
-  }
-
-  renderVisibilityBadge() {
-    const { tournament } = this.state
-    if (tournament && !tournament.cancelled && this.props.officialLevel === officialLevels.full) {
+  const renderVisibilityBadge = () => {
+    if (tournament && !tournament.cancelled && officialLevel === officialLevels.full) {
       return <VisibilityBadge visibility={tournament.visibility}/>
     }
   }
 
-  renderCancelledBadge() {
-    const { tournament } = this.state
+  const renderCancelledBadge = () => {
     if (tournament && tournament.cancelled) {
       return <div className="badge badge--0">Turnaus peruttu</div>
     }
   }
 
-  renderContent() {
-    const { error, tournament } = this.state
+  const renderContent = () => {
     if (error) {
       return <Message type="error">Virhe haettaessa turnauksen tietoja. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.</Message>
     }
     if (!tournament) {
       return <Loading/>
     }
-    switch (this.props.officialLevel) {
+    switch (officialLevel) {
       case officialLevels.full:
-        return this.renderFullOfficialContent()
+        return renderFullOfficialContent()
       case officialLevels.results:
-        return this.renderResultsOfficialContent()
+        return renderResultsOfficialContent()
       default:
-        return this.renderPublicContent()
+        return renderPublicContent()
     }
   }
 
-  renderFullOfficialContent() {
-    const { match: { params : { accessKey } } } = this.props
+  const renderFullOfficialContent = () => {
     return (
       <div className="tournament-page__full-official">
         <div className="title-1">
           Turnauksen hallinta
-          {this.renderVisibilityBadge()}
+          {renderVisibilityBadge()}
         </div>
         <div className="management-link"><Link to={`/official/${accessKey}/management`}>Muokkaa turnauksen asetuksia ja otteluohjelmaa</Link></div>
         <div className="title-1">Tulosten tallentaminen</div>
-        {this.renderFullOfficialMatchContent()}
+        {renderFullOfficialMatchContent()}
       </div>
     )
   }
 
-  renderFullOfficialMatchContent() {
-    if (this.state.tournament.visibility === all && this.tournamentHasMatches()) {
-      return this.renderMatchContent()
+  const renderFullOfficialMatchContent = () => {
+    if (tournament.visibility === all && tournamentHasMatches()) {
+      return renderMatchContent()
     } else {
       const msg = 'Kun olet julkaissut turnauksen otteluohjelman, pääset tässä tallentamaan otteluiden tuloksia.'
       return <Message type="warning">{msg}</Message>
     }
   }
 
-  renderResultsOfficialContent() {
-    if (this.state.tournament.visibility === all && this.tournamentHasMatches()) {
-      return this.renderMatchContent()
+  const renderResultsOfficialContent = () => {
+    if (tournament.visibility === all && tournamentHasMatches()) {
+      return renderMatchContent()
     }
     const msg = 'Kun turnauksen otteluohjelma julkaistaan, pääset tällä sivulla tallentamaan otteluiden tuloksia.'
     return <Message type="warning" fullPage={true}>{msg}</Message>
   }
 
-  renderPublicContent() {
-    const { tournament } = this.state
+  const renderPublicContent = () => {
     if (tournament.visibility === onlyTitle) {
       const msg = 'Turnauksen osallistujia ja otteluohjelmaa ei ole vielä julkaistu'
       return <Message type="warning" fullPage={true}>{msg}</Message>
-    } else if (tournament.visibility === teams || !this.tournamentHasMatches()) {
+    } else if (tournament.visibility === teams || !tournamentHasMatches()) {
       return <SeriesAndTeams tournament={tournament}/>
     } else {
-      return this.renderMatchContent()
+      return renderMatchContent()
     }
   }
 
-  tournamentHasMatches = () => {
-    return this.state.tournament.groupStageMatches.length > 0
+  const tournamentHasMatches = () => {
+    return tournament.groupStageMatches.length > 0
   }
 
-  renderMatchContent() {
-    const { filters, tournament } = this.state
-    const groupStageMatches = tournament.groupStageMatches.filter(this.isFilterGroupStageMatch)
-    const filteredPlayoffMatches = tournament.playoffMatches.filter(this.isFilterPlayoffMatch)
+  const renderMatchContent = () => {
+    const groupStageMatches = tournament.groupStageMatches.filter(isFilterGroupStageMatch)
+    const filteredPlayoffMatches = tournament.playoffMatches.filter(isFilterPlayoffMatch)
     return (
       <div>
-        <Filters filters={filters} resetFilters={this.resetFilters} setFilterValue={this.setFilterValue} tournament={tournament}/>
-        {this.renderMatches(groupStageMatches, 'Alkulohkojen ottelut', tournament.playoffMatches.length, true)}
-        {this.renderGroupTables()}
-        {this.renderMatches(filteredPlayoffMatches, 'Jatko-ottelut', filteredPlayoffMatches.length)}
-        {this.renderPlayoffGroupTables()}
+        <Filters filters={filters} resetFilters={resetFilters} setFilterValue={setFilterValue} tournament={tournament}/>
+        {renderMatches(groupStageMatches, 'Alkulohkojen ottelut', tournament.playoffMatches.length, true)}
+        {renderGroupTables()}
+        {renderMatches(filteredPlayoffMatches, 'Jatko-ottelut', filteredPlayoffMatches.length)}
+        {renderPlayoffGroupTables()}
         <InfoBox/>
       </div>
     )
   }
 
-  renderSubTitle = () => {
-    const { tournament } = this.state
+  const renderSubTitle = () => {
     if (tournament) {
       const { startDate, endDate } = tournament
-      return <div className="sub-title">{this.renderLocation()}, {formatTournamentDates(startDate, endDate)}</div>
+      return <div className="sub-title">{renderLocation()}, {formatTournamentDates(startDate, endDate)}</div>
     }
   }
 
-  renderLocation = () => {
-    const { tournament: { address, location } } = this.state
+  const renderLocation = () => {
+    const { address, location } = tournament
     const googleMapsUrl = address ? `https://www.google.com/maps/place/${address.split(' ').join('+')}` : undefined
     return googleMapsUrl ? <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="sub-title__location">{location}</a> : location
   }
 
-  resetFilters = () => {
-    this.setState({ filters: defaultFilters })
-    this.props.history.push({ search: '' })
+  const resetFilters = () => {
+    setFilters(defaultFilters)
+    history.push({ search: '' })
   }
 
-  setFilterValue = key => event => {
-    const filters = { ...this.state.filters, [key]: parseInt(event.target.value) }
-    this.setState({ filters })
-    this.props.history.push({ search: this.buildQueryParams(filters) })
+  const setFilterValue = key => event => {
+    const newFilters = { ...filters, [key]: parseInt(event.target.value) }
+    setFilters(newFilters)
+    history.push({ search: buildQueryParams(newFilters) })
   }
 
-  buildQueryParams = filters => {
+  const buildQueryParams = filters => {
     const validFilters = {}
     Object.keys(filters).forEach(filter => {
       if (filters[filter] > 0) {
@@ -217,9 +219,8 @@ export default class TournamentPage extends React.PureComponent {
     return queryString.stringify(validFilters)
   }
 
-  renderMatches = (matches, title, showTitle, showEmptyError = false) => {
-    const { renderMatch } = this.props
-    const { filters, tournament: { clubs, days, fields, id } } = this.state
+  const renderMatches = (matches, title, showTitle, showEmptyError = false) => {
+    const { clubs, days, fields, id } = tournament
     return (
       <div>
         {showTitle ? <div className="title-2">{title}</div> : ''}
@@ -238,8 +239,7 @@ export default class TournamentPage extends React.PureComponent {
     )
   }
 
-  isFilterGroupStageMatch = match => {
-    const { filters } = this.state
+  const isFilterGroupStageMatch = match => {
     const { ageGroupId, day, fieldId, groupId, homeTeam, awayTeam } = match
     return (!filters.ageGroupId || filters.ageGroupId === ageGroupId)
       && (!filters.fieldId || filters.fieldId === fieldId)
@@ -249,8 +249,7 @@ export default class TournamentPage extends React.PureComponent {
       && (!filters.day || filters.day === day)
   }
 
-  isFilterPlayoffMatch = match => {
-    const { filters } = this.state
+  const isFilterPlayoffMatch = match => {
     const { ageGroupId, day, fieldId, homeTeam, awayTeam, homeTeamOriginId, awayTeamOriginId } = match
     return (!filters.ageGroupId || filters.ageGroupId === ageGroupId)
       && (!filters.fieldId || filters.fieldId === fieldId)
@@ -260,39 +259,37 @@ export default class TournamentPage extends React.PureComponent {
       && (!filters.day || filters.day === day)
   }
 
-  renderGroupTables = () => {
-    const { filters, tournament: { calculateGroupTables, groups } } = this.state
-    const filteredGroups = groups.filter(this.isFilterGroup)
+  const renderGroupTables = () => {
+    const { calculateGroupTables, groups } = tournament
+    const filteredGroups = groups.filter(isFilterGroup)
     if (calculateGroupTables && filteredGroups.length && !filters.day) {
       return (
         <React.Fragment>
           <div className="title-2">Sarjataulukot</div>
-          <div className="group-results row">{filteredGroups.map(group => this.renderGroup(group, filteredGroups.length))}</div>
+          <div className="group-results row">{filteredGroups.map(group => renderGroup(group, filteredGroups.length))}</div>
         </React.Fragment>
       )
     }
   }
 
-  renderPlayoffGroupTables = () => {
-    const { filters, tournament: { calculateGroupTables, playoffGroups } } = this.state
-    const filteredGroups = playoffGroups.filter(this.isFilterGroup)
+  const renderPlayoffGroupTables = () => {
+    const { calculateGroupTables, playoffGroups } = tournament
+    const filteredGroups = playoffGroups.filter(isFilterGroup)
     if (calculateGroupTables && filteredGroups.length && !filters.day) {
       return (
         <>
           <div className="title-2">Jatkolohkot</div>
-          <div className="group-results row">{filteredGroups.map(group => this.renderGroup(group, filteredGroups.length))}</div>
+          <div className="group-results row">{filteredGroups.map(group => renderGroup(group, filteredGroups.length))}</div>
         </>
       )
     }
   }
 
-  renderGroup = (group, groupsCount) => {
-    const { filters, tournament: { clubs } } = this.state
-    return <GroupResults clubs={clubs} filters={filters} group={group} groupsCount={groupsCount} key={group.id}/>
+  const renderGroup = (group, groupsCount) => {
+    return <GroupResults clubs={tournament.clubs} filters={filters} group={group} groupsCount={groupsCount} key={group.id}/>
   }
 
-  isFilterGroup = group => {
-    const { filters } = this.state
+  const isFilterGroup = group => {
     const { ageGroupId, id: groupId, results } = group
     return results.length
       && (!filters.ageGroupId || filters.ageGroupId === ageGroupId)
@@ -301,42 +298,36 @@ export default class TournamentPage extends React.PureComponent {
       && (!filters.teamId || results.findIndex(team => team.teamId === filters.teamId) !== -1)
   }
 
-  componentDidMount() {
-    this.fetchTournamentData()
-    document.addEventListener('visibilitychange', this.handleVisibilityChange)
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('visibilitychange', this.handleVisibilityChange)
-  }
-
-  handleVisibilityChange = () => {
-    if (document.visibilityState === 'visible') {
-      this.fetchTournamentData()
-    }
-  }
-
-  fetchTournamentData = () => {
-    const { tournamentKey } = this.props
-    fetchTournament(tournamentKey, (err, tournament) => {
-      if (tournament) {
-        this.setState({ tournament })
-        this.subscribeToResultsChannel(tournament.id)
-      } else if (err && !this.state.tournament) {
-        this.setState({ error: true })
-      }
-    })
-  }
-
-  subscribeToResultsChannel = tournamentId => {
-    consumer.subscriptions.create({
-      channel: 'ResultsChannel',
-      tournament_id: tournamentId,
-    }, {
-      received: data => {
-        const tournament = buildTournamentFromSocketData(this.state.tournament, data)
-        this.setState({ tournament })
-      },
-    })
-  }
+  const iconLink = officialLevel === officialLevels.none ? '/' : null
+  const title = tournament ? tournament.name : 'fudisturnaus.com'
+  const club = tournament ? tournament.club : undefined
+  return (
+    <div>
+      <IframeTitle />
+      <Title iconLink={iconLink} loading={!tournament && !error} text={title} club={club}>
+        {renderCancelledBadge()}
+      </Title>
+      {renderSubTitle()}
+      {renderContent()}
+    </div>
+  )
 }
+
+TournamentPage.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+  location: PropTypes.shape({
+    search: PropTypes.string.isRequired,
+  }).isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      accessKey: PropTypes.string,
+    }).isRequired,
+  }),
+  officialLevel: PropTypes.oneOf([none, results, full]).isRequired,
+  renderMatch: PropTypes.func.isRequired,
+  tournamentKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+}
+
+export default TournamentPage

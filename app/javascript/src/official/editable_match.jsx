@@ -1,58 +1,64 @@
-import React from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import Match from '../public/match'
 import { matchTypes } from '../util/enums'
 import { saveResult } from '../tournament_management/api_client'
 import AccessContext from '../util/access_context'
 import Button from '../form/button'
+import { formatMatchTime } from '../util/date_util'
+import Team from '../public/team'
 
-export default class EditableMatch extends Match {
-  static propTypes = {
-    match: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      type: PropTypes.string.isRequired,
-      startTime: PropTypes.string.isRequired,
-      field: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-      }).isRequired,
-      title: PropTypes.string,
-      homeTeam: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-      }),
-      awayTeam: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-      }),
-      homeGoals: PropTypes.number,
-      awayGoals: PropTypes.number,
-      penalties: PropTypes.bool,
-      ageGroup: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-      }).isRequired,
-      group: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-      }),
-    }).isRequired,
-    selectedClubId: PropTypes.number,
-    selectedTeamId: PropTypes.number,
-    tournamentId: PropTypes.number.isRequired,
+const EditableMatch = ({ clubs, fieldsCount, match, selectedClubId, selectedTeamId, tournamentDays, tournamentId }) => {
+  const accessContext = useContext(AccessContext)
+  const homeGoalsField = useRef()
+  const [formOpen, setFormOpen] = useState(false)
+  const [data, setData] = useState({ home: '', away: '' })
+  const [errors, setErrors] = useState([])
+
+  useEffect(() => {
+    if (formOpen) {
+      homeGoalsField.current.focus()
+    }
+  }, [formOpen])
+
+  const renderMatchInfo = (startTime, field, ageGroup, group) => {
+    const fieldName = fieldsCount > 1 ? `${field.name}, ` : ''
+    return (
+      <div>
+        <span className="match__start-time">{formatMatchTime(tournamentDays, startTime)}</span>
+        <span className="match__details">{fieldName}{ageGroup.name}{group ? `, ${group.name}` : ''}</span>
+      </div>
+    )
   }
 
-  static contextType = AccessContext
-
-  constructor(props) {
-    super(props)
-    this.state = { formOpen: false, errors: [] }
-    this.homeGoalsRef = React.createRef()
+  const renderPlayoffMatchTitle = (homeTeam, awayTeam, title) => {
+    if (title) {
+      const text = homeTeam || awayTeam ? `${title}:` : title
+      return <div className="match__playoff-title">{text}</div>
+    }
   }
 
-  resolveMainClasses() {
-    return 'match match--editable'
+  const renderTeams = (homeTeam, awayTeam) => {
+    if (homeTeam || awayTeam) {
+      return (
+        <>
+          {renderTeam(homeTeam)}
+          <span className="match__teams-separator">-</span>
+          {renderTeam(awayTeam)}
+        </>
+      )
+    }
   }
 
-  renderResult() {
-    const { match: { homeTeam, awayTeam, homeGoals, awayGoals, penalties } } = this.props
-    if (this.state.formOpen) {
-      return this.renderForm()
+  const renderTeam = team => {
+    if (!team) return <span>?</span>
+    const selected = team.id === selectedTeamId || team.clubId === selectedClubId
+    return <Team clubId={team.clubId} clubs={clubs} name={team.name} selected={selected} />
+  }
+
+  const renderResult = () => {
+    const { homeTeam, awayTeam, homeGoals, awayGoals, penalties } = match
+    if (formOpen) {
+      return renderForm()
     }
     if (homeGoals || homeGoals === 0) {
       return <span>{homeGoals} - {awayGoals}{penalties ? ' rp' : ''}</span>
@@ -61,31 +67,31 @@ export default class EditableMatch extends Match {
     }
   }
 
-  renderForm() {
+  const renderForm = () => {
     return (
       <form>
         <div className="match__result-fields">
-          {this.renderGoalsField('homeGoals', 1, this.homeGoalsRef)}
+          {renderGoalsField('homeGoals', 1, homeGoalsField)}
           <span className="match__goals-separator">-</span>
-          {this.renderGoalsField('awayGoals', 2)}
+          {renderGoalsField('awayGoals', 2)}
         </div>
-        {this.renderPenaltiesField()}
+        {renderPenaltiesField()}
         <div className="match__buttons">
-          <Button onClick={this.saveResult} label="&#x2713;" type="primary" size="small" disabled={!this.canSubmit()} />
-          <Button onClick={this.cancel} label="&#x2715;" type="normal" size="small" />
+          <Button onClick={handleSave} label="&#x2713;" type="primary" size="small" disabled={!canSubmit()} />
+          <Button onClick={cancel} label="&#x2715;" type="normal" size="small" />
         </div>
       </form>
     )
   }
 
-  renderGoalsField(name, tabIndex, ref) {
-    const goals = this.state[name]
+  const renderGoalsField = (name, tabIndex, ref) => {
+    const goals = data[name]
     const value = goals || goals === 0 ? goals : ''
     return (
       <input
         type="number"
         value={value}
-        onChange={this.setGoals(name)}
+        onChange={setGoals(name)}
         className="match__goals-field"
         tabIndex={tabIndex}
         ref={ref}
@@ -93,75 +99,124 @@ export default class EditableMatch extends Match {
     )
   }
 
-  renderPenaltiesField() {
-    if (this.props.match.type === matchTypes.playoff) {
+  const renderPenaltiesField = () => {
+    if (match.type === matchTypes.playoff) {
       return (
         <div className="match__penalties">
-          <input type="checkbox" value={true} checked={this.state.penalties} onChange={this.setPenalties}/> rp
+          <input type="checkbox" value={true} checked={data.penalties} onChange={setPenalties}/> rp
         </div>
       )
     }
   }
 
-  renderErrors() {
-    if (this.state.errors.length > 0) {
-      return <div className="form-error">{this.state.errors.join('. ')}.</div>
+  const renderErrors = () => {
+    if (errors.length > 0) {
+      return <div className="form-error">{errors.join('. ')}.</div>
     }
   }
 
-  onClick = () => {
-    const { match: { homeTeam, awayTeam, homeGoals, awayGoals, penalties } } = this.props
-    if (!this.state.formOpen && homeTeam && awayTeam) {
-      this.setState({
-        formOpen: true,
-        homeGoals: this.initialValue(homeGoals),
-        awayGoals: this.initialValue(awayGoals),
-        initialHomeGoals: this.initialValue(homeGoals),
-        initialAwayGoals: this.initialValue(awayGoals),
+  const onClick = () => {
+    const { homeTeam, awayTeam, homeGoals, awayGoals, penalties } = match
+    if (!formOpen && homeTeam && awayTeam) {
+      setData({
+        homeGoals: initialValue(homeGoals),
+        awayGoals: initialValue(awayGoals),
+        initialHomeGoals: initialValue(homeGoals),
+        initialAwayGoals: initialValue(awayGoals),
         penalties,
         initialPenalties: penalties,
       })
+      setFormOpen(true)
     }
   }
 
-  initialValue = value => value !== null ? value.toString() : ''
+  const initialValue = value => value !== null ? value.toString() : ''
 
-  canSubmit = () => {
-    const { homeGoals, awayGoals, penalties, initialHomeGoals, initialAwayGoals, initialPenalties } = this.state
+  const canSubmit = () => {
+    const { homeGoals, awayGoals, penalties, initialHomeGoals, initialAwayGoals, initialPenalties } = data
     const changed = homeGoals !== initialHomeGoals || awayGoals !== initialAwayGoals || penalties !== initialPenalties
-    const both = (homeGoals === '' && awayGoals === '') || (this.isNumber(homeGoals) && this.isNumber(awayGoals))
+    const both = (homeGoals === '' && awayGoals === '') || (isNumber(homeGoals) && isNumber(awayGoals))
     return changed && both
   }
 
-  isNumber = value => {
-    return parseInt(value).toString() === value
+  const isNumber = value => parseInt(value).toString() === value
+
+  const resetForm = () => {
+    setErrors([])
+    setFormOpen(false)
   }
 
-  cancel = () => {
-    this.setState({ formOpen: false, errors: [] })
+  const cancel = () => {
+    resetForm()
   }
 
-  setGoals = name => event => this.setState({ [name]: event.target.value })
+  const setGoals = name => event => setData({ ...data, [name]: event.target.value })
 
-  setPenalties = event => {
-    this.setState({ penalties: event.target.checked })
-  }
+  const setPenalties = event => setData({ ...data, penalties: event.target.checked })
 
-  saveResult = () => {
-    const { match: { id, type }, tournamentId } = this.props
-    const { homeGoals, awayGoals, penalties } = this.state
-    saveResult(this.context, tournamentId, type, id, parseInt(homeGoals), parseInt(awayGoals), penalties, (errors) => {
+  const handleSave = () => {
+    const { id, type } = match
+    const { homeGoals, awayGoals, penalties } = data
+    saveResult(accessContext, tournamentId, type, id, parseInt(homeGoals), parseInt(awayGoals), penalties, (errors) => {
       if (errors) {
-        this.setState({ errors })
+        setErrors(errors)
       } else {
-        this.setState({ formOpen: false, errors: [] })
+        resetForm()
       }
     })
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (!prevState.formOpen && this.state.formOpen) {
-      this.homeGoalsRef.current.focus()
-    }
-  }
+  const { startTime, field, homeTeam, awayTeam, title, ageGroup, group } = match
+  return (
+    <div className="match match--editable" onClick={onClick}>
+      <div className="match__row">
+        {renderMatchInfo(startTime, field, ageGroup, group)}
+      </div>
+      <div className="match__row">
+        <div className="match__teams">
+          {renderPlayoffMatchTitle(homeTeam, awayTeam, title)}
+          {renderTeams(homeTeam, awayTeam)}
+        </div>
+        <div className="match__result">{renderResult()}</div>
+      </div>
+      {renderErrors()}
+    </div>
+  )
 }
+
+EditableMatch.propTypes = {
+  clubs: PropTypes.arrayOf(PropTypes.shape({
+    logoUrl: PropTypes.string,
+  })).isRequired,
+  fieldsCount: PropTypes.number.isRequired,
+  match: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    type: PropTypes.string.isRequired,
+    startTime: PropTypes.string.isRequired,
+    field: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    }).isRequired,
+    title: PropTypes.string,
+    homeTeam: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    }),
+    awayTeam: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    }),
+    homeGoals: PropTypes.number,
+    awayGoals: PropTypes.number,
+    penalties: PropTypes.bool,
+    ageGroup: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    }).isRequired,
+    group: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    }),
+  }).isRequired,
+  selectedClubId: PropTypes.number,
+  selectedTeamId: PropTypes.number,
+  tournamentDays: PropTypes.number.isRequired,
+  tournamentId: PropTypes.number.isRequired,
+}
+
+export default EditableMatch

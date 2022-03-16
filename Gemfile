@@ -9,8 +9,7 @@ gem 'rails', '7.0.2.3'
 gem 'puma'
 # Use SassC for stylesheets
 gem 'sassc-rails'
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier'
+gem 'terser'
 gem 'jsbundling-rails'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'mini_racer', platforms: :ruby

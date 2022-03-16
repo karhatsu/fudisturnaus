@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { addDays } from 'date-fns'
 import { zonedTimeToUtc } from 'date-fns-tz'
@@ -14,85 +14,28 @@ import Button from '../form/button'
 
 const ORIGIN_SEPARATOR = '@'
 
-export default class PlayoffMatch extends React.PureComponent {
-  static propTypes = {
-    ageGroups: PropTypes.arrayOf(idNamePropType).isRequired,
-    fields: PropTypes.arrayOf(idNamePropType).isRequired,
-    groups: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      ageGroupId: PropTypes.number.isRequired,
-    })),
-    playoffGroups: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      ageGroupId: PropTypes.number.isRequired,
-    })).isRequired,
-    playoffMatch: PropTypes.shape({
-      ageGroupId: PropTypes.number.isRequired,
-      awayTeamOriginId: PropTypes.number.isRequired,
-      awayTeamOriginType: PropTypes.string.isRequired,
-      awayTeamOriginRule: PropTypes.number.isRequired,
-      fieldId: PropTypes.number.isRequired,
-      homeTeamOriginId: PropTypes.number.isRequired,
-      homeTeamOriginType: PropTypes.string.isRequired,
-      homeTeamOriginRule: PropTypes.number.isRequired,
-      id: PropTypes.number.isRequired,
-      playoffGroupId: PropTypes.number,
-      startTime: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-    }),
-    playoffMatches: PropTypes.arrayOf(PropTypes.shape({
-      ageGroupId: PropTypes.number.isRequired,
-      fieldId: PropTypes.number.isRequired,
-      startTime: PropTypes.string.isRequired,
-    })).isRequired,
-    onPlayoffMatchDelete: PropTypes.func,
-    onPlayoffMatchSave: PropTypes.func.isRequired,
-    matchMinutes: PropTypes.number.isRequired,
-    teams: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      groupId: PropTypes.number.isRequired,
-    })).isRequired,
-    tournamentDays: PropTypes.number.isRequired,
-    tournamentId: PropTypes.number.isRequired,
-    tournamentDate: PropTypes.string.isRequired,
-  }
+const PlayoffMatch = props => {
+  const {
+    ageGroups,
+    fields,
+    matchMinutes,
+    onPlayoffMatchDelete,
+    onPlayoffMatchSave,
+    playoffGroups,
+    playoffMatch,
+    playoffMatches,
+    teams,
+    tournamentDate,
+    tournamentDays,
+    tournamentId,
+  } = props
+  const accessContext = useContext(AccessContext)
+  const timeField = useRef()
+  const [formOpen, setFormOpen] = useState(false)
+  const [data, setData] = useState({})
+  const [errors, setErrors] = useState([])
 
-  static contextType = AccessContext
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      formOpen: false,
-      form: {
-        awayTeamOrigin: undefined,
-        awayTeamOriginRule: undefined,
-        day: undefined,
-        fieldId: undefined,
-        homeTeamOrigin: undefined,
-        homeTeamOriginRule: undefined,
-        playoffGroupId: undefined,
-        startTime: undefined,
-        title: undefined,
-      },
-      errors: [],
-    }
-    this.timeFieldRed = React.createRef()
-  }
-
-  render() {
-    return (
-      <div className="tournament-item">
-        {this.state.formOpen && this.renderForm()}
-        {!this.state.formOpen && this.renderName()}
-      </div>
-    )
-  }
-
-  renderName() {
-    const { ageGroups, fields, playoffGroups, playoffMatch, tournamentDays } = this.props
+  const renderName = () => {
     let text = '+ Lisää uusi jatko-ottelu'
     if (playoffMatch) {
       const { ageGroupId, fieldId, startTime, title, playoffGroupId } = playoffMatch
@@ -109,45 +52,42 @@ export default class PlayoffMatch extends React.PureComponent {
       }
       text = textElements.join(' | ')
     }
-    return <div className={resolveTournamentItemClasses(playoffMatch)}><span onClick={this.openForm}>{text}</span></div>
+    return <div className={resolveTournamentItemClasses(playoffMatch)}><span onClick={openForm}>{text}</span></div>
   }
 
-  renderForm() {
-    const ageGroups = this.props.ageGroups.filter(ageGroup => ageGroup.calculateGroupTables)
-    const { form } = this.state
+  const renderForm = () => {
+    const ageGroups = props.ageGroups.filter(ageGroup => ageGroup.calculateGroupTables)
     return (
       <form className="form form--horizontal">
-        <FormErrors errors={this.state.errors}/>
+        <FormErrors errors={errors}/>
         <div className="tournament-item__form">
-          <IdNameSelect field="ageGroupId" formData={form} items={ageGroups} label="- Sarja -" onChange={this.changeValue('ageGroupId')}/>
-          {this.buildFieldsDropDown()}
-          {this.buildDayDropDown()}
-          {this.renderStartTimeField()}
-          {this.renderTitleField()}
-          {this.renderSourceField('home', 'Koti')}
-          {this.renderRuleField('home')}
-          {this.renderSourceField('away', 'Vieras')}
-          {this.renderRuleField('away')}
-          {this.renderPlayoffGroupsDropDown()}
-          {this.renderButtons()}
+          <IdNameSelect field="ageGroupId" formData={data} items={ageGroups} label="- Sarja -" onChange={changeValue('ageGroupId')}/>
+          {buildFieldsDropDown()}
+          {buildDayDropDown()}
+          {renderStartTimeField()}
+          {renderTitleField()}
+          {renderSourceField('home', 'Koti')}
+          {renderRuleField('home')}
+          {renderSourceField('away', 'Vieras')}
+          {renderRuleField('away')}
+          {renderPlayoffGroupsDropDown()}
+          {renderButtons()}
         </div>
       </form>
     )
   }
 
-  buildFieldsDropDown() {
-    const { fields } = this.props
+  const buildFieldsDropDown = () => {
     if (fields.length > 1) {
-      return <IdNameSelect field="fieldId" formData={this.state.form} items={fields} label="- Kenttä -" onChange={this.setField}/>
+      return <IdNameSelect field="fieldId" formData={data} items={fields} label="- Kenttä -" onChange={setField}/>
     }
   }
 
-  buildDayDropDown() {
-    const { tournamentDays, tournamentDate } = this.props
+  const buildDayDropDown = () => {
     if (tournamentDays > 1) {
       return (
         <div className="form__field">
-          <select onChange={this.changeValue('day')} value={this.state.form.day}>
+          <select onChange={changeValue('day')} value={data.day}>
             {Array(tournamentDays).fill().map((x, i) => {
               return <option key={i} value={i + 1}>{resolveWeekDay(tournamentDate, i)}</option>
             })}
@@ -157,36 +97,33 @@ export default class PlayoffMatch extends React.PureComponent {
     }
   }
 
-  renderStartTimeField() {
-    const { form: { startTime } } = this.state
-    const onChange = this.changeValue('startTime')
-    return <TextField ref={this.timeFieldRed} containerClass="form__field--time" onChange={onChange} placeholder="HH:MM" value={startTime}/>
+  const renderStartTimeField = () => {
+    const onChange = changeValue('startTime')
+    return <TextField ref={timeField} containerClass="form__field--time" onChange={onChange} placeholder="HH:MM" value={data.startTime}/>
   }
 
-  renderTitleField() {
-    const { form: { title } } = this.state
-    return <TextField onChange={this.changeValue('title')} placeholder="Kuvaus, esim. A1-B2 tai Finaali" value={title}/>
+  const renderTitleField = () => {
+    return <TextField onChange={changeValue('title')} placeholder="Kuvaus, esim. A1-B2 tai Finaali" value={data.title}/>
   }
 
-  renderSourceField(homeAway, label) {
-    const { form: { ageGroupId } } = this.state
-    if (ageGroupId) {
-      const groups = this.props.groups.filter(group => group.ageGroupId === parseInt(ageGroupId))
-      const playoffMatches = this.props.playoffMatches.filter(match => match.ageGroupId === parseInt(ageGroupId))
+  const renderSourceField = (homeAway, label) => {
+    if (data.ageGroupId) {
+      const groups = props.groups.filter(group => group.ageGroupId === parseInt(data.ageGroupId))
+      const playoffMatches = props.playoffMatches.filter(match => match.ageGroupId === parseInt(data.ageGroupId))
       const field = `${homeAway}TeamOrigin`
       return (
         <div className="form__field">
-          <select value={this.state.form[field]} onChange={this.changeValue(field)}>
+          <select value={data[field]} onChange={changeValue(field)}>
             <option>- {label} -</option>
             <optgroup label="Lohkosta">
               {groups.map(group => {
-                const key = this.buildOrigin('Group', group.id)
+                const key = buildOrigin('Group', group.id)
                 return <option key={key} value={key}>{group.name}</option>
               })}
             </optgroup>
             <optgroup label="Jatko-ottelusta">
               {playoffMatches.map(playoffMatch => {
-                const key = this.buildOrigin('PlayoffMatch', playoffMatch.id)
+                const key = buildOrigin('PlayoffMatch', playoffMatch.id)
                 return <option key={key} value={key}>{playoffMatch.title}</option>
               })}
             </optgroup>
@@ -196,17 +133,17 @@ export default class PlayoffMatch extends React.PureComponent {
     }
   }
 
-  renderRuleField(homeAway) {
-    const origin = this.state.form[`${homeAway}TeamOrigin`]
+  const renderRuleField = (homeAway) => {
+    const origin = data[`${homeAway}TeamOrigin`]
     if (origin) {
       const field = `${homeAway}TeamOriginRule`
-      const originType = this.parseOriginType(origin)
-      const originId = this.parseOriginId(origin)
+      const originType = parseOriginType(origin)
+      const originId = parseOriginId(origin)
       if (originType === 'Group') {
-        const teamCount = this.props.teams.filter(team => team.groupId === originId).length
+        const teamCount = teams.filter(team => team.groupId === originId).length
         return (
           <div className="form__field">
-            <select value={this.state.form[field]} onChange={this.changeValue(field)}>
+            <select value={data[field]} onChange={changeValue(field)}>
               <option>- Sija -</option>
               {Array(teamCount).fill().map((x, i) => {
                 return <option key={i} value={i + 1}>{i + 1}.</option>
@@ -217,7 +154,7 @@ export default class PlayoffMatch extends React.PureComponent {
       } else if (originType === 'PlayoffMatch') {
         return (
           <div className="form__field">
-            <select value={this.state.form[field]} onChange={this.changeValue(field)}>
+            <select value={data[field]} onChange={changeValue(field)}>
               <option>- Ottelun -</option>
               <option value={-1}>Voittaja</option>
               <option value={-2}>Häviäjä</option>
@@ -228,14 +165,12 @@ export default class PlayoffMatch extends React.PureComponent {
     }
   }
 
-  renderPlayoffGroupsDropDown() {
-    const { playoffGroups } = this.props
-    const { ageGroupId } = this.state.form
-    const groups = ageGroupId && playoffGroups.filter(g => g.ageGroupId === parseInt(ageGroupId))
-    if (groups?.length) {
+  const renderPlayoffGroupsDropDown = () => {
+    const groups = data.ageGroupId && playoffGroups.filter(g => g.ageGroupId === parseInt(data.ageGroupId))
+    if (groups && groups.length) {
       return (
         <div className="form__field">
-          <select onChange={this.changeValue('playoffGroupId')} value={this.state.form.playoffGroupId || ''}>
+          <select onChange={changeValue('playoffGroupId')} value={data.playoffGroupId || ''}>
             <option value="">- Jatkolohko -</option>
             {groups.map(playoffGroup => {
               const { id, name } = playoffGroup
@@ -247,39 +182,34 @@ export default class PlayoffMatch extends React.PureComponent {
     }
   }
 
-  renderButtons() {
+  const renderButtons = () => {
     return (
       <div className="form__buttons">
-        <Button label="Tallenna" onClick={this.submit} type="primary" disabled={!this.canSubmit()}/>
-        <Button label="Peruuta" onClick={this.cancel} type="normal"/>
-        {!!this.props.playoffMatch && <Button type="danger" label="Poista" onClick={this.delete}/>}
+        <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()}/>
+        <Button label="Peruuta" onClick={cancel} type="normal"/>
+        {!!playoffMatch && <Button type="danger" label="Poista" onClick={handleDelete}/>}
       </div>
     )
   }
 
-  openForm = () => {
-    const { fields, playoffMatch, tournamentDate } = this.props
-    this.setState({
-      formOpen: true,
-      form: {
-        ageGroupId: playoffMatch ? playoffMatch.ageGroupId : undefined,
-        awayTeamOrigin: playoffMatch ? this.buildOrigin(playoffMatch.awayTeamOriginType, playoffMatch.awayTeamOriginId) : undefined,
-        awayTeamOriginRule: playoffMatch ? playoffMatch.awayTeamOriginRule : undefined,
-        day: playoffMatch ? resolveDay(tournamentDate, playoffMatch.startTime) : 1,
-        fieldId: playoffMatch ? playoffMatch.fieldId : fields.length === 1 ? fields[0].id : undefined,
-        homeTeamOrigin: playoffMatch ? this.buildOrigin(playoffMatch.homeTeamOriginType, playoffMatch.homeTeamOriginId) : undefined,
-        homeTeamOriginRule: playoffMatch ? playoffMatch.homeTeamOriginRule : undefined,
-        playoffGroupId: playoffMatch ? playoffMatch.playoffGroupId : undefined,
-        startTime: playoffMatch ? formatTime(playoffMatch.startTime) : '',
-        title: playoffMatch ? playoffMatch.title : '',
-      },
+  const openForm = () => {
+    setData({
+      ageGroupId: playoffMatch ? playoffMatch.ageGroupId : undefined,
+      awayTeamOrigin: playoffMatch ? buildOrigin(playoffMatch.awayTeamOriginType, playoffMatch.awayTeamOriginId) : undefined,
+      awayTeamOriginRule: playoffMatch ? playoffMatch.awayTeamOriginRule : undefined,
+      day: playoffMatch ? resolveDay(tournamentDate, playoffMatch.startTime) : 1,
+      fieldId: playoffMatch ? playoffMatch.fieldId : fields.length === 1 ? fields[0].id : undefined,
+      homeTeamOrigin: playoffMatch ? buildOrigin(playoffMatch.homeTeamOriginType, playoffMatch.homeTeamOriginId) : undefined,
+      homeTeamOriginRule: playoffMatch ? playoffMatch.homeTeamOriginRule : undefined,
+      playoffGroupId: playoffMatch ? playoffMatch.playoffGroupId : undefined,
+      startTime: playoffMatch ? formatTime(playoffMatch.startTime) : '',
+      title: playoffMatch ? playoffMatch.title : '',
     })
+    setFormOpen(true)
   }
 
-  setField = event => {
-    const { playoffMatches, matchMinutes, tournamentDate } = this.props
-    const { form } = this.state
-    let { form: { day, startTime } } = this.state
+  const setField = event => {
+    let { day, startTime } = data
     const fieldId = event.target.value
     if (fieldId && startTime === '') {
       const suggestion = resolveSuggestedTime(playoffMatches, fieldId, matchMinutes, tournamentDate)
@@ -288,26 +218,28 @@ export default class PlayoffMatch extends React.PureComponent {
         day = suggestion.day
       }
     }
-    this.setState({ form: { ...form, day, fieldId, startTime } })
-    if (this.timeFieldRed) {
-      this.timeFieldRed.current.focus()
+    setData({ ...data, day, fieldId, startTime })
+    if (timeField) {
+      timeField.current.focus()
     }
   }
 
-  changeValue = field => event => {
-    const { form } = this.state
-    this.setState({ form: { ...form, [field]: event.target.value } })
+  const changeValue = field => event => {
+    setData({ ...data, [field]: event.target.value })
   }
 
-  canSubmit = () => {
-    const { form: { ageGroupId, awayTeamOrigin, awayTeamOriginRule, fieldId, homeTeamOrigin, homeTeamOriginRule, startTime, title } } = this.state
+  const canSubmit = () => {
+    const { ageGroupId, awayTeamOrigin, awayTeamOriginRule, fieldId, homeTeamOrigin, homeTeamOriginRule, startTime, title } = data
     return parseInt(ageGroupId) > 0 && !!awayTeamOrigin && !!awayTeamOriginRule && parseInt(fieldId) > 0 && !!homeTeamOrigin &&
       !!homeTeamOriginRule && startTime.match(/\d{2}:\d{2}/) && !!title
   }
 
-  submit = () => {
-    const { playoffMatch, onPlayoffMatchSave, tournamentId, tournamentDate } = this.props
-    const { form } = this.state
+  const resetForm = () => {
+    setFormOpen(false)
+    setErrors([])
+  }
+
+  const submit = () => {
     const {
       ageGroupId,
       awayTeamOrigin,
@@ -319,56 +251,109 @@ export default class PlayoffMatch extends React.PureComponent {
       playoffGroupId,
       startTime,
       title,
-    } = form
+    } = data
     const id = playoffMatch ? playoffMatch.id : undefined
-    const data = {
+    const body = {
       ageGroupId,
-      awayTeamOriginId: this.parseOriginId(awayTeamOrigin),
-      awayTeamOriginType: this.parseOriginType(awayTeamOrigin),
+      awayTeamOriginId: parseOriginId(awayTeamOrigin),
+      awayTeamOriginType: parseOriginType(awayTeamOrigin),
       awayTeamOriginRule,
       fieldId,
-      homeTeamOriginId: this.parseOriginId(homeTeamOrigin),
-      homeTeamOriginType: this.parseOriginType(homeTeamOrigin),
+      homeTeamOriginId: parseOriginId(homeTeamOrigin),
+      homeTeamOriginType: parseOriginType(homeTeamOrigin),
       homeTeamOriginRule,
       playoffGroupId,
       startTime: addDays(zonedTimeToUtc(`${tournamentDate} ${startTime}`, 'Europe/Helsinki'), day - 1),
       title,
     }
-    savePlayoffMatch(this.context, tournamentId, id, data, (errors, data) => {
+    savePlayoffMatch(accessContext, tournamentId, id, body, (errors, data) => {
       if (errors) {
-        this.setState({ errors })
+        setErrors(errors)
       } else {
-        this.setState({ formOpen: false, errors: [] })
+        resetForm()
         onPlayoffMatchSave(data)
       }
     })
   }
 
-  cancel = () => {
-    this.setState({ formOpen: false, errors: [] })
+  const cancel = () => {
+    resetForm()
   }
 
-  delete = () => {
-    const { playoffMatch: { id }, onPlayoffMatchDelete, tournamentId } = this.props
-    deletePlayoffMatch(this.context, tournamentId, id, (errors) => {
+  const handleDelete = () => {
+    deletePlayoffMatch(accessContext, tournamentId, playoffMatch.id, (errors) => {
       if (errors) {
-        this.setState({ errors })
+        setErrors(errors)
       } else {
-        this.setState({ formOpen: false, errors: [] })
-        onPlayoffMatchDelete(id)
+        resetForm()
+        onPlayoffMatchDelete(playoffMatch.id)
       }
     })
   }
 
-  buildOrigin = (type, id) => {
+  const buildOrigin = (type, id) => {
     return `${type}${ORIGIN_SEPARATOR}${id}`
   }
 
-  parseOriginType = origin => {
+  const parseOriginType = origin => {
     return origin.split(ORIGIN_SEPARATOR)[0]
   }
 
-  parseOriginId = origin => {
+  const parseOriginId = origin => {
     return parseInt(origin.split(ORIGIN_SEPARATOR)[1])
   }
+
+  return (
+    <div className="tournament-item">
+      {formOpen && renderForm()}
+      {!formOpen && renderName()}
+    </div>
+  )
 }
+
+PlayoffMatch.propTypes = {
+  ageGroups: PropTypes.arrayOf(idNamePropType).isRequired,
+  fields: PropTypes.arrayOf(idNamePropType).isRequired,
+  groups: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    ageGroupId: PropTypes.number.isRequired,
+  })),
+  playoffGroups: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    ageGroupId: PropTypes.number.isRequired,
+  })).isRequired,
+  playoffMatch: PropTypes.shape({
+    ageGroupId: PropTypes.number.isRequired,
+    awayTeamOriginId: PropTypes.number.isRequired,
+    awayTeamOriginType: PropTypes.string.isRequired,
+    awayTeamOriginRule: PropTypes.number.isRequired,
+    fieldId: PropTypes.number.isRequired,
+    homeTeamOriginId: PropTypes.number.isRequired,
+    homeTeamOriginType: PropTypes.string.isRequired,
+    homeTeamOriginRule: PropTypes.number.isRequired,
+    id: PropTypes.number.isRequired,
+    playoffGroupId: PropTypes.number,
+    startTime: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+  }),
+  playoffMatches: PropTypes.arrayOf(PropTypes.shape({
+    ageGroupId: PropTypes.number.isRequired,
+    fieldId: PropTypes.number.isRequired,
+    startTime: PropTypes.string.isRequired,
+  })).isRequired,
+  onPlayoffMatchDelete: PropTypes.func,
+  onPlayoffMatchSave: PropTypes.func.isRequired,
+  matchMinutes: PropTypes.number.isRequired,
+  teams: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    groupId: PropTypes.number.isRequired,
+  })).isRequired,
+  tournamentDays: PropTypes.number.isRequired,
+  tournamentId: PropTypes.number.isRequired,
+  tournamentDate: PropTypes.string.isRequired,
+}
+
+export default PlayoffMatch

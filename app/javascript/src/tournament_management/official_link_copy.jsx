@@ -1,52 +1,47 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import * as clipboard from 'clipboard-polyfill'
 import Button from '../form/button'
 import Message from '../components/message'
 import { buildUrl } from '../util/url_util'
 
-export default class OfficialLinkCopy extends React.PureComponent {
-  static propTypes = {
-    description: PropTypes.string.isRequired,
-    path: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-  }
+const OfficialLinkCopy = ({ description, path, title }) => {
+  const [officialLinkCopied, setCopied] = useState(false)
+  const [officialLinkCopyError, setError] = useState(false)
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      officialLinkCopied: false,
-      officialLinkCopyError: false,
-    }
-  }
-
-  render() {
-    const successFeedbackStyle = this.state.officialLinkCopied ? undefined :  { display: 'none' }
-    const errorFeedbackStyle = this.state.officialLinkCopyError ? undefined :  { display: 'none' }
-    return (
-      <div className="tournament-management__section">
-        <div className="official-link">
-          <Button onClick={this.copyOfficialLink} label={this.props.title} type="primary" />
-          <div className="official-link__description">{this.props.description}</div>
-          <Message type="success" style={successFeedbackStyle}>Linkki kopioitu leikepöydälle</Message>
-          <Message type="error" style={errorFeedbackStyle}>Selaimesi ei tue linkin kopiointia</Message>
-        </div>
-      </div>
-    )
-  }
-
-  copyOfficialLink = () => {
-    const url = buildUrl(this.props.path)
+  const copyOfficialLink = () => {
+    const url = buildUrl(path)
     clipboard.writeText(url).then(() => {
-      this.setState({ officialLinkCopied: true })
+      setCopied(true)
       setTimeout(() => {
-        this.setState({ officialLinkCopied: false })
+        setCopied(false)
       }, 5000)
     }).catch(() => {
-      this.setState({ officialLinkCopyError: true })
+      setError(true)
       setTimeout(() => {
-        this.setState({ officialLinkCopyError: false })
+        setError(false)
       }, 5000)
     })
   }
+
+  const successFeedbackStyle = officialLinkCopied ? undefined :  { display: 'none' }
+  const errorFeedbackStyle = officialLinkCopyError ? undefined :  { display: 'none' }
+  return (
+    <div className="tournament-management__section">
+      <div className="official-link">
+        <Button onClick={copyOfficialLink} label={title} type="primary" />
+        <div className="official-link__description">{description}</div>
+        <Message type="success" style={successFeedbackStyle}>Linkki kopioitu leikepöydälle</Message>
+        <Message type="error" style={errorFeedbackStyle}>Selaimesi ei tue linkin kopiointia</Message>
+      </div>
+    </div>
+  )
 }
+
+OfficialLinkCopy.propTypes = {
+  description: PropTypes.string.isRequired,
+  path: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+}
+
+export default OfficialLinkCopy

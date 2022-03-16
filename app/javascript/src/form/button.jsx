@@ -1,26 +1,12 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
 
-export default class Button extends React.PureComponent {
-  static propTypes = {
-    disabled: PropTypes.bool,
-    onClick: PropTypes.func.isRequired,
-    label: PropTypes.string.isRequired,
-    size: PropTypes.oneOf(['small']),
-    type: PropTypes.oneOf(['primary', 'normal', 'danger']).isRequired,
+const Button = ({ disabled, label, onClick, size, type }) => {
+  const inputType = () => {
+    return type === 'primary' ? 'submit' : 'button'
   }
 
-  render() {
-    const { disabled, label } = this.props
-    return <input type={this.inputType()} value={label} onClick={this.onClick} className={this.classNames()} disabled={disabled}/>
-  }
-
-  inputType = () => {
-    return this.props.type === 'primary' ? 'submit' : 'button'
-  }
-
-  classNames = () => {
-    const { size, type } = this.props
+  const classNames = () => {
     const classes = ['button']
     if (size === 'small') classes.push('button--small')
     if (type === 'primary') classes.push('button--primary')
@@ -28,8 +14,20 @@ export default class Button extends React.PureComponent {
     return classes.join(' ')
   }
 
-  onClick = event => {
+  const handleClick = useCallback(event => {
     event.preventDefault()
-    this.props.onClick()
-  }
+    onClick()
+  }, [onClick])
+
+  return <input type={inputType()} value={label} onClick={handleClick} className={classNames()} disabled={disabled}/>
 }
+
+Button.propTypes = {
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func.isRequired,
+  label: PropTypes.string.isRequired,
+  size: PropTypes.oneOf(['small']),
+  type: PropTypes.oneOf(['primary', 'normal', 'danger']).isRequired,
+}
+
+export default Button

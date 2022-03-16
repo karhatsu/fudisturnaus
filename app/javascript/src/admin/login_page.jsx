@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { loginToAdmin } from './api_client'
 import Title from '../components/title'
@@ -6,69 +6,57 @@ import TextField from '../form/text_field'
 import Button from '../form/button'
 import Message from '../components/message'
 
-export default class AdminLoginPage extends React.PureComponent {
-  static propTypes = {
-    onSuccessfulLogin: PropTypes.func.isRequired,
-  }
+const AdminLoginPage = ({ onSuccessfulLogin }) => {
+  const [error, setError] = useState()
+  const [data, setData] = useState({ username: '', password: '' })
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      error: undefined,
-      username: '',
-      password: '',
-    }
-  }
-
-  render() {
-    return (
-      <form className="form form--vertical">
-        <Title text="fudisturnaus.com" loading={false}/>
-        <div className="login-form">
-          {this.renderError()}
-          {this.renderField('Käyttäjätunnus', 'username', 'text')}
-          {this.renderField('Salasana', 'password', 'password')}
-          {this.renderSubmitButton()}
-        </div>
-      </form>
-    )
-  }
-
-  renderError() {
-    const { error } = this.state
+  const renderError = () => {
     if (error) {
       return <Message type="error">{error}</Message>
     }
   }
 
-  renderField(label, field, type) {
-    return <TextField field={field} label={label} onChange={this.setValue(field)} type={type} value={this.state[field]}/>
+  const renderField = (label, field, type) => {
+    return <TextField field={field} label={label} onChange={setValue(field)} type={type} value={data[field]}/>
   }
 
-  renderSubmitButton() {
+  const renderSubmitButton = () => {
     return (
       <div className="form__buttons">
-        <Button label="Kirjaudu sisään" onClick={this.submit} type="primary"/>
+        <Button label="Kirjaudu sisään" onClick={submit} type="primary"/>
       </div>
     )
   }
 
-  setValue = field => {
-    return e => {
-      this.setState({ [field]: e.target.value })
-    }
-  }
+  const setValue = field => e => setData({ ...data, [field]: e.target.value })
 
-  submit = () => {
-    const { username, password } = this.state
-    if (username && password) {
-      loginToAdmin(username, password, (error, sessionKey) => {
+  const submit = () => {
+    if (data.username && data.password) {
+      loginToAdmin(data.username, data.password, (error, sessionKey) => {
         if (error) {
-          this.setState({ error })
+          setError(error)
         } else {
-          this.props.onSuccessfulLogin(sessionKey)
+          onSuccessfulLogin(sessionKey)
         }
       })
     }
   }
+
+  return (
+    <form className="form form--vertical">
+      <Title text="fudisturnaus.com" loading={false}/>
+      <div className="login-form">
+        {renderError()}
+        {renderField('Käyttäjätunnus', 'username', 'text')}
+        {renderField('Salasana', 'password', 'password')}
+        {renderSubmitButton()}
+      </div>
+    </form>
+  )
 }
+
+AdminLoginPage.propTypes = {
+  onSuccessfulLogin: PropTypes.func.isRequired,
+}
+
+export default AdminLoginPage

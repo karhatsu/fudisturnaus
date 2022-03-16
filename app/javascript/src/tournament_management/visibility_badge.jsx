@@ -4,17 +4,8 @@ import { visibilityTypes } from '../util/enums'
 
 const { onlyTitle, teams, all } = visibilityTypes
 
-export default class VisibilityBadge extends React.PureComponent {
-  static propTypes = {
-    visibility: PropTypes.oneOf([onlyTitle, teams, all]).isRequired,
-  }
-
-  render() {
-    const { visibility } = this.props
-    return <div className={`badge badge--${visibility}`}>{this.resolveText(visibility)}</div>
-  }
-
-  resolveText = visibility => {
+const VisibilityBadge = ({ visibility }) => {
+  const resolveText = () => {
     switch (visibility) {
       case onlyTitle:
         return 'Vain perustiedot julkaistu'
@@ -24,4 +15,12 @@ export default class VisibilityBadge extends React.PureComponent {
         return 'Koko otteluohjelma julkaistu'
     }
   }
+
+  return <div className={`badge badge--${visibility}`}>{resolveText()}</div>
 }
+
+VisibilityBadge.propTypes = {
+  visibility: PropTypes.oneOf([onlyTitle, teams, all]).isRequired,
+}
+
+export default VisibilityBadge

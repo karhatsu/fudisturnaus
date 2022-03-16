@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import AccessContext from '../util/access_context'
 import { fetchClubs, refreshCache } from './api_client'
 import FormErrors from '../form/form_errors'
@@ -6,78 +6,72 @@ import ClubForm from './club_form'
 import Title from '../components/title'
 import Message from '../components/message'
 
-export default class ClubsManagementPage extends React.PureComponent {
-  static contextType = AccessContext
+const ClubsManagementPage = () => {
+  const [clubs, setClubs] = useState([])
+  const [errors, setErrors] = useState([])
+  const [cacheRefreshResponse, setCacheRefreshResponse] = useState()
+  const accessContext = useContext(AccessContext)
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      clubs: [],
-      errors: [],
-      cacheRefreshResponse: undefined,
-    }
-  }
-
-  render() {
-    return (
-      <div>
-        <Title iconLink="/admin" loading={!this.state.clubs.length} text="Seurat"/>
-        <div className="tournament-management__section">
-          <FormErrors errors={this.state.errors}/>
-          {this.state.clubs.map(club => <ClubForm key={club.id} club={club} onClubDelete={this.onClubDelete} onClubSave={this.onClubSave}/>)}
-        </div>
-        <div className="title-2">Cache refresh</div>
-        {this.renderCacheSection()}
-      </div>
-    )
-  }
-
-  componentDidMount() {
-    fetchClubs(this.context, (errors, response) => {
+  useEffect(() => {
+    fetchClubs(accessContext, (errors, response) => {
       if (errors) {
-        this.setState({ errors })
+        setErrors(errors)
       } else {
-        this.setState({ errors: [], clubs: response.clubs })
+        setErrors([])
+        setClubs(response.clubs)
       }
     })
+  }, [accessContext])
+
+  const onClubDelete = id => {
+    const newClubs = [...clubs]
+    const clubIndex = newClubs.findIndex(club => club.id === id)
+    newClubs.splice(clubIndex, 1)
+    setClubs(newClubs)
   }
 
-  onClubDelete = id => {
-    const clubs = [...this.state.clubs]
-    const clubIndex = clubs.findIndex(club => club.id === id)
-    clubs.splice(clubIndex, 1)
-    this.setState({ clubs })
+  const onClubSave = data => {
+    const newClubs = [...clubs]
+    const clubIndex = newClubs.findIndex(club => club.id === data.id)
+    newClubs[clubIndex] = { ...newClubs[clubIndex], ...data }
+    setClubs(clubs.sort((a, b) => a.name.localeCompare(b.name)))
   }
 
-  onClubSave = data => {
-    const clubs = [...this.state.clubs]
-    const clubIndex = clubs.findIndex(club => club.id === data.id)
-    clubs[clubIndex] = { ...clubs[clubIndex], ...data }
-    this.setState({ clubs: clubs.sort((a, b) => a.name.localeCompare(b.name) ) })
-  }
-
-  renderCacheSection() {
-    const { cacheRefreshResponse } = this.state
+  const renderCacheSection = () => {
     const messageType = cacheRefreshResponse === 'Done' ? 'success' : (cacheRefreshResponse ? 'error' : undefined)
     return (
       <div className="tournament-management__section">
         {cacheRefreshResponse && <Message type={messageType}>{cacheRefreshResponse}</Message>}
-        <a href="#" onClick={this.refreshCache}>Refresh cache</a>
+        <a href="#" onClick={handleRefresh}>Refresh cache</a>
       </div>
     )
   }
 
-  refreshCache = event => {
+  const handleRefresh = event => {
     event.preventDefault()
-    refreshCache(this.context, errors => {
+    refreshCache(accessContext, errors => {
       if (errors) {
-        this.setState({ cacheRefreshResponse: errors })
+        setCacheRefreshResponse(errors)
       } else {
-        this.setState({ cacheRefreshResponse: 'Done' })
+        setCacheRefreshResponse('Done')
         setTimeout(() => {
-          this.setState({ cacheRefreshResponse: undefined })
+          setCacheRefreshResponse()
         }, 3000)
       }
     })
   }
+
+  return (
+    <div>
+      <Title iconLink="/admin" loading={!clubs.length} text="Seurat"/>
+      <div className="tournament-management__section">
+        <FormErrors errors={errors}/>
+        {clubs.map(club => <ClubForm key={club.id} club={club} onClubDelete={onClubDelete} onClubSave={onClubSave}/>)}
+      </div>
+      <div className="title-2">Cache refresh</div>
+      {renderCacheSection()}
+    </div>
+  )
 }
+
+export default ClubsManagementPage

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import AccessContext from '../util/access_context'
 import FormErrors from '../form/form_errors'
@@ -7,108 +7,98 @@ import Button from '../form/button'
 import { deleteClub, updateClub } from './api_client'
 import Team from '../public/team'
 
-export default class ClubForm extends React.PureComponent {
-  static propTypes = {
-    club: PropTypes.shape({
-      alias: PropTypes.string,
-      id: PropTypes.number.isRequired,
-      logoUrl: PropTypes.string,
-      name: PropTypes.string.isRequired,
-    }).isRequired,
-    onClubDelete: PropTypes.func.isRequired,
-    onClubSave: PropTypes.func.isRequired,
-  }
+const ClubForm = ({ club, onClubDelete, onClubSave }) => {
+  const [formOpen, setFormOpen] = useState(false)
+  const [data, setData] = useState({})
+  const [errors, setErrors] = useState([])
+  const nameField = useRef()
+  const accessContext = useContext(AccessContext)
 
-  static contextType = AccessContext
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      formOpen: false,
-      name: undefined,
-      logoUrl: undefined,
-      alias: undefined,
-      errors: [],
+  useEffect(() => {
+    if (formOpen) {
+      nameField.current.focus()
     }
-    this.nameFieldRed = React.createRef()
+  }, [formOpen])
+
+  const renderName = () => {
+    return <div className="tournament-item__title" onClick={openForm}><Team club={club} name={club.name}/></div>
   }
 
-  render() {
-    return (
-      <div className="tournament-item">
-        {this.state.formOpen && this.renderForm()}
-        {!this.state.formOpen && this.renderName()}
-      </div>
-    )
-  }
-
-  renderName() {
-    const { club } = this.props
-    return <div className="tournament-item__title" onClick={this.openForm}><Team club={club} name={club.name}/></div>
-  }
-
-  renderForm() {
+  const renderForm = () => {
     return (
       <form className="form form--horizontal">
-        <FormErrors errors={this.state.errors}/>
+        <FormErrors errors={errors}/>
         <div className="tournament-item__form">
-          <TextField ref={this.nameFieldRed} onChange={this.changeValue('name')} value={this.state.name}/>
-          <TextField placeholder="Logo URL" onChange={this.changeValue('logoUrl')} value={this.state.logoUrl}/>
-          <TextField placeholder="Alias" onChange={this.changeValue('alias')} value={this.state.alias}/>
+          <TextField ref={nameField} onChange={changeValue('name')} value={data.name}/>
+          <TextField placeholder="Logo URL" onChange={changeValue('logoUrl')} value={data.logoUrl}/>
+          <TextField placeholder="Alias" onChange={changeValue('alias')} value={data.alias}/>
           <div className="form__buttons">
-            <Button label="Tallenna" onClick={this.submit} type="primary" disabled={!this.canSubmit()}/>
-            <Button label="Peruuta" onClick={this.cancel} type="normal"/>
-            <Button label="Poista" onClick={this.delete} type="danger"/>
+            <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()}/>
+            <Button label="Peruuta" onClick={cancel} type="normal"/>
+            <Button label="Poista" onClick={handleDelete} type="danger"/>
           </div>
         </div>
       </form>
     )
   }
 
-  openForm = () => {
-    const { club: { alias, logoUrl, name } } = this.props
-    this.setState({ formOpen: true, logoUrl: logoUrl || '', name, alias: alias || ''  })
+  const openForm = () => {
+    const { alias, logoUrl, name } = club
+    setData({ logoUrl: logoUrl || '', name, alias: alias || ''  })
+    setFormOpen(true)
   }
 
-  changeValue = field => event => {
-    this.setState({ [field]: event.target.value })
+  const changeValue = field => event => setData({ ...data, [field]: event.target.value })
+
+  const canSubmit = () => {
+    return !!data.name
   }
 
-  canSubmit = () => {
-    return !!this.state.name
-  }
-
-  submit = () => {
-    const { club, onClubSave } = this.props
-    const { name, logoUrl, alias } = this.state
-    updateClub(this.context, club.id, { name, logoUrl, alias }, (errors, data) => {
+  const submit = () => {
+    const { name, logoUrl, alias } = data
+    updateClub(accessContext, club.id, { name, logoUrl, alias }, (errors, data) => {
       if (errors) {
-        this.setState({ errors })
+        setErrors(errors)
       } else {
-        this.setState({ formOpen: false, errors: [] })
+        setFormOpen(false)
+        setErrors([])
         onClubSave(data)
       }
     })
   }
 
-  cancel = () => {
-    this.setState({ formOpen: false, errors: [] })
+  const cancel = () => {
+    setFormOpen(false)
+    setErrors([])
   }
 
-  delete = () => {
-    const { club, onClubDelete } = this.props
-    deleteClub(this.context, club.id, errors => {
+  const handleDelete = () => {
+    deleteClub(accessContext, club.id, errors => {
       if (errors) {
-        this.setState({ errors })
+        setErrors(errors)
       } else {
         onClubDelete(club.id)
       }
     })
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (!prevState.formOpen && this.state.formOpen && this.nameFieldRed) {
-      this.nameFieldRed.current.focus()
-    }
-  }
+  return (
+    <div className="tournament-item">
+      {formOpen && renderForm()}
+      {!formOpen && renderName()}
+    </div>
+  )
 }
+
+ClubForm.propTypes = {
+  club: PropTypes.shape({
+    alias: PropTypes.string,
+    id: PropTypes.number.isRequired,
+    logoUrl: PropTypes.string,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
+  onClubDelete: PropTypes.func.isRequired,
+  onClubSave: PropTypes.func.isRequired,
+}
+
+export default ClubForm

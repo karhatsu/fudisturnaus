@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import TextField from '../form/text_field'
 import Button from '../form/button'
 import { sendContactRequest } from './api_client'
@@ -8,87 +8,82 @@ import Message from '../components/message'
 const genericIntro = 'Lähettäkää alla oleva lomake, niin hoidetaan asia kuntoon saman tien.'
 const tournamentIntro = 'Jos tiedätte jo turnauksen tarkemmat tiedot, voitte täyttää ne valmiiksi tähän.'
 
-export default class ContactForm extends React.PureComponent {
-  constructor(props) {
-    super(props)
-    this.state = {
-      errors: [],
-      submitted: false,
-      form: {
-        name: '',
-        contactInfo: '',
-        message: '',
-        tournamentOrganizer: '',
-        tournamentName: '',
-        tournamentStartDate: '',
-        tournamentDays: 1,
-        tournamentLocation: '',
-      },
-    }
-  }
+const initialData = {
+  name: '',
+  contactInfo: '',
+  message: '',
+  tournamentOrganizer: '',
+  tournamentName: '',
+  tournamentStartDate: '',
+  tournamentDays: 1,
+  tournamentLocation: '',
+}
 
-  render() {
-    if (this.state.submitted) {
-      return <Message type="success" noMargins={true}>Kiitos yhteydenotosta. Palaamme asiaan pian!</Message>
-    }
-    return (
-      <form className="form form--vertical">
-        <FormErrors errors={this.state.errors}/>
-        {this.renderIntro(genericIntro)}
-        {this.renderField('Nimi', 'name', 'text', 'Oma nimesi')}
-        {this.renderField('Yhteystieto', 'contactInfo', 'text', 'Esim. sähköposti tai puhelin')}
-        {this.renderMessageField()}
-        {this.renderIntro(tournamentIntro)}
-        {this.renderField('Turnauksen järjestävä seura', 'tournamentOrganizer', 'text')}
-        {this.renderField('Turnauksen nimi', 'tournamentName', 'text')}
-        {this.renderField('Pvm', 'tournamentStartDate', 'date')}
-        {this.renderField('Kesto (pv)', 'tournamentDays', 'number')}
-        {this.renderField('Paikka (kentän nimi)', 'tournamentLocation', 'text')}
-        <div className="form__buttons">
-          <Button label="Lähetä" onClick={this.submit} type="primary" disabled={!this.canSubmit()}/>
-        </div>
-      </form>
-    )
-  }
+const ContactForm = () => {
+  const [errors, setErrors] = useState([])
+  const [submitted, setSubmitted] = useState(false)
+  const [data, setData] = useState(initialData)
 
-  renderIntro(text) {
+  const renderIntro = (text) => {
     return <div className="form__intro">{text}</div>
   }
 
-  renderField(label, field, type, placeholder) {
+  const renderField = (label, field, type, placeholder) => {
     return <TextField
       label={label}
-      onChange={this.setValue(field)}
+      onChange={setValue(field)}
       placeholder={placeholder}
       type={type}
-      value={this.state.form[field]}/>
+      value={data[field]}/>
   }
 
-  renderMessageField() {
+  const renderMessageField = () => {
     return (
       <div className="form__field">
         <div className="label">Viesti</div>
-        <textarea className="form__field" onChange={this.setValue('message')} cols={40} rows={10}/>
+        <textarea className="form__field" onChange={setValue('message')} cols={40} rows={10}/>
       </div>
     )
   }
 
-  setValue = field => event => {
-    const { form } = this.state
-    this.setState({ form: { ...form, [field]: event.target.value } })
-  }
+  const setValue = field => event => setData({ ...data, [field]: event.target.value })
 
-  canSubmit = () => {
-    const { form: { name, contactInfo } } = this.state
+  const canSubmit = () => {
+    const { name, contactInfo } = data
     return !!name && !!contactInfo
   }
 
-  submit = () => {
-    sendContactRequest(this.state.form, errors => {
+  const submit = () => {
+    sendContactRequest(data, errors => {
       if (errors) {
-        return this.setState({ errors })
+        return setErrors(errors)
       }
-      this.setState({ submitted: true })
+      setSubmitted(true)
     })
   }
+
+  if (submitted) {
+    return <Message type="success" noMargins={true}>Kiitos yhteydenotosta. Palaamme asiaan pian!</Message>
+  }
+
+  return (
+    <form className="form form--vertical">
+      <FormErrors errors={errors}/>
+      {renderIntro(genericIntro)}
+      {renderField('Nimi', 'name', 'text', 'Oma nimesi')}
+      {renderField('Yhteystieto', 'contactInfo', 'text', 'Esim. sähköposti tai puhelin')}
+      {renderMessageField()}
+      {renderIntro(tournamentIntro)}
+      {renderField('Turnauksen järjestävä seura', 'tournamentOrganizer', 'text')}
+      {renderField('Turnauksen nimi', 'tournamentName', 'text')}
+      {renderField('Pvm', 'tournamentStartDate', 'date')}
+      {renderField('Kesto (pv)', 'tournamentDays', 'number')}
+      {renderField('Paikka (kentän nimi)', 'tournamentLocation', 'text')}
+      <div className="form__buttons">
+        <Button label="Lähetä" onClick={submit} type="primary" disabled={!canSubmit()}/>
+      </div>
+    </form>
+  )
 }
+
+export default ContactForm

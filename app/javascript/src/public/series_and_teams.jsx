@@ -3,86 +3,86 @@ import PropTypes from 'prop-types'
 import Team from './team'
 import Message from '../components/message'
 
-export default class SeriesAndTeams extends React.PureComponent {
-  static propTypes = {
-    tournament: PropTypes.shape({
-      ageGroups: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-      })).isRequired,
-      cancelled: PropTypes.bool.isRequired,
-      clubs: PropTypes.arrayOf(PropTypes.shape({
-        logoUrl: PropTypes.string,
-      })).isRequired,
-      groups: PropTypes.arrayOf(PropTypes.shape({
-        ageGroupId: PropTypes.number.isRequired,
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-      })).isRequired,
-      teams: PropTypes.arrayOf(PropTypes.shape({
-        ageGroupId: PropTypes.number.isRequired,
-        clubId: PropTypes.number.isRequired,
-        groupId: PropTypes.number.isRequired,
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-      })).isRequired,
-    }).isRequired,
-  }
+const SeriesAndTeams = ({ tournament }) => {
 
-  render() {
-    return (
-      <div className="series-and-teams">
-        {this.renderInfo()}
-        {this.props.tournament.ageGroups.map(this.renderAgeGroup)}
-      </div>
-    )
-  }
-
-  renderInfo = () => {
-    if (!this.props.tournament.cancelled) {
+  const renderInfo = () => {
+    if (!tournament.cancelled) {
       return <Message type="warning" fullPage={true}>Turnauksen otteluohjelma julkaistaan myöhemmin</Message>
     }
   }
 
-  renderAgeGroup = ageGroup => {
+  const renderAgeGroup = ageGroup => {
     const { id, name } = ageGroup
-    const ageGroupTitle = this.oneAgeGroup() ? 'Ilmoittautuneet joukkueet' : name
+    const ageGroupTitle = oneAgeGroup() ? 'Ilmoittautuneet joukkueet' : name
     return (
       <div className="series-and-teams__age-group" key={id}>
         <div className="title-2">{ageGroupTitle}</div>
-        <div className="series-and-teams__groups">{this.renderGroups(id)}</div>
+        <div className="series-and-teams__groups">{renderGroups(id)}</div>
       </div>
     )
   }
 
-  renderGroups = ageGroupId => {
-    const ageGroupTeams = this.props.tournament.teams.filter(team => team.ageGroupId === ageGroupId)
+  const renderGroups = ageGroupId => {
+    const ageGroupTeams = tournament.teams.filter(team => team.ageGroupId === ageGroupId)
     if (!ageGroupTeams.length) {
-      const msg = `${this.oneAgeGroup() ? 'Turnaukseen' : 'Sarjaan'} ei ole ilmoittautunut vielä yhtään joukkuetta`
+      const msg = `${oneAgeGroup() ? 'Turnaukseen' : 'Sarjaan'} ei ole ilmoittautunut vielä yhtään joukkuetta`
       return <div className="series-and-teams__no-teams">{msg}</div>
     }
-    const groups = this.props.tournament.groups.filter(group => group.ageGroupId === ageGroupId)
-    return groups.map(group => this.renderGroup(group, groups.length > 1))
+    const groups = tournament.groups.filter(group => group.ageGroupId === ageGroupId)
+    return groups.map(group => renderGroup(group, groups.length > 1))
   }
 
-  renderGroup = (group, multipleGroups) => {
-    const teams = this.props.tournament.teams.filter(team => team.groupId === group.id)
+  const renderGroup = (group, multipleGroups) => {
+    const teams = tournament.teams.filter(team => team.groupId === group.id)
     if (!teams.length) return
     return (
       <div className="series-and-teams__group" key={group.id}>
         {multipleGroups && <div className="series-and-teams__group-title">{group.name}</div>}
-        {teams.map(this.renderTeam)}
+        {teams.map(renderTeam)}
       </div>
     )
   }
 
-  renderTeam = (team) => {
-    const { tournament: { clubs } } = this.props
+  const renderTeam = (team) => {
     const { clubId, id, name: teamName } = team
-    return <div className="series-and-teams__team" key={id}><Team clubId={clubId} clubs={clubs} name={teamName}/></div>
+    return <div className="series-and-teams__team" key={id}><Team clubId={clubId} clubs={tournament.clubs} name={teamName}/></div>
   }
 
-  oneAgeGroup = () => {
-    return this.props.tournament.ageGroups.length === 1
+  const oneAgeGroup = () => {
+    return tournament.ageGroups.length === 1
   }
+
+  return (
+    <div className="series-and-teams">
+      {renderInfo()}
+      {tournament.ageGroups.map(renderAgeGroup)}
+    </div>
+  )
 }
+
+SeriesAndTeams.propTypes = {
+  tournament: PropTypes.shape({
+    ageGroups: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })).isRequired,
+    cancelled: PropTypes.bool.isRequired,
+    clubs: PropTypes.arrayOf(PropTypes.shape({
+      logoUrl: PropTypes.string,
+    })).isRequired,
+    groups: PropTypes.arrayOf(PropTypes.shape({
+      ageGroupId: PropTypes.number.isRequired,
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })).isRequired,
+    teams: PropTypes.arrayOf(PropTypes.shape({
+      ageGroupId: PropTypes.number.isRequired,
+      clubId: PropTypes.number.isRequired,
+      groupId: PropTypes.number.isRequired,
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })).isRequired,
+  }).isRequired,
+}
+
+export default SeriesAndTeams

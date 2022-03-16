@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useParams } from 'react-router'
 import { Route, Switch } from 'react-router-dom'
 
 import '../styles/application.scss'
@@ -8,37 +9,21 @@ import TournamentManagementPage from '../tournament_management/main'
 import EditableMatch from './editable_match'
 import AccessContext from '../util/access_context'
 
-export default class OfficialMain extends React.PureComponent {
-  static propTypes = {
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        accessKey: PropTypes.string,
-        resultsAccessKey: PropTypes.string,
-      }).isRequired,
-    }).isRequired,
-    tournamentId: PropTypes.number.isRequired,
-  }
+const OfficialMain = ({ tournamentId }) => {
+  const { accessKey, resultsAccessKey } = useParams()
 
-  render() {
-    const { match: { params: { accessKey, resultsAccessKey } } } = this.props
+  const renderTournamentManagementPage = routeProps => {
     return (
-      <AccessContext.Provider value={{ officialAccessKey: accessKey, resultsAccessKey }}>
-        <Switch>
-          <Route path="/official/:accessKey/management" render={props => this.renderTournamentManagementPage(props)}/>
-          <Route path="/official/:accessKey" render={props => this.renderTournamentPage(props, officialLevels.full)}/>
-          <Route path="/results/:resultsAccessKey" render={props => this.renderTournamentPage(props, officialLevels.results)}/>
-        </Switch>
-      </AccessContext.Provider>
+      <TournamentManagementPage
+        {...routeProps}
+        official={true}
+        titleIconLink={`/official/${accessKey}`}
+        tournamentId={tournamentId}
+      />
     )
   }
 
-  renderTournamentManagementPage(routeProps) {
-    const { match: { params: { accessKey } }, tournamentId } = this.props
-    return <TournamentManagementPage {...routeProps} official={true} titleIconLink={`/official/${accessKey}`} tournamentId={tournamentId} />
-  }
-
-  renderTournamentPage(routeProps, officialLevel) {
-    const { tournamentId } = this.props
+  const renderTournamentPage = (routeProps, officialLevel) => {
     return (
       <TournamentPage
         {...routeProps}
@@ -48,4 +33,20 @@ export default class OfficialMain extends React.PureComponent {
       />
     )
   }
+
+  return (
+    <AccessContext.Provider value={{ officialAccessKey: accessKey, resultsAccessKey }}>
+      <Switch>
+        <Route path="/official/:accessKey/management" render={props => renderTournamentManagementPage(props)}/>
+        <Route path="/official/:accessKey" render={props => renderTournamentPage(props, officialLevels.full)}/>
+        <Route path="/results/:resultsAccessKey" render={props => renderTournamentPage(props, officialLevels.results)}/>
+      </Switch>
+    </AccessContext.Provider>
+  )
 }
+
+OfficialMain.propTypes = {
+  tournamentId: PropTypes.number.isRequired,
+}
+
+export default OfficialMain

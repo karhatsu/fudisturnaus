@@ -29,13 +29,13 @@ module GroupResults
   def sort_teams_by_all_rules(sorted_team_results)
     if equal_points_rule == Tournament::EQUAL_POINTS_RULE_ALL_MATCHES_FIRST
       sorted_team_results.sort do |a, b|
-        [b.relative_points, b.mutual_relative_points, b.lot, a.team_name] <=>
-          [a.relative_points, a.mutual_relative_points, a.lot, b.team_name]
+        [b.relative_points, b.mutual_relative_points, b.lot.to_i, a.team_name] <=>
+          [a.relative_points, a.mutual_relative_points, a.lot.to_i, b.team_name]
       end
     else
       sorted_team_results.sort do |a, b|
-        [b.points, b.mutual_relative_points, b.relative_points, b.lot, a.team_name] <=>
-          [a.points, a.mutual_relative_points, a.relative_points, a.lot, b.team_name]
+        [b.points, b.mutual_relative_points, b.relative_points, b.lot.to_i, a.team_name] <=>
+          [a.points, a.mutual_relative_points, a.relative_points, a.lot.to_i, b.team_name]
       end
     end
   end

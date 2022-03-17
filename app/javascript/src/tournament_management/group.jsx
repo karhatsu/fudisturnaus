@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { deleteGroup, saveGroup } from './api_client'
 import AccessContext from '../util/access_context'
@@ -7,18 +7,17 @@ import { idNamePropType } from '../util/custom_prop_types'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
 import Button from '../form/button'
+import useForm from '../util/use_form'
 
 const Group = ({ ageGroups, group, onGroupDelete, onGroupSave, tournamentId, type }) => {
   const accessContext = useContext(AccessContext)
   const nameField = useRef()
-  const [formOpen, setFormOpen] = useState(false)
-  const [data, setData] = useState({})
-  const [errors, setErrors] = useState([])
+  const { formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, changeValue } = useForm()
 
   const renderName = () => {
     const title = type === 'playoffGroup' ? 'jatkolohko' : 'lohko'
     const text = group ? `${group.name} (${getName(ageGroups, group.ageGroupId)})` : `+ Lisää uusi ${title}`
-    return <div className={resolveTournamentItemClasses(group)}><span onClick={editGroup}>{text}</span></div>
+    return <div className={resolveTournamentItemClasses(group)}><span onClick={onOpenClick}>{text}</span></div>
   }
 
   const renderForm = () => {
@@ -28,7 +27,7 @@ const Group = ({ ageGroups, group, onGroupDelete, onGroupSave, tournamentId, typ
         <FormErrors errors={errors}/>
         <div className="tournament-item__form">
           <div className="form__field">
-            <select onChange={changeValue('ageGroupId')} value={ageGroupId}>
+            <select onChange={onAgeGroupChange} value={ageGroupId}>
               <option>Sarja</option>
               {ageGroups.map(ageGroup => {
                 const { id, name } = ageGroup
@@ -36,10 +35,10 @@ const Group = ({ ageGroups, group, onGroupDelete, onGroupSave, tournamentId, typ
               })}
             </select>
           </div>
-          <TextField ref={nameField} onChange={changeValue('name')} placeholder="Esim. A tai Taso 2" value={name}/>
+          <TextField ref={nameField} onChange={onFieldChange('name')} placeholder="Esim. A tai Taso 2" value={name}/>
           <div className="form__buttons">
             <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()}/>
-            <Button label="Peruuta" onClick={cancel} type="normal"/>
+            <Button label="Peruuta" onClick={closeForm} type="normal"/>
             {!!group && <Button type="danger" label="Poista" onClick={handleDelete}/>}
           </div>
         </div>
@@ -47,17 +46,16 @@ const Group = ({ ageGroups, group, onGroupDelete, onGroupSave, tournamentId, typ
     )
   }
 
-  const editGroup = () => {
-    setData({
+  const onOpenClick = () => {
+    openForm({
       ageGroupId: group ? group.ageGroupId : -1,
       name: group ? group.name : '',
     })
-    setFormOpen(true)
   }
 
-  const changeValue = field => event => {
-    setData({ ...data, [field]: event.target.value })
-    if (field === 'ageGroupId' && nameField) {
+  const onAgeGroupChange = event => {
+    changeValue('ageGroupId', event.target.value)
+    if (nameField) {
       nameField.current.focus()
     }
   }
@@ -66,25 +64,16 @@ const Group = ({ ageGroups, group, onGroupDelete, onGroupSave, tournamentId, typ
     return parseInt(data.ageGroupId) > 0 && !!data.name
   }
 
-  const resetForm = () => {
-    setFormOpen(false)
-    setErrors([])
-  }
-
   const submit = () => {
     const trimmedData = { ...data, name: data.name.trim() }
     saveGroup(accessContext, pathType(), tournamentId, group ? group.id : undefined, trimmedData, (errors, data) => {
       if (errors) {
         setErrors(errors)
       } else {
-        resetForm()
+        closeForm()
         onGroupSave(data)
       }
     })
-  }
-
-  const cancel = () => {
-    resetForm()
   }
 
   const handleDelete = () => {
@@ -92,7 +81,7 @@ const Group = ({ ageGroups, group, onGroupDelete, onGroupSave, tournamentId, typ
       if (errors) {
         setErrors(errors)
       } else {
-        resetForm()
+        closeForm()
         onGroupDelete(group.id)
       }
     })

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { deleteAgeGroup, saveAgeGroup } from './api_client'
 import AccessContext from '../util/access_context'
@@ -6,13 +6,12 @@ import { resolveTournamentItemClasses } from '../util/util'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
 import Button from '../form/button'
+import useForm from '../util/use_form'
 
 const AgeGroup = ({ ageGroup, onAgeGroupDelete, onAgeGroupSave, tournamentId }) => {
   const accessContext = useContext(AccessContext)
   const nameField = useRef()
-  const [formOpen, setFormOpen] = useState(false)
-  const [data, setData] = useState({})
-  const [errors, setErrors] = useState([])
+  const { formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, onCheckboxChange } = useForm()
 
   useEffect(() => {
     if (formOpen) {
@@ -41,14 +40,14 @@ const AgeGroup = ({ ageGroup, onAgeGroupDelete, onAgeGroupSave, tournamentId }) 
       <form className="form form--horizontal">
         <FormErrors errors={errors}/>
         <div className="tournament-item__form">
-          <TextField ref={nameField} onChange={changeName} placeholder="Esim. P11 tai T09 Haaste" value={name}/>
+          <TextField ref={nameField} onChange={onFieldChange('name')} placeholder="Esim. P11 tai T09 Haaste" value={name}/>
           <div className="form__field">
-            <input type="checkbox" onChange={changeCalculateGroupTables} value={true} checked={!!calculateGroupTables}/>
+            <input type="checkbox" onChange={onCheckboxChange('calculateGroupTables')} value={true} checked={!!calculateGroupTables}/>
             Laske sarjataulukot
           </div>
           <div className="form__buttons">
             <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()}/>
-            <Button label="Peruuta" onClick={cancel} type="normal"/>
+            <Button label="Peruuta" onClick={closeForm} type="normal"/>
             {!!ageGroup && <Button type="danger" label="Poista" onClick={handleDelete}/>}
           </div>
         </div>
@@ -57,28 +56,14 @@ const AgeGroup = ({ ageGroup, onAgeGroupDelete, onAgeGroupSave, tournamentId }) 
   }
 
   const editAgeGroup = () => {
-    setData({
+    openForm({
       name: ageGroup ? ageGroup.name : '',
       calculateGroupTables: ageGroup && ageGroup.calculateGroupTables,
     })
-    setFormOpen(true)
-  }
-
-  const changeName = event => {
-    setData({ ...data, name: event.target.value })
-  }
-
-  const changeCalculateGroupTables = event => {
-    setData({ ...data, calculateGroupTables: event.target.checked })
   }
 
   const canSubmit = () => {
     return !!data.name
-  }
-
-  const resetForm = () => {
-    setFormOpen(false)
-    setErrors([])
   }
 
   const submit = () => {
@@ -87,14 +72,10 @@ const AgeGroup = ({ ageGroup, onAgeGroupDelete, onAgeGroupSave, tournamentId }) 
       if (errors) {
         setErrors(errors)
       } else {
-        resetForm()
+        closeForm()
         onAgeGroupSave(data)
       }
     })
-  }
-
-  const cancel = () => {
-    resetForm()
   }
 
   const handleDelete = () => {
@@ -102,7 +83,7 @@ const AgeGroup = ({ ageGroup, onAgeGroupDelete, onAgeGroupSave, tournamentId }) 
       if (errors) {
         setErrors(errors)
       } else {
-        resetForm()
+        closeForm()
         onAgeGroupDelete(ageGroup.id)
       }
     })

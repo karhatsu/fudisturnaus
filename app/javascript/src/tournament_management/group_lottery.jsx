@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import { getName } from '../util/util'
 import { saveLottery } from './api_client'
@@ -6,19 +6,18 @@ import AccessContext from '../util/access_context'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
 import Button from '../form/button'
+import useForm from '../util/use_form'
 
 const GroupLottery = ({ ageGroups, group, onLotterySave, tournamentId }) => {
   const accessContext = useContext(AccessContext)
-  const [formOpen, setFormOpen] = useState(false)
-  const [lots, setLots] = useState({})
-  const [errors, setErrors] = useState([])
+  const { formOpen, data, errors, setErrors, openForm, closeForm, changeValue } = useForm()
 
   const renderButtons = () => {
     if (formOpen) {
       return (
         <div className="form__buttons">
           <Button label="Tallennan arvonnan tulos" onClick={save} type="primary"/>
-          <Button label="Peruuta" onClick={cancel} type="normal"/>
+          <Button label="Peruuta" onClick={closeForm} type="normal"/>
         </div>
       )
     }
@@ -46,41 +45,30 @@ const GroupLottery = ({ ageGroups, group, onLotterySave, tournamentId }) => {
 
   const renderLotField = (teamId) => {
     if (formOpen) {
-      return <TextField onChange={setLot(teamId)} placeholder="Esim. 0 tai 1" type="number" value={lots[teamId] || ''}/>
+      return <TextField onChange={setLot(teamId)} placeholder="Esim. 0 tai 1" type="number" value={data[teamId] || ''}/>
     }
     const lot = group.results.find(result => result.teamId === teamId).lot
     const text = lot || lot === 0 ? `Arpa: ${lot}` : 'Aseta arpa'
-    return <a href="#" onClick={openForm}>{text}</a>
+    return <a href="#" onClick={onOpenClick}>{text}</a>
   }
 
-  const setLot = (teamId) => event => setLots({ ...lots, [teamId]: event.target.value })
+  const setLot = (teamId) => event => changeValue(teamId, event.target.value)
 
-  const openForm = (e) => {
+  const onOpenClick = e => {
     e.preventDefault()
     const lots = {}
     group.results.forEach(result => {
       lots[result.teamId] = result.lot === 0 ? '0' : result.lot
     })
-    setLots(lots)
-    setErrors([])
-    setFormOpen(true)
-  }
-
-  const resetForm = () => {
-    setFormOpen(false)
-    setErrors([])
-  }
-
-  const cancel = () => {
-    resetForm()
+    openForm(lots)
   }
 
   const save = () => {
-    saveLottery(accessContext, tournamentId, group.id, lots, (errors, data) => {
+    saveLottery(accessContext, tournamentId, group.id, data, (errors, data) => {
       if (errors) {
         setErrors(errors)
       } else {
-        resetForm()
+        closeForm()
         onLotterySave(group.id, data)
       }
     })

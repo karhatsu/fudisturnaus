@@ -7,6 +7,7 @@ import { idNamePropType } from '../util/custom_prop_types'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
 import Button from '../form/button'
+import useForm from '../util/use_form'
 
 const CHOOSE_CLUB_ID = '-1'
 const NEW_CLUB_ID = '-2'
@@ -15,10 +16,8 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
   const accessContext = useContext(AccessContext)
   const nameField = useRef()
   const clubNameField = useRef()
-  const [formOpen, setFormOpen] = useState(false)
-  const [data, setData] = useState({})
+  const { formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, changeValue, changeValues } = useForm()
   const [clubName, setClubName] = useState('')
-  const [errors, setErrors] = useState([])
 
   useEffect(() => {
     if (data.clubId && data.clubId === NEW_CLUB_ID && clubNameField) {
@@ -40,7 +39,7 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
         <FormErrors errors={errors}/>
         <div className="tournament-item__form">
           <div className="form__field">
-            <select onChange={changeValue('groupId')} value={groupId}>
+            <select onChange={onFieldChange('groupId')} value={groupId}>
               <option>Lohko</option>
               {groups.map(group => {
                 const { id, name, ageGroupId } = group
@@ -49,7 +48,7 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
             </select>
           </div>
           <div className="form__field">
-            <select onChange={changeValue('clubId')} value={clubId}>
+            <select onChange={onClubIdChange} value={clubId}>
               <option value={CHOOSE_CLUB_ID}>Seura</option>
               <option value={NEW_CLUB_ID}>+ Lisää uusi seura</option>
               {clubs.map(club => {
@@ -58,10 +57,10 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
               })}
             </select>
           </div>
-          <TextField ref={nameField} onChange={changeValue('name')} placeholder="Esim. FC Kontu Valkoinen" value={name}/>
+          <TextField ref={nameField} onChange={onFieldChange('name')} placeholder="Esim. FC Kontu Valkoinen" value={name}/>
           <div className="form__buttons">
             <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()}/>
-            <Button label="Peruuta" onClick={cancel} type="normal"/>
+            <Button label="Peruuta" onClick={closeForm} type="normal"/>
             {!!team && <Button type="danger" label="Poista" onClick={handleDelete}/>}
           </div>
         </div>
@@ -90,34 +89,27 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
   }
 
   const editTeam = () => {
-    setData({
+    openForm({
       clubId: team ? team.club.id : CHOOSE_CLUB_ID,
       groupId: team ? team.groupId : -1,
       name: team ? team.name : '',
     })
-    setFormOpen(true)
   }
 
-  const changeValue = field => event => {
+  const onClubIdChange = event => {
     const value = event.target.value
-    let name = data.name
-    if (field === 'clubId' && !name && parseInt(value) > 0) {
+    if (!data.name && parseInt(value) > 0) {
       const clubName = getName(clubs, parseInt(value))
       if (clubName.indexOf('Tuntematon') === -1) {
-        name = `${clubName} `
+        changeValue('name', `${clubName} `)
       }
     }
-    setData({ ...data, name, [field]: value })
+    changeValue('clubId', value)
   }
 
   const canSubmit = () => {
     const { clubId, groupId, name } = data
     return clubId > 0 && groupId > 0 && !!name
-  }
-
-  const resetForm = () => {
-    setFormOpen(false)
-    setErrors([])
   }
 
   const submit = () => {
@@ -126,14 +118,10 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
       if (errors) {
         setErrors(errors)
       } else {
-        resetForm()
+        closeForm()
         onTeamSave(data)
       }
     })
-  }
-
-  const cancel = () => {
-    resetForm()
   }
 
   const handleDelete = () => {
@@ -141,7 +129,7 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
       if (errors) {
         setErrors(errors)
       } else {
-        resetForm()
+        closeForm()
         onTeamDelete(team.id)
       }
     })
@@ -152,7 +140,7 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
       if (errors) {
         setErrors(errors)
       } else {
-        setData({ ...data, clubId: response.id, name: `${clubName} ` })
+        changeValues({ clubId: response.id, name: `${clubName} ` })
         setErrors([])
         setClubName('')
         onClubSave(response)
@@ -164,7 +152,7 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
   }
 
   const closeClubForm = () => {
-    setData({ ...data, clubId: CHOOSE_CLUB_ID })
+    changeValue('clubId', CHOOSE_CLUB_ID)
     setClubName('')
   }
 

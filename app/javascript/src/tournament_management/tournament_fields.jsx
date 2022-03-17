@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { formatTournamentDates } from '../util/date_util'
 import FormErrors from '../form/form_errors'
@@ -6,6 +6,7 @@ import TextField from '../form/text_field'
 import Button from '../form/button'
 import { visibilityTypes } from '../util/enums'
 import VisibilityBadge from './visibility_badge'
+import useForm from '../util/use_form'
 
 const { onlyTitle, teams, all } = visibilityTypes
 
@@ -24,9 +25,7 @@ const initialData = {
 
 const TournamentFields = props => {
   const { clubs, tournament, onCancel, onSave } = props
-  const [formOpen, setFormOpen] = useState(!tournament)
-  const [data, setData] = useState(initialData)
-  const [errors, setErrors] = useState([])
+  const { formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, onCheckboxChange } = useForm(tournament ? undefined : initialData)
 
   const renderTournamentForm = () => {
     return (
@@ -54,7 +53,7 @@ const TournamentFields = props => {
       <div className="form__field">
         <div className="label">Järjestävä seura</div>
         <div>
-          <select onChange={setValue('clubId')} value={data.clubId}>
+          <select onChange={onFieldChange('clubId')} value={data.clubId}>
             <option>- Ei tiedossa -</option>
             {clubs.filter(club => club.name.indexOf('Tuntematon') === -1).map(club => {
               return <option key={club.id} value={club.id}>{club.name}</option>
@@ -66,7 +65,7 @@ const TournamentFields = props => {
   }
 
   const renderTournamentField = (label, type, field, placeholder) => {
-    return <TextField label={label} onChange={setValue(field)} placeholder={placeholder} type={type} value={data[field]}/>
+    return <TextField label={label} onChange={onFieldChange(field)} placeholder={placeholder} type={type} value={data[field]}/>
   }
 
   const renderEqualPointsRuleField = () => {
@@ -74,7 +73,7 @@ const TournamentFields = props => {
       <div className="form__field">
         <div className="label">Sääntö tasapisteissä</div>
         <div className="">
-          <select onChange={setValue('equalPointsRule')} value={data.equalPointsRule}>
+          <select onChange={onFieldChange('equalPointsRule')} value={data.equalPointsRule}>
             <option value={0}>Kaikki ottelut (maaliero, tehdyt maalit), keskinäiset ottelut, arpa</option>
             <option value={1}>Keskinäiset ottelut, kaikki ottelut (maaliero, tehdyt maalit), arpa</option>
           </select>
@@ -88,7 +87,7 @@ const TournamentFields = props => {
       <div className="form__field">
         <div className="label">Turnauksen näkyvyys</div>
         <div className="">
-          <select onChange={setValue('visibility')} value={data.visibility}>
+          <select onChange={onFieldChange('visibility')} value={data.visibility}>
             <option value={onlyTitle}>Turnauksen perustiedot</option>
             <option value={teams}>Turnauksen perustiedot, sarjat ja joukkueet</option>
             <option value={all}>Turnauksen koko otteluohjelma</option>
@@ -103,7 +102,7 @@ const TournamentFields = props => {
       <div className="form__field">
         <div className="label">{label}</div>
         <div>
-          <input type="checkbox" onChange={setCheckboxValue(field)} checked={data[field]} />
+          <input type="checkbox" onChange={onCheckboxChange(field)} checked={data[field]} />
         </div>
       </div>
     )
@@ -125,7 +124,7 @@ const TournamentFields = props => {
     return (
       <div className="tournament-item">
         <div className="tournament-item__title tournament-item__title--existing" >
-          <span onClick={openForm} className={showBadge ? 'tournament-item__title--with-badge' : ''}>
+          <span onClick={onOpenClick} className={showBadge ? 'tournament-item__title--with-badge' : ''}>
             <span>{texts.join(', ')}</span>
             {showBadge && <VisibilityBadge visibility={visibility}/>}
           </span>
@@ -134,24 +133,14 @@ const TournamentFields = props => {
     )
   }
 
-  const resetForm = () => {
-    setFormOpen(false)
-    setErrors([])
-  }
-
-  const openForm = () => {
+  const onOpenClick = () => {
     const { name, startDate, days, location, address, matchMinutes, equalPointsRule, visibility, clubId, cancelled } = tournament
-    setData({ name, startDate, days, location, address: address || '', matchMinutes, equalPointsRule, visibility, clubId, cancelled })
-    setFormOpen(true)
+    openForm({ name, startDate, days, location, address: address || '', matchMinutes, equalPointsRule, visibility, clubId, cancelled })
   }
 
   const cancel = () => {
-    onCancel ? onCancel() : resetForm()
+    onCancel ? onCancel() : closeForm()
   }
-
-  const setValue = field => event => setData({ ...data, [field]: event.target.value })
-
-  const setCheckboxValue = field => event => setData({ ...data, [field]: event.target.checked })
 
   const canSubmit = () => {
     const { days, name, startDate, location } = data
@@ -167,7 +156,7 @@ const TournamentFields = props => {
       if (errors) {
         setErrors(errors)
       } else {
-        resetForm()
+        closeForm()
       }
     })
   }

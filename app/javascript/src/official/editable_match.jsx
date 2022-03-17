@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { matchTypes } from '../util/enums'
 import { saveResult } from '../tournament_management/api_client'
@@ -6,13 +6,12 @@ import AccessContext from '../util/access_context'
 import Button from '../form/button'
 import { formatMatchTime } from '../util/date_util'
 import Team from '../public/team'
+import useForm from '../util/use_form'
 
 const EditableMatch = ({ clubs, fieldsCount, match, selectedClubId, selectedTeamId, tournamentDays, tournamentId }) => {
   const accessContext = useContext(AccessContext)
   const homeGoalsField = useRef()
-  const [formOpen, setFormOpen] = useState(false)
-  const [data, setData] = useState({ home: '', away: '' })
-  const [errors, setErrors] = useState([])
+  const { formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, onCheckboxChange } = useForm()
 
   useEffect(() => {
     if (formOpen) {
@@ -78,7 +77,7 @@ const EditableMatch = ({ clubs, fieldsCount, match, selectedClubId, selectedTeam
         {renderPenaltiesField()}
         <div className="match__buttons">
           <Button onClick={handleSave} label="&#x2713;" type="primary" size="small" disabled={!canSubmit()} />
-          <Button onClick={cancel} label="&#x2715;" type="normal" size="small" />
+          <Button onClick={closeForm} label="&#x2715;" type="normal" size="small" />
         </div>
       </form>
     )
@@ -91,7 +90,7 @@ const EditableMatch = ({ clubs, fieldsCount, match, selectedClubId, selectedTeam
       <input
         type="number"
         value={value}
-        onChange={setGoals(name)}
+        onChange={onFieldChange(name)}
         className="match__goals-field"
         tabIndex={tabIndex}
         ref={ref}
@@ -103,7 +102,7 @@ const EditableMatch = ({ clubs, fieldsCount, match, selectedClubId, selectedTeam
     if (match.type === matchTypes.playoff) {
       return (
         <div className="match__penalties">
-          <input type="checkbox" value={true} checked={data.penalties} onChange={setPenalties}/> rp
+          <input type="checkbox" value={true} checked={data.penalties} onChange={onCheckboxChange}/> rp
         </div>
       )
     }
@@ -118,7 +117,7 @@ const EditableMatch = ({ clubs, fieldsCount, match, selectedClubId, selectedTeam
   const onClick = () => {
     const { homeTeam, awayTeam, homeGoals, awayGoals, penalties } = match
     if (!formOpen && homeTeam && awayTeam) {
-      setData({
+      openForm({
         homeGoals: initialValue(homeGoals),
         awayGoals: initialValue(awayGoals),
         initialHomeGoals: initialValue(homeGoals),
@@ -126,7 +125,6 @@ const EditableMatch = ({ clubs, fieldsCount, match, selectedClubId, selectedTeam
         penalties,
         initialPenalties: penalties,
       })
-      setFormOpen(true)
     }
   }
 
@@ -141,19 +139,6 @@ const EditableMatch = ({ clubs, fieldsCount, match, selectedClubId, selectedTeam
 
   const isNumber = value => parseInt(value).toString() === value
 
-  const resetForm = () => {
-    setErrors([])
-    setFormOpen(false)
-  }
-
-  const cancel = () => {
-    resetForm()
-  }
-
-  const setGoals = name => event => setData({ ...data, [name]: event.target.value })
-
-  const setPenalties = event => setData({ ...data, penalties: event.target.checked })
-
   const handleSave = () => {
     const { id, type } = match
     const { homeGoals, awayGoals, penalties } = data
@@ -161,7 +146,7 @@ const EditableMatch = ({ clubs, fieldsCount, match, selectedClubId, selectedTeam
       if (errors) {
         setErrors(errors)
       } else {
-        resetForm()
+        closeForm()
       }
     })
   }

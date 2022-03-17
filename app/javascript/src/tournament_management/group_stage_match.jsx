@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { addDays } from 'date-fns'
 import { zonedTimeToUtc } from 'date-fns-tz'
@@ -11,6 +11,7 @@ import { idNamePropType } from '../util/custom_prop_types'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
 import Button from '../form/button'
+import useForm from '../util/use_form'
 
 const GroupStageMatch = props => {
   const {
@@ -29,9 +30,7 @@ const GroupStageMatch = props => {
   } = props
   const accessContext = useContext(AccessContext)
   const timeField = useRef()
-  const [formOpen, setFormOpen] = useState(false)
-  const [data, setData] = useState({})
-  const [errors, setErrors] = useState([])
+  const { formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, changeValues } = useForm()
 
   const renderName = () => {
     let text = '+ Lisää uusi alkulohkon ottelu'
@@ -46,7 +45,7 @@ const GroupStageMatch = props => {
       textElements.push(`${getName(teams, homeTeamId)} - ${getName(teams, awayTeamId)}`)
       text = textElements.join(' | ')
     }
-    return <div className={resolveTournamentItemClasses(groupStageMatch)}><span onClick={openForm}>{text}</span></div>
+    return <div className={resolveTournamentItemClasses(groupStageMatch)}><span onClick={onOpenClick}>{text}</span></div>
   }
 
   const renderForm = () => {
@@ -75,21 +74,29 @@ const GroupStageMatch = props => {
   const buildTeamDropDown = (field, label) => {
     if (data.groupId) {
       const teams = props.teams.filter(team => team.groupId === parseInt(data.groupId))
-      return <IdNameSelect field={field} formData={data} items={teams} label={label} onChange={changeValue(field)}/>
+      return <IdNameSelect field={field} formData={data} items={teams} label={label} onChange={onFieldChange(field)}/>
     }
   }
 
   const buildGroupDropDown = () => {
     const customNameBuild = item => `${item.name} (${getName(ageGroups, item.ageGroupId)})`
-    const onChange = changeValue('groupId')
-    return <IdNameSelect customNameBuild={customNameBuild} field="groupId" formData={data} items={groups} label="- Lohko -" onChange={onChange}/>
+    return (
+      <IdNameSelect
+        customNameBuild={customNameBuild}
+        field="groupId"
+        formData={data}
+        items={groups}
+        label="- Lohko -"
+        onChange={onFieldChange('groupId')}
+      />
+    )
   }
 
   const buildDayDropDown = () => {
     if (tournamentDays > 1) {
       return (
         <div className="form__field">
-          <select onChange={changeValue('day')} value={data.day}>
+          <select onChange={onFieldChange('day')} value={data.day}>
             {Array(tournamentDays).fill().map((x, i) => {
               return <option key={i} value={i + 1}>{resolveWeekDay(tournamentDate, i)}</option>
             })}
@@ -100,23 +107,29 @@ const GroupStageMatch = props => {
   }
 
   const renderStartTimeField = () => {
-    const onChange = changeValue('startTime')
-    return <TextField ref={timeField} containerClass="form__field--time" onChange={onChange} placeholder="HH:MM" value={data.startTime}/>
+    return (
+      <TextField
+        ref={timeField}
+        containerClass="form__field--time"
+        onChange={onFieldChange('startTime')}
+        placeholder="HH:MM"
+        value={data.startTime}
+      />
+    )
   }
 
   const renderButtons = () => {
     return (
       <div className="form__buttons">
         <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()}/>
-        <Button label="Peruuta" onClick={cancel} type="normal"/>
+        <Button label="Peruuta" onClick={closeForm} type="normal"/>
         {!!groupStageMatch && <Button type="danger" label="Poista" onClick={handleDelete}/>}
       </div>
     )
   }
 
-  const openForm = () => {
-    setFormOpen(true)
-    setData({
+  const onOpenClick = () => {
+    openForm({
       awayTeamId: groupStageMatch ? groupStageMatch.awayTeamId : undefined,
       day: groupStageMatch ? resolveDay(tournamentDate, groupStageMatch.startTime) : 1,
       fieldId: groupStageMatch ? groupStageMatch.fieldId : fields.length === 1 ? fields[0].id : undefined,
@@ -136,22 +149,15 @@ const GroupStageMatch = props => {
         day = suggestion.day
       }
     }
-    setData({ ...data, day, fieldId, startTime })
+    changeValues({ day, fieldId, startTime })
     if (timeField) {
       timeField.current.focus()
     }
   }
 
-  const changeValue = field => event => setData({ ...data, [field]: event.target.value })
-
   const canSubmit = () => {
     const { awayTeamId, fieldId, groupId, homeTeamId, startTime } = data
     return parseInt(awayTeamId) > 0 && parseInt(fieldId) > 0 && parseInt(groupId) > 0 && parseInt(homeTeamId) > 0 && startTime.match(/\d{2}:\d{2}/)
-  }
-
-  const resetForm = () => {
-    setFormOpen(false)
-    setErrors([])
   }
 
   const submit = () => {
@@ -163,14 +169,10 @@ const GroupStageMatch = props => {
       if (errors) {
         setErrors(errors)
       } else {
-        resetForm()
+        closeForm()
         onGroupStageMatchSave(data)
       }
     })
-  }
-
-  const cancel = () => {
-    resetForm()
   }
 
   const handleDelete = () => {
@@ -178,7 +180,7 @@ const GroupStageMatch = props => {
       if (errors) {
         setErrors(errors)
       } else {
-        resetForm()
+        closeForm()
         onGroupStageMatchDelete(groupStageMatch.id)
       }
     })

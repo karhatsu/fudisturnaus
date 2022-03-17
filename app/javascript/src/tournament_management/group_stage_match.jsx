@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { addDays } from 'date-fns'
 import { zonedTimeToUtc } from 'date-fns-tz'
@@ -31,6 +31,23 @@ const GroupStageMatch = props => {
   const accessContext = useContext(AccessContext)
   const timeField = useRef()
   const { formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, changeValues } = useForm()
+  const [timeSuggested, setTimeSuggested] = useState(false)
+
+  useEffect(() => {
+    if (formOpen && !timeSuggested && fields.length === 1 && data.startTime === '') {
+      setTimeSuggested(true)
+      let { day, startTime } = data
+      const suggestion = resolveSuggestedTime(groupStageMatches, fields[0].id, matchMinutes, tournamentDate)
+      if (suggestion) {
+        startTime = suggestion.startTime
+        day = suggestion.day
+        changeValues({ day, startTime })
+        if (timeField) {
+          timeField.current.focus()
+        }
+      }
+    }
+  }, [formOpen, timeSuggested, fields, data, groupStageMatches, matchMinutes, tournamentDate, changeValues])
 
   const renderName = () => {
     let text = '+ Lisää uusi alkulohkon ottelu'
@@ -122,7 +139,7 @@ const GroupStageMatch = props => {
     return (
       <div className="form__buttons">
         <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()}/>
-        <Button label="Peruuta" onClick={closeForm} type="normal"/>
+        <Button label="Peruuta" onClick={resetForm} type="normal"/>
         {!!groupStageMatch && <Button type="danger" label="Poista" onClick={handleDelete}/>}
       </div>
     )
@@ -160,6 +177,11 @@ const GroupStageMatch = props => {
     return parseInt(awayTeamId) > 0 && parseInt(fieldId) > 0 && parseInt(groupId) > 0 && parseInt(homeTeamId) > 0 && startTime.match(/\d{2}:\d{2}/)
   }
 
+  const resetForm = () => {
+    closeForm()
+    setTimeSuggested(false)
+  }
+
   const submit = () => {
     const { day, startTime } = data
     const isoStartTime = addDays(zonedTimeToUtc(`${tournamentDate} ${startTime}`, 'Europe/Helsinki'), day - 1)
@@ -169,7 +191,7 @@ const GroupStageMatch = props => {
       if (errors) {
         setErrors(errors)
       } else {
-        closeForm()
+        resetForm()
         onGroupStageMatchSave(data)
       }
     })
@@ -180,7 +202,7 @@ const GroupStageMatch = props => {
       if (errors) {
         setErrors(errors)
       } else {
-        closeForm()
+        resetForm()
         onGroupStageMatchDelete(groupStageMatch.id)
       }
     })

@@ -34,7 +34,7 @@ const ClubsManagementPage = () => {
     const newClubs = [...clubs]
     const clubIndex = newClubs.findIndex(club => club.id === data.id)
     newClubs[clubIndex] = { ...newClubs[clubIndex], ...data }
-    setClubs(clubs.sort((a, b) => a.name.localeCompare(b.name)))
+    setClubs(newClubs.sort((a, b) => a.name.localeCompare(b.name)))
   }
 
   const renderCacheSection = () => {

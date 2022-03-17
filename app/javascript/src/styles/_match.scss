@@ -94,6 +94,10 @@
     .button:first-child {
       margin-right: 8px;
     }
+
+    .button--primary:disabled:hover {
+      padding: 4px 8px;
+    }
   }
 
   &--editable {

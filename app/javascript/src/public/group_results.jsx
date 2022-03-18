@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 import { resolveColStyles } from '../util/util'
 import Team from './team'
 
-const GroupResults = ({ clubs, filters, group, groupsCount }) => {
+const GroupResults = ({ clubs, filters, group, groupsCount, showLottery }) => {
 
   const renderGroupResultRow = (allResults, teamGroupResults, index) => {
     const { clubId, ranking, teamName, lot, matches, wins, draws, losses, goalsFor, goalsAgainst, points } = teamGroupResults
     const rankingText = index > 0 && ranking === allResults[index - 1].ranking ? '' : `${ranking}.`
-    const team = `${teamName}${typeof lot === 'number' ? ` (arpa: ${lot})` : ''}`
+    const team = `${teamName}${showLottery && typeof lot === 'number' ? ` (arpa: ${lot})` : ''}`
     return (
       <tr key={teamName} className={resolveTeamClasses(teamGroupResults)}>
         <td>{rankingText}</td>
@@ -75,6 +75,7 @@ GroupResults.propTypes = {
     })).isRequired,
   }).isRequired,
   groupsCount: PropTypes.number.isRequired,
+  showLottery: PropTypes.bool.isRequired,
 }
 
 export default GroupResults

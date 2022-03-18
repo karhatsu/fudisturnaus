@@ -266,7 +266,7 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
       return (
         <React.Fragment>
           <div className="title-2">Sarjataulukot</div>
-          <div className="group-results row">{filteredGroups.map(group => renderGroup(group, filteredGroups.length))}</div>
+          <div className="group-results row">{filteredGroups.map(group => renderGroup(group, filteredGroups.length, true))}</div>
         </React.Fragment>
       )
     }
@@ -279,14 +279,23 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
       return (
         <>
           <div className="title-2">Jatkolohkot</div>
-          <div className="group-results row">{filteredGroups.map(group => renderGroup(group, filteredGroups.length))}</div>
+          <div className="group-results row">{filteredGroups.map(group => renderGroup(group, filteredGroups.length, false))}</div>
         </>
       )
     }
   }
 
-  const renderGroup = (group, groupsCount) => {
-    return <GroupResults clubs={tournament.clubs} filters={filters} group={group} groupsCount={groupsCount} key={group.id}/>
+  const renderGroup = (group, groupsCount, showLottery) => {
+    return (
+      <GroupResults
+        clubs={tournament.clubs}
+        filters={filters}
+        group={group}
+        groupsCount={groupsCount}
+        showLottery={showLottery}
+        key={group.id}
+      />
+    )
   }
 
   const isFilterGroup = group => {

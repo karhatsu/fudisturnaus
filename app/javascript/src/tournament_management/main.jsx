@@ -327,7 +327,8 @@ const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => 
   }
 
   const renderPlayoffGroupsSection = () => {
-    const { ageGroups, id } = tournament
+    const { id } = tournament
+    const ageGroups = tournament.ageGroups.filter(ageGroup => ageGroup.calculateGroupTables)
     return (
       <div className="tournament-management__section">
         <div className="tournament-item">

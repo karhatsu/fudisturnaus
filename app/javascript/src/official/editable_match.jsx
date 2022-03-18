@@ -102,7 +102,7 @@ const EditableMatch = ({ clubs, fieldsCount, match, selectedClubId, selectedTeam
     if (match.type === matchTypes.playoff) {
       return (
         <div className="match__penalties">
-          <input type="checkbox" value={true} checked={data.penalties} onChange={onCheckboxChange}/> rp
+          <input type="checkbox" value={true} checked={data.penalties} onChange={onCheckboxChange('penalties')}/> rp
         </div>
       )
     }

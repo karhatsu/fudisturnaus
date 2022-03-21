@@ -1,1 +1,1 @@
-json.(referee, :id, :name)
+json.(referee, :id, :name, :access_key)

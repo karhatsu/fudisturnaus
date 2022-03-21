@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import { deleteReferee, saveReferee } from './api_client'
 import AccessContext from '../util/access_context'
 import { resolveTournamentItemClasses } from '../util/util'
-import { idNamePropType } from '../util/custom_prop_types'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
 import Button from '../form/button'
 import useForm from '../util/use_form'
+import { buildUrl } from '../util/url_util'
 
 const Referee = ({ referee, onRefereeDelete, onRefereeSave, tournamentId }) =>{
   const accessContext = useContext(AccessContext)
@@ -22,7 +22,19 @@ const Referee = ({ referee, onRefereeDelete, onRefereeSave, tournamentId }) =>{
 
   const renderName = () => {
     const text = referee ? referee.name : '+ Lisää uusi tuomari'
-    return <div className={resolveTournamentItemClasses(referee)}><span onClick={onOpenClick}>{text}</span></div>
+    return (
+      <div className={resolveTournamentItemClasses(referee)}>
+        <span onClick={onOpenClick}>{text}</span>
+        {referee && (
+          <a
+            className="tournament-item__title__link"
+            href={buildUrl(`/referees/${referee.accessKey}`)}
+            target="_blank"
+            rel="noreferrer"
+          >Avaa tuomarin sivu</a>
+        )}
+      </div>
+    )
   }
 
   const renderForm = () => {
@@ -81,7 +93,11 @@ const Referee = ({ referee, onRefereeDelete, onRefereeSave, tournamentId }) =>{
 }
 
 Referee.propTypes = {
-  referee: idNamePropType,
+  referee: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    accessKey: PropTypes.string.isRequired,
+  }),
   onRefereeDelete: PropTypes.func,
   onRefereeSave: PropTypes.func.isRequired,
   tournamentId: PropTypes.number.isRequired,

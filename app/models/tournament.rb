@@ -16,6 +16,7 @@ class Tournament < ApplicationRecord
   has_many :groups, -> {order(:name)}, through: :age_groups
   has_many :playoff_groups, -> {order(:name)}, through: :age_groups
   has_many :fields, -> {order(:name)}, dependent: :destroy
+  has_many :referees, -> {order(:name)}, dependent: :destroy
 
   validates :name, presence: true
   validates :start_date, presence: true

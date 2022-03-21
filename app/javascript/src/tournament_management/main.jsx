@@ -22,6 +22,7 @@ import PlayoffGroups from './playoff_groups'
 import PlayoffMatches from './playoff_matches'
 import TournamentLinks from './tournament_links'
 import EmailContent from './email_content'
+import Referees from './referees'
 
 const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => {
   const history = useHistory()
@@ -64,6 +65,7 @@ const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => 
         <Lottery tournament={tournament} tournamentId={getTournamentId()} onLotterySave={onLotterySave} />
         <PlayoffGroups tournament={tournament} tournamentId={getTournamentId()} onItemDelete={onItemDelete} onItemSave={onItemSave} />
         <PlayoffMatches tournament={tournament} tournamentId={getTournamentId()} onItemDelete={onItemDelete} onItemSave={onItemSave} />
+        <Referees tournament={tournament} tournamentId={getTournamentId()} onItemDelete={onItemDelete} onItemSave={onItemSave} />
         <TournamentLinks tournament={tournament} />
         {!official && <EmailContent tournament={tournament} />}
         {renderDeleteButton()}
@@ -118,6 +120,7 @@ const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => 
     switch (itemName) {
       case 'ageGroups':
       case 'fields':
+      case 'referees':
         return (a, b) => a.name.localeCompare(b.name)
       case 'teams':
         return (a, b) => {

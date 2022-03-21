@@ -22,3 +22,5 @@ json.playoff_matches @tournament.playoff_matches, partial: 'api/v1/official/play
 json.fields @tournament.fields, partial: 'api/v1/official/fields/field', as: :field
 
 json.teams @tournament.teams, partial: 'api/v1/official/teams/team', as: :team
+
+json.referees @tournament.referees, partial: 'api/v1/official/referees/referee', as: :referee

@@ -21,6 +21,7 @@ Rails.application.routes.draw do
           resources :group_stage_matches, only: [:create, :update, :destroy]
           resources :playoff_groups, only: [:create, :update, :destroy]
           resources :playoff_matches, only: [:create, :update, :destroy]
+          resources :referees, only: [:create, :update, :destroy]
           resources :teams, only: [:create, :update, :destroy]
         end
         resources :clubs, only: :create

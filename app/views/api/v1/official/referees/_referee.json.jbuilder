@@ -1,0 +1,1 @@
+json.(referee, :id, :name)

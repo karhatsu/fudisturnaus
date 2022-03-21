@@ -360,6 +360,7 @@ PlayoffMatch.propTypes = {
   onPlayoffMatchDelete: PropTypes.func,
   onPlayoffMatchSave: PropTypes.func.isRequired,
   matchMinutes: PropTypes.number.isRequired,
+  referees: PropTypes.array.isRequired,
   teams: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,

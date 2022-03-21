@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import GroupStageMatch from './group_stage_match'
 
 const GroupStageMatches = ({ onItemDelete, onItemSave, tournament, tournamentId }) => {
-  const { ageGroups, days, fields, groups, groupStageMatches, teams, id, matchMinutes } = tournament
+  const { ageGroups, days, fields, groups, groupStageMatches, teams, id, matchMinutes, referees } = tournament
   const canMatches = teams.length > 1 && fields.length > 0
 
   const renderCannotAddGroupStageMatches = () => {
@@ -27,6 +27,7 @@ const GroupStageMatches = ({ onItemDelete, onItemSave, tournament, tournamentId 
         onGroupStageMatchDelete={onItemDelete('groupStageMatches')}
         onGroupStageMatchSave={onItemSave('groupStageMatches')}
         matchMinutes={matchMinutes}
+        referees={referees}
         teams={teams}
         tournamentDays={days}
         tournamentId={tournamentId}
@@ -47,6 +48,7 @@ const GroupStageMatches = ({ onItemDelete, onItemSave, tournament, tournamentId 
           groupStageMatches={groupStageMatches}
           onGroupStageMatchSave={onItemSave('groupStageMatches')}
           matchMinutes={matchMinutes}
+          referees={referees}
           teams={teams}
           tournamentDays={days}
           tournamentId={id}
@@ -60,9 +62,7 @@ const GroupStageMatches = ({ onItemDelete, onItemSave, tournament, tournamentId 
 GroupStageMatches.propTypes = {
   onItemDelete: PropTypes.func.isRequired,
   onItemSave: PropTypes.func.isRequired,
-  tournament: PropTypes.shape({
-
-  }).isRequired,
+  tournament: PropTypes.object.isRequired,
   tournamentId: PropTypes.number.isRequired,
 }
 

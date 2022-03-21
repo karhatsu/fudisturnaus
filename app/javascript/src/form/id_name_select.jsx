@@ -12,8 +12,8 @@ const IdNameSelect = ({ customNameBuild, field, formData, items, label, onChange
 
   return (
     <div className="form__field">
-      <select onChange={onChange} value={formData[field]}>
-        <option>{label}</option>
+      <select onChange={onChange} value={formData[field] || ''}>
+        <option value="">{label}</option>
         {renderOptions()}
       </select>
     </div>

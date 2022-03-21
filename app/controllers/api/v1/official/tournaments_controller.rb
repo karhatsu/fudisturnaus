@@ -2,7 +2,8 @@ class Api::V1::Official::TournamentsController < Api::V1::Official::OfficialBase
   def show
     includes = {
         age_groups: [
-          groups: [:age_group, :teams, group_stage_matches: [:field, :home_team, :away_team]],
+          groups: [:age_group, :teams, group_stage_matches: [:field, :home_team, :away_team, :referee]],
+          playoff_matches: :referee,
           playoff_groups: :age_group,
         ],
         groups: [teams: :club]

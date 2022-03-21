@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import PlayoffMatch from './playoff_match'
 
 const PlayoffMatches = ({ onItemDelete, onItemSave, tournament, tournamentId }) => {
-  const { ageGroups, days, fields, groups, playoffGroups, playoffMatches, teams, id, matchMinutes, startDate } = tournament
+  const { ageGroups, days, fields, groups, playoffGroups, playoffMatches, teams, id, matchMinutes, startDate, referees } = tournament
   const ageGroupsIdsWithTables = ageGroups.filter(ageGroup => ageGroup.calculateGroupTables).map(ageGroup => ageGroup.id)
   const groupIdsWithTables = groups.filter(group => ageGroupsIdsWithTables.includes(group.ageGroupId)).map(group => group.id)
   const teamsWithTables = teams.filter(team => groupIdsWithTables.includes(team.groupId))
@@ -31,6 +31,7 @@ const PlayoffMatches = ({ onItemDelete, onItemSave, tournament, tournamentId }) 
         onPlayoffMatchDelete={onItemDelete('playoffMatches')}
         onPlayoffMatchSave={onItemSave('playoffMatches')}
         matchMinutes={matchMinutes}
+        referees={referees}
         teams={teams}
         tournamentDays={days}
         tournamentId={tournamentId}
@@ -52,6 +53,7 @@ const PlayoffMatches = ({ onItemDelete, onItemSave, tournament, tournamentId }) 
           playoffMatches={playoffMatches}
           onPlayoffMatchSave={onItemSave('playoffMatches')}
           matchMinutes={matchMinutes}
+          referees={referees}
           teams={teams}
           tournamentDays={days}
           tournamentId={id}

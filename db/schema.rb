@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_19_050752) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_21_130921) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -60,10 +60,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_19_050752) do
     t.integer "away_goals"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.bigint "referee_id"
     t.index ["away_team_id"], name: "index_group_stage_matches_on_away_team_id"
     t.index ["field_id"], name: "index_group_stage_matches_on_field_id"
     t.index ["group_id"], name: "index_group_stage_matches_on_group_id"
     t.index ["home_team_id"], name: "index_group_stage_matches_on_home_team_id"
+    t.index ["referee_id"], name: "index_group_stage_matches_on_referee_id"
   end
 
   create_table "groups", force: :cascade do |t|
@@ -101,6 +103,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_19_050752) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.bigint "playoff_group_id"
+    t.bigint "referee_id"
     t.index ["age_group_id"], name: "index_playoff_matches_on_age_group_id"
     t.index ["away_team_id"], name: "index_playoff_matches_on_away_team_id"
     t.index ["away_team_origin_type", "away_team_origin_id"], name: "index_playoff_matches_on_away_team_origin"
@@ -108,6 +111,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_19_050752) do
     t.index ["home_team_id"], name: "index_playoff_matches_on_home_team_id"
     t.index ["home_team_origin_type", "home_team_origin_id"], name: "index_playoff_matches_on_home_team_origin"
     t.index ["playoff_group_id"], name: "index_playoff_matches_on_playoff_group_id"
+    t.index ["referee_id"], name: "index_playoff_matches_on_referee_id"
   end
 
   create_table "referees", force: :cascade do |t|
@@ -156,12 +160,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_19_050752) do
   add_foreign_key "fields", "tournaments"
   add_foreign_key "group_stage_matches", "fields"
   add_foreign_key "group_stage_matches", "groups"
+  add_foreign_key "group_stage_matches", "referees"
   add_foreign_key "group_stage_matches", "teams", column: "away_team_id"
   add_foreign_key "group_stage_matches", "teams", column: "home_team_id"
   add_foreign_key "groups", "age_groups"
   add_foreign_key "playoff_groups", "age_groups"
   add_foreign_key "playoff_matches", "fields"
   add_foreign_key "playoff_matches", "playoff_groups"
+  add_foreign_key "playoff_matches", "referees"
   add_foreign_key "playoff_matches", "teams", column: "away_team_id"
   add_foreign_key "playoff_matches", "teams", column: "home_team_id"
   add_foreign_key "referees", "tournaments"

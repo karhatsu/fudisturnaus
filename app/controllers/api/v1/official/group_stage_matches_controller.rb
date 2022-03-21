@@ -25,6 +25,6 @@ class Api::V1::Official::GroupStageMatchesController < Api::V1::Official::Offici
   private
 
   def match_params
-    params.require(:group_stage_match).permit(:start_time, :field_id, :group_id, :home_team_id, :away_team_id)
+    params.require(:group_stage_match).permit(:start_time, :field_id, :group_id, :home_team_id, :away_team_id, :referee_id)
   end
 end

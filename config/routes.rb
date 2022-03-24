@@ -40,6 +40,10 @@ Rails.application.routes.draw do
     get ':results_access_key' => 'results#index'
   end
 
+  namespace :referees do
+    get ':referee_access_key' => 'referees#index'
+  end
+
   namespace :official do
     get ':access_key/management' => 'official#index'
     get ':access_key' => 'official#index'

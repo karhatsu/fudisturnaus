@@ -208,6 +208,8 @@ function buildHeaders(accessContext) {
     headers['X-Access-Key'] = accessContext.officialAccessKey
   } else if (accessContext.resultsAccessKey) {
     headers['X-Results-Access-Key'] = accessContext.resultsAccessKey
+  } else if (accessContext.refereeAccessKey) {
+    headers['X-Referee-Access-Key'] = accessContext.refereeAccessKey
   } else if (accessContext.adminSessionKey) {
     headers['X-Session-Key'] = accessContext.adminSessionKey
   }

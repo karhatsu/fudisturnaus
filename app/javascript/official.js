@@ -6,12 +6,14 @@ import OfficialMain from './src/official/main'
 document.addEventListener('DOMContentLoaded', () => {
   const node = document.getElementById('initial-data')
   const props = JSON.parse(node.getAttribute('data'))
-  const { tournamentId } = props
+  const tournamentId = parseInt(props.tournamentId)
+  const refereeId = props.refereeId && parseInt(props.refereeId)
   ReactDOM.render(
     <BrowserRouter>
       <Switch>
-        <Route path="/official/:accessKey" render={routeProps => <OfficialMain {...routeProps} tournamentId={tournamentId} />}/>
-        <Route path="/results/:resultsAccessKey" render={routeProps => <OfficialMain {...routeProps} tournamentId={tournamentId} />}/>
+        <Route path="/official/:accessKey" render={() => <OfficialMain tournamentId={tournamentId} />}/>
+        <Route path="/results/:resultsAccessKey" render={() => <OfficialMain tournamentId={tournamentId} />}/>
+        <Route path="/referees/:refereeAccessKey" render={() => <OfficialMain tournamentId={tournamentId} refereeId={refereeId} />}/>
       </Switch>
     </BrowserRouter>,
     document.getElementById('official-app')

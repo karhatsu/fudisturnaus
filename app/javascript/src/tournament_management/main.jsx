@@ -213,14 +213,6 @@ const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => 
 }
 
 TournamentManagementPage.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
   official: PropTypes.bool.isRequired,
   titleIconLink: PropTypes.string.isRequired,
   tournamentId: PropTypes.number,

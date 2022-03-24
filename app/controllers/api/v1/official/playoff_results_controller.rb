@@ -19,7 +19,8 @@ class Api::V1::Official::PlayoffResultsController < Api::V1::Official::OfficialB
 
   def find_and_verity_match
     @match = PlayoffMatch.find(params[:match_id])
-    render status: 400, json: { error: 'Match not found' } unless @match
+    return render status: 400, json: { error: 'Match not found' } unless @match
+    return render status: 401, body: nil if @referee && @match.referee_id != @referee.id
     render status: 401, body: nil if @match.tournament_id != @tournament.id
   end
 

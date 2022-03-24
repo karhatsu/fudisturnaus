@@ -1,17 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useHistory, useLocation, useParams } from 'react-router'
 import { Link } from 'react-router-dom'
 import queryString from 'query-string'
 
-import consumer from '../../channels/consumer'
 import Loading from '../components/loading'
 import Matches from './matches'
 import GroupResults from './group_results'
-import { buildTournamentFromSocketData } from '../util/util'
-import { formatTournamentDates } from '../util/date_util'
 import Title from '../components/title'
-import { fetchTournament } from './api_client'
 import Filters from './filters'
 import SeriesAndTeams from './series_and_teams'
 import VisibilityBadge from '../tournament_management/visibility_badge'
@@ -19,6 +15,9 @@ import { visibilityTypes } from '../util/enums'
 import InfoBox from './info_box'
 import IframeTitle from './iframe_title'
 import Message from '../components/message'
+import useTournamentFetching from '../util/use_tournament_fetching'
+import CancelledBadge from './cancelled_badge'
+import TournamentSubTitle from './tournament_sub_title'
 
 const { onlyTitle, teams, all } = visibilityTypes
 
@@ -42,50 +41,8 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
   const { accessKey } = useParams()
   const { search } = useLocation()
   const history = useHistory()
-  const [error, setError] = useState(false)
-  const [tournament, setTournament] = useState()
-  const [subscribed, setSubscribed] = useState(false)
-  const [socketData, setSocketData] = useState()
+  const { error, tournament } = useTournamentFetching(tournamentKey)
   const [filters, setFilters] = useState(defaultFilters)
-
-  const fetchTournamentData = useCallback(() => {
-    fetchTournament(tournamentKey, (err, tournament) => {
-      if (tournament) {
-        setTournament(tournament)
-      } else if (err && !tournament) {
-        setError(true)
-      }
-    })
-  }, [tournamentKey])
-
-  const handleVisibilityChange = useCallback(() => {
-    if (document.visibilityState === 'visible') {
-      fetchTournamentData()
-    }
-  }, [fetchTournamentData])
-
-  useEffect(() => {
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-    fetchTournamentData()
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-    }
-  }, [fetchTournamentData, handleVisibilityChange])
-
-  useEffect(() => {
-    if (tournament && !subscribed) {
-      consumer.subscriptions.create({ channel: 'ResultsChannel', tournament_id: tournament.id }, { received: data => setSocketData(data) })
-      setSubscribed(true)
-    }
-  }, [tournament, subscribed])
-
-  useEffect(() => {
-    if (socketData) {
-      const newTournament = buildTournamentFromSocketData(tournament, socketData)
-      setSocketData()
-      setTournament(newTournament)
-    }
-  }, [tournament, socketData])
 
   useEffect(() => {
     const queryParams = queryString.parse(search)
@@ -98,12 +55,6 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
   const renderVisibilityBadge = () => {
     if (tournament && !tournament.cancelled && officialLevel === officialLevels.full) {
       return <VisibilityBadge visibility={tournament.visibility}/>
-    }
-  }
-
-  const renderCancelledBadge = () => {
-    if (tournament && tournament.cancelled) {
-      return <div className="badge badge--0">Turnaus peruttu</div>
     }
   }
 
@@ -183,19 +134,6 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
         <InfoBox/>
       </div>
     )
-  }
-
-  const renderSubTitle = () => {
-    if (tournament) {
-      const { startDate, endDate } = tournament
-      return <div className="sub-title">{renderLocation()}, {formatTournamentDates(startDate, endDate)}</div>
-    }
-  }
-
-  const renderLocation = () => {
-    const { address, location } = tournament
-    const googleMapsUrl = address ? `https://www.google.com/maps/place/${address.split(' ').join('+')}` : undefined
-    return googleMapsUrl ? <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="sub-title__location">{location}</a> : location
   }
 
   const resetFilters = () => {
@@ -314,26 +252,15 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
     <div>
       <IframeTitle />
       <Title iconLink={iconLink} loading={!tournament && !error} text={title} club={club}>
-        {renderCancelledBadge()}
+        <CancelledBadge tournament={tournament} />
       </Title>
-      {renderSubTitle()}
+      <TournamentSubTitle tournament={tournament} />
       {renderContent()}
     </div>
   )
 }
 
 TournamentPage.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-  location: PropTypes.shape({
-    search: PropTypes.string.isRequired,
-  }).isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      accessKey: PropTypes.string,
-    }).isRequired,
-  }),
   officialLevel: PropTypes.oneOf([none, results, full]).isRequired,
   renderMatch: PropTypes.func.isRequired,
   tournamentKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,

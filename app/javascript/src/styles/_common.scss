@@ -16,11 +16,12 @@ ul {
 
 li:before {
   content: '⚽';
+  padding-right: 8px;
 }
 
 li {
   list-style: none;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .loading {

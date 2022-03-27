@@ -13,7 +13,7 @@ describe 'referee', type: :system do
       expect(page).to have_current_path '/'
       visit "/referees/#{referee.access_key}"
       expect(page).to have_current_path "/referees/#{referee.access_key}"
-      expect(page).to have_xpath("(//span[contains(@class, 'title__text')])[text()='#{tournament.name}']")
+      expect(page).to have_xpath("(//span[contains(@class, 'title__text')])[text()='#{tournament.name} - #{referee.name}']")
     end
   end
 

@@ -10,7 +10,7 @@ import EditableMatch from './editable_match'
 import AccessContext from '../util/access_context'
 import RefereePage from './referee_page'
 
-const OfficialMain = ({ tournamentId, refereeId }) => {
+const OfficialMain = ({ tournamentId, refereeId, refereeName }) => {
   const { accessKey, resultsAccessKey, refereeAccessKey } = useParams()
 
   const renderTournamentManagementPage = () => {
@@ -34,7 +34,7 @@ const OfficialMain = ({ tournamentId, refereeId }) => {
   }
 
   const renderRefereePage = () => {
-    return <RefereePage tournamentId={tournamentId} refereeId={refereeId} />
+    return <RefereePage tournamentId={tournamentId} refereeId={refereeId} refereeName={refereeName} />
   }
 
   return (
@@ -52,6 +52,7 @@ const OfficialMain = ({ tournamentId, refereeId }) => {
 OfficialMain.propTypes = {
   tournamentId: PropTypes.number.isRequired,
   refereeId: PropTypes.number,
+  refereeName: PropTypes.string,
 }
 
 export default OfficialMain

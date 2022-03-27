@@ -12,7 +12,7 @@ import TournamentSubTitle from '../public/tournament_sub_title'
 
 const { all } = visibilityTypes
 
-const RefereePage = ({ tournamentId, refereeId }) => {
+const RefereePage = ({ tournamentId, refereeId, refereeName }) => {
   const { error, tournament } = useTournamentFetching(tournamentId)
 
   const renderMatches = (matches, title) => {
@@ -57,7 +57,7 @@ const RefereePage = ({ tournamentId, refereeId }) => {
     )
   }
 
-  const title = tournament ? tournament.name : 'fudisturnaus.com'
+  const title = tournament ? `${tournament.name} - ${refereeName}` : 'fudisturnaus.com'
   const club = tournament ? tournament.club : undefined
   return (
     <div>
@@ -73,6 +73,7 @@ const RefereePage = ({ tournamentId, refereeId }) => {
 RefereePage.propTypes = {
   tournamentId: PropTypes.number.isRequired,
   refereeId: PropTypes.number.isRequired,
+  refereeName: PropTypes.string.isRequired,
 }
 
 export default RefereePage

@@ -14,6 +14,7 @@ class Referees::RefereesController < ApplicationController
     referee = Referee.find_by_access_key referee_access_key
     return redirect_to root_path unless referee
     @referee_id = referee.id
+    @referee_name = referee.name
     @tournament = referee.tournament
   end
 end

@@ -43,7 +43,7 @@ const TournamentList = props => {
     )
   }, [buildLink])
 
-  const matchCaseInsensitive = useCallback((text) => new RegExp(search, 'i').test(text), [search])
+  const matchCaseInsensitive = useCallback(text => new RegExp(search.trim(), 'i').test(text), [search])
 
   const filterTournaments = useCallback(() => {
     if (!search) return tournaments

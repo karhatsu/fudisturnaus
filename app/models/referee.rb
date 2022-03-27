@@ -1,7 +1,7 @@
 require 'securerandom'
 
 class Referee < ApplicationRecord
-  belongs_to :tournament
+  belongs_to :tournament, touch: true
 
   validates :name, presence: true
 

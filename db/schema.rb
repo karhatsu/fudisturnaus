@@ -10,24 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_10_090713) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_03_21_130921) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "age_groups", force: :cascade do |t|
     t.bigint "tournament_id", null: false
     t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "calculate_group_tables", default: false, null: false
     t.index ["tournament_id"], name: "index_age_groups_on_tournament_id"
   end
 
   create_table "clubs", force: :cascade do |t|
     t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "logo_url"
     t.string "alias"
   end
@@ -35,8 +34,8 @@ ActiveRecord::Schema.define(version: 2021_08_10_090713) do
   create_table "fields", force: :cascade do |t|
     t.bigint "tournament_id", null: false
     t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["tournament_id"], name: "index_fields_on_tournament_id"
   end
 
@@ -45,7 +44,7 @@ ActiveRecord::Schema.define(version: 2021_08_10_090713) do
     t.integer "sluggable_id", null: false
     t.string "sluggable_type", limit: 50
     t.string "scope"
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
     t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
@@ -54,32 +53,34 @@ ActiveRecord::Schema.define(version: 2021_08_10_090713) do
   create_table "group_stage_matches", force: :cascade do |t|
     t.bigint "group_id", null: false
     t.bigint "field_id", null: false
-    t.datetime "start_time", null: false
+    t.datetime "start_time", precision: nil, null: false
     t.bigint "home_team_id", null: false
     t.bigint "away_team_id", null: false
     t.integer "home_goals"
     t.integer "away_goals"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.bigint "referee_id"
     t.index ["away_team_id"], name: "index_group_stage_matches_on_away_team_id"
     t.index ["field_id"], name: "index_group_stage_matches_on_field_id"
     t.index ["group_id"], name: "index_group_stage_matches_on_group_id"
     t.index ["home_team_id"], name: "index_group_stage_matches_on_home_team_id"
+    t.index ["referee_id"], name: "index_group_stage_matches_on_referee_id"
   end
 
   create_table "groups", force: :cascade do |t|
     t.bigint "age_group_id", null: false
     t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["age_group_id"], name: "index_groups_on_age_group_id"
   end
 
   create_table "playoff_groups", force: :cascade do |t|
     t.bigint "age_group_id", null: false
     t.string "name", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["age_group_id"], name: "index_playoff_groups_on_age_group_id"
   end
 
@@ -94,14 +95,15 @@ ActiveRecord::Schema.define(version: 2021_08_10_090713) do
     t.integer "away_team_origin_rule", null: false
     t.bigint "home_team_id"
     t.bigint "away_team_id"
-    t.datetime "start_time", null: false
+    t.datetime "start_time", precision: nil, null: false
     t.string "title", null: false
     t.integer "home_goals"
     t.integer "away_goals"
     t.boolean "penalties", default: false, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "playoff_group_id"
+    t.bigint "referee_id"
     t.index ["age_group_id"], name: "index_playoff_matches_on_age_group_id"
     t.index ["away_team_id"], name: "index_playoff_matches_on_away_team_id"
     t.index ["away_team_origin_type", "away_team_origin_id"], name: "index_playoff_matches_on_away_team_origin"
@@ -109,6 +111,16 @@ ActiveRecord::Schema.define(version: 2021_08_10_090713) do
     t.index ["home_team_id"], name: "index_playoff_matches_on_home_team_id"
     t.index ["home_team_origin_type", "home_team_origin_id"], name: "index_playoff_matches_on_home_team_origin"
     t.index ["playoff_group_id"], name: "index_playoff_matches_on_playoff_group_id"
+    t.index ["referee_id"], name: "index_playoff_matches_on_referee_id"
+  end
+
+  create_table "referees", force: :cascade do |t|
+    t.bigint "tournament_id", null: false
+    t.string "name", null: false
+    t.string "access_key", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tournament_id"], name: "index_referees_on_tournament_id"
   end
 
   create_table "teams", force: :cascade do |t|
@@ -116,8 +128,8 @@ ActiveRecord::Schema.define(version: 2021_08_10_090713) do
     t.bigint "group_id", null: false
     t.string "name", null: false
     t.integer "group_stage_number"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "lot"
     t.index ["club_id"], name: "index_teams_on_club_id"
     t.index ["group_id"], name: "index_teams_on_group_id"
@@ -128,8 +140,8 @@ ActiveRecord::Schema.define(version: 2021_08_10_090713) do
     t.date "start_date", null: false
     t.integer "days", default: 1, null: false
     t.string "location", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "access_key"
     t.string "address"
     t.integer "match_minutes", default: 45, null: false
@@ -148,13 +160,17 @@ ActiveRecord::Schema.define(version: 2021_08_10_090713) do
   add_foreign_key "fields", "tournaments"
   add_foreign_key "group_stage_matches", "fields"
   add_foreign_key "group_stage_matches", "groups"
+  add_foreign_key "group_stage_matches", "referees"
   add_foreign_key "group_stage_matches", "teams", column: "away_team_id"
   add_foreign_key "group_stage_matches", "teams", column: "home_team_id"
+  add_foreign_key "groups", "age_groups"
   add_foreign_key "playoff_groups", "age_groups"
   add_foreign_key "playoff_matches", "fields"
   add_foreign_key "playoff_matches", "playoff_groups"
+  add_foreign_key "playoff_matches", "referees"
   add_foreign_key "playoff_matches", "teams", column: "away_team_id"
   add_foreign_key "playoff_matches", "teams", column: "home_team_id"
+  add_foreign_key "referees", "tournaments"
   add_foreign_key "teams", "clubs"
   add_foreign_key "teams", "groups"
   add_foreign_key "tournaments", "clubs"

@@ -28,7 +28,7 @@ class Api::V1::Official::PlayoffMatchesController < Api::V1::Official::OfficialB
     allowed = [:age_group_id, :title, :start_time, :field_id,
                :home_team_origin_id, :home_team_origin_type, :home_team_origin_rule,
                :away_team_origin_id, :away_team_origin_type, :away_team_origin_rule,
-               :playoff_group_id]
+               :playoff_group_id, :referee_id]
     params.require(:playoff_match).permit(allowed)
   end
 end

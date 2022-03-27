@@ -171,6 +171,27 @@ export function deletePlayoffMatch(accessContext, tournamentId, id, callback) {
   }).catch(() => handleApiConnectionError(callback))
 }
 
+export function saveReferee(accessContext, tournamentId, id, name, callback) {
+  const url = `/api/v1/official/tournaments/${tournamentId}/referees` + (id ? `/${id}` : '')
+  const method = id ? 'PATCH' : 'POST'
+  fetch(url, {
+    method,
+    headers: buildHeaders(accessContext),
+    body: JSON.stringify({ referee: { name } }),
+  }).then(response => {
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
+}
+
+export function deleteReferee(accessContext, tournamentId, id, callback) {
+  fetch(`/api/v1/official/tournaments/${tournamentId}/referees/${id}`, {
+    method: 'DELETE',
+    headers: buildHeaders(accessContext),
+  }).then(response => {
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
+}
+
 export function saveLottery(accessContext, tournamentId, groupId, data, callback) {
   fetch(`/api/v1/official/tournaments/${tournamentId}/groups/${groupId}/lottery`, {
     method: 'PUT',
@@ -187,6 +208,8 @@ function buildHeaders(accessContext) {
     headers['X-Access-Key'] = accessContext.officialAccessKey
   } else if (accessContext.resultsAccessKey) {
     headers['X-Results-Access-Key'] = accessContext.resultsAccessKey
+  } else if (accessContext.refereeAccessKey) {
+    headers['X-Referee-Access-Key'] = accessContext.refereeAccessKey
   } else if (accessContext.adminSessionKey) {
     headers['X-Session-Key'] = accessContext.adminSessionKey
   }

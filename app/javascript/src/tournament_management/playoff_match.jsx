@@ -25,6 +25,7 @@ const PlayoffMatch = props => {
     playoffGroups,
     playoffMatch,
     playoffMatches,
+    referees,
     teams,
     tournamentDate,
     tournamentDays,
@@ -54,7 +55,7 @@ const PlayoffMatch = props => {
   const renderName = () => {
     let text = '+ Lisää uusi jatko-ottelu'
     if (playoffMatch) {
-      const { ageGroupId, fieldId, startTime, title, playoffGroupId } = playoffMatch
+      const { ageGroupId, fieldId, startTime, title, playoffGroupId, refereeId } = playoffMatch
       const textElements = []
       if (fields.length > 1) {
         textElements.push(getName(fields, fieldId))
@@ -65,6 +66,9 @@ const PlayoffMatch = props => {
       if (playoffGroupId) {
         const playoffGroup = playoffGroups.find(g => g.id === playoffGroupId)
         textElements.push(playoffGroup.name)
+      }
+      if (refereeId) {
+        textElements.push(getName(referees, refereeId))
       }
       text = textElements.join(' | ')
     }
@@ -87,6 +91,7 @@ const PlayoffMatch = props => {
           {renderSourceField('away', 'Vieras')}
           {renderRuleField('away')}
           {renderPlayoffGroupsDropDown()}
+          {buildRefereesDropDown()}
           {renderButtons()}
         </div>
       </form>
@@ -205,6 +210,12 @@ const PlayoffMatch = props => {
     }
   }
 
+  const buildRefereesDropDown = () => {
+    if (referees.length) {
+      return <IdNameSelect field="refereeId" formData={data} items={referees} label="- Tuomari -" onChange={onFieldChange('refereeId')}/>
+    }
+  }
+
   const renderButtons = () => {
     return (
       <div className="form__buttons">
@@ -227,6 +238,7 @@ const PlayoffMatch = props => {
       playoffGroupId: playoffMatch ? playoffMatch.playoffGroupId : undefined,
       startTime: playoffMatch ? formatTime(playoffMatch.startTime) : '',
       title: playoffMatch ? playoffMatch.title : '',
+      refereeId: playoffMatch ? playoffMatch.refereeId : undefined,
     })
   }
 
@@ -258,31 +270,15 @@ const PlayoffMatch = props => {
   }
 
   const submit = () => {
-    const {
-      ageGroupId,
-      awayTeamOrigin,
-      awayTeamOriginRule,
-      fieldId,
-      day,
-      homeTeamOrigin,
-      homeTeamOriginRule,
-      playoffGroupId,
-      startTime,
-      title,
-    } = data
+    const { awayTeamOrigin, day, homeTeamOrigin, startTime } = data
     const id = playoffMatch ? playoffMatch.id : undefined
     const body = {
-      ageGroupId,
+      ...data,
       awayTeamOriginId: parseOriginId(awayTeamOrigin),
       awayTeamOriginType: parseOriginType(awayTeamOrigin),
-      awayTeamOriginRule,
-      fieldId,
       homeTeamOriginId: parseOriginId(homeTeamOrigin),
       homeTeamOriginType: parseOriginType(homeTeamOrigin),
-      homeTeamOriginRule,
-      playoffGroupId,
       startTime: addDays(zonedTimeToUtc(`${tournamentDate} ${startTime}`, 'Europe/Helsinki'), day - 1),
-      title,
     }
     savePlayoffMatch(accessContext, tournamentId, id, body, (errors, data) => {
       if (errors) {
@@ -349,6 +345,7 @@ PlayoffMatch.propTypes = {
     homeTeamOriginRule: PropTypes.number.isRequired,
     id: PropTypes.number.isRequired,
     playoffGroupId: PropTypes.number,
+    refereeId: PropTypes.number,
     startTime: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
   }),
@@ -360,6 +357,7 @@ PlayoffMatch.propTypes = {
   onPlayoffMatchDelete: PropTypes.func,
   onPlayoffMatchSave: PropTypes.func.isRequired,
   matchMinutes: PropTypes.number.isRequired,
+  referees: PropTypes.array.isRequired,
   teams: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,

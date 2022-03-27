@@ -23,6 +23,7 @@ const GroupStageMatch = props => {
     matchMinutes,
     onGroupStageMatchDelete,
     onGroupStageMatchSave,
+    referees,
     teams,
     tournamentDate,
     tournamentId,
@@ -52,7 +53,7 @@ const GroupStageMatch = props => {
   const renderName = () => {
     let text = '+ Lisää uusi alkulohkon ottelu'
     if (groupStageMatch) {
-      const { ageGroupId, awayTeamId, fieldId, groupId, homeTeamId, startTime } = groupStageMatch
+      const { ageGroupId, awayTeamId, fieldId, groupId, homeTeamId, startTime, refereeId } = groupStageMatch
       const textElements = []
       if (fields.length > 1) {
         textElements.push(getName(fields, fieldId))
@@ -60,6 +61,9 @@ const GroupStageMatch = props => {
       textElements.push(formatMatchTime(tournamentDays, startTime))
       textElements.push(`${getName(groups, groupId)} (${getName(ageGroups, ageGroupId)})`)
       textElements.push(`${getName(teams, homeTeamId)} - ${getName(teams, awayTeamId)}`)
+      if (refereeId) {
+        textElements.push(getName(referees, refereeId))
+      }
       text = textElements.join(' | ')
     }
     return <div className={resolveTournamentItemClasses(groupStageMatch)}><span onClick={onOpenClick}>{text}</span></div>
@@ -76,6 +80,7 @@ const GroupStageMatch = props => {
           {buildGroupDropDown()}
           {buildTeamDropDown('homeTeamId', '- Kotijoukkue -')}
           {buildTeamDropDown('awayTeamId', '- Vierasjoukkue -')}
+          {buildRefereesDropDown()}
           {renderButtons()}
         </div>
       </form>
@@ -145,6 +150,12 @@ const GroupStageMatch = props => {
     )
   }
 
+  const buildRefereesDropDown = () => {
+    if (referees.length) {
+      return <IdNameSelect field="refereeId" formData={data} items={referees} label="- Tuomari -" onChange={onFieldChange('refereeId')}/>
+    }
+  }
+
   const onOpenClick = () => {
     openForm({
       awayTeamId: groupStageMatch ? groupStageMatch.awayTeamId : undefined,
@@ -153,6 +164,7 @@ const GroupStageMatch = props => {
       groupId: groupStageMatch ? groupStageMatch.groupId : undefined,
       homeTeamId: groupStageMatch ? groupStageMatch.homeTeamId : undefined,
       startTime: groupStageMatch ? formatTime(groupStageMatch.startTime) : '',
+      refereeId: groupStageMatch ? groupStageMatch.refereeId : undefined,
     })
   }
 
@@ -231,6 +243,7 @@ GroupStageMatch.propTypes = {
     groupId: PropTypes.number.isRequired,
     homeTeamId: PropTypes.number.isRequired,
     id: PropTypes.number.isRequired,
+    refereeId: PropTypes.number,
     startTime: PropTypes.string.isRequired,
   }),
   groupStageMatches: PropTypes.arrayOf(PropTypes.shape({
@@ -240,6 +253,7 @@ GroupStageMatch.propTypes = {
   onGroupStageMatchDelete: PropTypes.func,
   onGroupStageMatchSave: PropTypes.func.isRequired,
   matchMinutes: PropTypes.number.isRequired,
+  referees: PropTypes.array.isRequired,
   teams: PropTypes.arrayOf(idNamePropType).isRequired,
   tournamentDays: PropTypes.number.isRequired,
   tournamentId: PropTypes.number.isRequired,

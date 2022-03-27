@@ -8,6 +8,7 @@ class Api::V1::Official::OfficialBaseController < ApplicationController
   def check_access
     official_access_key = request.headers['HTTP_X_ACCESS_KEY']
     results_access_key = request.headers['HTTP_X_RESULTS_ACCESS_KEY']
+    referee_access_key = request.headers['HTTP_X_REFEREE_ACCESS_KEY']
     admin_session_key = request.headers['HTTP_X_SESSION_KEY']
     if official_access_key
       @tournament = Tournament.where('access_key=?', official_access_key).first
@@ -16,6 +17,11 @@ class Api::V1::Official::OfficialBaseController < ApplicationController
       render status: 401, body: nil unless allow_results_access_key?
       @tournament = Tournament.where('results_access_key=?', results_access_key).first
       render status: 401, body: nil unless @tournament
+    elsif referee_access_key
+      render status: 401, body: nil unless allow_results_access_key?
+      @referee = Referee.where('access_key=?', referee_access_key).first
+      render status: 401, body: nil unless @referee
+      @tournament = @referee.tournament
     elsif admin_session_key
       ok = AdminSession.find_by_key admin_session_key
       render status: 401, body: nil unless ok

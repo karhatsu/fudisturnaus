@@ -2,7 +2,7 @@ json.(@tournament, :id, :name, :start_date, :end_date, :days, :location, :addres
 json.club @tournament.club, :logo_url if @tournament.club_id
 
 json.group_stage_matches @tournament.group_stage_matches do |group_stage_match|
-  json.(group_stage_match, :id, :age_group_id, :group_id, :field_id, :start_time, :day, :home_goals, :away_goals)
+  json.(group_stage_match, :id, :age_group_id, :group_id, :field_id, :start_time, :day, :home_goals, :away_goals, :referee_id)
   json.type 'GroupStageMatch'
 
   json.age_group group_stage_match.age_group, :name
@@ -13,7 +13,7 @@ json.group_stage_matches @tournament.group_stage_matches do |group_stage_match|
 end
 
 json.playoff_matches @tournament.playoff_matches do |playoff_match|
-  json.(playoff_match, :id, :age_group_id, :field_id, :title, :start_time, :day, :home_goals, :away_goals, :penalties, :home_team_origin_id, :away_team_origin_id)
+  json.(playoff_match, :id, :age_group_id, :field_id, :title, :start_time, :day, :home_goals, :away_goals, :penalties, :home_team_origin_id, :away_team_origin_id, :referee_id)
   json.type 'PlayoffMatch'
 
   json.age_group playoff_match.age_group, :name

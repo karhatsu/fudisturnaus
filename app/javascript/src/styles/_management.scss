@@ -36,7 +36,7 @@
     font-style: italic;
   }
 
-  .tournament-item__title {
+  &__title {
     color: $green;
 
     &--with-badge {
@@ -47,6 +47,10 @@
 
     span {
       cursor: pointer;
+    }
+
+    &__link {
+      margin-left: 8px;
     }
   }
 }

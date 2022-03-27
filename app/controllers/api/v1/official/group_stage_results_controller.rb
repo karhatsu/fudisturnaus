@@ -19,7 +19,8 @@ class Api::V1::Official::GroupStageResultsController < Api::V1::Official::Offici
 
   def find_and_verity_match
     @match = GroupStageMatch.find(params[:match_id])
-    render status: 400, json: { error: 'Match not found' } unless @match
+    return render status: 400, json: { error: 'Match not found' } unless @match
+    return render status: 401, body: nil if @referee && @match.referee_id != @referee.id
     render status: 401, body: nil if @match.tournament_id != @tournament.id
   end
 

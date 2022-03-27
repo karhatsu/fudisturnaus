@@ -8,9 +8,14 @@ const Info = () => {
       <Title iconLink="/" loading={false} text="fudisturnaus.com - Info"/>
       <div className="title-2">Mikä on fudisturnaus.com?</div>
       <div className="info-box">
-        fudisturnaus.com on helppokäyttöinen tulospalvelu jalkapallon junioriturnauksia varten.
-        Sen avulla jaat kätevästi turnauksen otteluohjelman muille joukkueille ja hoidat turnauksen tulospalvelun.
+        <div className="info-box__paragraph">fudisturnaus.com on helppokäyttöinen ja ilmainen tulospalvelu jalkapallon
+          junioriturnauksia varten. Sen avulla jaat kätevästi turnauksen otteluohjelman muille joukkueille ja hoidat
+          turnauksen tulospalvelun.</div>
+        <div className="info-box__paragraph">Tämän tulospalvelun teossa on panostettu erityisesti käytettävyyteen niin
+          toimitsijoiden kuin turnauksen osallistujienkin näkökulmasta.</div>
       </div>
+      <div className="title-2">Paljonko palvelun käyttö maksaa?</div>
+      <div className="info-box">Palvelu on ilmainen.</div>
       <div className="title-2">Mitkä ovat palvelun tärkeimmät ominaisuudet?</div>
       <div className="info-box">
         <ul>
@@ -18,9 +23,11 @@ const Info = () => {
             perustiedot, joukkueet sekä ottelut.</li>
           <li>Koko turnauksen otteluohjelma sarjataulukkoineen löytyy yhdeltä julkiselta sivulta. Tällä sivulla
             on helppo etsiä esim. oman sarjan, seuran tai joukkueen ottelut.</li>
-          <li>Otteluiden tulosten tallentaminen onnistuu todella helposti vaikkapa kännykällä. Voit jopa halutessasi
-            jakaa tuomareille linkin, jonka kautta he syöttävät tuloksen suoraan ottelun päätyttyä. Vaihtoehtoisesti
-            järjestäjät voivat tietysti itse syöttää tulokset.</li>
+          <li>Otteluiden tulosten tallentaminen onnistuu todella helposti vaikkapa kännykällä.</li>
+          <li>Tulosten tallentamiseen on monta eri vaihtoehtoa. Järjestäjä voi tallentaa tulokset itse tai tuomareille
+            voi jakaa linkin, jonka kauttaa he pääsevät tallentamaan tulokset suoraan. Otteluille voi myös asetella
+            tuomarit, jolloin jokainen heistä saa tulosten tallentamista varten oman linkkinsä. Tämä vaihtoehto on
+            erittäin kätevä erityisesti isommissa turnauksissa, joissa pelejä on paljon.</li>
           <li>Tulokset näkyvät muille käyttäjille automaattisesti ilman, että sivua tarvitsee edes päivittää.
             Jokaisen ottelun jälkeen tieto päivittyy myös sarjataulukoihin.</li>
           <li>Kun alkulohkon kaikki ottelut on pelattu, ohjelma asettaa joukkueet jatko-otteluihin ilman erillisiä
@@ -31,8 +38,6 @@ const Info = () => {
           <li>Sivusto toimii hyvin niin puhelimilla, tableteilla kuin pöytäkoneillakin.</li>
         </ul>
       </div>
-      <div className="title-2">Paljonko palvelun käyttö maksaa?</div>
-      <div className="info-box">Palvelu on ilmainen.</div>
       <div className="title-2">Miten saamme palvelun käyttöön?</div>
       <div className="info-box">
         <ContactForm/>

@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import GroupLottery from './group_lottery'
 
-const Lottery = ({ ageGroups, groups, onLotterySave, tournamentId }) => {
+const Lottery = ({ onLotterySave, tournament, tournamentId }) => {
+  const { ageGroups, groups } = tournament
   const renderInfo = () => {
     return (
       <div className="tournament-item">
@@ -12,28 +13,49 @@ const Lottery = ({ ageGroups, groups, onLotterySave, tournamentId }) => {
     )
   }
 
-  const groupsWithResultsToBeSolved = groups.filter(group => group.results)
-  if (!groupsWithResultsToBeSolved.length) {
-    return renderInfo()
+  const renderContent = () => {
+    const groupsWithResultsToBeSolved = groups.filter(group => group.results)
+    if (!groupsWithResultsToBeSolved.length) {
+      return renderInfo()
+    }
+    return groupsWithResultsToBeSolved.map(group => {
+      return (
+        <GroupLottery
+          ageGroups={ageGroups}
+          group={group}
+          key={group.id}
+          onLotterySave={onLotterySave}
+          tournamentId={tournamentId}
+        />
+      )
+    })
   }
-  return groupsWithResultsToBeSolved.map(group => {
-    return <GroupLottery ageGroups={ageGroups} group={group} key={group.id} onLotterySave={onLotterySave} tournamentId={tournamentId}/>
-  })
+
+  return (
+    <>
+      <div className="title-2">Tasatilanteen ratkaisu arvalla</div>
+      <div className="tournament-management__section tournament-management__section--lottery">
+        {renderContent()}
+      </div>
+    </>
+  )
 }
 
 Lottery.propTypes = {
-  ageGroups: PropTypes.array.isRequired,
-  groups: PropTypes.arrayOf(PropTypes.shape({
-    ageGroupId: PropTypes.number.isRequired,
-    id: PropTypes.number.isRequired,
-    results: PropTypes.arrayOf(PropTypes.shape({
-      ranking: PropTypes.number.isRequired,
-      teamId: PropTypes.number.isRequired,
-      teamName: PropTypes.string.isRequired,
-      lot: PropTypes.number,
-    })),
-  })).isRequired,
   onLotterySave: PropTypes.func.isRequired,
+  tournament: PropTypes.shape({
+    ageGroups: PropTypes.array.isRequired,
+    groups: PropTypes.arrayOf(PropTypes.shape({
+      ageGroupId: PropTypes.number.isRequired,
+      id: PropTypes.number.isRequired,
+      results: PropTypes.arrayOf(PropTypes.shape({
+        ranking: PropTypes.number.isRequired,
+        teamId: PropTypes.number.isRequired,
+        teamName: PropTypes.string.isRequired,
+        lot: PropTypes.number,
+      })),
+    })).isRequired,
+  }).isRequired,
   tournamentId: PropTypes.number.isRequired,
 }
 

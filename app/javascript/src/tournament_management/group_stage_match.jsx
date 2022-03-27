@@ -197,7 +197,7 @@ const GroupStageMatch = props => {
   const submit = () => {
     const { day, startTime } = data
     const isoStartTime = addDays(zonedTimeToUtc(`${tournamentDate} ${startTime}`, 'Europe/Helsinki'), day - 1)
-    const body = { ...data, startTime: isoStartTime }
+    const body = { ...data, startTime: isoStartTime, day: undefined }
     const id = groupStageMatch ? groupStageMatch.id : undefined
     saveGroupStageMatch(accessContext, tournamentId, id, body, (errors, data) => {
       if (errors) {

@@ -270,15 +270,33 @@ const PlayoffMatch = props => {
   }
 
   const submit = () => {
-    const { awayTeamOrigin, day, homeTeamOrigin, startTime } = data
+    const {
+      ageGroupId,
+      awayTeamOrigin,
+      awayTeamOriginRule,
+      fieldId,
+      day,
+      homeTeamOrigin,
+      homeTeamOriginRule,
+      playoffGroupId,
+      refereeId,
+      startTime,
+      title,
+    } = data
     const id = playoffMatch ? playoffMatch.id : undefined
     const body = {
-      ...data,
+      ageGroupId,
       awayTeamOriginId: parseOriginId(awayTeamOrigin),
       awayTeamOriginType: parseOriginType(awayTeamOrigin),
+      awayTeamOriginRule,
+      fieldId,
       homeTeamOriginId: parseOriginId(homeTeamOrigin),
       homeTeamOriginType: parseOriginType(homeTeamOrigin),
+      homeTeamOriginRule,
+      playoffGroupId,
+      refereeId,
       startTime: addDays(zonedTimeToUtc(`${tournamentDate} ${startTime}`, 'Europe/Helsinki'), day - 1),
+      title,
     }
     savePlayoffMatch(accessContext, tournamentId, id, body, (errors, data) => {
       if (errors) {

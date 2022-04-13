@@ -25,5 +25,6 @@ fi:
         address: Osoite
         days: Kesto (pv)
         location: Sijainti
+        match_minutes: Otteluiden välinen aika
         name: Nimi
         start_date: Pvm

@@ -30,7 +30,6 @@ const TournamentFields = props => {
   const renderTournamentForm = () => {
     return (
       <form className="form form--vertical">
-        <FormErrors errors={errors}/>
         {renderOrganizerField()}
         {renderTournamentField('Nimi', 'text', 'name', 'Esim. Kevät Cup 2019')}
         {renderTournamentField('Pvm', 'date', 'startDate')}
@@ -42,6 +41,7 @@ const TournamentFields = props => {
         {renderVisibilityField()}
         {tournament && renderCheckbox('Peruttu', 'cancelled')}
         {!tournament && renderCheckbox('Testiturnaus', 'test')}
+        <FormErrors errors={errors}/>
         {renderTournamentFormButtons()}
       </form>
     )

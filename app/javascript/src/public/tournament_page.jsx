@@ -251,7 +251,7 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
   return (
     <div>
       <IframeTitle />
-      <Title iconLink={iconLink} loading={!tournament && !error} text={title} club={club}>
+      <Title iconLink={iconLink} loading={!tournament && !error} text={title} club={club} tournament={tournament}>
         <CancelledBadge tournament={tournament} />
       </Title>
       <TournamentSubTitle tournament={tournament} />

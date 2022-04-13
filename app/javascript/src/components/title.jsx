@@ -4,10 +4,46 @@ import { Link } from 'react-router-dom'
 
 const emoji = '⚽'
 
-const Title = ({ children, club, iconLink, loading, text }) => {
+const buildEventJson = tournament => ({
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: tournament.name,
+  startDate: tournament.startDate,
+  endDate: tournament.endDate,
+  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  eventStatus: tournament.cancelled ? 'https://schema.org/EventCancelled' : 'https://schema.org/EventScheduled',
+  location: {
+    '@type': 'Place',
+    name: tournament.location,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: tournament.address,
+      addressCountry: 'FI',
+    },
+  },
+  image: [
+    'https://www.fudisturnaus.com/logo.jpg'
+  ],
+  description: 'Jalkapalloturnaus',
+  organizer: {
+    '@type': 'Organization',
+    name: tournament.club?.name,
+  },
+})
+
+const Title = ({ children, club, iconLink, loading, text, tournament }) => {
   useEffect(() => {
     document.title = text.indexOf('fudisturnaus.com') !== -1 ? text : `${text} - fudisturnaus.com`
   }, [text])
+
+  useEffect(() => {
+    const eventElement = document.getElementById('event-data-json')
+    let event = ''
+    if (tournament) {
+      event = JSON.stringify(buildEventJson(tournament))
+    }
+    eventElement.innerText = event
+  }, [tournament])
 
   const resolveEmojiClasses = () => {
     const emojiClasses = ['title__emoji']
@@ -52,6 +88,7 @@ Title.propTypes = {
   iconLink: PropTypes.string,
   loading: PropTypes.bool.isRequired,
   text: PropTypes.string.isRequired,
+  tournament: PropTypes.object,
 }
 
 export default Title

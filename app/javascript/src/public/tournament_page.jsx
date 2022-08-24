@@ -121,6 +121,21 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
     return tournament.groupStageMatches.length > 0
   }
 
+  const renderSponsors = () => {
+    if (officialLevel === officialLevels.none && tournament && tournament.slug === 'fc-kontu-p14-kevatturnaus') {
+      return (
+        <>
+          <div className="title-2">Turnausta tukemassa</div>
+          <div className="sponsors">
+            <a href="https://tuokko.fi/" target="_blank" rel="noopener noreferrer">
+              <img alt="Tuokko" src="/sponsors/fc-kontu-p14-kevatturnaus/Tuokko150pxpng.png" />
+            </a>
+          </div>
+        </>
+      )
+    }
+  }
+
   const renderMatchContent = () => {
     const groupStageMatches = tournament.groupStageMatches.filter(isFilterGroupStageMatch)
     const filteredPlayoffMatches = tournament.playoffMatches.filter(isFilterPlayoffMatch)
@@ -131,6 +146,7 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
         {renderGroupTables()}
         {renderMatches(filteredPlayoffMatches, 'Jatko-ottelut', filteredPlayoffMatches.length)}
         {renderPlayoffGroupTables()}
+        {renderSponsors()}
         <InfoBox/>
       </div>
     )

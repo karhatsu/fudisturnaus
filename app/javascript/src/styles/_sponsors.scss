@@ -1,0 +1,15 @@
+@import 'variables';
+@import 'shared';
+
+.sponsors {
+  @include white-box(false);
+  background-color: transparent;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: -8px;
+
+  img {
+    margin: 16px;
+  }
+}

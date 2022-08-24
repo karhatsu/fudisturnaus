@@ -7,9 +7,19 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  margin: -8px;
+  justify-content: center;
+  margin: 0;
 
   img {
-    margin: 16px;
+    height: 120px;
+    margin: 8px;
+
+    &.intersport {
+      height: 90px;
+
+      @media only screen and (min-width: 48em) {
+        height: 120px;
+      }
+    }
   }
 }

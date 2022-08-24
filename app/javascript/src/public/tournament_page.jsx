@@ -37,6 +37,18 @@ const defaultFilters = {
   teamId: 0,
 }
 
+const kontuSponsors = [
+  { href: 'http://asuras.fi/', img: 'Asuras.jpeg' },
+  { href: 'https://daddygreens.fi', img: 'Daddy_Greens_logo_black_bg_RGB.png' },
+  { href: 'https://www.intersport.fi/fi/kauppa/helsinki-easton', img: 'intersport.jpg', className: 'intersport' },
+  { href: 'https://www.jiiteetyot.fi', img: 'JiiTeeTyot.jpeg' },
+  { href: 'https://www.instagram.com/korvisten_karkkikiska', img: 'korvisten_karkkikiska.png' },
+  { href: 'https://www.kotipizza.fi/ravintolat/helsinki-kallio-porthaninkatu', img: 'kotipizza_kallio.jpg' },
+  { href: 'https://pomppulinnat.net/', img: 'Pomppulinnat.jpg' },
+  { href: 'https://www.tuokinprint.fi/', img: 'TP-logo.png' },
+  { href: 'https://tuokko.fi/', img: 'Tuokko150pxpng.png' }
+]
+
 const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
   const { accessKey } = useParams()
   const { search } = useLocation()
@@ -127,9 +139,11 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
         <>
           <div className="title-2">Turnausta tukemassa</div>
           <div className="sponsors">
-            <a href="https://tuokko.fi/" target="_blank" rel="noopener noreferrer">
-              <img alt="Tuokko" src="/sponsors/fc-kontu-p14-kevatturnaus/Tuokko150pxpng.png" />
-            </a>
+            {kontuSponsors.map(({ href, img, className }) => (
+              <a key={img} href={href} target="_blank" rel="noopener noreferrer">
+                <img alt="Tuokko" src={`/sponsors/fc-kontu-p14-kevatturnaus/${img}`} className={className} />
+              </a>
+            ))}
           </div>
         </>
       )

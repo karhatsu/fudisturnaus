@@ -46,7 +46,8 @@ const kontuSponsors = [
   { href: 'https://www.kotipizza.fi/ravintolat/helsinki-kallio-porthaninkatu', img: 'kotipizza_kallio.jpg' },
   { href: 'https://pomppulinnat.net/', img: 'Pomppulinnat.jpg' },
   { href: 'https://www.tuokinprint.fi/', img: 'TP-logo.png' },
-  { href: 'https://tuokko.fi/', img: 'Tuokko150pxpng.png' }
+  { href: 'https://tuokko.fi/', img: 'Tuokko150pxpng.png' },
+  { href: 'https://varte.fi/', img: 'varte.jpeg', className: 'varte' }
 ]
 
 const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {

@@ -25,6 +25,13 @@ describe 'tournament page', type: :system do
     expect_message 'warning', 'Turnauksen otteluohjelma julkaistaan myöhemmin'
   end
 
+  it 'redirect from renamed slug' do
+    old_slug = tournament.slug
+    tournament.update_attribute :slug, 'new_slug'
+    visit "/t/#{old_slug}"
+    expect(page).to have_current_path('/t/new_slug')
+  end
+
   describe 'when matches added' do
     let(:field1) { create :field, name: 'Field 1', tournament: tournament }
     let(:field2) { create :field, name: 'Field 2', tournament: tournament }

@@ -135,14 +135,14 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
   }
 
   const renderSponsors = () => {
-    if (officialLevel === officialLevels.none && tournament && tournament.slug === 'fc-kontu-p14-kevatturnaus') {
+    if (officialLevel === officialLevels.none && tournament && tournament.slug === 'fc-kontu-p14-syysturnaus') {
       return (
         <>
           <div className="title-2">Turnausta tukemassa</div>
           <div className="sponsors">
             {kontuSponsors.map(({ href, img, className }) => (
               <a key={img} href={href} target="_blank" rel="noopener noreferrer">
-                <img alt="Tuokko" src={`/sponsors/fc-kontu-p14-kevatturnaus/${img}`} className={className} />
+                <img alt="Tuokko" src={`/sponsors/fc-kontu-p14-syysturnaus/${img}`} className={className} />
               </a>
             ))}
           </div>

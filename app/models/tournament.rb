@@ -9,7 +9,7 @@ class Tournament < ApplicationRecord
   VISIBILITY_TEAMS = 1
   VISIBILITY_ALL = 2
 
-  friendly_id :name, use: :slugged
+  friendly_id :name, use: :history
 
   belongs_to :club, optional: true
   has_many :age_groups, -> {order(:name)}

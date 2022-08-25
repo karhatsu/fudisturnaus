@@ -95,6 +95,10 @@ class Tournament < ApplicationRecord
     self.results_access_key = SecureRandom.hex
   end
 
+  def should_generate_new_friendly_id?
+    name_changed?
+  end
+
   def check_match_dates
     date_diff = (start_date - start_date_was).to_i
     yield

@@ -27,9 +27,9 @@ describe 'tournament page', type: :system do
 
   it 'redirect from renamed slug' do
     old_slug = tournament.slug
-    tournament.update_attribute :slug, 'new_slug'
+    tournament.update_attribute :name, 'New name for tournament'
     visit "/t/#{old_slug}"
-    expect(page).to have_current_path('/t/new_slug')
+    expect(page).to have_current_path('/t/new-name-for-tournament')
   end
 
   describe 'when matches added' do

@@ -9,6 +9,14 @@ body {
   padding: 8px;
 }
 
+a {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 ul {
   margin: 0;
   padding: 0;

@@ -47,6 +47,10 @@
 
     span {
       cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     &__link {

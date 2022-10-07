@@ -8,6 +8,8 @@
 }
 
 .title {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   font-size: 24px;
   line-height: 24px;
@@ -27,7 +29,6 @@
 
   &__emoji {
     text-decoration: none;
-    position: absolute;
 
     &--loading {
       animation: spin 2s linear infinite;
@@ -36,11 +37,11 @@
 
   &__text {
     font-weight: 600;
-    padding-left: 32px;
+    margin-left: 8px;
   }
 
   &__club-logo {
-    height: 20px;
+    height: 24px;
     margin-left: 6px;
   }
 }

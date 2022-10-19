@@ -74,8 +74,8 @@ const TournamentFields = props => {
         <div className="label">Sääntö tasapisteissä</div>
         <div className="">
           <select onChange={onFieldChange('equalPointsRule')} value={data.equalPointsRule}>
-            <option value={0}>Kaikki ottelut (maaliero, tehdyt maalit), keskinäiset ottelut, arpa</option>
-            <option value={1}>Keskinäiset ottelut, kaikki ottelut (maaliero, tehdyt maalit), arpa</option>
+            <option value={0}>Kaikki ottelut (pisteet, maaliero, tehdyt maalit), keskinäiset ottelut, arpa</option>
+            <option value={1}>Keskinäiset ottelut (pisteet, maaliero, tehdyt maalit), kaikki ottelut, arpa</option>
           </select>
         </div>
       </div>

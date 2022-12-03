@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       namespace :public do
         resources :contacts, only: :create
         resources :tournaments, only: [:index, :show]
+        resources :organizers, only: :index
       end
 
       namespace :official do

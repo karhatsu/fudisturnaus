@@ -29,3 +29,13 @@ export function sendContactRequest(data, callback) {
     handleApiResponse(response, callback)
   }).catch(() => handleApiConnectionError(callback))
 }
+
+export function fetchOrganizers(callback) {
+  fetch('/api/v1/public/organizers')
+    .then(response => response.json())
+    .then(json => callback(null, json.organizers))
+    .catch(err => {
+      console.error(err) // eslint-disable-line no-console
+      callback(undefined)
+    })
+}

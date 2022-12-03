@@ -1,8 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Title from '../components/title'
 import ContactForm from './contact_form'
+import { fetchOrganizers } from './api_client'
 
 const Info = () => {
+  const [organizers, setOrganizers] = useState()
+  useEffect(() => {
+    fetchOrganizers((err, result) => {
+      setOrganizers(result)
+    })
+  }, [])
+
   return (
     <div>
       <Title iconLink="/" loading={false} text="fudisturnaus.com - Info"/>
@@ -38,6 +46,14 @@ const Info = () => {
           <li>Sivusto toimii hyvin niin puhelimilla, tableteilla kuin pöytäkoneillakin.</li>
         </ul>
       </div>
+      {organizers && (
+        <>
+          <div className="title-2">Liity näiden turnausjärjestäjien joukkoon!</div>
+          <div className="info-box info-box--organizers">
+            {organizers.map(club => <img key={club.name} src={club.logoUrl} alt={club.name} title={club.name} />)}
+          </div>
+        </>
+      )}
       <div className="title-2">Miten saamme palvelun käyttöön?</div>
       <div className="info-box">
         <ContactForm/>

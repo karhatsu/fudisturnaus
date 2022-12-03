@@ -1,13 +1,13 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Route } from 'react-router-dom'
 import Main from './src/public/main'
 
 document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(
+  const root = createRoot(document.getElementById('react-app'))
+  root.render(
     <BrowserRouter>
       <Route path="/" component={Main} />
-    </BrowserRouter>,
-    document.getElementById('react-app'),
+    </BrowserRouter>
   )
 })

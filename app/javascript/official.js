@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import OfficialMain from './src/official/main'
 
@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const tournamentId = parseInt(props.tournamentId)
   const refereeId = props.refereeId && parseInt(props.refereeId)
   const refereeName = props.refereeName
-  ReactDOM.render(
+  const root = createRoot(document.getElementById('official-app'))
+  root.render(
     <BrowserRouter>
       <Switch>
         <Route path="/official/:accessKey" render={() => <OfficialMain tournamentId={tournamentId} />}/>
@@ -18,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
           return <OfficialMain tournamentId={tournamentId} refereeId={refereeId} refereeName={refereeName} />
         }}/>
       </Switch>
-    </BrowserRouter>,
-    document.getElementById('official-app')
+    </BrowserRouter>
   )
 })

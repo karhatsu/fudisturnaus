@@ -1,13 +1,13 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Route } from 'react-router-dom'
 import AdminMain from './src/admin/main'
 
 document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(
+  const root = createRoot(document.getElementById('admin-app'))
+  root.render(
     <BrowserRouter>
       <Route path="/admin" component={AdminMain} />
-    </BrowserRouter>,
-    document.getElementById('admin-app'),
+    </BrowserRouter>
   )
 })

@@ -100,7 +100,7 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
     const value = event.target.value
     if (!data.name && parseInt(value) > 0) {
       const clubName = getName(clubs, parseInt(value))
-      if (clubName.indexOf('Tuntematon') === -1) {
+      if (clubName.indexOf('Ei virallista seuraa') === -1) {
         changeValue('name', `${clubName} `)
       }
     }

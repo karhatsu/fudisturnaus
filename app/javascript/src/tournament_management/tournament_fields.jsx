@@ -55,7 +55,7 @@ const TournamentFields = props => {
         <div>
           <select onChange={onFieldChange('clubId')} value={data.clubId}>
             <option>- Ei tiedossa -</option>
-            {clubs.filter(club => club.name.indexOf('Tuntematon') === -1).map(club => {
+            {clubs.filter(club => club.name.indexOf('Ei virallista seuraa') === -1).map(club => {
               return <option key={club.id} value={club.id}>{club.name}</option>
             })}
           </select>

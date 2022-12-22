@@ -18,7 +18,7 @@ const initialData = {
   days: 1,
   location: '',
   address: '',
-  matchMinutes: 45,
+  matchMinutes: 30,
   equalPointsRule: 0,
   visibility: teams,
 }

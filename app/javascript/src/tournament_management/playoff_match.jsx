@@ -265,8 +265,14 @@ const PlayoffMatch = props => {
 
   const canSubmit = () => {
     const { ageGroupId, awayTeamOrigin, awayTeamOriginRule, fieldId, homeTeamOrigin, homeTeamOriginRule, startTime, title } = data
-    return parseInt(ageGroupId) > 0 && !!awayTeamOrigin && !!awayTeamOriginRule && parseInt(fieldId) > 0 && !!homeTeamOrigin &&
-      !!homeTeamOriginRule && startTime.match(/\d{2}:\d{2}/) && !!title
+    return parseInt(ageGroupId) > 0
+      && !!awayTeamOrigin
+      && !!awayTeamOriginRule
+      && parseInt(fieldId) > 0
+      && !!homeTeamOrigin
+      && !!homeTeamOriginRule
+      && startTime.match(/^[012]?\d:[0-5]\d$/)
+      && !!title
   }
 
   const submit = () => {
@@ -284,6 +290,7 @@ const PlayoffMatch = props => {
       title,
     } = data
     const id = playoffMatch ? playoffMatch.id : undefined
+    const finalStartTime = startTime.length === 4 ? `0${startTime}` : startTime
     const body = {
       ageGroupId,
       awayTeamOriginId: parseOriginId(awayTeamOrigin),
@@ -295,7 +302,7 @@ const PlayoffMatch = props => {
       homeTeamOriginRule,
       playoffGroupId,
       refereeId,
-      startTime: addDays(zonedTimeToUtc(`${tournamentDate} ${startTime}`, 'Europe/Helsinki'), day - 1),
+      startTime: addDays(zonedTimeToUtc(`${tournamentDate} ${finalStartTime}`, 'Europe/Helsinki'), day - 1),
       title,
     }
     savePlayoffMatch(accessContext, tournamentId, id, body, (errors, data) => {

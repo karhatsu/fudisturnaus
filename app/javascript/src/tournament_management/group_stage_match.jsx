@@ -186,7 +186,11 @@ const GroupStageMatch = props => {
 
   const canSubmit = () => {
     const { awayTeamId, fieldId, groupId, homeTeamId, startTime } = data
-    return parseInt(awayTeamId) > 0 && parseInt(fieldId) > 0 && parseInt(groupId) > 0 && parseInt(homeTeamId) > 0 && startTime.match(/\d{2}:\d{2}/)
+    return parseInt(awayTeamId) > 0
+      && parseInt(fieldId) > 0
+      && parseInt(groupId) > 0
+      && parseInt(homeTeamId) > 0
+      && startTime.match(/^[012]?\d:[0-5]\d$/)
   }
 
   const resetForm = () => {
@@ -196,7 +200,8 @@ const GroupStageMatch = props => {
 
   const submit = () => {
     const { day, startTime } = data
-    const isoStartTime = addDays(zonedTimeToUtc(`${tournamentDate} ${startTime}`, 'Europe/Helsinki'), day - 1)
+    const finalStartTime = startTime.length === 4 ? `0${startTime}` : startTime
+    const isoStartTime = addDays(zonedTimeToUtc(`${tournamentDate} ${finalStartTime}`, 'Europe/Helsinki'), day - 1)
     const body = { ...data, startTime: isoStartTime, day: undefined }
     const id = groupStageMatch ? groupStageMatch.id : undefined
     saveGroupStageMatch(accessContext, tournamentId, id, body, (errors, data) => {

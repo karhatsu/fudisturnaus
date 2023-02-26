@@ -240,6 +240,7 @@ const PlayoffMatch = props => {
       title: playoffMatch ? playoffMatch.title : '',
       refereeId: playoffMatch ? playoffMatch.refereeId : undefined,
     })
+    setTimeSuggested(!!playoffMatch?.id)
   }
 
   const resetForm = () => {

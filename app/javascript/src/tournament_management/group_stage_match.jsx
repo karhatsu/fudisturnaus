@@ -166,6 +166,7 @@ const GroupStageMatch = props => {
       startTime: groupStageMatch ? formatTime(groupStageMatch.startTime) : '',
       refereeId: groupStageMatch ? groupStageMatch.refereeId : undefined,
     })
+    setTimeSuggested(!!groupStageMatch?.id)
   }
 
   const setField = event => {

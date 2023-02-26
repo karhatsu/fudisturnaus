@@ -235,7 +235,9 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
       return (
         <React.Fragment>
           <div className="title-2">Sarjataulukot</div>
-          <div className="group-results row">{filteredGroups.map(group => renderGroup(group, filteredGroups.length, true))}</div>
+          <div className="group-results row">
+            {filteredGroups.map(group => renderGroup(group, filteredGroups.length, true))}
+          </div>
         </React.Fragment>
       )
     }
@@ -248,7 +250,9 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
       return (
         <>
           <div className="title-2">Jatkolohkot</div>
-          <div className="group-results row">{filteredGroups.map(group => renderGroup(group, filteredGroups.length, false))}</div>
+          <div className="group-results row">
+            {filteredGroups.map(group => renderGroup(group, filteredGroups.length, false))}
+          </div>
         </>
       )
     }
@@ -257,10 +261,12 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
   const renderGroup = (group, groupsCount, showLottery) => {
     return (
       <GroupResults
+        ageGroups={tournament.ageGroups}
         clubs={tournament.clubs}
         filters={filters}
         group={group}
-        groupsCount={groupsCount}
+        groups={tournament.groups}
+        visibleGroupsCount={groupsCount}
         showLottery={showLottery}
         key={group.id}
       />

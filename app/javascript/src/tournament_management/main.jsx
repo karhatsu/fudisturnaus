@@ -206,7 +206,7 @@ const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => 
   const title = `${titlePrefix} - Hallintasivut`
   return (
     <div>
-      <Title iconLink={titleIconLink} loading={!tournament && !error} text={title}/>
+      <Title club={tournament?.club} iconLink={titleIconLink} loading={!tournament && !error} text={title}/>
       {renderContent()}
     </div>
   )

@@ -1,23 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import TournamentList from './tournament_list'
-import { fetchTournaments } from './api_client'
+import { useAllTournaments } from './all_tournaments_context'
 
 const buildLink = tournament => `/t/${tournament.slug}`
 
 const Index = () => {
-  const [error, setError] = useState(false)
-  const [tournaments, setTournaments] = useState(undefined)
+  const { fetchAllTournaments, tournaments, error } = useAllTournaments()
 
-  useEffect(() => {
-    fetchTournaments({}, (err, data) => {
-      if (err) {
-        setError(true)
-      } else {
-        const tournaments = data.filter(t => !t.test)
-        setTournaments(tournaments)
-      }
-    })
-  }, [])
+  useEffect(() => fetchAllTournaments(), [fetchAllTournaments])
 
   return (
     <TournamentList

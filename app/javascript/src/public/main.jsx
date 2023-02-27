@@ -7,16 +7,19 @@ import TournamentPage, { officialLevels } from './tournament_page'
 import Match from './match'
 import Info from './info'
 import TournamentsPage from './tournaments_page'
+import { AllTournamentsContextProvider } from './all_tournaments_context'
 
 const Main = () => {
   return (
-    <Switch>
-      <Route path="/info" component={Info}/>
-      <Route path="/t/:key" component={TournamentPageWrapper} />
-      <Route path="/tournaments/:key" component={TournamentPageWrapper} />
-      <Route path="/tournaments" component={TournamentsPage} />
-      <Route path="/" exact component={Index} />
-    </Switch>
+    <AllTournamentsContextProvider>
+      <Switch>
+        <Route path="/info" component={Info}/>
+        <Route path="/t/:key" component={TournamentPageWrapper} />
+        <Route path="/tournaments/:key" component={TournamentPageWrapper} />
+        <Route path="/tournaments" component={TournamentsPage} />
+        <Route path="/" exact component={Index} />
+      </Switch>
+    </AllTournamentsContextProvider>
   )
 }
 

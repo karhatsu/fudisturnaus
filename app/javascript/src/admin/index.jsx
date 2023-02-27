@@ -1,12 +1,26 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import TournamentList from '../public/tournament_list'
+import { fetchTournaments } from '../public/api_client'
 
 const buildLink = tournament => `/admin/tournaments/${tournament.id}`
 
 const AdminIndex = () => {
+  const [error, setError] = useState(false)
+  const [tournaments, setTournaments] = useState(undefined)
+
+  useEffect(() => {
+    fetchTournaments({}, (err, data) => {
+      if (err) {
+        setError(true)
+      } else {
+        setTournaments(data)
+      }
+    })
+  }, [])
+
   return (
-    <TournamentList buildLink={buildLink} showSearch={true} showTestTournaments={true} title="Admin">
+    <TournamentList buildLink={buildLink} showSearch={true} title="Admin" tournaments={tournaments} tournamentsError={error}>
       <div className="title-2">Hallinta</div>
       <div className="tournament-management__section">
         <Link to="/admin/tournaments/new">+ Lisää uusi turnaus</Link>

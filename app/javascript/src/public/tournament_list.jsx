@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import { addDays, endOfDay, endOfWeek, isBefore, isSameDay, parseISO } from 'date-fns'
 
-import { fetchTournaments } from './api_client'
 import Loading from '../components/loading'
 import Title from '../components/title'
 import TournamentLinkBox from '../components/tournament_link_box'
@@ -18,21 +17,8 @@ const sortByAscendingDate = (a, b) => {
 }
 
 const TournamentList = props => {
-  const { buildLink, query, showInfo, showSearch, showTestTournaments, title } = props
-  const [error, setError] = useState(false)
-  const [tournaments, setTournaments] = useState(undefined)
+  const { buildLink, showInfo, showSearch, title, tournaments, tournamentsError } = props
   const [search, setSearch] = useState('')
-
-  useEffect(() => {
-    fetchTournaments(query || {}, (err, data) => {
-      if (err) {
-        setError(true)
-      } else {
-        const tournaments = showTestTournaments ? data : data.filter(t => !t.test)
-        setTournaments(tournaments)
-      }
-    })
-  }, [query, showTestTournaments])
 
   const renderTournament = useCallback(tournament => {
     const { id } = tournament
@@ -101,7 +87,7 @@ const TournamentList = props => {
   }
 
   const renderContent = () => {
-    if (error) {
+    if (tournamentsError) {
       return <Message type="error">Virhe haettaessa turnauksia. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.</Message>
     } else if (!tournaments) {
       return <Loading/>
@@ -128,7 +114,7 @@ const TournamentList = props => {
 
   return (
     <div>
-      <Title loading={!error && !tournaments} text={title}/>
+      <Title loading={!tournamentsError && !tournaments} text={title}/>
       {showInfo && <InfoBox/>}
       {renderContent()}
       {props.children}
@@ -141,9 +127,9 @@ TournamentList.propTypes = {
   children: PropTypes.arrayOf(PropTypes.element),
   showInfo: PropTypes.bool,
   showSearch: PropTypes.bool,
-  showTestTournaments: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
-  query: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  tournaments: PropTypes.array,
+  tournamentsError: PropTypes.bool.isRequired,
 }
 
 export default TournamentList

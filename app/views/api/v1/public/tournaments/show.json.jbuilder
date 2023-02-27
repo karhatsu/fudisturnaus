@@ -6,7 +6,7 @@ json.group_stage_matches @tournament.group_stage_matches do |group_stage_match|
   json.type 'GroupStageMatch'
 
   json.age_group group_stage_match.age_group, :name
-  json.group group_stage_match.group, :name
+  json.group group_stage_match.group, :age_group_id, :name
   json.field group_stage_match.field, :name
   json.home_team group_stage_match.home_team, :id, :name, :club_id
   json.away_team group_stage_match.away_team, :id, :name, :club_id

@@ -22,8 +22,10 @@ const RefereePage = ({ tournamentId, refereeId, refereeName }) => {
       <div>
         <div className="title-2">{title}</div>
         <Matches
+          ageGroups={tournament.ageGroups}
           clubs={clubs}
           fieldsCount={fields.length}
+          groups={tournament.groups}
           matches={matches}
           renderMatch={EditableMatch}
           showEmptyError={false}

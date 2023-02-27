@@ -8,12 +8,12 @@ def fill_result(match_index, home_goals, away_goals, penalties = false)
   page.find('.match__buttons .button--primary').native.send_keys(:return)
 end
 
-def expect_match_info(start_time, age_group_name, group_name, home_team_name, away_team_name, field_name = nil, index = 0)
+def expect_match_info(start_time, home_team_name, away_team_name, details = nil, index = 0)
   expect(page.all('.match .match__start-time')[index].text).to eql "#{start_time}"
-  if field_name
-    expect(page.all('.match .match__details')[index].text).to eql "#{field_name}, #{age_group_name}, #{group_name}"
+  if details
+    expect(page.all('.match .match__details')[index].text).to eql details
   else
-    expect(page.all('.match .match__details')[index].text).to eql "#{age_group_name}, #{group_name}"
+    expect(page.all('.match .match__details')[index]).to be_nil
   end
   expect(page.all('.match .match__teams')[index].all('.team')[0].text).to eql home_team_name
   expect(page.all('.match .match__teams')[index].all('.team')[1].text).to eql away_team_name

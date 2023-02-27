@@ -7,8 +7,9 @@ import Button from '../form/button'
 import { formatMatchTime } from '../util/date_util'
 import Team from '../public/team'
 import useForm from '../util/use_form'
+import { buildGroupTitle } from '../util/util'
 
-const EditableMatch = ({ clubs, fieldsCount, match, selectedClubId, selectedTeamId, tournamentDays, tournamentId }) => {
+const EditableMatch = ({ ageGroups, clubs, fieldsCount, groups, match, selectedClubId, selectedTeamId, tournamentDays, tournamentId }) => {
   const accessContext = useContext(AccessContext)
   const homeGoalsField = useRef()
   const { formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, onCheckboxChange } = useForm()
@@ -20,11 +21,14 @@ const EditableMatch = ({ clubs, fieldsCount, match, selectedClubId, selectedTeam
   }, [formOpen])
 
   const renderMatchInfo = (startTime, field, ageGroup, group) => {
-    const fieldName = fieldsCount > 1 ? `${field.name}, ` : ''
+    const details = []
+    if (fieldsCount > 1) details.push(field.name)
+    const groupsTitle = buildGroupTitle(ageGroups, groups, ageGroup, group)
+    if (groupsTitle) details.push(groupsTitle)
     return (
       <div>
         <span className="match__start-time">{formatMatchTime(tournamentDays, startTime)}</span>
-        <span className="match__details">{fieldName}{ageGroup.name}{group ? `, ${group.name}` : ''}</span>
+        {details.length > 0 && <span className="match__details">{details.join(', ')}</span>}
       </div>
     )
   }
@@ -170,10 +174,12 @@ const EditableMatch = ({ clubs, fieldsCount, match, selectedClubId, selectedTeam
 }
 
 EditableMatch.propTypes = {
+  ageGroups: PropTypes.array.isRequired,
   clubs: PropTypes.arrayOf(PropTypes.shape({
     logoUrl: PropTypes.string,
   })).isRequired,
   fieldsCount: PropTypes.number.isRequired,
+  groups: PropTypes.array.isRequired,
   match: PropTypes.shape({
     id: PropTypes.number.isRequired,
     type: PropTypes.string.isRequired,

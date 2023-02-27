@@ -105,7 +105,7 @@ describe 'official', type: :system do
     end
 
     def expect_match_info_for_added_match
-      expect_match_info '11:30', 'T11', 'Group A', 'FC Brown', 'SC Lions Green', 'Field 1'
+      expect_match_info '11:30', 'FC Brown', 'SC Lions Green', 'Field 1'
     end
   end
 
@@ -254,7 +254,7 @@ describe 'official', type: :system do
       submit
       expect_item_title 'group-stage-matches', 'pe 12:00 | Group B (P11) | Team 1 - Team 2'
       click_link 'Takaisin tulosten syöttöön'
-      expect_match_info 'pe 12:00', 'P11', 'Group B', 'Team 1', 'Team 2'
+      expect_match_info 'pe 12:00', 'Team 1', 'Team 2'
     end
   end
 

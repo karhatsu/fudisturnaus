@@ -131,7 +131,7 @@ describe 'tournament visibilities', type: :system do
       end
 
       def expect_match
-        expect_match_info '12:00', 'P11', 'A', 'FC Team 1', 'SC Team 1'
+        expect_match_info '12:00', 'FC Team 1', 'SC Team 1'
       end
     end
   end

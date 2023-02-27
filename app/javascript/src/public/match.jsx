@@ -2,14 +2,18 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { formatMatchTime } from '../util/date_util'
 import Team from './team'
+import { buildGroupTitle } from '../util/util'
 
-const Match = ({ clubs, fieldsCount, match, selectedClubId, selectedTeamId, tournamentDays }) => {
+const Match = ({ ageGroups, clubs, fieldsCount, groups, match, selectedClubId, selectedTeamId, tournamentDays }) => {
   const renderMatchInfo = (startTime, field, ageGroup, group) => {
-    const fieldName = fieldsCount > 1 ? `${field.name}, ` : ''
+    const details = []
+    if (fieldsCount > 1) details.push(field.name)
+    const groupsTitle = buildGroupTitle(ageGroups, groups, ageGroup, group)
+    if (groupsTitle) details.push(groupsTitle)
     return (
       <div>
         <span className="match__start-time">{formatMatchTime(tournamentDays, startTime)}</span>
-        <span className="match__details">{fieldName}{ageGroup.name}{group ? `, ${group.name}` : ''}</span>
+        {details.length > 0 && <span className="match__details">{details.join(', ')}</span>}
       </div>
     )
   }
@@ -46,7 +50,7 @@ const Match = ({ clubs, fieldsCount, match, selectedClubId, selectedTeamId, tour
     }
   }
 
-  const { startTime, field, homeTeam, awayTeam, title, ageGroup, group } = match
+  const { ageGroup, startTime, field, homeTeam, awayTeam, title, group } = match
   return (
     <div className="match">
       <div className="match__row">
@@ -64,10 +68,12 @@ const Match = ({ clubs, fieldsCount, match, selectedClubId, selectedTeamId, tour
 }
 
 Match.propTypes = {
+  ageGroups: PropTypes.array.isRequired,
   clubs: PropTypes.arrayOf(PropTypes.shape({
     logoUrl: PropTypes.string,
   })).isRequired,
   fieldsCount: PropTypes.number.isRequired,
+  groups: PropTypes.array.isRequired,
   match: PropTypes.shape({
     id: PropTypes.number.isRequired,
     type: PropTypes.string.isRequired,
@@ -89,6 +95,7 @@ Match.propTypes = {
       name: PropTypes.string.isRequired,
     }).isRequired,
     group: PropTypes.shape({
+      ageGroupId: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
     }),
   }).isRequired,

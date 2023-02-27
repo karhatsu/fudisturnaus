@@ -194,8 +194,10 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
       <div>
         {showTitle ? <div className="title-2">{title}</div> : ''}
         <Matches
+          ageGroups={tournament.ageGroups}
           clubs={clubs}
           fieldsCount={fields.length}
+          groups={tournament.groups}
           matches={matches}
           renderMatch={renderMatch}
           selectedClubId={filters.clubId}

@@ -89,3 +89,12 @@ export function resolveColStyles(count) {
     return 'col-xs-12 col-sm-6 col-md-4'
   }
 }
+
+export const buildGroupTitle = (ageGroups, groups, ageGroup, group) => {
+  if (!group) return ageGroup.name // playoff match
+  const groupsInAgeGroup = groups.filter(g => g.ageGroupId === group.ageGroupId)
+  if (ageGroups.length === 1 && groupsInAgeGroup.length === 1) return undefined // 1 age group, 1 group -> no title needed
+  if (groupsInAgeGroup.length === 1) return ageGroup.name // 1 group in this age group -> use age group name as title
+  if (ageGroups.length === 1) return group.name // 1 age group, multiple groups -> use group name as title
+  return `${ageGroup.name} ${group.name}` // multiple age groups and groups -> use both names in title
+}

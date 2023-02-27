@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { resolveColStyles } from '../util/util'
+import { buildGroupTitle, resolveColStyles } from '../util/util'
 import Team from './team'
 
 const GroupResults = ({ ageGroups, clubs, filters, group, groups, visibleGroupsCount, showLottery }) => {
@@ -25,15 +25,6 @@ const GroupResults = ({ ageGroups, clubs, filters, group, groups, visibleGroupsC
     )
   }
 
-  const resolveTitle = () => {
-    const { ageGroup, ageGroupId, name } = group
-    const groupsInAgeGroup = groups.filter(g => g.ageGroupId === ageGroupId)
-    if (ageGroups.length === 1 && groupsInAgeGroup.length === 1) return undefined // 1 age group, 1 group -> no title needed
-    if (groupsInAgeGroup.length === 1) return ageGroup.name // 1 group in this age group -> use age group name as title
-    if (ageGroups.length === 1) return name // 1 age group, multiple groups -> use group name as title
-    return `${ageGroup.name} ${name}` // multiple age groups and groups -> use both names in title
-  }
-
   const resolveTeamClasses = teamGroupResults => {
     const filteredTeam = teamGroupResults.clubId === filters.clubId || teamGroupResults.teamId === filters.teamId
     return filteredTeam ? 'group-results__team--active' : ''
@@ -43,7 +34,7 @@ const GroupResults = ({ ageGroups, clubs, filters, group, groups, visibleGroupsC
   if (!results.length) {
     return null
   }
-  const title = resolveTitle()
+  const title = buildGroupTitle(ageGroups, groups, group.ageGroup, group)
   return (
     <div className={resolveColStyles(visibleGroupsCount)}>
       <div className="group-results__group">

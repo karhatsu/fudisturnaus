@@ -6,8 +6,10 @@ import Message from '../components/message'
 
 const Matches = props => {
   const {
+    ageGroups,
     clubs,
     fieldsCount,
+    groups,
     renderMatch,
     selectedClubId,
     selectedTeamId,
@@ -46,7 +48,7 @@ const Matches = props => {
   }
 
   const renderMatchWrapper = match => {
-    const matchProps = { clubs, fieldsCount, match, selectedClubId, selectedTeamId, tournamentDays, tournamentId }
+    const matchProps = { ageGroups, clubs, fieldsCount, groups, match, selectedClubId, selectedTeamId, tournamentDays, tournamentId }
     return (
       <div className={resolveColStyles(fieldsCount)} key={match.id}>
         {renderMatch(matchProps)}
@@ -66,8 +68,10 @@ const Matches = props => {
 }
 
 Matches.propTypes = {
+  ageGroups: PropTypes.array.isRequired,
   clubs: PropTypes.array.isRequired,
   fieldsCount: PropTypes.number.isRequired,
+  groups: PropTypes.array.isRequired,
   matches: PropTypes.array.isRequired,
   renderMatch: PropTypes.func.isRequired,
   selectedClubId: PropTypes.number,

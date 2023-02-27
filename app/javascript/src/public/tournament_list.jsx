@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { addDays, endOfDay, endOfWeek, isBefore, isSameDay, parseISO } from 'date-fns'
 
@@ -17,8 +17,7 @@ const sortByAscendingDate = (a, b) => {
 }
 
 const TournamentList = props => {
-  const { buildLink, showInfo, showSearch, title, tournaments, tournamentsError } = props
-  const [search, setSearch] = useState('')
+  const { buildLink, search, setSearch, showInfo, title, tournaments, tournamentsError } = props
 
   const renderTournament = useCallback(tournament => {
     const { id } = tournament
@@ -100,7 +99,7 @@ const TournamentList = props => {
       : 'Turnaukset myöhemmin'
     return (
       <>
-        {showSearch && renderSearchBox()}
+        {setSearch && renderSearchBox()}
         <div className="tournament-links">
           {renderTournaments(groups.today, 'Turnaukset tänään')}
           {renderTournaments(groups.thisWeek, 'Turnaukset tällä viikolla')}
@@ -125,8 +124,9 @@ const TournamentList = props => {
 TournamentList.propTypes = {
   buildLink: PropTypes.func.isRequired,
   children: PropTypes.arrayOf(PropTypes.element),
+  search: PropTypes.string,
+  setSearch: PropTypes.func,
   showInfo: PropTypes.bool,
-  showSearch: PropTypes.bool,
   title: PropTypes.string.isRequired,
   tournaments: PropTypes.array,
   tournamentsError: PropTypes.bool.isRequired,

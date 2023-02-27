@@ -9,6 +9,7 @@ export const useAllTournaments = () => useContext(AllTournamentsContext)
 export const AllTournamentsContextProvider = ({ children }) => {
   const [error, setError] = useState(false)
   const [tournaments, setTournaments] = useState(undefined)
+  const [search, setSearch] = useState('')
 
   const fetchAllTournaments = useCallback(() => {
     fetchTournaments({}, (err, data) => {
@@ -21,7 +22,7 @@ export const AllTournamentsContextProvider = ({ children }) => {
     })
   }, [])
 
-  const value = { fetchAllTournaments, tournaments, error }
+  const value = { fetchAllTournaments, tournaments, error, search, setSearch }
   return <AllTournamentsContext.Provider value={value}>{children}</AllTournamentsContext.Provider>
 }
 

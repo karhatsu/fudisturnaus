@@ -5,15 +5,16 @@ import { useAllTournaments } from './all_tournaments_context'
 const buildLink = tournament => `/t/${tournament.slug}`
 
 const Index = () => {
-  const { fetchAllTournaments, tournaments, error } = useAllTournaments()
+  const { fetchAllTournaments, tournaments, error, search, setSearch } = useAllTournaments()
 
   useEffect(() => fetchAllTournaments(), [fetchAllTournaments])
 
   return (
     <TournamentList
       buildLink={buildLink}
+      search={search}
+      setSearch={setSearch}
       showInfo={true}
-      showSearch={true}
       title="fudisturnaus.com"
       tournaments={tournaments}
       tournamentsError={error}

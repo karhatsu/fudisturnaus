@@ -8,6 +8,7 @@ const buildLink = tournament => `/admin/tournaments/${tournament.id}`
 const AdminIndex = () => {
   const [error, setError] = useState(false)
   const [tournaments, setTournaments] = useState(undefined)
+  const [search, setSearch] = useState('')
 
   useEffect(() => {
     fetchTournaments({}, (err, data) => {
@@ -20,7 +21,14 @@ const AdminIndex = () => {
   }, [])
 
   return (
-    <TournamentList buildLink={buildLink} showSearch={true} title="Admin" tournaments={tournaments} tournamentsError={error}>
+    <TournamentList
+      buildLink={buildLink}
+      search={search}
+      setSearch={setSearch}
+      title="Admin"
+      tournaments={tournaments}
+      tournamentsError={error}
+    >
       <div className="title-2">Hallinta</div>
       <div className="tournament-management__section">
         <Link to="/admin/tournaments/new">+ Lisää uusi turnaus</Link>

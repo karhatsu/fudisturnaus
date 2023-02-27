@@ -39,11 +39,13 @@ const TournamentList = props => {
   }, [search, tournaments, matchCaseInsensitive])
 
   const groupTournaments = useCallback(tournaments => {
-    const groups = { today: [], thisWeek: [], nextWeek: [], later: [], past: [] }
+    const groups = { today: [], yesterday: [], thisWeek: [], nextWeek: [], later: [], past: [] }
     tournaments.forEach(tournament => {
       const startDate = parseISO(tournament.startDate)
       const endDate = parseISO(tournament.endDate)
-      if (isBefore(endOfDay(endDate), new Date())) {
+      if (isSameDay(endDate, addDays(new Date(), -1))) {
+        groups.yesterday.push(tournament)
+      } else if (isBefore(endOfDay(endDate), new Date())) {
         groups.past.push(tournament)
       } else if (isSameDay(startDate, new Date()) || isSameDay(endDate, new Date())) {
         groups.today.push(tournament)
@@ -102,10 +104,11 @@ const TournamentList = props => {
         {setSearch && renderSearchBox()}
         <div className="tournament-links">
           {renderTournaments(groups.today, 'Turnaukset tänään')}
+          {renderTournaments(groups.yesterday, 'Eilen pelatut turnaukset')}
           {renderTournaments(groups.thisWeek, 'Turnaukset tällä viikolla')}
           {renderTournaments(groups.nextWeek, 'Turnaukset ensi viikolla')}
           {renderTournaments(groups.later, laterTitle)}
-          {renderTournaments(groups.past, 'Päättyneet turnaukset')}
+          {renderTournaments(groups.past, 'Aikaisemmat turnaukset')}
         </div>
       </>
     )

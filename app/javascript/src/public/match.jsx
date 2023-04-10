@@ -30,7 +30,7 @@ const Match = ({ ageGroups, clubs, fieldsCount, groups, match, selectedClubId, s
       return (
         <>
           {renderTeam(homeTeam)}
-          <span className="match__teams-separator">-</span>
+          <span className="match__teams-separator">–</span>
           {renderTeam(awayTeam)}
         </>
       )

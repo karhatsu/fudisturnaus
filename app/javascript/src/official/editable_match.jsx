@@ -45,7 +45,7 @@ const EditableMatch = ({ ageGroups, clubs, fieldsCount, groups, match, selectedC
       return (
         <>
           {renderTeam(homeTeam)}
-          <span className="match__teams-separator">-</span>
+          <span className="match__teams-separator">–</span>
           {renderTeam(awayTeam)}
         </>
       )

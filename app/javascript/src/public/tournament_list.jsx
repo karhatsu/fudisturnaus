@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { addDays, endOfDay, endOfWeek, isBefore, isSameDay, parseISO } from 'date-fns'
+import { addDays, endOfDay, endOfWeek, isBefore, isSameDay, isTomorrow, parseISO } from 'date-fns'
 
 import Loading from '../components/loading'
 import Title from '../components/title'
@@ -39,7 +39,7 @@ const TournamentList = props => {
   }, [search, tournaments, matchCaseInsensitive])
 
   const groupTournaments = useCallback(tournaments => {
-    const groups = { today: [], yesterday: [], thisWeek: [], nextWeek: [], later: [], past: [] }
+    const groups = { today: [], tomorrow: [], yesterday: [], thisWeek: [], nextWeek: [], later: [], past: [] }
     tournaments.forEach(tournament => {
       const startDate = parseISO(tournament.startDate)
       const endDate = parseISO(tournament.endDate)
@@ -49,6 +49,8 @@ const TournamentList = props => {
         groups.past.push(tournament)
       } else if (isSameDay(startDate, new Date()) || isSameDay(endDate, new Date())) {
         groups.today.push(tournament)
+      } else if (isTomorrow(startDate) || isTomorrow(endDate)) {
+        groups.tomorrow.push(tournament)
       } else if (isBefore(startDate, endOfWeek(new Date(), { weekStartsOn: 1 }))) {
         groups.thisWeek.push(tournament)
       } else if (isBefore(startDate, endOfWeek(addDays(new Date(), 7), { weekStartsOn: 1 }))) {
@@ -96,7 +98,7 @@ const TournamentList = props => {
       return <Message type="error">Ei turnauksia</Message>
     }
     const groups = groupTournaments(filterTournaments())
-    const laterTitle = !groups.today.length && !groups.thisWeek.length && !groups.nextWeek.length
+    const laterTitle = !groups.today.length && !groups.tomorrow.length && !groups.thisWeek.length && !groups.nextWeek.length
       ? 'Tulevat turnaukset'
       : 'Turnaukset myöhemmin'
     return (
@@ -104,6 +106,7 @@ const TournamentList = props => {
         {setSearch && renderSearchBox()}
         <div className="tournament-links">
           {renderTournaments(groups.today, 'Turnaukset tänään')}
+          {renderTournaments(groups.tomorrow, 'Turnaukset huomenna')}
           {renderTournaments(groups.yesterday, 'Eilen pelatut turnaukset')}
           {renderTournaments(groups.thisWeek, 'Turnaukset tällä viikolla')}
           {renderTournaments(groups.nextWeek, 'Turnaukset ensi viikolla')}

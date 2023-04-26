@@ -232,7 +232,10 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
 
   const renderGroupTables = () => {
     const { calculateGroupTables, groups } = tournament
-    const filteredGroups = groups.filter(isFilterGroup)
+    const filteredGroups = groups.filter(isFilterGroup).sort((a, b) => {
+      if (a.ageGroup.name !== b.ageGroup.name) return a.ageGroup.name.localeCompare(b.ageGroup.name)
+      return a.name.localeCompare(b.name)
+    })
     if (calculateGroupTables && filteredGroups.length && !filters.day) {
       return (
         <React.Fragment>

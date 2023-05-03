@@ -38,16 +38,10 @@ const defaultFilters = {
 }
 
 const kontuSponsors = [
-  { href: 'http://asuras.fi/', img: 'Asuras.jpeg' },
   { href: 'https://daddygreens.fi', img: 'Daddy_Greens_logo_black_bg_RGB.png' },
-  { href: 'https://www.intersport.fi/fi/kauppa/helsinki-easton', img: 'intersport.jpg', className: 'intersport' },
-  { href: 'https://www.jiiteetyot.fi', img: 'JiiTeeTyot.jpeg' },
-  { href: 'https://www.instagram.com/korvisten_karkkikiska', img: 'korvisten_karkkikiska.png' },
-  { href: 'https://www.kotipizza.fi/ravintolat/helsinki-kallio-porthaninkatu', img: 'kotipizza_kallio.jpg' },
-  { href: 'https://pomppulinnat.net/', img: 'Pomppulinnat.jpg' },
-  { href: 'https://www.tuokinprint.fi/', img: 'TP-logo.png' },
-  { href: 'https://tuokko.fi/', img: 'Tuokko150pxpng.png' },
-  { href: 'https://varte.fi/', img: 'varte.jpeg', className: 'varte' }
+  { href: 'https://www.subway.fi/fi/ravintolat/helsinki/helsinki-kontulankaari', img: 'Subway-logo.png' },
+  { href: 'https://www.intersport.fi/fi/kauppa/helsinki-easton', img: 'intersport.jpg' },
+  { href: 'https://getra.fi/', img: 'Getra-Blauw.png' },
 ]
 
 const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
@@ -135,14 +129,14 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
   }
 
   const renderSponsors = () => {
-    if (officialLevel === officialLevels.none && tournament && tournament.slug === 'fc-kontu-p14-syysturnaus') {
+    if (officialLevel === officialLevels.none && tournament && tournament.slug === 'fc-kontun-touko-cup') {
       return (
         <>
           <div className="title-2">Turnausta tukemassa</div>
           <div className="sponsors">
             {kontuSponsors.map(({ href, img, className }) => (
               <a key={img} href={href} target="_blank" rel="noopener noreferrer">
-                <img alt="Tuokko" src={`/sponsors/fc-kontu-p14-syysturnaus/${img}`} className={className} />
+                <img alt="Tuokko" src={`/sponsors/${img}`} className={className} />
               </a>
             ))}
           </div>

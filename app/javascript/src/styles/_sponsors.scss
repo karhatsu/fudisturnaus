@@ -14,20 +14,8 @@
     height: 120px;
     margin: 8px;
 
-    &.intersport {
-      height: 90px;
-
-      @media only screen and (min-width: 48em) {
-        height: 120px;
-      }
-    }
-
-    &.varte {
-      height: 100px;
-
-      @media only screen and (min-width: 48em) {
-        height: 120px;
-      }
+    @media only screen and (min-width: 48em) {
+      height: 120px;
     }
   }
 }

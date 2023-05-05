@@ -14,8 +14,16 @@
     height: 120px;
     margin: 8px;
 
-    @media only screen and (min-width: 48em) {
+    &.wide {
+      height: 90px;
+    }
+
+    @media only screen and (min-width: 32em) {
       height: 120px;
+
+      &.wide {
+        height: 120px;
+      }
     }
   }
 }

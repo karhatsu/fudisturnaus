@@ -40,8 +40,11 @@ const defaultFilters = {
 const kontuSponsors = [
   { href: 'https://daddygreens.fi', img: 'Daddy_Greens_logo_black_bg_RGB.png' },
   { href: 'https://www.subway.fi/fi/ravintolat/helsinki/helsinki-kontulankaari', img: 'Subway-logo.png' },
-  { href: 'https://www.intersport.fi/fi/kauppa/helsinki-easton', img: 'intersport.jpg' },
+  { href: 'https://www.intersport.fi/fi/kauppa/helsinki-easton', img: 'intersport.jpg', className: 'wide' },
+  { href: 'https://www.k-ruoka.fi/kauppa/k-market-kivikko', img: 'K-market-Kivikko.png' },
   { href: 'https://getra.fi/', img: 'Getra-Blauw.png' },
+  { href: 'https://www.laattabest.com/', img: 'LaattaBest.jpeg' },
+  { href: 'https://www.ahlsell.fi/', img: 'ahlsell.jpeg', className: 'wide' },
 ]
 
 const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {

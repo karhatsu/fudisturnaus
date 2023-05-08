@@ -44,7 +44,7 @@ const kontuSponsors = [
   { href: 'https://www.k-ruoka.fi/kauppa/k-market-kivikko', img: 'K-market-Kivikko.png' },
   { href: 'https://getra.fi/', img: 'Getra-Blauw.png' },
   { href: 'https://www.laattabest.com/', img: 'LaattaBest.jpeg' },
-  { href: 'https://www.ahlsell.fi/', img: 'ahlsell.jpeg', className: 'wide' },
+  { href: 'https://www.ahlsell.fi/', img: 'ahlsell.jpeg', className: 'wide' }
 ]
 
 const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {

@@ -20,7 +20,7 @@ class Tournament < ApplicationRecord
 
   validates :name, presence: true
   validates :start_date, presence: true
-  validates :days, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
+  validates :days, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :location, presence: true
   validates :match_minutes, numericality: { only_integer: true, greater_than_or_equal_to: 15, less_than_or_equal_to: 180 }
   validates :equal_points_rule, inclusion: { in: [EQUAL_POINTS_RULE_ALL_MATCHES_FIRST, EQUAL_POINTS_RULE_MUTUAL_MATCHES_FIRST] }

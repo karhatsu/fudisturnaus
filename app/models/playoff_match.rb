@@ -19,7 +19,6 @@ class PlayoffMatch < ApplicationRecord
   validates :home_team_origin_rule, numericality: { only_integer: true, allow_nil: false }
   validates :away_team_origin_rule, numericality: { only_integer: true, allow_nil: false }
   validate :no_same_teams
-  validate :draw_not_allowed
   validate :teams_are_required
 
   delegate :tournament, to: :age_group
@@ -27,7 +26,7 @@ class PlayoffMatch < ApplicationRecord
 
   def populate_next_round_playoff_matches
     changed_matches = []
-    if home_goals && away_goals
+    if home_goals && away_goals && home_goals != away_goals
       home_won = home_goals > away_goals
 
       playoff_matches_as_home_team.each do |match|
@@ -67,10 +66,6 @@ class PlayoffMatch < ApplicationRecord
     if home_team_origin_id == away_team_origin_id && home_team_origin_rule == away_team_origin_rule
       errors.add :base, 'Koti- ja vierasjoukkue eivät voi olla samoja'
     end
-  end
-
-  def draw_not_allowed
-    errors.add :base, 'Jatko-ottelu ei voi päättyä tasan' if !playoff_group_id && home_goals && away_goals && home_goals == away_goals
   end
 
   def teams_are_required

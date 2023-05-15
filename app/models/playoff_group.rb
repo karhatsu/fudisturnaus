@@ -6,6 +6,8 @@ class PlayoffGroup < ApplicationRecord
 
   validates :name, presence: true
 
+  before_destroy :check_usage
+
   delegate :equal_points_rule, to: :age_group
 
   def results
@@ -28,5 +30,14 @@ class PlayoffGroup < ApplicationRecord
       end
     end
     (home_teams + away_teams).select {|t| t}.uniq {|t| t.name}
+  end
+
+  private
+
+  def check_usage
+    unless playoff_matches.empty?
+      errors.add :base, 'Jatkolohkoa ei voi poistaa, koska se on käytössä jatko-otteluissa'
+      throw :abort
+    end
   end
 end

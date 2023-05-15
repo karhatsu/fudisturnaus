@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_03_155350) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_14_093400) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,6 +20,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_03_155350) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.boolean "calculate_group_tables", default: false, null: false
+    t.boolean "hide_group_tables", default: false, null: false
     t.index ["tournament_id"], name: "index_age_groups_on_tournament_id"
   end
 

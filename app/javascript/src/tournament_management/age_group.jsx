@@ -35,7 +35,7 @@ const AgeGroup = ({ ageGroup, onAgeGroupDelete, onAgeGroupSave, tournamentId }) 
   }
 
   const renderForm = () => {
-    const { calculateGroupTables, name } = data
+    const { calculateGroupTables, hideGroupTables, name } = data
     return (
       <form className="form form--horizontal">
         <FormErrors errors={errors}/>
@@ -45,6 +45,12 @@ const AgeGroup = ({ ageGroup, onAgeGroupDelete, onAgeGroupSave, tournamentId }) 
             <input type="checkbox" onChange={onCheckboxChange('calculateGroupTables')} value={true} checked={!!calculateGroupTables}/>
             Laske sarjataulukot
           </div>
+          {calculateGroupTables && (
+            <div className="form__field">
+              <input type="checkbox" onChange={onCheckboxChange('hideGroupTables')} value={true} checked={!!hideGroupTables}/>
+              Piilota sarjataulukot
+            </div>
+          )}
           <div className="form__buttons">
             <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()}/>
             <Button label="Peruuta" onClick={closeForm} type="normal"/>
@@ -59,6 +65,7 @@ const AgeGroup = ({ ageGroup, onAgeGroupDelete, onAgeGroupSave, tournamentId }) 
     openForm({
       name: ageGroup ? ageGroup.name : '',
       calculateGroupTables: ageGroup && ageGroup.calculateGroupTables,
+      hideGroupTables: ageGroup && ageGroup.hideGroupTables,
     })
   }
 
@@ -104,6 +111,7 @@ AgeGroup.propTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     calculateGroupTables: PropTypes.bool.isRequired,
+    hideGroupTables: PropTypes.bool.isRequired,
   }),
   onAgeGroupDelete: PropTypes.func,
   onAgeGroupSave: PropTypes.func.isRequired,

@@ -26,6 +26,6 @@ class Api::V1::Official::AgeGroupsController < Api::V1::Official::OfficialBaseCo
   private
 
   def age_group_params
-    params.require(:age_group).permit(:name, :calculate_group_tables)
+    params.require(:age_group).permit(:name, :calculate_group_tables, :hide_group_tables)
   end
 end

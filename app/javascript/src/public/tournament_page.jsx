@@ -228,12 +228,15 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
   }
 
   const renderGroupTables = () => {
-    const { calculateGroupTables, groups } = tournament
-    const filteredGroups = groups.filter(isFilterGroup).sort((a, b) => {
-      if (a.ageGroup.name !== b.ageGroup.name) return a.ageGroup.name.localeCompare(b.ageGroup.name)
-      return a.name.localeCompare(b.name)
-    })
-    if (calculateGroupTables && filteredGroups.length && !filters.day) {
+    const { calculateGroupTables, groups, hideGroupTables } = tournament
+    const filteredGroups = groups
+      .filter(isFilterGroup)
+      .filter(group => officialLevel !== officialLevels.none || !group.ageGroup.hideGroupTables)
+      .sort((a, b) => {
+        if (a.ageGroup.name !== b.ageGroup.name) return a.ageGroup.name.localeCompare(b.ageGroup.name)
+        return a.name.localeCompare(b.name)
+      })
+    if (calculateGroupTables && !hideGroupTables && filteredGroups.length && !filters.day) {
       return (
         <React.Fragment>
           <div className="title-2">Sarjataulukot</div>

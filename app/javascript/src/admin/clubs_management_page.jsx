@@ -64,12 +64,17 @@ const ClubsManagementPage = () => {
   return (
     <div>
       <Title iconLink="/admin" loading={!clubs.length} text="Seurat"/>
+      <div className="title-2">Seurat ilman logoa</div>
+      <div className="tournament-management__section">
+        {clubs.filter(club => !club.logoUrl).map(club => <ClubForm key={club.id} club={club} onClubDelete={onClubDelete} onClubSave={onClubSave}/>)}
+      </div>
+      <div className="title-2">Cache refresh</div>
+      {renderCacheSection()}
+      <div className="title-2">Kaikki seurat</div>
       <div className="tournament-management__section">
         <FormErrors errors={errors}/>
         {clubs.map(club => <ClubForm key={club.id} club={club} onClubDelete={onClubDelete} onClubSave={onClubSave}/>)}
       </div>
-      <div className="title-2">Cache refresh</div>
-      {renderCacheSection()}
     </div>
   )
 }

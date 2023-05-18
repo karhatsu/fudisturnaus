@@ -31,7 +31,7 @@ const { none, results, full } = officialLevels
 const defaultFilters = {
   ageGroupId: 0,
   clubId: 0,
-  day: 0,
+  date: '',
   fieldId: 0,
   groupId: 0,
   teamId: 0,
@@ -170,7 +170,8 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
   }
 
   const setFilterValue = key => event => {
-    const newFilters = { ...filters, [key]: parseInt(event.target.value) }
+    const value = key === 'date' ? event.target.value : parseInt(event.target.value)
+    const newFilters = { ...filters, [key]: value }
     setFilters(newFilters)
     history.push({ search: buildQueryParams(newFilters) })
   }
@@ -208,23 +209,23 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
   }
 
   const isFilterGroupStageMatch = match => {
-    const { ageGroupId, day, fieldId, groupId, homeTeam, awayTeam } = match
+    const { ageGroupId, date, fieldId, groupId, homeTeam, awayTeam } = match
     return (!filters.ageGroupId || filters.ageGroupId === ageGroupId)
       && (!filters.fieldId || filters.fieldId === fieldId)
       && (!filters.groupId || filters.groupId === groupId)
       && (!filters.clubId || filters.clubId === homeTeam.clubId || filters.clubId === awayTeam.clubId)
       && (!filters.teamId || filters.teamId === homeTeam.id || filters.teamId === awayTeam.id)
-      && (!filters.day || filters.day === day)
+      && (!filters.date || filters.date === date)
   }
 
   const isFilterPlayoffMatch = match => {
-    const { ageGroupId, day, fieldId, homeTeam, awayTeam, homeTeamOriginId, awayTeamOriginId } = match
+    const { ageGroupId, date, fieldId, homeTeam, awayTeam, homeTeamOriginId, awayTeamOriginId } = match
     return (!filters.ageGroupId || filters.ageGroupId === ageGroupId)
       && (!filters.fieldId || filters.fieldId === fieldId)
       && (!filters.groupId || filters.groupId === homeTeamOriginId || filters.groupId === awayTeamOriginId)
       && (!filters.clubId || (homeTeam && filters.clubId === homeTeam.clubId) || (awayTeam && filters.clubId === awayTeam.clubId))
       && (!filters.teamId || (homeTeam && filters.teamId === homeTeam.id) || (awayTeam && filters.teamId === awayTeam.id))
-      && (!filters.day || filters.day === day)
+      && (!filters.date || filters.date === date)
   }
 
   const renderGroupTables = () => {
@@ -236,7 +237,7 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
         if (a.ageGroup.name !== b.ageGroup.name) return a.ageGroup.name.localeCompare(b.ageGroup.name)
         return a.name.localeCompare(b.name)
       })
-    if (calculateGroupTables && !hideGroupTables && filteredGroups.length && !filters.day) {
+    if (calculateGroupTables && !hideGroupTables && filteredGroups.length && !filters.date) {
       return (
         <React.Fragment>
           <div className="title-2">Sarjataulukot</div>
@@ -251,7 +252,7 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
   const renderPlayoffGroupTables = () => {
     const { calculateGroupTables, playoffGroups } = tournament
     const filteredGroups = playoffGroups.filter(isFilterGroup)
-    if (calculateGroupTables && filteredGroups.length && !filters.day) {
+    if (calculateGroupTables && filteredGroups.length && !filters.date) {
       return (
         <>
           <div className="title-2">Jatkolohkot</div>

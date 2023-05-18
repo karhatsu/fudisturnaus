@@ -3,6 +3,12 @@
 
 .group-results {
   margin-top: 16px;
+
+  &--1 {
+    .group-results__group {
+      max-width: 800px;
+    }
+  }
 }
 
 .group-results__group {

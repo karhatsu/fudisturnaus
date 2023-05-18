@@ -240,7 +240,7 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
       return (
         <React.Fragment>
           <div className="title-2">Sarjataulukot</div>
-          <div className="group-results row">
+          <div className={`group-results group-results--${filteredGroups.length} row`}>
             {filteredGroups.map(group => renderGroup(group, filteredGroups.length, true))}
           </div>
         </React.Fragment>
@@ -255,7 +255,7 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
       return (
         <>
           <div className="title-2">Jatkolohkot</div>
-          <div className="group-results row">
+          <div className={`group-results group-results--${filteredGroups.length} row`}>
             {filteredGroups.map(group => renderGroup(group, filteredGroups.length, false))}
           </div>
         </>

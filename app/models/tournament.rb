@@ -112,7 +112,7 @@ class Tournament < ApplicationRecord
   def check_match_dates
     date_diff = (start_date - start_date_was).to_i
     yield
-    if date_diff != 0
+    if date_diff != 0 && days != 0
       (group_stage_matches + playoff_matches).each do |match|
         match.start_time = match.start_time + date_diff.days
         match.save!

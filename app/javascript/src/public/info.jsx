@@ -50,7 +50,12 @@ const Info = () => {
         <>
           <div className="title-2">Liity näiden turnausjärjestäjien joukkoon!</div>
           <div className="info-box info-box--organizers">
-            {organizers.map(club => <img key={club.name} src={club.logoUrl} alt={club.name} title={club.name} />)}
+            {organizers.map(club => (
+              <div key={club.name} className="info-box__organizer">
+                <img src={club.logoUrl} alt={club.name} />
+                <div className="info-box__organizer-name">{club.name}</div>
+              </div>
+            ))}
           </div>
         </>
       )}

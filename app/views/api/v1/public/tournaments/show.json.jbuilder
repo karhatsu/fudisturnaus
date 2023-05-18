@@ -1,4 +1,4 @@
-json.(@tournament, :id, :name, :start_date, :end_date, :days, :location, :address, :calculate_group_tables, :hide_group_tables, :visibility, :cancelled, :slug)
+json.(@tournament, :id, :name, :start_date, :end_date, :days, :location, :address, :calculate_group_tables, :visibility, :cancelled, :slug)
 json.club @tournament.club, :logo_url, :name if @tournament.club_id
 
 json.group_stage_matches @tournament.group_stage_matches do |group_stage_match|

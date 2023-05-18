@@ -47,10 +47,6 @@ class Tournament < ApplicationRecord
     age_groups.any?(&:calculate_group_tables?)
   end
 
-  def hide_group_tables
-    age_groups.all?(&:hide_group_tables?)
-  end
-
   def group_stage_matches
     age_groups
         .includes(groups: [group_stage_matches: [:field, :home_team, :away_team]])

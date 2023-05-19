@@ -132,6 +132,6 @@ class Tournament < ApplicationRecord
         dates << match.start_time.to_date
       end
     end
-    dates.uniq
+    dates.uniq.sort
   end
 end

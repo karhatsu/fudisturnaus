@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { formatTournamentDates } from '../util/date_util'
 import FormErrors from '../form/form_errors'
@@ -25,7 +25,22 @@ const initialData = {
 
 const TournamentFields = props => {
   const { clubs, tournament, onCancel, onSave } = props
-  const { formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, onCheckboxChange } = useForm(tournament ? undefined : initialData)
+  const {
+    changeValue,
+    formOpen,
+    data,
+    errors,
+    setErrors,
+    openForm,
+    closeForm,
+    onFieldChange,
+    onCheckboxChange,
+  } = useForm(tournament ? undefined : initialData)
+
+  const onMultipleEventsChange = useCallback(event => {
+    const days = event.target.checked ? 0 : 1
+    changeValue('days', days)
+  }, [changeValue])
 
   const renderTournamentForm = () => {
     return (
@@ -33,7 +48,8 @@ const TournamentFields = props => {
         {renderOrganizerField()}
         {renderTournamentField('Nimi', 'text', 'name', 'Esim. Kevät Cup 2019')}
         {renderTournamentField('Pvm', 'date', 'startDate')}
-        {renderTournamentField('Kesto (pv)', 'number', 'days')}
+        {renderMultipleEventsCheckbox()}
+        {data.days > 0 && renderTournamentField('Kesto (pv)', 'number', 'days')}
         {renderTournamentField('Paikka', 'text', 'location', 'Esim. Kontulan tekonurmi')}
         {renderTournamentField('Osoite', 'text', 'address', 'Esim. Tanhuantie 4-6, 00940 Helsinki')}
         {renderTournamentField('Otteluiden välinen aika (min)', 'number', 'matchMinutes')}
@@ -59,6 +75,17 @@ const TournamentFields = props => {
               return <option key={club.id} value={club.id}>{club.name}</option>
             })}
           </select>
+        </div>
+      </div>
+    )
+  }
+
+  const renderMultipleEventsCheckbox = () => {
+    return (
+      <div className="form__field">
+        <div className="label">Monta erillistä tapahtumaa</div>
+        <div>
+          <input type="checkbox" onChange={onMultipleEventsChange} checked={parseInt(data.days) === 0} />
         </div>
       </div>
     )
@@ -144,7 +171,7 @@ const TournamentFields = props => {
 
   const canSubmit = () => {
     const { days, name, startDate, location } = data
-    return parseInt(days) >= 1 && !!name && !!startDate && !!location
+    return parseInt(days) >= 0 && !!name && !!startDate && !!location
   }
 
   const submit = () => {

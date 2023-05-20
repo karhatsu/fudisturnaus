@@ -17,8 +17,10 @@ export function formatDate(date) {
 }
 
 export function formatMatchTime(tournamentDays, time) {
-  const weekDay = tournamentDays > 1 ? `${formatWeekDay(parse(time))} ` : ''
-  return `${weekDay}${formatTime(time)}`
+  const formattedTime = formatTime(time)
+  if (tournamentDays > 1) return `${formatWeekDay(parse(time))} ${formattedTime}`
+  else if (tournamentDays === 1) return formattedTime
+  else return `${formatDate(time)} ${formattedTime}`
 }
 
 export function formatTime(time) {

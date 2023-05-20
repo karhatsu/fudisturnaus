@@ -60,6 +60,10 @@ class PlayoffMatch < ApplicationRecord
     (start_time.to_date - tournament.start_date).to_i + 1
   end
 
+  def date
+    start_time.to_date
+  end
+
   private
 
   def no_same_teams

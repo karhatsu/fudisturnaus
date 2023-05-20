@@ -20,7 +20,7 @@ class Tournament < ApplicationRecord
 
   validates :name, presence: true
   validates :start_date, presence: true
-  validates :days, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
+  validates :days, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :location, presence: true
   validates :match_minutes, numericality: { only_integer: true, greater_than_or_equal_to: 15, less_than_or_equal_to: 180 }
   validates :equal_points_rule, inclusion: { in: [EQUAL_POINTS_RULE_ALL_MATCHES_FIRST, EQUAL_POINTS_RULE_MUTUAL_MATCHES_FIRST] }
@@ -39,8 +39,14 @@ class Tournament < ApplicationRecord
     groups.flat_map {|g| g.teams.flat_map(&:club)}.uniq.sort { |a, b| a.name <=> b.name }
   end
 
+  def dates
+    return find_unique_dates if days == 0
+    days.times.map {|i| start_date + i}
+  end
+
   def end_date
-    start_date + (days - 1).days
+    #start_date + (days - 1).days
+    dates[dates.length - 1]
   end
 
   def calculate_group_tables
@@ -102,11 +108,26 @@ class Tournament < ApplicationRecord
   def check_match_dates
     date_diff = (start_date - start_date_was).to_i
     yield
-    if date_diff != 0
+    if date_diff != 0 && days != 0
       (group_stage_matches + playoff_matches).each do |match|
         match.start_time = match.start_time + date_diff.days
         match.save!
       end
     end
+  end
+
+  def find_unique_dates
+    dates = [start_date]
+    age_groups.each do |ag|
+      ag.groups.each do |g|
+        g.group_stage_matches.each do |match|
+          dates << match.start_time.to_date
+        end
+      end
+      ag.playoff_matches.each do |match|
+        dates << match.start_time.to_date
+      end
+    end
+    dates.uniq.sort
   end
 end

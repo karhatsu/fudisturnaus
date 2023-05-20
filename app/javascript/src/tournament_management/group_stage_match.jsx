@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import { addDays } from 'date-fns'
+import { addDays, differenceInDays, format, parseISO } from 'date-fns'
 import { zonedTimeToUtc } from 'date-fns-tz'
 import { deleteGroupStageMatch, saveGroupStageMatch } from './api_client'
 import AccessContext from '../util/access_context'
@@ -31,8 +31,17 @@ const GroupStageMatch = props => {
   } = props
   const accessContext = useContext(AccessContext)
   const timeField = useRef()
-  const { formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, changeValues } = useForm()
+  const { changeValue, formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, changeValues } = useForm()
   const [timeSuggested, setTimeSuggested] = useState(false)
+
+  const onDateChange = useCallback(event => {
+    if(event.target.value) {
+      const day = differenceInDays(parseISO(event.target.value), parseISO(tournamentDate)) + 1
+      changeValue('day', day > 1 ? day : 1)
+    } else {
+      changeValue('day', 1)
+    }
+  }, [changeValue, tournamentDate])
 
   useEffect(() => {
     if (formOpen && !timeSuggested && fields.length === 1 && data.startTime === '') {
@@ -75,7 +84,7 @@ const GroupStageMatch = props => {
         <FormErrors errors={errors}/>
         <div className="tournament-item__form">
           {buildFieldsDropDown()}
-          {buildDayDropDown()}
+          {buildDaySelection()}
           {renderStartTimeField()}
           {buildGroupDropDown()}
           {buildTeamDropDown('homeTeamId', '- Kotijoukkue -')}
@@ -114,8 +123,11 @@ const GroupStageMatch = props => {
     )
   }
 
-  const buildDayDropDown = () => {
-    if (tournamentDays > 1) {
+  const buildDaySelection = () => {
+    if (tournamentDays === 0) {
+      const date = format(addDays(parseISO(tournamentDate), data.day - 1), 'yyyy-MM-dd')
+      return <TextField onChange={onDateChange} value={date} type="date" />
+    } else if (tournamentDays > 1) {
       return (
         <div className="form__field">
           <select onChange={onFieldChange('day')} value={data.day}>

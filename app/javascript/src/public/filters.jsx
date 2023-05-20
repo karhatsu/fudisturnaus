@@ -6,10 +6,11 @@ import { getName } from '../util/util'
 const Filters = ({ filters, resetFilters, setFilterValue, tournament }) => {
   const renderFilter = (key, items, defaultText, selectedText, nameCallback) => {
     if (items.length > 1) {
+      const defaultValue = key === 'date' ? '' : 0
       const title = filters[key] > 0 ? selectedText : defaultText
       return (
         <select id={`filter-${key}`} className="filter" onChange={setFilterValue(key)} value={filters[key]}>
-          <option value={0}>{title}</option>
+          <option value={defaultValue}>{title}</option>
           {items.map(item => {
             const { id, name } = item
             return <option key={id} value={id}>{nameCallback ? nameCallback(item) : name}</option>
@@ -67,9 +68,9 @@ const Filters = ({ filters, resetFilters, setFilterValue, tournament }) => {
   }
 
   const resolveDays = () => {
-    const { days: daysCount, startDate } = tournament
-    return new Array(daysCount).fill(undefined).map((none, index) => {
-      return { id: index + 1, name: `${resolveWeekDay(startDate, index)} ${resolveDate(startDate, index)}` }
+    const { dates } = tournament
+    return dates.map(date => {
+      return { id: date, name: `${resolveWeekDay(date, 0)} ${resolveDate(date, 0)}` }
     })
   }
 
@@ -99,7 +100,7 @@ const Filters = ({ filters, resetFilters, setFilterValue, tournament }) => {
       {renderFilter('groupId', resolveGroups(), 'Lohko', 'Kaikki lohkot', resolveGroupName)}
       {renderFilter('clubId', resolveClubs(), 'Seura', 'Kaikki seurat')}
       {renderFilter('teamId', resolveTeams(), 'Joukkue', 'Kaikki joukkueet')}
-      {renderFilter('day', resolveDays(), 'Päivä', 'Kaikki päivät')}
+      {renderFilter('date', resolveDays(), 'Päivä', 'Kaikki päivät')}
       {renderFilter('fieldId', resolveFields(), 'Kenttä', 'Kaikki kentät')}
       {renderResetLink()}
     </div>
@@ -120,6 +121,7 @@ Filters.propTypes = {
   tournament: PropTypes.shape({
     ageGroups: PropTypes.array.isRequired,
     clubs: PropTypes.array.isRequired,
+    dates: PropTypes.arrayOf(PropTypes.string).isRequired,
     days: PropTypes.number.isRequired,
     fields: PropTypes.array.isRequired,
     groups: PropTypes.array.isRequired,

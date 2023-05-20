@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { addDays, endOfDay, endOfWeek, isBefore, isSameDay, isTomorrow, parseISO } from 'date-fns'
+import { addDays, endOfDay, endOfWeek, isAfter, isBefore, isSameDay, isToday, isTomorrow, parseISO } from 'date-fns'
 
 import Loading from '../components/loading'
 import Title from '../components/title'
@@ -41,19 +41,19 @@ const TournamentList = props => {
   const groupTournaments = useCallback(tournaments => {
     const groups = { today: [], tomorrow: [], yesterday: [], thisWeek: [], nextWeek: [], later: [], past: [] }
     tournaments.forEach(tournament => {
-      const startDate = parseISO(tournament.startDate)
+      const dates = tournament.dates.map(date => parseISO(date))
       const endDate = parseISO(tournament.endDate)
       if (isSameDay(endDate, addDays(new Date(), -1))) {
         groups.yesterday.push(tournament)
       } else if (isBefore(endOfDay(endDate), new Date())) {
         groups.past.push(tournament)
-      } else if (isSameDay(startDate, new Date()) || isSameDay(endDate, new Date())) {
+      } else if (dates.find(date => isToday(date))) {
         groups.today.push(tournament)
-      } else if (isTomorrow(startDate) || isTomorrow(endDate)) {
+      } else if (dates.find(date => isTomorrow(date))) {
         groups.tomorrow.push(tournament)
-      } else if (isBefore(startDate, endOfWeek(new Date(), { weekStartsOn: 1 }))) {
+      } else if (dates.find(date => isAfter(date, new Date()) && isBefore(date, endOfWeek(new Date(), { weekStartsOn: 1 })))) {
         groups.thisWeek.push(tournament)
-      } else if (isBefore(startDate, endOfWeek(addDays(new Date(), 7), { weekStartsOn: 1 }))) {
+      } else if (dates.find(date => isAfter(date, new Date()) && isBefore(date, endOfWeek(addDays(new Date(), 7), { weekStartsOn: 1 })))) {
         groups.nextWeek.push(tournament)
       } else {
         groups.later.push(tournament)

@@ -132,10 +132,10 @@ describe 'official', type: :system do
       edit_item 'tournament', 0
       form_inputs[0].fill_in with: 'New name'
       form_inputs[1].fill_in with: '20/05/2019' # Mon
-      form_inputs[2].fill_in with: '2'
-      form_inputs[3].fill_in with: 'Test city'
-      form_inputs[4].fill_in with: 'Street 10'
-      form_inputs[5].fill_in with: '60'
+      form_inputs[3].fill_in with: '2' # [2] is the multi event checkbox
+      form_inputs[4].fill_in with: 'Test city'
+      form_inputs[5].fill_in with: 'Street 10'
+      form_inputs[6].fill_in with: '60'
       submit
       sleep 0.2
       expect_item_title 'tournament', 'New name, 20.05.2019 - 21.05.2019, Test city, Street 10'

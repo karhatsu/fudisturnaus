@@ -3,6 +3,15 @@ import PropTypes from 'prop-types'
 import { resolveDate, resolveWeekDay } from '../util/date_util'
 import { getName } from '../util/util'
 
+export const defaultFilters = {
+  ageGroupId: 0,
+  clubId: 0,
+  date: '',
+  fieldId: 0,
+  groupId: 0,
+  teamId: 0,
+}
+
 const Filters = ({ filters, resetFilters, setFilterValue, tournament }) => {
   const renderFilter = (key, items, defaultText, selectedText, nameCallback) => {
     if (items.length > 1) {
@@ -89,7 +98,7 @@ const Filters = ({ filters, resetFilters, setFilterValue, tournament }) => {
   }
 
   const renderResetLink = () => {
-    if (Object.keys(filters).some(key => filters[key] > 0)) {
+    if (Object.keys(filters).some(key => filters[key] !== defaultFilters[key])) {
       return <div onClick={resetFilters} className="filters__reset-link">Näytä kaikki ottelut</div>
     }
   }

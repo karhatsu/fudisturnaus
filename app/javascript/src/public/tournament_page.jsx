@@ -8,7 +8,7 @@ import Loading from '../components/loading'
 import Matches from './matches'
 import GroupResults from './group_results'
 import Title from '../components/title'
-import Filters from './filters'
+import Filters, { defaultFilters } from './filters'
 import SeriesAndTeams from './series_and_teams'
 import VisibilityBadge from '../tournament_management/visibility_badge'
 import { visibilityTypes } from '../util/enums'
@@ -27,15 +27,6 @@ export const officialLevels = {
   full: 2,
 }
 const { none, results, full } = officialLevels
-
-const defaultFilters = {
-  ageGroupId: 0,
-  clubId: 0,
-  date: '',
-  fieldId: 0,
-  groupId: 0,
-  teamId: 0,
-}
 
 const kontuSponsors = [
   { href: 'https://daddygreens.fi', img: 'Daddy_Greens_logo_black_bg_RGB.png' },

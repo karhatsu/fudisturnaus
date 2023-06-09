@@ -48,7 +48,7 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
   useEffect(() => {
     const queryParams = queryString.parse(search)
     Object.keys(queryParams).forEach(queryParam => {
-      queryParams[queryParam] = parseInt(queryParams[queryParam])
+      queryParams[queryParam] = defaultFilters[queryParam] === 0 ? parseInt(queryParams[queryParam]) : queryParams[queryParam]
     })
     setFilters({ ...defaultFilters, ...queryParams })
   }, [search])
@@ -170,7 +170,7 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
   const buildQueryParams = filters => {
     const validFilters = {}
     Object.keys(filters).forEach(filter => {
-      if (filters[filter] > 0) {
+      if (filters[filter] !== defaultFilters[filter]) {
         validFilters[filter] = filters[filter]
       }
     })

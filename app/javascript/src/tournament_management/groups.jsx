@@ -3,12 +3,13 @@ import PropTypes from 'prop-types'
 import Group from './group'
 
 const Groups = ({ onItemDelete, onItemSave, tournament, tournamentId }) => {
+  const { ageGroups, groups } = tournament
+
   const renderCannotAddGroups = () => {
     return <div className="tournament-item">Voit lisätä lohkoja, kun olet lisännyt vähintään yhden sarjan.</div>
   }
 
   const renderGroups = () => {
-    const { ageGroups, groups } = tournament
     return groups.map(group => {
       return <Group
         key={group.id}
@@ -22,7 +23,6 @@ const Groups = ({ onItemDelete, onItemSave, tournament, tournamentId }) => {
     })
   }
 
-  const { ageGroups } = tournament
   return (
     <>
       <div className="title-2">Lohkot</div>

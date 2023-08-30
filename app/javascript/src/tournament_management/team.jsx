@@ -43,7 +43,7 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
               <option>Lohko</option>
               {groups.map(group => {
                 const { id, name, ageGroupId } = group
-                return <option key={id} value={id}>{name} ({getName(ageGroups, ageGroupId)})</option>
+                return <option key={id} value={id}>{getName(ageGroups, ageGroupId)} | {name}</option>
               })}
             </select>
           </div>

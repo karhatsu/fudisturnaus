@@ -68,7 +68,8 @@ const GroupStageMatch = props => {
         textElements.push(getName(fields, fieldId))
       }
       textElements.push(formatMatchTime(tournamentDays, startTime))
-      textElements.push(`${getName(groups, groupId)} (${getName(ageGroups, ageGroupId)})`)
+      textElements.push(getName(ageGroups, ageGroupId))
+      textElements.push(getName(groups, groupId))
       textElements.push(`${getName(teams, homeTeamId)} - ${getName(teams, awayTeamId)}`)
       if (refereeId) {
         textElements.push(getName(referees, refereeId))
@@ -110,7 +111,7 @@ const GroupStageMatch = props => {
   }
 
   const buildGroupDropDown = () => {
-    const customNameBuild = item => `${item.name} (${getName(ageGroups, item.ageGroupId)})`
+    const customNameBuild = item => `${getName(ageGroups, item.ageGroupId)} | ${item.name}`
     return (
       <IdNameSelect
         customNameBuild={customNameBuild}

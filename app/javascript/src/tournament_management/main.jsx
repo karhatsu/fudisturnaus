@@ -35,8 +35,11 @@ const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => 
   const fetchTournamentData = () => {
     fetchTournament(accessContext, getTournamentId(), (err, tournament) => {
       if (tournament) {
-        const teams = [...tournament.teams]
-        setTournament({ ...tournament, teams: teams.sort(getComparator(tournament, 'teams')) })
+        setTournament({
+          ...tournament,
+          groups: [...tournament.groups].sort(getComparator(tournament, 'groups')),
+          teams: [...tournament.teams].sort(getComparator(tournament, 'teams')),
+        })
       } else if (err && !tournament) {
         setError(true)
       }

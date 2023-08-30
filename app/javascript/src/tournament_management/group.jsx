@@ -16,7 +16,7 @@ const Group = ({ ageGroups, group, onGroupDelete, onGroupSave, tournamentId, typ
 
   const renderName = () => {
     const title = type === 'playoffGroup' ? 'jatkolohko' : 'lohko'
-    const text = group ? `${group.name} (${getName(ageGroups, group.ageGroupId)})` : `+ Lisää uusi ${title}`
+    const text = group ? `${getName(ageGroups, group.ageGroupId)} | ${group.name}` : `+ Lisää uusi ${title}`
     return <div className={resolveTournamentItemClasses(group)}><span onClick={onOpenClick}>{text}</span></div>
   }
 

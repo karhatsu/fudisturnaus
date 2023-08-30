@@ -30,7 +30,7 @@ const Teams = ({ onClubSave, onItemDelete, onItemSave, tournament, tournamentId 
     const teamsByGroups = teams.reduce((groupTeams, team) => {
       const { groupId } = team
       const group = groups.find(g => g.id === groupId)
-      const key = `${group.name} (${getName(ageGroups, group.ageGroupId)})`
+      const key = `${getName(ageGroups, group.ageGroupId)} | ${group.name}`
       if (!groupTeams[key]) {
         groupTeams[key] = []
       }

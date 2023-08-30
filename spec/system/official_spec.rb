@@ -44,17 +44,17 @@ describe 'official', type: :system do
       form_selects[0].select 'T11'
       form_inputs[0].fill_in with: 'Group A'
       submit
-      expect_item_title 'groups', 'Group A (T11)'
+      expect_item_title 'groups', 'T11 | Group A'
 
       add_new_item 'teams'
-      form_selects[0].select 'Group A (T11)'
+      form_selects[0].select 'T11 | Group A'
       form_selects[1].select @club.name
       form_inputs[0].fill_in with: 'FC Brown'
       submit
       expect_item_title 'teams', 'FC Brown'
 
       add_new_item 'teams'
-      form_selects[0].select 'Group A (T11)'
+      form_selects[0].select 'T11 | Group A'
       form_selects[1].select '+ Lisää uusi seura'
       page.find('.new-club-form .form__field input').fill_in with: 'SC Lions'
       page.find('.new-club-form .button--primary').click
@@ -64,11 +64,11 @@ describe 'official', type: :system do
       add_new_item 'group-stage-matches'
       form_selects[0].select 'Field 1'
       form_inputs[0].fill_in with: '11:30'
-      form_selects[1].select 'Group A (T11)'
+      form_selects[1].select 'T11 | Group A'
       form_selects[2].select 'FC Brown'
       form_selects[3].select 'SC Lions Green'
       submit
-      expect_item_title 'group-stage-matches', 'Field 1 | 11:30 | Group A (T11) | FC Brown - SC Lions Green'
+      expect_item_title 'group-stage-matches', 'Field 1 | 11:30 | T11 | Group A | FC Brown - SC Lions Green'
 
       add_new_item 'playoff-matches'
       form_selects[0].select 'T11'
@@ -143,30 +143,30 @@ describe 'official', type: :system do
       edit_item 'fields', 0
       form_inputs[0].fill_in with: 'Grass'
       submit
-      expect_item_title 'group-stage-matches', 'Grass | ma 10:00 | A (P10) | Team 1 - Team 2'
+      expect_item_title 'group-stage-matches', 'Grass | ma 10:00 | P10 | A | Team 1 - Team 2'
       expect_item_title 'playoff-matches', 'Grass | ma 12:00 | P10 | Final'
 
       edit_item 'age-groups', 0
       form_inputs[0].fill_in with: 'T08'
       submit
       expect_item_title 'age-groups', 'T08'
-      expect_item_title 'groups', 'A (T08)'
-      expect_section_title 'teams', 'A (T08)'
-      expect_item_title 'group-stage-matches', 'Grass | ma 10:00 | A (T08) | Team 1 - Team 2'
+      expect_item_title 'groups', 'T08 | A'
+      expect_section_title 'teams', 'T08 | A'
+      expect_item_title 'group-stage-matches', 'Grass | ma 10:00 | T08 | A | Team 1 - Team 2'
       expect_item_title 'playoff-matches', 'Grass | ma 12:00 | T08 | Final'
 
       edit_item 'groups', 0
       form_inputs[0].fill_in with: 'B'
       submit
-      expect_item_title 'groups', 'B (T08)'
-      expect_section_title 'teams', 'B (T08)'
-      expect_item_title 'group-stage-matches', 'Grass | ma 10:00 | B (T08) | Team 1 - Team 2'
+      expect_item_title 'groups', 'T08 | B'
+      expect_section_title 'teams', 'T08 | B'
+      expect_item_title 'group-stage-matches', 'Grass | ma 10:00 | T08 | B | Team 1 - Team 2'
 
       edit_item 'teams', 0
       form_inputs[0].fill_in with: 'FC Team'
       submit
       expect_item_title 'teams', 'FC Team'
-      expect_item_title 'group-stage-matches', 'Grass | ma 10:00 | B (T08) | FC Team - Team 2'
+      expect_item_title 'group-stage-matches', 'Grass | ma 10:00 | T08 | B | FC Team - Team 2'
 
       edit_item 'group-stage-matches', 0
       form_selects[1].select 'ti'
@@ -174,7 +174,7 @@ describe 'official', type: :system do
       form_selects[3].select 'Team 2'
       form_selects[4].select 'FC Team'
       submit
-      expect_item_title 'group-stage-matches', 'Grass | ti 11:00 | B (T08) | Team 2 - FC Team'
+      expect_item_title 'group-stage-matches', 'Grass | ti 11:00 | T08 | B | Team 2 - FC Team'
 
       edit_item 'playoff-matches', 0
       form_selects[2].select 'ti'
@@ -243,16 +243,16 @@ describe 'official', type: :system do
       add_new_item 'group-stage-matches'
       form_selects[0].select 'to' # Thursday
       form_inputs[0].fill_in with: '14:45'
-      form_selects[1].select 'Group B (P11)'
+      form_selects[1].select 'P11 | Group B'
       form_selects[2].select 'Team 1'
       form_selects[3].select 'Team 2'
       submit
-      expect_item_title 'group-stage-matches', 'to 14:45 | Group B (P11) | Team 1 - Team 2'
+      expect_item_title 'group-stage-matches', 'to 14:45 | P11 | Group B | Team 1 - Team 2'
       edit_item 'group-stage-matches', 0
       form_selects[0].select 'pe' # Friday
       form_inputs[0].fill_in with: '12:00'
       submit
-      expect_item_title 'group-stage-matches', 'pe 12:00 | Group B (P11) | Team 1 - Team 2'
+      expect_item_title 'group-stage-matches', 'pe 12:00 | P11 | Group B | Team 1 - Team 2'
       click_link 'Takaisin tulosten syöttöön'
       expect_match_info 'pe 12:00', 'Team 1', 'Team 2'
     end

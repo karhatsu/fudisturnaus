@@ -29,6 +29,10 @@
   &__emoji {
     text-decoration: none;
 
+    &:hover {
+      text-decoration: none;
+    }
+
     &--loading {
       animation: spin 2s linear infinite;
     }

@@ -219,31 +219,34 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
       && (!filters.date || filters.date === date)
   }
 
+  const showGroupTables = filteredGroups => {
+    const { calculateGroupTables } = tournament
+    return calculateGroupTables && filteredGroups.length && !filters.date && !filters.fieldId
+  }
+
   const renderGroupTables = () => {
-    const { calculateGroupTables, groups } = tournament
-    const filteredGroups = groups
+    const filteredGroups = tournament.groups
       .filter(isFilterGroup)
       .filter(group => officialLevel !== officialLevels.none || !group.ageGroup.hideGroupTables)
       .sort((a, b) => {
         if (a.ageGroup.name !== b.ageGroup.name) return a.ageGroup.name.localeCompare(b.ageGroup.name)
         return a.name.localeCompare(b.name)
       })
-    if (calculateGroupTables && filteredGroups.length && !filters.date) {
+    if (showGroupTables(filteredGroups)) {
       return (
-        <React.Fragment>
+        <>
           <div className="title-2">Sarjataulukot</div>
           <div className={`group-results group-results--${filteredGroups.length} row`}>
             {filteredGroups.map(group => renderGroup(group, filteredGroups.length, true))}
           </div>
-        </React.Fragment>
+        </>
       )
     }
   }
 
   const renderPlayoffGroupTables = () => {
-    const { calculateGroupTables, playoffGroups } = tournament
-    const filteredGroups = playoffGroups.filter(isFilterGroup)
-    if (calculateGroupTables && filteredGroups.length && !filters.date) {
+    const filteredGroups = tournament.playoffGroups.filter(isFilterGroup)
+    if (showGroupTables(filteredGroups)){
       return (
         <>
           <div className="title-2">Jatkolohkot</div>

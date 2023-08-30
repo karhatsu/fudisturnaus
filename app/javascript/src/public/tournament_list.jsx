@@ -5,7 +5,6 @@ import { addDays, endOfDay, endOfWeek, isAfter, isBefore, isSameDay, isToday, is
 import Loading from '../components/loading'
 import Title from '../components/title'
 import TournamentLinkBox from '../components/tournament_link_box'
-import InfoBox from './info_box'
 import Message from '../components/message'
 
 const sortByAscendingDate = (a, b) => {
@@ -17,7 +16,7 @@ const sortByAscendingDate = (a, b) => {
 }
 
 const TournamentList = props => {
-  const { buildLink, search, setSearch, showInfo, title, tournaments, tournamentsError } = props
+  const { buildLink, search, setSearch, title, tournaments, tournamentsError } = props
 
   const renderTournament = useCallback(tournament => {
     const { id } = tournament
@@ -120,9 +119,8 @@ const TournamentList = props => {
   return (
     <div>
       <Title loading={!tournamentsError && !tournaments} text={title}/>
-      {showInfo && <InfoBox/>}
-      {renderContent()}
       {props.children}
+      {renderContent()}
     </div>
   )
 }
@@ -132,7 +130,6 @@ TournamentList.propTypes = {
   children: PropTypes.arrayOf(PropTypes.element),
   search: PropTypes.string,
   setSearch: PropTypes.func,
-  showInfo: PropTypes.bool,
   title: PropTypes.string.isRequired,
   tournaments: PropTypes.array,
   tournamentsError: PropTypes.bool.isRequired,

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import TournamentList from './tournament_list'
 import { useAllTournaments } from './all_tournaments_context'
+import InfoBox from './info_box'
 
 const buildLink = tournament => `/t/${tournament.slug}`
 
@@ -14,11 +15,12 @@ const Index = () => {
       buildLink={buildLink}
       search={search}
       setSearch={setSearch}
-      showInfo={true}
       title="fudisturnaus.com"
       tournaments={tournaments}
       tournamentsError={error}
-    />
+    >
+      <InfoBox/>
+    </TournamentList>
   )
 }
 

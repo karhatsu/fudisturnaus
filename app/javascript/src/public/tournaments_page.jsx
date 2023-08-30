@@ -25,7 +25,6 @@ export default function TournamentsPage() {
     <TournamentList
       buildLink={buildLink}
       title="fudisturnaus.com"
-      showInfo={false}
       tournaments={tournaments}
       tournamentsError={error}
     />

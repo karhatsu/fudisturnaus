@@ -7,7 +7,7 @@ import Button from '../form/button'
 import { visibilityTypes } from '../util/enums'
 import VisibilityBadge from './visibility_badge'
 import useForm from '../util/use_form'
-import ReactMarkdown from "react-markdown"
+import ReactMarkdown from 'react-markdown'
 
 const { onlyTitle, teams, all } = visibilityTypes
 
@@ -138,7 +138,9 @@ const TournamentFields = props => {
           </div>
         )}
       </div>
-      <div className="form__field__help">Voit käyttää <a href="https://commonmark.org/help/" target="_blank">markdown-muotoilua</a> esim. linkkien tekemiseen</div>
+      <div className="form__field__help">
+        Voit käyttää <a href="https://commonmark.org/help/" target="_blank" rel="noreferrer">markdown-muotoilua</a> esim. linkkien tekemiseen
+      </div>
     </div>
   )
 

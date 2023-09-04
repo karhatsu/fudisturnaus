@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useHistory, useLocation, useParams } from 'react-router'
 import { Link } from 'react-router-dom'
 import queryString from 'query-string'
-import ReactMarkdown from "react-markdown"
+import ReactMarkdown from 'react-markdown'
 
 import Loading from '../components/loading'
 import Matches from './matches'

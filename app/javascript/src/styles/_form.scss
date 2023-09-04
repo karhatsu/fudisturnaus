@@ -34,6 +34,11 @@ $inputHeight: 16px;
     -webkit-appearance: menulist-button;
   }
 
+  textarea {
+    width: 300px;
+    height: 100px;
+  }
+
   &--long {
     input {
       width: 300px;
@@ -106,7 +111,7 @@ $inputHeight: 16px;
   }
 
   .form__field {
-    .label, input, select {
+    .label, input, select, textarea {
       margin-top: 4px;
     }
   }

@@ -21,6 +21,7 @@ const initialData = {
   matchMinutes: 30,
   equalPointsRule: 0,
   visibility: teams,
+  info: '',
 }
 
 const TournamentFields = props => {
@@ -55,6 +56,7 @@ const TournamentFields = props => {
         {renderTournamentField('Otteluiden välinen aika (min)', 'number', 'matchMinutes')}
         {renderEqualPointsRuleField()}
         {renderVisibilityField()}
+        {renderInfoField()}
         {tournament && renderCheckbox('Peruttu', 'cancelled')}
         {!tournament && renderCheckbox('Testiturnaus', 'test')}
         <FormErrors errors={errors}/>
@@ -124,6 +126,15 @@ const TournamentFields = props => {
     )
   }
 
+  const renderInfoField = () => (
+    <div className="form__field">
+      <div className="label">Turnausinfo</div>
+      <div>
+        <textarea onChange={onFieldChange('info')} value={data.info || ''} />
+      </div>
+    </div>
+  )
+
   const renderCheckbox = (label, field) => {
     return (
       <div className="form__field">
@@ -161,8 +172,8 @@ const TournamentFields = props => {
   }
 
   const onOpenClick = () => {
-    const { name, startDate, days, location, address, matchMinutes, equalPointsRule, visibility, clubId, cancelled } = tournament
-    openForm({ name, startDate, days, location, address: address || '', matchMinutes, equalPointsRule, visibility, clubId, cancelled })
+    const { name, startDate, days, location, address, matchMinutes, equalPointsRule, visibility, clubId, cancelled, info } = tournament
+    openForm({ name, startDate, days, location, address: address || '', matchMinutes, equalPointsRule, visibility, clubId, cancelled, info })
   }
 
   const cancel = () => {

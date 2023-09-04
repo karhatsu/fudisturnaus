@@ -64,6 +64,10 @@ $inputHeight: 16px;
     }
   }
 
+  &__help {
+    font-style: italic;
+  }
+
   &--long {
     input {
       width: 300px;

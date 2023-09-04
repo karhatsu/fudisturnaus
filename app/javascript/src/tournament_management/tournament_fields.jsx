@@ -138,6 +138,7 @@ const TournamentFields = props => {
           </div>
         )}
       </div>
+      <div className="form__field__help">Voit käyttää <a href="https://commonmark.org/help/" target="_blank">markdown-muotoilua</a> esim. linkkien tekemiseen</div>
     </div>
   )
 

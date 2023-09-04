@@ -50,6 +50,22 @@
       width: 80px;
     }
   }
+
+  &--tournament-info {
+    margin-top: 16px;
+
+    p {
+      margin: 6px 0;
+
+      &:first-of-type {
+        margin-top: 0;
+      }
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+  }
 }
 
 .info-box__link {

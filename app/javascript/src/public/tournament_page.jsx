@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useHistory, useLocation, useParams } from 'react-router'
 import { Link } from 'react-router-dom'
 import queryString from 'query-string'
+import ReactMarkdown from "react-markdown"
 
 import Loading from '../components/loading'
 import Matches from './matches'
@@ -58,6 +59,17 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
       return <VisibilityBadge visibility={tournament.visibility}/>
     }
   }
+
+  const showTournamentInfo = () => tournament?.info && officialLevel === officialLevels.none
+
+  const renderTournamentInfo = () => (
+    <div>
+      <div className="title-2">Turnausinfo</div>
+      <div className="info-box info-box--tournament-info">
+        <ReactMarkdown>{tournament.info}</ReactMarkdown>
+      </div>
+    </div>
+  )
 
   const renderContent = () => {
     if (error) {
@@ -292,6 +304,7 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
         <CancelledBadge tournament={tournament} />
       </Title>
       <TournamentSubTitle tournament={tournament} />
+      {showTournamentInfo() && renderTournamentInfo()}
       {renderContent()}
     </div>
   )

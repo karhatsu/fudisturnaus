@@ -7,7 +7,12 @@ const SeriesAndTeams = ({ tournament }) => {
 
   const renderInfo = () => {
     if (!tournament.cancelled) {
-      return <Message type="warning" fullPage={true}>Turnauksen otteluohjelma julkaistaan myöhemmin</Message>
+      return (
+        <div>
+          <div className="title-2">Otteluohjelma</div>
+          <Message type="warning" fullPage={true}>Turnauksen otteluohjelma julkaistaan myöhemmin</Message>
+        </div>
+      )
     }
   }
 

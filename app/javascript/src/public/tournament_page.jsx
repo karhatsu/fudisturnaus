@@ -121,8 +121,12 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
 
   const renderPublicContent = () => {
     if (tournament.visibility === onlyTitle) {
-      const msg = 'Turnauksen osallistujia ja otteluohjelmaa ei ole vielä julkaistu'
-      return <Message type="warning" fullPage={true}>{msg}</Message>
+      return (
+        <div>
+          <div className="title-2">Otteluohjelma</div>
+          <Message type="warning" fullPage={true}>Turnauksen osallistujia ja otteluohjelmaa ei ole vielä julkaistu</Message>
+        </div>
+      )
     } else if (tournament.visibility === teams || !tournamentHasMatches()) {
       return <SeriesAndTeams tournament={tournament}/>
     } else {
@@ -156,6 +160,7 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
     const filteredPlayoffMatches = tournament.playoffMatches.filter(isFilterPlayoffMatch)
     return (
       <div>
+        {showTournamentInfo() && <div className="title-2">Ottelut</div>}
         <Filters filters={filters} resetFilters={resetFilters} setFilterValue={setFilterValue} tournament={tournament}/>
         {renderMatches(groupStageMatches, 'Alkulohkojen ottelut', tournament.playoffMatches.length, true)}
         {renderGroupTables()}

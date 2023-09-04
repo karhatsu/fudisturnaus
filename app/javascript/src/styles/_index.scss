@@ -2,7 +2,7 @@
 @import 'shared';
 
 .info-box {
-  @include white-box(false);
+  @include white-box(false, 16px);
 
   &__paragraph {
     margin: 8px 0;
@@ -75,6 +75,10 @@
 
 .tournament-links {
   margin-top: 16px;
+
+  &__section {
+    margin-top: 8px;
+  }
 }
 
 .tournament-link {

@@ -56,7 +56,8 @@ describe 'tournament visibilities', type: :system do
 
       it 'public page shows teams' do
         visit "/tournaments/#{tournament.id}"
-        expect(page.find('.series-and-teams .title-2')).to have_text('Ilmoittautuneet joukkueet')
+        expect(page.all('.series-and-teams .title-2')[0]).to have_text('Otteluohjelma')
+        expect(page.all('.series-and-teams .title-2')[1]).to have_text('Ilmoittautuneet joukkueet')
         expect(page.all('.series-and-teams__team')[0]).to have_text('FC Team 1')
         expect(page.all('.series-and-teams__team')[1]).to have_text('SC Team 1')
       end
@@ -71,8 +72,9 @@ describe 'tournament visibilities', type: :system do
 
         it 'public page shows teams in both age groups' do
           visit "/tournaments/#{tournament.id}"
-          expect(page.all('.series-and-teams .title-2')[0]).to have_text('P11')
-          expect(page.all('.series-and-teams .title-2')[1]).to have_text('P12')
+          expect(page.all('.series-and-teams .title-2')[0]).to have_text('Otteluohjelma')
+          expect(page.all('.series-and-teams .title-2')[1]).to have_text('P11')
+          expect(page.all('.series-and-teams .title-2')[2]).to have_text('P12')
           expect(page.all('.series-and-teams__age-group')[1].all('.series-and-teams__team')[0]).to have_text('FC Team 2')
           expect(page.all('.series-and-teams__age-group')[1].all('.series-and-teams__team')[1]).to have_text('SC Team 2')
         end

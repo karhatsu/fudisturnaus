@@ -69,7 +69,7 @@ const TournamentList = props => {
       return (
         <>
           <div className="title-2">{title}</div>
-          <div className="row">
+          <div className="row tournament-links__section">
             {tournaments.map(renderTournament)}
           </div>
         </>

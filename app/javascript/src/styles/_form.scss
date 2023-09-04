@@ -31,7 +31,41 @@ $inputHeight: 16px;
 
   select {
     height: 34px;
+    max-width: 100%;
     -webkit-appearance: menulist-button;
+  }
+
+  textarea {
+    height: 100px;
+
+    @media only screen and (min-width: 32em) {
+      width: 400px;
+    }
+  }
+
+  &__tournament-info {
+    display: flex;
+    flex-direction: column;
+
+    .info-box--tournament-info {
+      border: 1px dashed #666;
+      border-radius: 4px;
+      margin-top: 8px;
+
+      @media only screen and (min-width: 32em) {
+        width: 400px;
+        margin-top: 4px;
+        margin-left: 16px;
+      }
+    }
+
+    @media only screen and (min-width: 32em) {
+      flex-direction: row;
+    }
+  }
+
+  &__help {
+    font-style: italic;
   }
 
   &--long {
@@ -106,7 +140,7 @@ $inputHeight: 16px;
   }
 
   .form__field {
-    .label, input, select {
+    .label, input, select, textarea {
       margin-top: 4px;
     }
   }

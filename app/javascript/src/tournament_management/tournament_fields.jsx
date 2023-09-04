@@ -7,6 +7,7 @@ import Button from '../form/button'
 import { visibilityTypes } from '../util/enums'
 import VisibilityBadge from './visibility_badge'
 import useForm from '../util/use_form'
+import ReactMarkdown from "react-markdown"
 
 const { onlyTitle, teams, all } = visibilityTypes
 
@@ -21,6 +22,7 @@ const initialData = {
   matchMinutes: 30,
   equalPointsRule: 0,
   visibility: teams,
+  info: '',
 }
 
 const TournamentFields = props => {
@@ -55,6 +57,7 @@ const TournamentFields = props => {
         {renderTournamentField('Otteluiden välinen aika (min)', 'number', 'matchMinutes')}
         {renderEqualPointsRuleField()}
         {renderVisibilityField()}
+        {renderInfoField()}
         {tournament && renderCheckbox('Peruttu', 'cancelled')}
         {!tournament && renderCheckbox('Testiturnaus', 'test')}
         <FormErrors errors={errors}/>
@@ -124,6 +127,21 @@ const TournamentFields = props => {
     )
   }
 
+  const renderInfoField = () => (
+    <div className="form__field">
+      <div className="label">Turnausinfo</div>
+      <div className="form__field__tournament-info">
+        <textarea onChange={onFieldChange('info')} value={data.info || ''} />
+        {data.info && (
+          <div className="info-box info-box--tournament-info">
+            <ReactMarkdown>{data.info}</ReactMarkdown>
+          </div>
+        )}
+      </div>
+      <div className="form__field__help">Voit käyttää <a href="https://commonmark.org/help/" target="_blank">markdown-muotoilua</a> esim. linkkien tekemiseen</div>
+    </div>
+  )
+
   const renderCheckbox = (label, field) => {
     return (
       <div className="form__field">
@@ -161,8 +179,8 @@ const TournamentFields = props => {
   }
 
   const onOpenClick = () => {
-    const { name, startDate, days, location, address, matchMinutes, equalPointsRule, visibility, clubId, cancelled } = tournament
-    openForm({ name, startDate, days, location, address: address || '', matchMinutes, equalPointsRule, visibility, clubId, cancelled })
+    const { name, startDate, days, location, address, matchMinutes, equalPointsRule, visibility, clubId, cancelled, info } = tournament
+    openForm({ name, startDate, days, location, address: address || '', matchMinutes, equalPointsRule, visibility, clubId, cancelled, info })
   }
 
   const cancel = () => {

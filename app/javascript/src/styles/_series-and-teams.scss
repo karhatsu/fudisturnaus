@@ -2,7 +2,7 @@
 @import 'shared';
 
 .series-and-teams__groups {
-  @include white-box(false);
+  @include white-box(false, 16px);
 }
 
 .series-and-teams__team {

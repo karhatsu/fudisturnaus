@@ -127,7 +127,10 @@ const TournamentList = props => {
 
 TournamentList.propTypes = {
   buildLink: PropTypes.func.isRequired,
-  children: PropTypes.arrayOf(PropTypes.element),
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ]),
   search: PropTypes.string,
   setSearch: PropTypes.func,
   title: PropTypes.string.isRequired,

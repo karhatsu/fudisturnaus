@@ -7,6 +7,7 @@ import Button from '../form/button'
 import { visibilityTypes } from '../util/enums'
 import VisibilityBadge from './visibility_badge'
 import useForm from '../util/use_form'
+import ReactMarkdown from "react-markdown"
 
 const { onlyTitle, teams, all } = visibilityTypes
 
@@ -129,8 +130,13 @@ const TournamentFields = props => {
   const renderInfoField = () => (
     <div className="form__field">
       <div className="label">Turnausinfo</div>
-      <div>
+      <div className="form__field__tournament-info">
         <textarea onChange={onFieldChange('info')} value={data.info || ''} />
+        {data.info && (
+          <div className="info-box info-box--tournament-info">
+            <ReactMarkdown>{data.info}</ReactMarkdown>
+          </div>
+        )}
       </div>
     </div>
   )

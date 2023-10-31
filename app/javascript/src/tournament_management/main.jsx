@@ -66,8 +66,8 @@ const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => 
         <Teams tournament={tournament} tournamentId={getTournamentId()} onClubSave={onClubSave} onItemDelete={onItemDelete} onItemSave={onItemSave} />
         <GroupStageMatches tournament={tournament} tournamentId={getTournamentId()} onItemDelete={onItemDelete} onItemSave={onItemSave} />
         <Lottery tournament={tournament} tournamentId={getTournamentId()} onLotterySave={onLotterySave} />
-        <PlayoffGroups tournament={tournament} tournamentId={getTournamentId()} onItemDelete={onItemDelete} onItemSave={onItemSave} />
         <PlayoffMatches tournament={tournament} tournamentId={getTournamentId()} onItemDelete={onItemDelete} onItemSave={onItemSave} />
+        <PlayoffGroups tournament={tournament} tournamentId={getTournamentId()} onItemDelete={onItemDelete} onItemSave={onItemSave} />
         <Referees tournament={tournament} tournamentId={getTournamentId()} onItemDelete={onItemDelete} onItemSave={onItemSave} />
         <TournamentLinks tournament={tournament} />
         {!official && <EmailContent tournament={tournament} />}

@@ -154,7 +154,7 @@ const PlayoffMatch = props => {
       return (
         <div className="form__field">
           <select value={data[field]} onChange={onFieldChange(field)}>
-            <option>- {label} -</option>
+            <option value="">- {label} -</option>
             <optgroup label="Lohkosta">
               {groups.map(group => {
                 const key = buildOrigin('Group', group.id)

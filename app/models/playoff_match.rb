@@ -30,11 +30,11 @@ class PlayoffMatch < ApplicationRecord
       home_won = home_goals > away_goals
 
       playoff_matches_as_home_team.each do |match|
-        if match.home_team_origin_rule == PlayoffMatch::RULE_WINNER
+        if match.home_team_origin_rule == RULE_WINNER
           match.home_team = home_won ? home_team : away_team
           match.save!
           changed_matches << match
-        elsif match.home_team_origin_rule == PlayoffMatch::RULE_LOSER
+        elsif match.home_team_origin_rule == RULE_LOSER
           match.home_team = home_won ? away_team : home_team
           match.save!
           changed_matches << match
@@ -42,11 +42,11 @@ class PlayoffMatch < ApplicationRecord
       end
 
       playoff_matches_as_away_team.each do |match|
-        if match.away_team_origin_rule == PlayoffMatch::RULE_WINNER
+        if match.away_team_origin_rule == RULE_WINNER
           match.away_team = home_won ? home_team : away_team
           match.save!
           changed_matches << match
-        elsif match.away_team_origin_rule == PlayoffMatch::RULE_LOSER
+        elsif match.away_team_origin_rule == RULE_LOSER
           match.away_team = home_won ? away_team : home_team
           match.save!
           changed_matches << match

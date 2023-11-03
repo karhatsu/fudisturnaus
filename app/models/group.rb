@@ -19,6 +19,10 @@ class Group < ApplicationRecord
     calculate_group_results teams, false
   end
 
+  def can_assign_playoff_matches?
+    group_stage_matches.size > 0 && results_in_all_matches? && !has_equal_rankings?
+  end
+
   def results_in_all_matches?
     group_stage_matches.all? { |match| match.home_goals && match.away_goals }
   end
@@ -33,7 +37,7 @@ class Group < ApplicationRecord
   end
 
   def populate_first_round_playoff_matches
-    return [] if !results_in_all_matches? || has_equal_rankings?
+    return [] unless can_assign_playoff_matches?
     changed_matches = []
     group_results = results
     playoff_matches_as_home_team.each do |match|

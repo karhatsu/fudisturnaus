@@ -21,6 +21,8 @@ class PlayoffMatch < ApplicationRecord
   validate :no_same_teams
   validate :teams_are_required
 
+  before_save :reassign_home_team, :reassign_away_team
+
   delegate :tournament, to: :age_group
   delegate :tournament_id, to: :age_group
 
@@ -75,6 +77,42 @@ class PlayoffMatch < ApplicationRecord
   def teams_are_required
     if (home_goals || away_goals) && (!home_team_id || !away_team_id)
       errors.add :base, 'Tulosta ei voi tallentaa, koska joukkueita ei ole asetettu'
+    end
+  end
+
+  def reassign_home_team
+    if home_team_origin_id_changed? || home_team_origin_type_changed? || home_team_origin_rule_changed?
+      if home_team_origin_type == 'Group'
+        group = home_team_origin
+        if group.can_assign_playoff_matches?
+          self.home_team_id = group.results[home_team_origin_rule - 1].team_id
+        end
+      elsif home_team_origin_type == 'PlayoffMatch'
+        previous_round_match = home_team_origin
+        if previous_round_match.home_won?
+          self.home_team_id = home_team_origin_rule == RULE_WINNER ? previous_round_match.home_team_id : previous_round_match.away_team_id
+        elsif previous_round_match.away_won?
+          self.home_team_id = home_team_origin_rule == RULE_WINNER ? previous_round_match.away_team_id : previous_round_match.home_team_id
+        end
+      end
+    end
+  end
+
+  def reassign_away_team
+    if away_team_origin_id_changed? || away_team_origin_type_changed? || away_team_origin_rule_changed?
+      if away_team_origin_type == 'Group'
+        group = away_team_origin
+        if group.can_assign_playoff_matches?
+          self.away_team_id = group.results[away_team_origin_rule - 1].team_id
+        end
+      elsif away_team_origin_type == 'PlayoffMatch'
+        previous_round_match = away_team_origin
+        if previous_round_match.away_won?
+          self.away_team_id = away_team_origin_rule == RULE_WINNER ? previous_round_match.away_team_id : previous_round_match.home_team_id
+        elsif previous_round_match.home_won?
+          self.away_team_id = away_team_origin_rule == RULE_WINNER ? previous_round_match.home_team_id : previous_round_match.away_team_id
+        end
+      end
     end
   end
 end

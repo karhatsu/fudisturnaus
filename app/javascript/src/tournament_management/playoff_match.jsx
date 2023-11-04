@@ -195,7 +195,7 @@ const PlayoffMatch = props => {
         return (
           <div className="form__field">
             <select value={data[field]} onChange={onFieldChange(field)}>
-              <option>- Ottelun -</option>
+              <option value="">- Ottelun -</option>
               <option value={-1}>Voittaja</option>
               <option value={-2}>Häviäjä</option>
             </select>

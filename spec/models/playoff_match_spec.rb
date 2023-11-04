@@ -39,6 +39,21 @@ RSpec.describe PlayoffMatch, type: :model do
         end
       end
 
+      context 'and the assignment is changed to a group that has no results yet' do
+        let(:group_c) { create :group, age_group: age_group, name: 'C' }
+
+        before do
+          semifinal_1.home_team_origin = group_c
+          semifinal_1.away_team_origin = group_c
+          semifinal_1.save
+        end
+
+        it 'resets the team assignments' do
+          expect(semifinal_1.home_team_id).to be_nil
+          expect(semifinal_1.away_team_id).to be_nil
+        end
+      end
+
       context 'when 2nd round playoff matches are created before the 1st round matches have results' do
         let(:final) { create :playoff_match, home_team_origin: semifinal_1,home_team_origin_rule: PlayoffMatch::RULE_WINNER,
                              away_team_origin: semifinal_2, away_team_origin_rule: PlayoffMatch::RULE_WINNER }
@@ -106,6 +121,23 @@ RSpec.describe PlayoffMatch, type: :model do
             it 'reassigns the teams for the match' do
               expect(final.home_team_id).to eql team_a2.id
               expect(final.away_team_id).to eql team_a1.id
+            end
+          end
+
+          context 'and the assignment rules are changed to refer playoff match that is not played yet' do
+            let(:playoff_match) { create :playoff_match, home_team_origin: group_a, home_team_origin_rule: 1, away_team_origin: group_b, away_team_origin_rule: 1 }
+
+            before do
+              final.home_team_origin = playoff_match
+              final.home_team_origin_rule = PlayoffMatch::RULE_WINNER
+              final.away_team_origin = playoff_match
+              final.away_team_origin_rule = PlayoffMatch::RULE_LOSER
+              final.save!
+            end
+
+            it 'resets the team assignments' do
+              expect(final.home_team_id).to be_nil
+              expect(final.away_team_id).to be_nil
             end
           end
         end

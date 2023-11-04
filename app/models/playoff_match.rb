@@ -86,6 +86,8 @@ class PlayoffMatch < ApplicationRecord
         group = home_team_origin
         if group.can_assign_playoff_matches?
           self.home_team_id = group.results[home_team_origin_rule - 1].team_id
+        else
+          self.home_team_id = nil
         end
       elsif home_team_origin_type == 'PlayoffMatch'
         previous_round_match = home_team_origin
@@ -93,6 +95,8 @@ class PlayoffMatch < ApplicationRecord
           self.home_team_id = home_team_origin_rule == RULE_WINNER ? previous_round_match.home_team_id : previous_round_match.away_team_id
         elsif previous_round_match.away_won?
           self.home_team_id = home_team_origin_rule == RULE_WINNER ? previous_round_match.away_team_id : previous_round_match.home_team_id
+        else
+          self.home_team_id = nil
         end
       end
     end
@@ -104,6 +108,8 @@ class PlayoffMatch < ApplicationRecord
         group = away_team_origin
         if group.can_assign_playoff_matches?
           self.away_team_id = group.results[away_team_origin_rule - 1].team_id
+        else
+          self.away_team_id = nil
         end
       elsif away_team_origin_type == 'PlayoffMatch'
         previous_round_match = away_team_origin
@@ -111,6 +117,8 @@ class PlayoffMatch < ApplicationRecord
           self.away_team_id = away_team_origin_rule == RULE_WINNER ? previous_round_match.away_team_id : previous_round_match.home_team_id
         elsif previous_round_match.home_won?
           self.away_team_id = away_team_origin_rule == RULE_WINNER ? previous_round_match.home_team_id : previous_round_match.away_team_id
+        else
+          self.away_team_id = nil
         end
       end
     end

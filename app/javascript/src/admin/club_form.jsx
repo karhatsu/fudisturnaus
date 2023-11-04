@@ -20,7 +20,11 @@ const ClubForm = ({ club, onClubDelete, onClubSave }) => {
   }, [formOpen])
 
   const renderName = () => {
-    return <div className="tournament-item__title" onClick={onOpenClick}><Team club={club} name={club.name}/></div>
+    return (
+      <div className="tournament-item__title" onClick={onOpenClick}>
+        <Team club={club} name={club.name} showAlias={true} />
+      </div>
+    )
   }
 
   const renderForm = () => {

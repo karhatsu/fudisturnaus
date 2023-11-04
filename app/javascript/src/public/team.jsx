@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const Team = props => {
-  const { clubId, clubs, name, selected } = props
+  const { clubId, clubs, name, selected, showAlias } = props
 
   const club = props.club ? props.club : clubs.find(c => c.id === clubId)
 
@@ -23,7 +23,7 @@ const Team = props => {
   return (
     <span className={resolveClassNames()}>
       {renderLogo()}
-      <span className="team__name">{name}</span>
+      <span className="team__name">{name}{showAlias && club.alias && ` (${club.alias})`}</span>
     </span>
   )
 }
@@ -40,6 +40,7 @@ Team.propTypes = {
   })),
   name: PropTypes.string.isRequired,
   selected: PropTypes.bool,
+  showAlias: PropTypes.bool,
 }
 
 export default Team

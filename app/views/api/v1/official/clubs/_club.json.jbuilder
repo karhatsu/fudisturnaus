@@ -1,1 +1,1 @@
-json.(club, :id, :name)
+json.(club, :id, :name, :alias)

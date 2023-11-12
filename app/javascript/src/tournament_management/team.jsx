@@ -8,21 +8,28 @@ import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
 import Button from '../form/button'
 import useForm from '../util/use_form'
+import ClubSelect, { NEW_CLUB_ID } from '../form/club_select'
 
 const CHOOSE_CLUB_ID = '-1'
-const NEW_CLUB_ID = '-2'
 
 const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, team, tournamentId }) => {
   const accessContext = useContext(AccessContext)
   const nameField = useRef()
+  const clubField = useRef()
   const clubNameField = useRef()
   const { formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, changeValue, changeValues } = useForm()
   const [clubName, setClubName] = useState('')
 
   useEffect(() => {
-    if (data.clubId && data.clubId === NEW_CLUB_ID && clubNameField) {
+    if (data.groupId && data.groupId !== -1 && data.clubId === CHOOSE_CLUB_ID && clubField.current) {
+      clubField.current.focus()
+    }
+  }, [data.groupId, data.clubId])
+
+  useEffect(() => {
+    if (data.clubId && data.clubId === NEW_CLUB_ID && clubNameField.current) {
       clubNameField.current.focus()
-    } else if (data.clubId && data.clubId !== CHOOSE_CLUB_ID && data.clubId !== NEW_CLUB_ID && nameField) {
+    } else if (data.clubId && data.clubId !== CHOOSE_CLUB_ID && data.clubId !== NEW_CLUB_ID && nameField.current) {
       nameField.current.focus()
     }
   }, [data.clubId])
@@ -33,7 +40,7 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
   }
 
   const renderForm = () => {
-    const { clubId, groupId, name } = data
+    const { groupId, name } = data
     return (
       <form className="form form--horizontal">
         <FormErrors errors={errors}/>
@@ -48,14 +55,7 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
             </select>
           </div>
           <div className="form__field">
-            <select onChange={onClubIdChange} value={clubId}>
-              <option value={CHOOSE_CLUB_ID}>Seura</option>
-              <option value={NEW_CLUB_ID}>+ Lisää uusi seura</option>
-              {clubs.map(club => {
-                const { id, name } = club
-                return <option key={id} value={id}>{name}</option>
-              })}
-            </select>
+            <ClubSelect clubId={data.clubId} clubs={clubs} onChange={onClubIdChange} ref={clubField} />
           </div>
           <TextField ref={nameField} onChange={onFieldChange('name')} placeholder="Esim. FC Kontu Valkoinen" value={name}/>
           <div className="form__buttons">
@@ -96,15 +96,14 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
     })
   }
 
-  const onClubIdChange = event => {
-    const value = event.target.value
-    if (!data.name && parseInt(value) > 0) {
-      const clubName = getName(clubs, parseInt(value))
+  const onClubIdChange = clubId => {
+    if (!data.name && parseInt(clubId) > 0) {
+      const clubName = getName(clubs, parseInt(clubId))
       if (clubName.indexOf('Ei virallista seuraa') === -1) {
         changeValue('name', `${clubName} `)
       }
     }
-    changeValue('clubId', value)
+    changeValue('clubId', clubId)
   }
 
   const canSubmit = () => {

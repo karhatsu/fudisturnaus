@@ -71,9 +71,9 @@ export function resolveTournamentItemClasses(existing) {
   return `tournament-item__title ${existing ? 'tournament-item__title--existing' : 'tournament-item__title--new'}`
 }
 
-export function getName(items, id) {
+export function getName(items, id, defaultValue) {
   const item = items.find(ag => ag.id === id)
-  return item ? item.name : '-'
+  return item ? item.name : (defaultValue !== undefined ? defaultValue : '-')
 }
 
 export function resolveColStyles(count) {

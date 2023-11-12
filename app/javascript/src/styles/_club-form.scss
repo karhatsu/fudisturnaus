@@ -1,0 +1,32 @@
+@import 'variables';
+
+.club-select {
+  position: relative;
+
+  &__background {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  &__list {
+    position: absolute;
+    width: 216px;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #fff;
+    border: 1px solid black;
+    border-radius: 2px;
+  }
+
+  &__option {
+    cursor: pointer;
+    padding: 8px;
+
+    &:hover {
+      background-color: #eee;
+    }
+  }
+}

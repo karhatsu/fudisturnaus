@@ -48,17 +48,19 @@ describe 'official', type: :system do
 
       add_new_item 'teams'
       form_selects[0].select 'T11 | Group A'
-      form_selects[1].select @club.name
-      form_inputs[0].fill_in with: 'FC Brown'
+      form_inputs[0].fill_in with: @club.name
+      page.find(".club-select__list #club_#{@club.id}").click
+      form_inputs[1].fill_in with: 'FC Brown'
       submit
       expect_item_title 'teams', 'FC Brown'
 
       add_new_item 'teams'
       form_selects[0].select 'T11 | Group A'
-      form_selects[1].select '+ Lisää uusi seura'
+      form_inputs[0].fill_in with: ' '
+      page.find('.club-select__list #add-new-club').click
       page.find('.new-club-form .form__field input').fill_in with: 'SC Lions'
       page.find('.new-club-form .button--primary').click
-      form_inputs[0].fill_in with: 'SC Lions Green'
+      form_inputs[1].fill_in with: 'SC Lions Green'
       submit
 
       add_new_item 'group-stage-matches'
@@ -163,7 +165,7 @@ describe 'official', type: :system do
       expect_item_title 'group-stage-matches', 'Grass | ma 10:00 | T08 | B | Team 1 - Team 2'
 
       edit_item 'teams', 0
-      form_inputs[0].fill_in with: 'FC Team'
+      form_inputs[1].fill_in with: 'FC Team'
       submit
       expect_item_title 'teams', 'FC Team'
       expect_item_title 'group-stage-matches', 'Grass | ma 10:00 | T08 | B | FC Team - Team 2'

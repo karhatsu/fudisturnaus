@@ -1,16 +1,26 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import AccessContext from '../util/access_context'
 import { fetchClubs, refreshCache } from './api_client'
 import FormErrors from '../form/form_errors'
 import ClubForm from './club_form'
 import Title from '../components/title'
 import Message from '../components/message'
+import TextField from '../form/text_field'
 
 const ClubsManagementPage = () => {
   const [clubs, setClubs] = useState([])
   const [errors, setErrors] = useState([])
   const [cacheRefreshResponse, setCacheRefreshResponse] = useState()
+  const [search, setSearch] = useState('')
   const accessContext = useContext(AccessContext)
+
+  const clubsWithoutLogo = useMemo(() => clubs.filter(club => !club.logoUrl), [clubs])
+
+  const filteredClubs = useMemo(() => {
+    if (!search) return clubs
+    const s = search.toLowerCase()
+    return clubs.filter(c => c.name.toLowerCase().match(s) || c.alias?.toLowerCase().match(s))
+  }, [clubs, search])
 
   useEffect(() => {
     fetchClubs(accessContext, (errors, response) => {
@@ -66,14 +76,15 @@ const ClubsManagementPage = () => {
       <Title iconLink="/admin" loading={!clubs.length} text="Seurat"/>
       <div className="title-2">Seurat ilman logoa</div>
       <div className="tournament-management__section">
-        {clubs.filter(club => !club.logoUrl).map(club => <ClubForm key={club.id} club={club} onClubDelete={onClubDelete} onClubSave={onClubSave}/>)}
+        {clubsWithoutLogo.map(club => <ClubForm key={club.id} club={club} onClubDelete={onClubDelete} onClubSave={onClubSave}/>)}
       </div>
       <div className="title-2">Cache refresh</div>
       {renderCacheSection()}
       <div className="title-2">Kaikki seurat</div>
       <div className="tournament-management__section">
+        <TextField value={search} onChange={e => setSearch(e.target.value)} placeholder="Etsi..." />
         <FormErrors errors={errors}/>
-        {clubs.map(club => <ClubForm key={club.id} club={club} onClubDelete={onClubDelete} onClubSave={onClubSave}/>)}
+        {filteredClubs.map(club => <ClubForm key={club.id} club={club} onClubDelete={onClubDelete} onClubSave={onClubSave}/>)}
       </div>
     </div>
   )

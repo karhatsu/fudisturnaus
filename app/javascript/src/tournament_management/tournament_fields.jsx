@@ -51,7 +51,7 @@ const TournamentFields = props => {
         {renderTournamentField('Nimi', 'text', 'name', 'Esim. Kevät Cup 2019')}
         {renderTournamentField('Pvm', 'date', 'startDate')}
         {renderMultipleEventsCheckbox()}
-        {data.days > 0 && renderTournamentField('Kesto (pv)', 'number', 'days')}
+        {(data.days === '' || data.days > 0) && renderTournamentField('Kesto (pv)', 'number', 'days')}
         {renderTournamentField('Paikka', 'text', 'location', 'Esim. Kontulan tekonurmi')}
         {renderTournamentField('Osoite', 'text', 'address', 'Esim. Tanhuantie 4-6, 00940 Helsinki')}
         {renderTournamentField('Otteluiden välinen aika (min)', 'number', 'matchMinutes')}

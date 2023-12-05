@@ -58,7 +58,7 @@ const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => 
         {visibility < 2 && <Message type="warning">Kun haluat julkaista otteluohjelman, muokkaa turnauksen perustietoja</Message>}
         <div className="title-2">Perustiedot</div>
         <div className="tournament-management__section tournament-management__section--tournament">
-          <TournamentFields clubs={tournament.clubs} onSave={onSave} tournament={tournament}/>
+          <TournamentFields clubs={tournament.clubs} onSave={onSave} tournament={tournament} official={official} />
         </div>
         <Fields fields={tournament.fields} tournamentId={getTournamentId()} onItemDelete={onItemDelete} onItemSave={onItemSave} />
         <AgeGroups ageGroups={tournament.ageGroups} tournamentId={getTournamentId()} onItemDelete={onItemDelete} onItemSave={onItemSave} />

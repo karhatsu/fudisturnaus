@@ -26,7 +26,7 @@ const initialData = {
 }
 
 const TournamentFields = props => {
-  const { clubs, tournament, onCancel, onSave } = props
+  const { clubs, official, tournament, onCancel, onSave } = props
   const {
     changeValue,
     formOpen,
@@ -67,7 +67,7 @@ const TournamentFields = props => {
   }
 
   const renderOrganizerField = () => {
-    if (!clubs) return
+    if (!clubs || official) return
     return (
       <div className="form__field">
         <div className="label">Järjestävä seura</div>
@@ -217,6 +217,7 @@ const TournamentFields = props => {
 
 TournamentFields.propTypes = {
   clubs: PropTypes.array,
+  official: PropTypes.bool.isRequired,
   onCancel: PropTypes.func,
   onSave: PropTypes.func.isRequired,
   tournament: PropTypes.shape({

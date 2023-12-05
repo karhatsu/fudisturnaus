@@ -41,7 +41,7 @@ const NewTournamentPage = () => {
     <div>
       <div className="title">Uusi turnaus</div>
       <div className="tournament-management__section">
-        <TournamentFields clubs={clubs} onCancel={goToIndex} onSave={onSave}/>
+        <TournamentFields clubs={clubs} onCancel={goToIndex} onSave={onSave} official={false} />
       </div>
     </div>
   )

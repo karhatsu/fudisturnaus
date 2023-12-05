@@ -3,6 +3,13 @@ class Api::V1::Admin::ClubsController < Api::V1::Admin::AdminBaseController
     @clubs = Club.all
   end
 
+  def create
+    @club = Club.new club_params
+    unless @club.save
+      render status: 400, json: { errors: @club.errors.full_messages }
+    end
+  end
+
   def update
     @club = Club.find params[:id]
     unless @club.update club_params

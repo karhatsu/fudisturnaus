@@ -43,7 +43,11 @@ const ClubsManagementPage = () => {
   const onClubSave = data => {
     const newClubs = [...clubs]
     const clubIndex = newClubs.findIndex(club => club.id === data.id)
-    newClubs[clubIndex] = { ...newClubs[clubIndex], ...data }
+    if (clubIndex !== -1) {
+      newClubs[clubIndex] = { ...newClubs[clubIndex], ...data }
+    } else {
+      newClubs.push(data)
+    }
     setClubs(newClubs.sort((a, b) => a.name.localeCompare(b.name)))
   }
 
@@ -82,6 +86,10 @@ const ClubsManagementPage = () => {
       </div>
       <div className="title-2">Cache refresh</div>
       {renderCacheSection()}
+      <div className="title-2">Uusi seura</div>
+      <div className="tournament-management__section">
+        <ClubForm onClubSave={onClubSave} />
+      </div>
       <div className="title-2">Kaikki seurat</div>
       <div className="tournament-management__section">
         <TextField value={search} onChange={e => setSearch(e.target.value)} placeholder="Etsi..." />

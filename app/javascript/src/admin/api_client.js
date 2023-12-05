@@ -55,6 +55,16 @@ export function fetchClubs(accessContext, callback) {
   }).catch(() => handleApiConnectionError(callback))
 }
 
+export function createClub(accessContext, data, callback) {
+  fetch('/api/v1/admin/clubs', {
+    method: 'POST',
+    headers: buildHeaders(accessContext),
+    body: JSON.stringify({ club: data }),
+  }).then(response => {
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
+}
+
 export function updateClub(accessContext, id, data, callback) {
   fetch(`/api/v1/admin/clubs/${id}`, {
     method: 'PUT',

@@ -52,7 +52,9 @@ const ClubsManagementPage = () => {
     return (
       <div className="tournament-management__section">
         {cacheRefreshResponse && <Message type={messageType}>{cacheRefreshResponse}</Message>}
-        <a href="#" onClick={handleRefresh}>Refresh cache</a>
+        <div className="tournament-item">
+          <a href="#" onClick={handleRefresh}>Refresh cache</a>
+        </div>
       </div>
     )
   }

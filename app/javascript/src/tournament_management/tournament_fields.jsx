@@ -8,6 +8,7 @@ import { visibilityTypes } from '../util/enums'
 import VisibilityBadge from './visibility_badge'
 import useForm from '../util/use_form'
 import ReactMarkdown from 'react-markdown'
+import ClubSelect, { CHOOSE_CLUB_ID } from '../form/club_select'
 
 const { onlyTitle, teams, all } = visibilityTypes
 
@@ -44,6 +45,10 @@ const TournamentFields = props => {
     changeValue('days', days)
   }, [changeValue])
 
+  const onClubIdChange = useCallback(clubId => {
+    changeValue('clubId', clubId)
+  }, [changeValue])
+
   const renderTournamentForm = () => {
     return (
       <form className="form form--vertical">
@@ -71,14 +76,7 @@ const TournamentFields = props => {
     return (
       <div className="form__field">
         <div className="label">Järjestävä seura</div>
-        <div>
-          <select onChange={onFieldChange('clubId')} value={data.clubId}>
-            <option>- Ei tiedossa -</option>
-            {clubs.filter(club => club.name.indexOf('Ei virallista seuraa') === -1).map(club => {
-              return <option key={club.id} value={club.id}>{club.name}</option>
-            })}
-          </select>
-        </div>
+        <ClubSelect clubId={data.clubId || CHOOSE_CLUB_ID} clubs={clubs} onChange={onClubIdChange} />
       </div>
     )
   }
@@ -216,7 +214,7 @@ const TournamentFields = props => {
 }
 
 TournamentFields.propTypes = {
-  clubs: PropTypes.array,
+  clubs: PropTypes.array.isRequired,
   official: PropTypes.bool.isRequired,
   onCancel: PropTypes.func,
   onSave: PropTypes.func.isRequired,

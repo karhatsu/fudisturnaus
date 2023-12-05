@@ -3,8 +3,9 @@ import PropTypes from 'prop-types'
 import { getName } from '../util/util'
 
 export const NEW_CLUB_ID = '-2'
+export const CHOOSE_CLUB_ID = '-1'
 
-const ClubSelect = forwardRef(({ clubId, clubs, onChange }, ref) => {
+const ClubSelect = forwardRef(({ clubId, clubs, onChange, showNewClub }, ref) => {
   const [showList, setShowList] = useState(false)
   const [search, setSearch] = useState('')
 
@@ -35,9 +36,11 @@ const ClubSelect = forwardRef(({ clubId, clubs, onChange }, ref) => {
       />
       {showList && (
         <div className="club-select__list">
-          <div onClick={() => selectClub(NEW_CLUB_ID)} className="club-select__option" id="add-new-club">
-            + Lisää uusi seura
-          </div>
+          {showNewClub && (
+            <div onClick={() => selectClub(NEW_CLUB_ID)} className="club-select__option" id="add-new-club">
+              + Lisää uusi seura
+            </div>
+          )}
           {visibleClubs.map(c => (
             <div key={c.id} onClick={() => selectClub(c.id)} className="club-select__option" id={`club_${c.id}`}>{c.name}</div>
           ))}
@@ -56,6 +59,7 @@ ClubSelect.propTypes = {
     name: PropTypes.string.isRequired,
   })).isRequired,
   onChange: PropTypes.func.isRequired,
+  showNewClub: PropTypes.bool,
 }
 
 export default ClubSelect

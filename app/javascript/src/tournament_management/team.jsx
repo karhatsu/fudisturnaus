@@ -8,9 +8,7 @@ import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
 import Button from '../form/button'
 import useForm from '../util/use_form'
-import ClubSelect, { NEW_CLUB_ID } from '../form/club_select'
-
-const CHOOSE_CLUB_ID = '-1'
+import ClubSelect, { CHOOSE_CLUB_ID, NEW_CLUB_ID } from '../form/club_select'
 
 const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, team, tournamentId }) => {
   const accessContext = useContext(AccessContext)
@@ -55,7 +53,7 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
             </select>
           </div>
           <div className="form__field">
-            <ClubSelect clubId={data.clubId} clubs={clubs} onChange={onClubIdChange} ref={clubField} />
+            <ClubSelect clubId={data.clubId} clubs={clubs} onChange={onClubIdChange} showNewClub={true} ref={clubField} />
           </div>
           <TextField ref={nameField} onChange={onFieldChange('name')} placeholder="Esim. FC Kontu Valkoinen" value={name}/>
           <div className="form__buttons">

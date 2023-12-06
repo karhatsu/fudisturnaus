@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import PropTypes from 'prop-types'
 import { formatTournamentDates } from '../util/date_util'
 import FormErrors from '../form/form_errors'
@@ -9,6 +9,8 @@ import VisibilityBadge from './visibility_badge'
 import useForm from '../util/use_form'
 import ReactMarkdown from 'react-markdown'
 import ClubSelect, { CHOOSE_CLUB_ID } from '../form/club_select'
+import { fetchAddressSuggestions } from './api_client'
+import AccessContext from '../util/access_context'
 
 const { onlyTitle, teams, all } = visibilityTypes
 
@@ -39,6 +41,8 @@ const TournamentFields = props => {
     onFieldChange,
     onCheckboxChange,
   } = useForm(tournament ? undefined : initialData)
+  const [addressSuggestions, setAddressSuggestions] = useState()
+  const accessContext = useContext(AccessContext)
 
   const onMultipleEventsChange = useCallback(event => {
     const days = event.target.checked ? 0 : 1
@@ -49,6 +53,18 @@ const TournamentFields = props => {
     changeValue('clubId', clubId)
   }, [changeValue])
 
+  const getAddressSuggestions = useCallback(() => {
+    if (!data.location) return
+    fetchAddressSuggestions(accessContext, data.location, (err, data) => {
+      if (data) setAddressSuggestions(data)
+      else console.error('Failed to fetch address suggestions', err)
+    })
+  }, [accessContext, data.location])
+
+  const onAddressSuggestionSelection = useCallback((event) => {
+    if (event.target.value) changeValue('address', event.target.value)
+  }, [changeValue])
+
   const renderTournamentForm = () => {
     return (
       <form className="form form--vertical">
@@ -57,7 +73,8 @@ const TournamentFields = props => {
         {renderTournamentField('Pvm', 'date', 'startDate')}
         {renderMultipleEventsCheckbox()}
         {(data.days === '' || data.days > 0) && renderTournamentField('Kesto (pv)', 'number', 'days')}
-        {renderTournamentField('Paikka', 'text', 'location', 'Esim. Kontulan tekonurmi')}
+        {renderLocationField()}
+        {renderAddressSuggestions()}
         {renderTournamentField('Osoite', 'text', 'address', 'Esim. Tanhuantie 4-6, 00940 Helsinki')}
         {renderTournamentField('Otteluiden välinen aika (min)', 'number', 'matchMinutes')}
         {renderEqualPointsRuleField()}
@@ -92,8 +109,39 @@ const TournamentFields = props => {
     )
   }
 
+  const renderLocationField = () => {
+    const onBlur = tournament?.id ? undefined : getAddressSuggestions
+    return (
+      <TextField
+        label="Paikka"
+        onBlur={onBlur}
+        onChange={onFieldChange('location')}
+        placeholder="Esim. Kontulan tekonurmi"
+        type="text"
+        value={data.location}
+      />
+    )
+  }
+
   const renderTournamentField = (label, type, field, placeholder) => {
     return <TextField label={label} onChange={onFieldChange(field)} placeholder={placeholder} type={type} value={data[field]}/>
+  }
+
+  const renderAddressSuggestions = () => {
+    if (!addressSuggestions) return
+    return (
+      <div className="form__field">
+        <div className="label">Valitse osoite</div>
+        <div>
+          <select onChange={onAddressSuggestionSelection}>
+            <option value="">- Valitse osoite -</option>
+            {addressSuggestions.map(suggestion => (
+              <option key={suggestion.id} value={suggestion.address}>{suggestion.location} = {suggestion.address}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+    )
   }
 
   const renderEqualPointsRuleField = () => {
@@ -221,6 +269,7 @@ TournamentFields.propTypes = {
   tournament: PropTypes.shape({
     cancelled: PropTypes.bool.isRequired,
     clubId: PropTypes.number,
+    id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     location: PropTypes.string.isRequired,
     address: PropTypes.string,

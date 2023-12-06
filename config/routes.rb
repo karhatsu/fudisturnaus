@@ -26,6 +26,7 @@ Rails.application.routes.draw do
           resources :teams, only: [:create, :update, :destroy]
         end
         resources :clubs, only: :create
+        resources :address_suggestions, only: :index
       end
 
       namespace :admin do

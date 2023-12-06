@@ -202,6 +202,14 @@ export function saveLottery(accessContext, tournamentId, groupId, data, callback
   }).catch(() => handleApiConnectionError(callback))
 }
 
+export function fetchAddressSuggestions(accessContext, location, callback) {
+  fetch(`/api/v1/official/address_suggestions?location=${encodeURIComponent(location)}`, {
+    headers: buildHeaders(accessContext),
+  }).then(response => {
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
+}
+
 function buildHeaders(accessContext) {
   const headers = { 'Content-Type': 'application/json' }
   if (accessContext.officialAccessKey) {

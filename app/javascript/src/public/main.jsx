@@ -8,6 +8,7 @@ import Match from './match'
 import Info from './info'
 import TournamentsPage from './tournaments_page'
 import { AllTournamentsContextProvider } from './all_tournaments_context'
+import PrivacyPolicyPage from './privacy_policy_page'
 
 const Main = () => {
   return (
@@ -17,6 +18,7 @@ const Main = () => {
         <Route path="/t/:key" component={TournamentPageWrapper} />
         <Route path="/tournaments/:key" component={TournamentPageWrapper} />
         <Route path="/tournaments" component={TournamentsPage} />
+        <Route path="/privacy-policy" component={PrivacyPolicyPage} />
         <Route path="/" exact component={Index} />
       </Switch>
     </AllTournamentsContextProvider>

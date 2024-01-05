@@ -3,7 +3,7 @@ import Title from '../components/title'
 
 const PrivacyPolicyPage = () => (
   <div>
-    <Title text="Tietosuojalauseke" loading={false}/>
+    <Title text="Tietosuojalauseke" loading={false} iconLink="/" />
 
     <div className="title-2">Mitä tietoja kerätään?</div>
     <div className="info-box">

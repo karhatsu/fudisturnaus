@@ -1,10 +1,9 @@
 class Referees::RefereesController < ApplicationController
-  layout 'official'
+  layout 'referee'
 
   before_action :check_referee_access_key
 
   def index
-    render 'official/official/index'
   end
 
   private

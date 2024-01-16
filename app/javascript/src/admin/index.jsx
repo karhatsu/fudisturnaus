@@ -31,10 +31,10 @@ const AdminIndex = () => {
     >
       <div className="title-2">Hallinta</div>
       <div className="tournament-management__section">
-        <Link to="/admin/tournaments/new">+ Lisää uusi turnaus</Link>
+        <Link to="tournaments/new">+ Lisää uusi turnaus</Link>
       </div>
       <div className="tournament-management__section">
-        <Link to="/admin/clubs">Seurat</Link>
+        <Link to="clubs">Seurat</Link>
       </div>
     </TournamentList>
   )

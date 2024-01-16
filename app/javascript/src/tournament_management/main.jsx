@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useHistory, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { Link } from 'react-router-dom'
 
 import { fetchTournament, updateTournament } from './api_client'
@@ -25,7 +25,7 @@ import EmailContent from './email_content'
 import Referees from './referees'
 
 const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => {
-  const history = useHistory()
+  const navigate = useNavigate()
   const params = useParams()
   const accessContext = useContext(AccessContext)
   const [deleteErrors, setDeleteErrors] = useState([])
@@ -182,7 +182,7 @@ const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => 
       if (errors) {
         setDeleteErrors(errors)
       } else {
-        history.push('/admin')
+        navigate('/admin')
       }
     })
   }

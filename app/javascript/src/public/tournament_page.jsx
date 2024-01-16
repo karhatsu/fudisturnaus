@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useHistory, useLocation, useParams } from 'react-router'
+import { useLocation, useNavigate, useParams } from 'react-router'
 import { Link } from 'react-router-dom'
 import queryString from 'query-string'
 import ReactMarkdown from 'react-markdown'
@@ -42,7 +42,7 @@ const kontuSponsors = [
 const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
   const { accessKey } = useParams()
   const { search } = useLocation()
-  const history = useHistory()
+  const navigate = useNavigate()
   const { error, tournament } = useTournamentFetching(tournamentKey)
   const [filters, setFilters] = useState(defaultFilters)
 
@@ -174,14 +174,14 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
 
   const resetFilters = () => {
     setFilters(defaultFilters)
-    history.push({ search: '' })
+    navigate({ search: '' })
   }
 
   const setFilterValue = key => event => {
     const value = key === 'date' ? event.target.value : parseInt(event.target.value)
     const newFilters = { ...filters, [key]: value }
     setFilters(newFilters)
-    history.push({ search: buildQueryParams(newFilters) })
+    navigate({ search: buildQueryParams(newFilters) })
   }
 
   const buildQueryParams = filters => {

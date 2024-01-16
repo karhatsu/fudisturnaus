@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useHistory } from 'react-router'
+import { useNavigate } from 'react-router'
 import TournamentFields from '../tournament_management/tournament_fields'
 import { createTournament, fetchClubs } from './api_client'
 import AccessContext from '../util/access_context'
@@ -7,7 +7,7 @@ import AccessContext from '../util/access_context'
 const NewTournamentPage = () => {
   const accessContext = useContext(AccessContext)
   const [clubs, setClubs] = useState()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchClubs(accessContext, (errors, response) => {
@@ -30,11 +30,11 @@ const NewTournamentPage = () => {
   }
 
   const goToTournamentPage = id => {
-    history.push(`/admin/tournaments/${id}`)
+    navigate(`/admin/tournaments/${id}`)
   }
 
   const goToIndex = () => {
-    history.push('/admin')
+    navigate('/admin')
   }
 
   return (

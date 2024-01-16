@@ -1,24 +1,45 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import OfficialMain from './src/official/main'
+import { useParams } from 'react-router'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import AccessContext from './src/util/access_context'
+import TournamentManagementPage from './src/tournament_management/main'
+import TournamentPage, { officialLevels } from './src/public/tournament_page'
+import EditableMatch from './src/official/editable_match'
+import './src/styles/application.scss'
+
+const OfficialApp = ({ tournamentId }) => {
+  const { accessKey } = useParams()
+
+  return (
+    <AccessContext.Provider value={{ officialAccessKey: accessKey }}>
+      <Routes>
+        <Route path="management" element={(
+          <TournamentManagementPage official={true} titleIconLink={`/official/${accessKey}`} tournamentId={tournamentId} />
+        )}/>
+        <Route path="/" element={(
+          <TournamentPage officialLevel={officialLevels.full} renderMatch={props => <EditableMatch {...props}/>} tournamentKey={tournamentId} />
+        )}/>
+      </Routes>
+    </AccessContext.Provider>
+  )
+}
+
+OfficialApp.propTypes = {
+  tournamentId: PropTypes.number.isRequired,
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   const node = document.getElementById('initial-data')
   const props = JSON.parse(node.getAttribute('data'))
   const tournamentId = parseInt(props.tournamentId)
-  const refereeId = props.refereeId && parseInt(props.refereeId)
-  const refereeName = props.refereeName
   const root = createRoot(document.getElementById('official-app'))
   root.render(
     <BrowserRouter>
-      <Switch>
-        <Route path="/official/:accessKey" render={() => <OfficialMain tournamentId={tournamentId} />}/>
-        <Route path="/results/:resultsAccessKey" render={() => <OfficialMain tournamentId={tournamentId} />}/>
-        <Route path="/referees/:refereeAccessKey" render={() => {
-          return <OfficialMain tournamentId={tournamentId} refereeId={refereeId} refereeName={refereeName} />
-        }}/>
-      </Switch>
+      <Routes>
+        <Route path="/official/:accessKey/*" element={<OfficialApp tournamentId={tournamentId} />}/>
+      </Routes>
     </BrowserRouter>
   )
 })

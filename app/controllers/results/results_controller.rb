@@ -1,10 +1,9 @@
 class Results::ResultsController < ApplicationController
-  layout 'official'
+  layout 'results'
 
   before_action :check_results_access_key
 
   def index
-    render 'official/official/index'
   end
 
   private

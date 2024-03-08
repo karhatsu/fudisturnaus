@@ -13,7 +13,7 @@ import Filters, { defaultFilters } from './filters'
 import SeriesAndTeams from './series_and_teams'
 import VisibilityBadge from '../tournament_management/visibility_badge'
 import { visibilityTypes } from '../util/enums'
-import InfoBox from './info_box'
+import Hero from './hero'
 import IframeTitle from './iframe_title'
 import Message from '../components/message'
 import useTournamentFetching from '../util/use_tournament_fetching'
@@ -130,7 +130,13 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
     } else if (tournament.visibility === teams || !tournamentHasMatches()) {
       return <SeriesAndTeams tournament={tournament}/>
     } else {
-      return renderMatchContent()
+      return (
+        <>
+          {renderMatchContent()}
+          <div className="title-2">fudisturnaus.com</div>
+          <Hero />
+        </>
+      )
     }
   }
 
@@ -167,7 +173,6 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
         {renderMatches(filteredPlayoffMatches, 'Jatko-ottelut', filteredPlayoffMatches.length)}
         {renderPlayoffGroupTables()}
         {renderSponsors()}
-        <InfoBox/>
       </div>
     )
   }

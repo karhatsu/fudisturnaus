@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import TournamentList from './tournament_list'
 import { useAllTournaments } from './all_tournaments_context'
-import InfoBox from './info_box'
+import Hero from './hero'
 
 const buildLink = tournament => `/t/${tournament.slug}`
 
@@ -19,7 +19,7 @@ const Index = () => {
       tournaments={tournaments}
       tournamentsError={error}
     >
-      <InfoBox/>
+      <Hero />
     </TournamentList>
   )
 }

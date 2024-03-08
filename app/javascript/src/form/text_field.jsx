@@ -18,7 +18,7 @@ TextField.propTypes = {
   onBlur: PropTypes.func,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
-  type: PropTypes.oneOf(['date', 'number', 'password', 'text']),
+  type: PropTypes.oneOf(['date', 'email', 'number', 'password', 'text']),
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 }
 

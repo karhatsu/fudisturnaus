@@ -10,7 +10,7 @@ const tournamentIntro = 'Jos tiedätte jo turnauksen tarkemmat tiedot, voitte t�
 
 const initialData = {
   name: '',
-  contactInfo: '',
+  email: '',
   message: '',
   tournamentOrganizer: '',
   tournamentName: '',
@@ -49,8 +49,8 @@ const ContactForm = () => {
   const setValue = field => event => setData({ ...data, [field]: event.target.value })
 
   const canSubmit = () => {
-    const { name, contactInfo } = data
-    return !!name && !!contactInfo
+    const { name, email } = data
+    return !!name && !!email
   }
 
   const submit = () => {
@@ -71,7 +71,7 @@ const ContactForm = () => {
       <FormErrors errors={errors}/>
       {renderIntro(genericIntro)}
       {renderField('Nimi', 'name', 'text', 'Oma nimesi')}
-      {renderField('Yhteystieto', 'contactInfo', 'text', 'Esim. sähköposti tai puhelin')}
+      {renderField('Sähköposti', 'email', 'email', 'Sähköposti')}
       {renderMessageField()}
       {renderIntro(tournamentIntro)}
       {renderField('Turnauksen järjestävä seura', 'tournamentOrganizer', 'text')}

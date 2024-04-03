@@ -60,6 +60,11 @@ const Info = () => {
         </>
       )}
       <div className="title-2">Miten saamme palvelun käyttöön?</div>
+      <div className="email-error-issue">
+        Huom! Sähköpostin lähetyksessä on ollut ongelmia 8.3.2024 - 3.4.2024 välillä. Jos olet yrittänyt lähettää
+        turnauksen tietoja kyseisenä aikana ekä ole saanut vastausta, lähetäthän tiedot uudestaan. Pahoittelemme
+        ongelmaa!
+      </div>
       <div className="info-box">
         <ContactForm/>
       </div>

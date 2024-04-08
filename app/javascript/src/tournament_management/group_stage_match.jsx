@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { addDays, differenceInDays, format, parseISO } from 'date-fns'
-import { zonedTimeToUtc } from 'date-fns-tz'
+import { fromZonedTime } from 'date-fns-tz'
 import { deleteGroupStageMatch, saveGroupStageMatch } from './api_client'
 import AccessContext from '../util/access_context'
 import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util/date_util'
@@ -215,7 +215,7 @@ const GroupStageMatch = props => {
   const submit = () => {
     const { day, startTime } = data
     const finalStartTime = startTime.length === 4 ? `0${startTime}` : startTime
-    const isoStartTime = addDays(zonedTimeToUtc(`${tournamentDate} ${finalStartTime}`, 'Europe/Helsinki'), day - 1)
+    const isoStartTime = addDays(fromZonedTime(`${tournamentDate} ${finalStartTime}`, 'Europe/Helsinki'), day - 1)
     const body = { ...data, startTime: isoStartTime, day: undefined }
     const id = groupStageMatch ? groupStageMatch.id : undefined
     saveGroupStageMatch(accessContext, tournamentId, id, body, (errors, data) => {

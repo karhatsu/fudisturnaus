@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { addDays, differenceInDays, format, parseISO } from 'date-fns'
-import { zonedTimeToUtc } from 'date-fns-tz'
+import { fromZonedTime } from 'date-fns-tz'
 import { deletePlayoffMatch, savePlayoffMatch } from './api_client'
 import AccessContext from '../util/access_context'
 import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util/date_util'
@@ -315,7 +315,7 @@ const PlayoffMatch = props => {
       homeTeamOriginRule,
       playoffGroupId,
       refereeId,
-      startTime: addDays(zonedTimeToUtc(`${tournamentDate} ${finalStartTime}`, 'Europe/Helsinki'), day - 1),
+      startTime: addDays(fromZonedTime(`${tournamentDate} ${finalStartTime}`, 'Europe/Helsinki'), day - 1),
       title,
     }
     savePlayoffMatch(accessContext, tournamentId, id, body, (errors, data) => {

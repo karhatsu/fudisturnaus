@@ -1,6 +1,7 @@
 import React, { forwardRef, useCallback, useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { getName } from '../util/util'
+import { filterClubs } from '../util/club_util'
 
 export const NEW_CLUB_ID = '-2'
 export const CHOOSE_CLUB_ID = '-1'
@@ -9,10 +10,7 @@ const ClubSelect = forwardRef(({ clubId, clubs, onChange, showNewClub }, ref) =>
   const [showList, setShowList] = useState(false)
   const [search, setSearch] = useState('')
 
-  const visibleClubs = useMemo(() => {
-    const s = search.toLowerCase()
-    return clubs.filter(c => c.name.toLowerCase().match(s) || c.alias?.toLowerCase().match(s))
-  }, [clubs, search])
+  const visibleClubs = useMemo(() => filterClubs(clubs, search), [clubs, search])
 
   const selectClub = useCallback(clubId => {
     onChange(clubId)

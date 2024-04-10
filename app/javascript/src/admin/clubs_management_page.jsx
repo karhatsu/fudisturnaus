@@ -6,6 +6,7 @@ import ClubForm from './club_form'
 import Title from '../components/title'
 import Message from '../components/message'
 import TextField from '../form/text_field'
+import { filterClubs } from '../util/club_util'
 
 const ClubsManagementPage = () => {
   const [clubs, setClubs] = useState([])
@@ -18,8 +19,7 @@ const ClubsManagementPage = () => {
 
   const filteredClubs = useMemo(() => {
     if (!search) return clubs
-    const s = search.toLowerCase()
-    return clubs.filter(c => c.name.toLowerCase().match(s) || c.alias?.toLowerCase().match(s))
+    return filterClubs(clubs, search)
   }, [clubs, search])
 
   useEffect(() => {

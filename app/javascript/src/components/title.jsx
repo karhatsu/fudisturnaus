@@ -70,10 +70,14 @@ const Title = ({ children, club, iconLink, loading, text, tournament }) => {
 
   return (
     <div className="title">
-      {renderEmoji()}
-      <span className="title__text">{text}</span>
-      {renderClubLogo()}
-      {children}
+      <div className="title__main">
+        {renderEmoji()}
+        <span className="title__text">{text}</span>
+        {renderClubLogo()}
+      </div>
+      <div className="title__extra">
+        {children}
+      </div>
     </div>
   )
 }

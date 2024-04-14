@@ -1,6 +1,69 @@
 require 'rails_helper'
 
 RSpec.describe PlayoffMatch, type: :model do
+  describe 'validation' do
+    let(:group_a) { create :group, name: 'A' }
+    let(:group_b) { create :group, name: 'B' }
+
+    describe 'group reference' do
+      let(:match) { build :playoff_match, home_team_origin: group_a, home_team_origin_rule: 1, away_team_origin: group_b, away_team_origin_rule: 2 }
+
+      it 'base' do expect(match).to be_valid end
+
+      it 'without title' do
+        match.title = ''
+        expect(match).not_to be_valid
+      end
+
+      it 'with invalid home rule' do
+        match.home_team_origin_rule = nil
+        expect(match).not_to be_valid
+        match.home_team_origin_rule = 'a'
+        expect(match).not_to be_valid
+        match.home_team_origin_rule = 4.5
+        expect(match).not_to be_valid
+      end
+
+      it 'with invalid away rule' do
+        match.away_team_origin_rule = nil
+        expect(match).not_to be_valid
+        match.away_team_origin_rule = 'b'
+        expect(match).not_to be_valid
+        match.away_team_origin_rule = 1.1
+        expect(match).not_to be_valid
+      end
+
+      it 'with the same team as home and away' do
+        match.away_team_origin_id = group_a.id
+        expect(match).to be_valid
+        match.away_team_origin_rule = 1
+        expect(match).not_to be_valid
+      end
+
+      describe 'result saving' do
+        let(:team1) { create :team, group: group_a, name: 'Team 1' }
+        let(:team2) { create :team, group: group_b, name: 'Team 2' }
+
+        it 'requires teams' do
+          match.home_goals = 0
+          match.away_goals = 0
+          expect(match).not_to be_valid
+          match.home_team_id = team1.id
+          match.away_team_id = team2.id
+          expect(match).to be_valid
+        end
+      end
+    end
+
+    describe 'playoff match reference' do
+      let(:match_1) { create :playoff_match, home_team_origin: group_a, home_team_origin_rule: 1, away_team_origin: group_b, away_team_origin_rule: 2 }
+      let(:match_2) { create :playoff_match, home_team_origin: group_a, home_team_origin_rule: 2, away_team_origin: group_b, away_team_origin_rule: 1 }
+      let(:match) { build :playoff_match, home_team_origin: match_1, home_team_origin_rule: PlayoffMatch::RULE_WINNER, away_team_origin: match_2, away_team_origin_rule: PlayoffMatch::RULE_LOSER }
+
+      it 'base' do expect(match).to be_valid end
+    end
+  end
+
   describe 'team assignment' do
     let(:tournament) { create :tournament }
     let(:age_group) { create :age_group, tournament: tournament, calculate_group_tables: true }

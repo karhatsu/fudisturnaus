@@ -16,8 +16,10 @@ class PlayoffMatch < ApplicationRecord
   has_many :playoff_matches_as_away_team, as: :away_team_origin, class_name: 'PlayoffMatch'
 
   validates :title, presence: true
-  validates :home_team_origin_rule, numericality: { only_integer: true, allow_nil: false }
-  validates :away_team_origin_rule, numericality: { only_integer: true, allow_nil: false }
+  validates :home_team_origin_rule, numericality: { only_integer: true, greater_than: 0 }, if: -> { home_team_origin_type == 'Group' }
+  validates :home_team_origin_rule, inclusion: { in: [RULE_WINNER, RULE_LOSER], message: 'on virheellinen' }, if: -> { home_team_origin_type == 'PlayoffMatch' }
+  validates :away_team_origin_rule, numericality: { only_integer: true, greater_than: 0 }, if: -> { away_team_origin_type == 'Group' }
+  validates :away_team_origin_rule, inclusion: { in: [RULE_WINNER, RULE_LOSER], message: 'on virheellinen' }, if: -> { away_team_origin_type == 'PlayoffMatch' }
   validate :no_same_teams
   validate :teams_are_required
 

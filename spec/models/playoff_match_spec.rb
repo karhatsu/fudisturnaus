@@ -22,6 +22,8 @@ RSpec.describe PlayoffMatch, type: :model do
         expect(match).not_to be_valid
         match.home_team_origin_rule = 4.5
         expect(match).not_to be_valid
+        match.home_team_origin_rule = PlayoffMatch::RULE_WINNER
+        expect(match).not_to be_valid
       end
 
       it 'with invalid away rule' do
@@ -30,6 +32,8 @@ RSpec.describe PlayoffMatch, type: :model do
         match.away_team_origin_rule = 'b'
         expect(match).not_to be_valid
         match.away_team_origin_rule = 1.1
+        expect(match).not_to be_valid
+        match.away_team_origin_rule = PlayoffMatch::RULE_LOSER
         expect(match).not_to be_valid
       end
 
@@ -61,6 +65,20 @@ RSpec.describe PlayoffMatch, type: :model do
       let(:match) { build :playoff_match, home_team_origin: match_1, home_team_origin_rule: PlayoffMatch::RULE_WINNER, away_team_origin: match_2, away_team_origin_rule: PlayoffMatch::RULE_LOSER }
 
       it 'base' do expect(match).to be_valid end
+
+      it 'with invalid home team rule' do
+        match.home_team_origin_rule = nil
+        expect(match).not_to be_valid
+        match.home_team_origin_rule = 1
+        expect(match).not_to be_valid
+      end
+
+      it 'with invalid away team rule' do
+        match.away_team_origin_rule = nil
+        expect(match).not_to be_valid
+        match.away_team_origin_rule = 0
+        expect(match).not_to be_valid
+      end
     end
   end
 

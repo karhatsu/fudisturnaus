@@ -19,6 +19,8 @@ fi:
         home_goals: Kotijoukkueen maalit
         home_team: Kotijoukkue
       playoff_match:
+        home_team_origin_rule: Kotijoukkueen asettelun sääntö
+        away_team_origin_rule: Vierasjoukkueen asettelun sääntö
         home_goals: Kotijoukkueen maalit
         away_goals: Vierasjoukkueen maalit
       tournament:

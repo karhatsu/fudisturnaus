@@ -23,7 +23,7 @@ export function fetchTournament(key, callback) {
 export function sendContactRequest(data, callback) {
   fetch('/api/v1/public/contacts', {
     method: 'POST',
-    body: JSON.stringify(data),
+    body: JSON.stringify({ contact: data }),
     headers: { 'Content-Type': 'application/json' },
   }).then(response => {
     handleApiResponse(response, callback)

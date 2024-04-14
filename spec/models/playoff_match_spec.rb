@@ -79,6 +79,18 @@ RSpec.describe PlayoffMatch, type: :model do
         match.away_team_origin_rule = 0
         expect(match).not_to be_valid
       end
+
+      it 'with home team referencing to match itself' do
+        match.save!
+        match.home_team_origin_id = match.id
+        expect(match).not_to be_valid
+      end
+
+      it 'with away team referencing to match itself' do
+        match.save!
+        match.away_team_origin_id = match.id
+        expect(match).not_to be_valid
+      end
     end
   end
 

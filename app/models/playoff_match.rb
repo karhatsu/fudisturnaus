@@ -21,6 +21,7 @@ class PlayoffMatch < ApplicationRecord
   validates :away_team_origin_rule, numericality: { only_integer: true, greater_than: 0 }, if: -> { away_team_origin_type == 'Group' }
   validates :away_team_origin_rule, inclusion: { in: [RULE_WINNER, RULE_LOSER], message: 'on virheellinen' }, if: -> { away_team_origin_type == 'PlayoffMatch' }
   validate :no_same_teams
+  validate :no_reference_to_itself, if: -> { away_team_origin_type == 'PlayoffMatch' }
   validate :teams_are_required
 
   before_save :reassign_home_team, :reassign_away_team
@@ -73,6 +74,12 @@ class PlayoffMatch < ApplicationRecord
   def no_same_teams
     if home_team_origin_id == away_team_origin_id && home_team_origin_rule == away_team_origin_rule
       errors.add :base, 'Koti- ja vierasjoukkue eivät voi olla samoja'
+    end
+  end
+
+  def no_reference_to_itself
+    if id && (home_team_origin_id == id || away_team_origin_id == id)
+      errors.add :base, 'Jatko-ottelu ei voi viitata itseensä'
     end
   end
 

@@ -75,6 +75,15 @@ export function updateClub(accessContext, id, data, callback) {
   }).catch(() => handleApiConnectionError(callback))
 }
 
+export function fetchContacts(accessContext, callback) {
+  fetch('/api/v1/admin/contacts', {
+    method: 'GET',
+    headers: buildHeaders(accessContext),
+  }).then(response => {
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
+}
+
 export function refreshCache(accessContext, callback) {
   fetch('/api/v1/admin/cache', {
     method: 'PUT',

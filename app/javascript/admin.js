@@ -8,6 +8,7 @@ import ClubsManagementPage from './src/admin/clubs_management_page'
 import NewTournamentPage from './src/admin/new_tournament_page'
 import TournamentManagementPage from './src/tournament_management/main'
 import './src/styles/application.scss'
+import ContactsPage from './src/admin/contacts_page'
 
 const AdminApp = () => {
   const [sessionKey, setSessionKey] = useState()
@@ -24,6 +25,7 @@ const AdminApp = () => {
     <AccessContext.Provider value={{ adminSessionKey: sessionKey }}>
       <Routes>
         <Route path="/" element={<AdminIndex />} />
+        <Route path="contacts" element={<ContactsPage />} />
         <Route path="clubs" element={<ClubsManagementPage />}/>
         <Route path="tournaments">
           <Route path="new" element={<NewTournamentPage />}/>

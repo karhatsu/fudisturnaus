@@ -27,6 +27,10 @@ export function formatTime(time) {
   return format(parse(time), 'HH:mm')
 }
 
+export function formatDateTime(date) {
+  return format(parse(date), 'dd.MM.yyyy HH:mm')
+}
+
 export function resolveWeekDay(baseDate, increment) {
   return formatWeekDay(addDays(parse(baseDate), increment))
 }

@@ -36,6 +36,9 @@ const AdminIndex = () => {
       <div className="tournament-management__section">
         <Link to="clubs">Seurat</Link>
       </div>
+      <div className="tournament-management__section">
+        <Link to="contacts">Yhteydenotot</Link>
+      </div>
     </TournamentList>
   )
 }

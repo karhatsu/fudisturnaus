@@ -19,14 +19,14 @@ class PlayoffGroup < ApplicationRecord
       if m.home_team
         m.home_team
       elsif m.home_team_origin_rule > 0
-        UnassignedPlayoffGroupTeam.new("#{m.home_team_origin.respond_to?(:name) ? m.home_team_origin.name : 'home'}#{m.home_team_origin_rule}")
+        UnassignedPlayoffGroupTeam.new("#{m.home_team_origin.name}#{m.home_team_origin_rule}")
       end
     end
     away_teams = playoff_matches.map do |m|
       if m.away_team
         m.away_team
       elsif m.away_team_origin_rule > 0
-        UnassignedPlayoffGroupTeam.new("#{m.away_team_origin.respond_to?(:name) ? m.away_team_origin.name : 'away'}#{m.away_team_origin_rule}")
+        UnassignedPlayoffGroupTeam.new("#{m.away_team_origin.name}#{m.away_team_origin_rule}")
       end
     end
     (home_teams + away_teams).select {|t| t}.uniq {|t| t.name}

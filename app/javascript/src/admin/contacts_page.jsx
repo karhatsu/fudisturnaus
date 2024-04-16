@@ -4,6 +4,7 @@ import AccessContext from '../util/access_context'
 import { fetchContacts } from './api_client'
 import FormErrors from '../form/form_errors'
 import { formatDateTime } from '../util/date_util'
+import { Link } from "react-router-dom"
 
 const ContactsPage = () => {
   const accessContext = useContext(AccessContext)
@@ -29,8 +30,9 @@ const ContactsPage = () => {
           <FormErrors errors={errors} />
         </div>
       )}
-      {contacts?.map((contact, i) => {
+      {contacts?.map(contact => {
         const {
+          id,
           handledAt,
           personName,
           email,
@@ -44,9 +46,14 @@ const ContactsPage = () => {
         } = contact
         const fields = [message, tournamentClub, tournamentName, tournamentStartDate, tournamentDays, tournamentLocation]
         return (
-          <div key={i} className="tournament-management__section">
+          <div key={id} className="tournament-management__section">
             {handledAt && `✅ ${formatDateTime(handledAt)} | `}
             {formatDateTime(createdAt)} | {personName} | <a href={`mailto:${email}`}>{email}</a> | {fields.filter(f => f).join(', ')}
+            {!handledAt && (
+              <div>
+                <Link to={`/admin/tournaments/new?contact_id=${id}`}>Lisää turnaus</Link>
+              </div>
+            )}
           </div>
         )
       })}

@@ -1,6 +1,6 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { formatTournamentDates } from '../util/date_util'
+import { formatDateRange } from '../util/date_util'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
 import Button from '../form/button'
@@ -14,22 +14,8 @@ import AccessContext from '../util/access_context'
 
 const { onlyTitle, teams, all } = visibilityTypes
 
-const initialData = {
-  cancelled: false,
-  clubId: undefined,
-  name: '',
-  startDate: '',
-  days: 1,
-  location: '',
-  address: '',
-  matchMinutes: 30,
-  equalPointsRule: 0,
-  visibility: teams,
-  info: '',
-}
-
 const TournamentFields = props => {
-  const { clubs, official, tournament, onCancel, onSave } = props
+  const { contactId, clubs, official, tournament, onCancel, onSave } = props
   const {
     changeValue,
     formOpen,
@@ -40,7 +26,7 @@ const TournamentFields = props => {
     closeForm,
     onFieldChange,
     onCheckboxChange,
-  } = useForm(tournament ? undefined : initialData)
+  } = useForm(tournament.id ? undefined : tournament)
   const [addressSuggestions, setAddressSuggestions] = useState()
   const accessContext = useContext(AccessContext)
 
@@ -60,6 +46,12 @@ const TournamentFields = props => {
       else console.error('Failed to fetch address suggestions', err)
     })
   }, [accessContext, data.location])
+
+  useEffect(() => {
+    if (contactId) {
+      getAddressSuggestions()
+    }
+  }, [contactId, getAddressSuggestions])
 
   const onAddressSuggestionSelection = useCallback((event) => {
     if (event.target.value) changeValue('address', event.target.value)
@@ -110,7 +102,7 @@ const TournamentFields = props => {
   }
 
   const renderLocationField = () => {
-    const onBlur = tournament?.id ? undefined : getAddressSuggestions
+    const onBlur = tournament.id ? undefined : getAddressSuggestions
     return (
       <TextField
         label="Paikka"
@@ -211,9 +203,9 @@ const TournamentFields = props => {
   }
 
   const renderTournamentReadOnlyFields = () => {
-    const { name, startDate, endDate, location, address, visibility } = tournament
+    const { name, startDate, days, location, address, visibility } = tournament
     const showBadge = visibility !== visibilityTypes.all
-    const texts = [name, formatTournamentDates(startDate, endDate), location, address || '(ei osoitetta)']
+    const texts = [name, formatDateRange(startDate, days), location, address || '(ei osoitetta)']
     return (
       <div className="tournament-item">
         <div className="tournament-item__title tournament-item__title--existing" >
@@ -262,6 +254,7 @@ const TournamentFields = props => {
 }
 
 TournamentFields.propTypes = {
+  contactId: PropTypes.string,
   clubs: PropTypes.array.isRequired,
   official: PropTypes.bool.isRequired,
   onCancel: PropTypes.func,
@@ -269,17 +262,16 @@ TournamentFields.propTypes = {
   tournament: PropTypes.shape({
     cancelled: PropTypes.bool.isRequired,
     clubId: PropTypes.number,
-    id: PropTypes.number.isRequired,
+    id: PropTypes.number,
     name: PropTypes.string.isRequired,
     location: PropTypes.string.isRequired,
     address: PropTypes.string,
     startDate: PropTypes.string.isRequired,
-    endDate: PropTypes.string.isRequired,
     days: PropTypes.number.isRequired,
     matchMinutes: PropTypes.number.isRequired,
     equalPointsRule: PropTypes.number.isRequired,
     visibility: PropTypes.oneOf([onlyTitle, teams, all]).isRequired,
-  }),
+  }).isRequired,
 }
 
 export default TournamentFields

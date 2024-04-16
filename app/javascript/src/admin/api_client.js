@@ -84,6 +84,15 @@ export function fetchContacts(accessContext, callback) {
   }).catch(() => handleApiConnectionError(callback))
 }
 
+export function fetchContact(accessContext, id, callback) {
+  fetch(`/api/v1/admin/contacts/${id}`, {
+    method: 'GET',
+    headers: buildHeaders(accessContext),
+  }).then(response => {
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
+}
+
 export function refreshCache(accessContext, callback) {
   fetch('/api/v1/admin/cache', {
     method: 'PUT',

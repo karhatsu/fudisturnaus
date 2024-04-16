@@ -1,0 +1,13 @@
+json.(contact,
+  :id,
+  :handled_at,
+  :person_name,
+  :email,
+  :message,
+  :tournament_club,
+  :tournament_name,
+  :tournament_start_date,
+  :tournament_days,
+  :tournament_location,
+  :created_at
+)

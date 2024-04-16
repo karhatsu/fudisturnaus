@@ -6,9 +6,9 @@ import { filterClubs } from '../util/club_util'
 export const NEW_CLUB_ID = '-2'
 export const CHOOSE_CLUB_ID = '-1'
 
-const ClubSelect = forwardRef(({ clubId, clubs, onChange, showNewClub }, ref) => {
+const ClubSelect = forwardRef(({ clubId, clubs, onChange, showNewClub, initialSearch = '' }, ref) => {
   const [showList, setShowList] = useState(false)
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState(initialSearch)
 
   const visibleClubs = useMemo(() => filterClubs(clubs, search), [clubs, search])
 
@@ -18,9 +18,13 @@ const ClubSelect = forwardRef(({ clubId, clubs, onChange, showNewClub }, ref) =>
   }, [onChange])
 
   useEffect(() => {
+    if (clubId === CHOOSE_CLUB_ID && initialSearch) {
+      setShowList(true)
+      return
+    }
     const clubName = getName(clubs, parseInt(clubId), '')
     setSearch(clubName)
-  }, [clubId, clubs])
+  }, [clubId, clubs, initialSearch])
 
   return (
     <div className="club-select">
@@ -56,6 +60,7 @@ ClubSelect.propTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,
+  initialSearch: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   showNewClub: PropTypes.bool,
 }

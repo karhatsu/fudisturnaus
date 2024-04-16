@@ -15,7 +15,7 @@ import AccessContext from '../util/access_context'
 const { onlyTitle, teams, all } = visibilityTypes
 
 const TournamentFields = props => {
-  const { contactId, clubs, official, tournament, onCancel, onSave } = props
+  const { contactId, clubName, clubs, official, tournament, onCancel, onSave } = props
   const {
     changeValue,
     formOpen,
@@ -85,7 +85,7 @@ const TournamentFields = props => {
     return (
       <div className="form__field">
         <div className="label">Järjestävä seura</div>
-        <ClubSelect clubId={data.clubId || CHOOSE_CLUB_ID} clubs={clubs} onChange={onClubIdChange} />
+        <ClubSelect clubId={data.clubId || CHOOSE_CLUB_ID} clubs={clubs} initialSearch={clubName} onChange={onClubIdChange} />
       </div>
     )
   }
@@ -255,6 +255,7 @@ const TournamentFields = props => {
 
 TournamentFields.propTypes = {
   contactId: PropTypes.string,
+  clubName: PropTypes.string,
   clubs: PropTypes.array.isRequired,
   official: PropTypes.bool.isRequired,
   onCancel: PropTypes.func,

@@ -26,6 +26,7 @@ const NewTournamentPage = () => {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [initialTournament, setInitialTournament] = useState()
+  const [clubName, setClubName] = useState()
   const contactId = searchParams.get('contact_id')
 
   useEffect(() => {
@@ -52,6 +53,7 @@ const NewTournamentPage = () => {
           days: contact.tournamentDays || 1,
           location: contact.tournamentLocation || '',
         })
+        setClubName(contact.tournamentClub)
       })
     } else {
       setInitialTournament(emptyTournament)
@@ -83,6 +85,7 @@ const NewTournamentPage = () => {
         {clubs && initialTournament && (
           <TournamentFields
             contactId={contactId}
+            clubName={clubName}
             clubs={clubs}
             onCancel={goToIndex}
             onSave={onSave}

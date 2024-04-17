@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Title from '../components/title'
 import AccessContext from '../util/access_context'
 import { fetchContacts } from './api_client'
 import FormErrors from '../form/form_errors'
 import { formatDateTime } from '../util/date_util'
-import { Link } from "react-router-dom"
 
 const ContactsPage = () => {
   const accessContext = useContext(AccessContext)

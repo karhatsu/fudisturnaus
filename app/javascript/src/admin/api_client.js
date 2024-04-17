@@ -18,11 +18,11 @@ export function loginToAdmin(username, password, callback) {
   }).catch(() => handleApiConnectionError(callback))
 }
 
-export function createTournament(accessContext, data, callback) {
+export function createTournament(accessContext, tournament, contactId, callback) {
   fetch('/api/v1/admin/tournaments', {
     method: 'POST',
     headers: buildHeaders(accessContext),
-    body: JSON.stringify({ tournament: data }),
+    body: JSON.stringify({ tournament, contactId }),
   }).then(response => {
     handleApiResponse(response, callback)
   }).catch(() => handleApiConnectionError(callback))

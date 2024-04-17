@@ -61,7 +61,7 @@ const NewTournamentPage = () => {
   }, [accessContext, contactId])
 
   const onSave = (data, callback) => {
-    createTournament(accessContext, data, (errors, response) => {
+    createTournament(accessContext, data, contactId, (errors, response) => {
       if (errors) {
         callback(errors)
       } else {

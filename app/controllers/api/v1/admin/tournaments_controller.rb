@@ -1,7 +1,10 @@
 class Api::V1::Admin::TournamentsController < Api::V1::Admin::AdminBaseController
   def create
     @tournament = Tournament.new tournament_params
-    unless @tournament.save
+    if @tournament.save
+      contact_id = params[:contact_id]
+      Contact.find(contact_id).update_attribute(:handled_at, Time.now) if contact_id
+    else
       render status: 400, json: { errors: @tournament.errors.full_messages }
     end
   end

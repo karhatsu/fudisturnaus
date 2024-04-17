@@ -8,6 +8,14 @@ export function formatTournamentDates(startDate, endDate) {
   return dates.join(' - ')
 }
 
+export function formatDateRange(startDate, days = 1) {
+  const dates = [formatDate(startDate)]
+  if (days > 1) {
+    dates.push(resolveDate(startDate, days))
+  }
+  return dates.join(' - ')
+}
+
 export function resolveDate(baseDate, increment) {
   return format(addDays(parse(baseDate), increment), 'dd.MM.yyyy')
 }
@@ -25,6 +33,10 @@ export function formatMatchTime(tournamentDays, time) {
 
 export function formatTime(time) {
   return format(parse(time), 'HH:mm')
+}
+
+export function formatDateTime(date) {
+  return format(parse(date), 'dd.MM.yyyy HH:mm')
 }
 
 export function resolveWeekDay(baseDate, increment) {

@@ -1,22 +1,22 @@
 Nimi:
-<%= @name %>
+<%= @contact.person_name %>
 
 Sähköposti:
-<%= @email %>
+<%= @contact.email %>
 
 Viesti:
-<%= @message %>
+<%= @contact.message %>
 
-<% unless @tournament_name.blank? %>
+<% unless @contact.tournament_name.blank? %>
 Turnauksen tiedot:
 
-Järjestäjä: <%= @tournament_organizer %>
+Järjestäjä: <%= @contact.tournament_club %>
 
-Nimi: <%= @tournament_name %>
+Nimi: <%= @contact.tournament_name %>
 
-Paikka: <%= @tournament_location %>
+Paikka: <%= @contact.tournament_location %>
 
-Pvm: <%= @tournament_start_date %>
+Pvm: <%= @contact.tournament_start_date %>
 
-Pv: <%= @tournament_days %>
+Pv: <%= @contact.tournament_days %>
 <% end %>

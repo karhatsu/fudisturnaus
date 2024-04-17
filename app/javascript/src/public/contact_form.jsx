@@ -9,10 +9,10 @@ const genericIntro = 'Lähettäkää alla oleva lomake, niin hoidetaan asia kunt
 const tournamentIntro = 'Jos tiedätte jo turnauksen tarkemmat tiedot, voitte täyttää ne valmiiksi tähän.'
 
 const initialData = {
-  name: '',
+  personName: '',
   email: '',
   message: '',
-  tournamentOrganizer: '',
+  tournamentClub: '',
   tournamentName: '',
   tournamentStartDate: '',
   tournamentDays: 1,
@@ -49,8 +49,8 @@ const ContactForm = () => {
   const setValue = field => event => setData({ ...data, [field]: event.target.value })
 
   const canSubmit = () => {
-    const { name, email } = data
-    return !!name && !!email
+    const { personName, email } = data
+    return !!personName && !!email
   }
 
   const submit = () => {
@@ -70,11 +70,11 @@ const ContactForm = () => {
     <form className="form form--vertical">
       <FormErrors errors={errors}/>
       {renderIntro(genericIntro)}
-      {renderField('Nimi', 'name', 'text', 'Oma nimesi')}
+      {renderField('Nimi', 'personName', 'text', 'Oma nimesi')}
       {renderField('Sähköposti', 'email', 'email', 'Sähköposti')}
       {renderMessageField()}
       {renderIntro(tournamentIntro)}
-      {renderField('Turnauksen järjestävä seura', 'tournamentOrganizer', 'text')}
+      {renderField('Turnauksen järjestävä seura', 'tournamentClub', 'text')}
       {renderField('Turnauksen nimi', 'tournamentName', 'text')}
       {renderField('Pvm', 'tournamentStartDate', 'date')}
       {renderField('Kesto (pv)', 'tournamentDays', 'number')}

@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import TournamentList from '../public/tournament_list'
 import { fetchTournaments } from '../public/api_client'
+import { fetchUnhandledContactCount } from './api_client'
+import AccessContext from '../util/access_context'
 
 const buildLink = tournament => `/admin/tournaments/${tournament.id}`
 
@@ -9,6 +11,8 @@ const AdminIndex = () => {
   const [error, setError] = useState(false)
   const [tournaments, setTournaments] = useState(undefined)
   const [search, setSearch] = useState('')
+  const [unhandledContacts, setUnhandledContacts] = useState('...')
+  const accessContext = useContext(AccessContext)
 
   useEffect(() => {
     fetchTournaments({}, (err, data) => {
@@ -18,7 +22,14 @@ const AdminIndex = () => {
         setTournaments(data)
       }
     })
-  }, [])
+    fetchUnhandledContactCount(accessContext, (err, data) => {
+      if (err) {
+        setUnhandledContacts(err)
+      } else {
+        setUnhandledContacts(data.count)
+      }
+    })
+  }, [accessContext])
 
   return (
     <TournamentList
@@ -37,7 +48,7 @@ const AdminIndex = () => {
         <Link to="clubs">Seurat</Link>
       </div>
       <div className="tournament-management__section">
-        <Link to="contacts">Yhteydenotot</Link>
+        <Link to="contacts">Yhteydenotot</Link> ({unhandledContacts})
       </div>
     </TournamentList>
   )

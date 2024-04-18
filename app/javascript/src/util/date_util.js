@@ -11,7 +11,7 @@ export function formatTournamentDates(startDate, endDate) {
 export function formatDateRange(startDate, days = 1) {
   const dates = [formatDate(startDate)]
   if (days > 1) {
-    dates.push(resolveDate(startDate, days))
+    dates.push(resolveDate(startDate, days - 1))
   }
   return dates.join(' - ')
 }

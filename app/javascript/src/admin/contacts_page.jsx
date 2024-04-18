@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Title from '../components/title'
 import AccessContext from '../util/access_context'
-import { fetchContacts } from './api_client'
+import { fetchContacts, updateContactHandledAt } from './api_client'
 import FormErrors from '../form/form_errors'
 import { formatDateTime } from '../util/date_util'
 
@@ -19,6 +19,22 @@ const ContactsPage = () => {
         setErrors([])
         setContacts(response.contacts)
       }
+    })
+  }, [accessContext])
+
+  const updateAsHandled = useCallback((event, id) => {
+    event.preventDefault()
+    updateContactHandledAt(accessContext, id, (err, contact) => {
+      if (err) {
+        console.error(err)
+        return
+      }
+      setContacts(prev => {
+        const newContacts = [...prev]
+        const index = newContacts.findIndex(c => c.id === id)
+        newContacts[index] = contact
+        return newContacts
+      })
     })
   }, [accessContext])
 
@@ -52,6 +68,8 @@ const ContactsPage = () => {
             {!handledAt && (
               <div>
                 <Link to={`/admin/tournaments/new?contact_id=${id}`}>Lisää turnaus</Link>
+                {' '}
+                <a href="" onClick={(event) => updateAsHandled(event, id)}>Merkitse käsitellyksi</a>
               </div>
             )}
           </div>

@@ -102,6 +102,15 @@ export function fetchUnhandledContactCount(accessContext, callback) {
   }).catch(() => handleApiConnectionError(callback))
 }
 
+export function updateContactHandledAt(accessContext, id, callback) {
+  fetch(`/api/v1/admin/contacts/${id}`, {
+    method: 'PUT',
+    headers: buildHeaders(accessContext),
+  }).then(response => {
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
+}
+
 export function refreshCache(accessContext, callback) {
   fetch('/api/v1/admin/cache', {
     method: 'PUT',

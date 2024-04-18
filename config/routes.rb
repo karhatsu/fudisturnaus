@@ -31,7 +31,7 @@ Rails.application.routes.draw do
 
       namespace :admin do
         resources :admin_sessions, only: :create
-        resources :contacts, only: [:index, :show]
+        resources :contacts, only: [:index, :show, :update]
         resources :clubs, only: [:index, :create, :update, :destroy]
         resources :unhandled_contacts, only: :index
         resources :tournaments, only: [:create, :destroy]

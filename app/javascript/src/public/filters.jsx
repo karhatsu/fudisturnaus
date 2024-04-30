@@ -70,8 +70,7 @@ const Filters = ({ filters, resetFilters, setFilterValue, tournament }) => {
     }
     const filterGroup = groupId ? groups.find(group => group.id === groupId) : null
     return clubs.filter(club => {
-      return club.name !== '- Ei virallista seuraa -' &&
-        (!ageGroupId || teams.find(team => team.clubId === club.id && team.ageGroupId === ageGroupId)) &&
+      return (!ageGroupId || teams.find(team => team.clubId === club.id && team.ageGroupId === ageGroupId)) &&
         (!filterGroup || filterGroup.results.find(team => team.clubId === club.id))
     })
   }

@@ -88,7 +88,7 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
 
   const editTeam = () => {
     openForm({
-      clubId: team ? team.club.id : CHOOSE_CLUB_ID,
+      clubId: team ? (team.club?.id || null) : CHOOSE_CLUB_ID,
       groupId: team ? team.groupId : -1,
       name: team ? team.name : '',
     })
@@ -106,7 +106,7 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
 
   const canSubmit = () => {
     const { clubId, groupId, name } = data
-    return clubId > 0 && groupId > 0 && !!name
+    return (clubId > 0 || clubId === null) && groupId > 0 && !!name
   }
 
   const submit = () => {
@@ -116,7 +116,7 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
         setErrors(errors)
       } else {
         closeForm()
-        onTeamSave(data)
+        onTeamSave({ ...data, club: data.club || null })
       }
     })
   }
@@ -169,7 +169,7 @@ Team.propTypes = {
   team: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    club: idNamePropType.isRequired,
+    club: idNamePropType,
     groupId: PropTypes.number.isRequired,
   }),
   onClubSave: PropTypes.func.isRequired,

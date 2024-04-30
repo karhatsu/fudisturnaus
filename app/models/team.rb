@@ -1,5 +1,5 @@
 class Team < ApplicationRecord
-  belongs_to :club
+  belongs_to :club, optional: true
   belongs_to :group, touch: true
   has_many :group_stage_home_matches, foreign_key: :home_team_id, class_name: 'GroupStageMatch'
   has_many :group_stage_away_matches, foreign_key: :away_team_id, class_name: 'GroupStageMatch'

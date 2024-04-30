@@ -36,7 +36,7 @@ class Tournament < ApplicationRecord
   end
 
   def clubs
-    groups.flat_map {|g| g.teams.flat_map(&:club)}.uniq.sort { |a, b| a.name <=> b.name }
+    groups.flat_map {|g| g.teams.flat_map(&:club)}.uniq.select {|c| c}.sort { |a, b| a.name <=> b.name }
   end
 
   def dates

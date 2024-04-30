@@ -32,7 +32,7 @@ const ClubSelect = forwardRef(({ clubId, clubs, onChange, showNewClub, initialSe
       <input
         onChange={e => setSearch(e.target.value)}
         onFocus={() => setShowList(true)}
-        placeholder="Seura"
+        placeholder={clubId === null ? '- Ei virallista seuraa -' : 'Seura'}
         ref={ref}
         value={search}
       />
@@ -43,6 +43,7 @@ const ClubSelect = forwardRef(({ clubId, clubs, onChange, showNewClub, initialSe
               + Lisää uusi seura
             </div>
           )}
+          <div onClick={() => selectClub(null)} className="club-select__option">- Ei virallista seuraa -</div>
           {visibleClubs.map(c => (
             <div key={c.id} onClick={() => selectClub(c.id)} className="club-select__option" id={`club_${c.id}`}>{c.name}</div>
           ))}
@@ -55,7 +56,7 @@ const ClubSelect = forwardRef(({ clubId, clubs, onChange, showNewClub, initialSe
 ClubSelect.displayName = 'ClubSelect'
 
 ClubSelect.propTypes = {
-  clubId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  clubId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   clubs: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,

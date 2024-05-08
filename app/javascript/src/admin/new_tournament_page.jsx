@@ -15,7 +15,7 @@ const emptyTournament = {
   location: '',
   address: '',
   matchMinutes: 30,
-  equalPointsRule: 0,
+  equalPointsRule: 1,
   visibility: visibilityTypes.teams,
   info: '',
 }

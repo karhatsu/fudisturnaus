@@ -120,10 +120,14 @@ $inputHeight: 16px;
   }
 
   &--small {
-    padding: 4px 8px;
+    padding: 6px 12px;
 
     &:hover {
-      padding: 3px 7px;
+      padding: 5px 11px;
+
+      &:disabled {
+        padding: 6px 12px;
+      }
     }
   }
 }

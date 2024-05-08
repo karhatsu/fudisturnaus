@@ -76,15 +76,7 @@
     font-size: 16px;
     text-align: center;
     padding: 4px;
-    width: 20px;
-
-    @media only screen and (min-width: 48em) {
-      width: 24px;
-    }
-
-    @media only screen and (min-width: 64em) {
-      width: 32px;
-    }
+    width: 32px;
   }
 
   &__penalties {
@@ -92,15 +84,16 @@
   }
 
   &__buttons {
-    margin-top: 4px;
+    margin-top: 6px;
     text-align: right;
 
-    .button:first-child {
-      margin-right: 8px;
-    }
+    .button {
+      font-weight: bold;
+      line-height: 18px;
 
-    .button--primary:disabled:hover {
-      padding: 4px 8px;
+      &--primary {
+        margin-right: 12px;
+      }
     }
   }
 

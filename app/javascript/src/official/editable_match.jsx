@@ -75,7 +75,7 @@ const EditableMatch = ({ ageGroups, clubs, fieldsCount, groups, match, selectedC
       <form>
         <div className="match__result-fields">
           {renderGoalsField('homeGoals', 1, homeGoalsField)}
-          <span className="match__goals-separator">-</span>
+          <span className="match__goals-separator">–</span>
           {renderGoalsField('awayGoals', 2)}
         </div>
         {renderPenaltiesField()}

@@ -1,6 +1,7 @@
 class Api::V1::Admin::ClubsController < Api::V1::Admin::AdminBaseController
   def index
     @clubs = Club.all
+    @clubs = @clubs.where("logo_url = ''") if params[:no_logo] == 'true'
   end
 
   def create

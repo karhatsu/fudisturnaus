@@ -55,6 +55,15 @@ export function fetchClubs(accessContext, callback) {
   }).catch(() => handleApiConnectionError(callback))
 }
 
+export function fetchClubsWithoutLogo(accessContext, callback) {
+  fetch('/api/v1/admin/clubs?no_logo=true', {
+    method: 'GET',
+    headers: buildHeaders(accessContext),
+  }).then(response => {
+    handleApiResponse(response, callback)
+  }).catch(() => handleApiConnectionError(callback))
+}
+
 export function createClub(accessContext, data, callback) {
   fetch('/api/v1/admin/clubs', {
     method: 'POST',

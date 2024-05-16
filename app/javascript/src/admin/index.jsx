@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import TournamentList from '../public/tournament_list'
 import { fetchTournaments } from '../public/api_client'
-import { fetchUnhandledContactCount } from './api_client'
+import { fetchClubsWithoutLogo, fetchUnhandledContactCount } from './api_client'
 import AccessContext from '../util/access_context'
 
 const buildLink = tournament => `/admin/tournaments/${tournament.id}`
@@ -12,6 +12,7 @@ const AdminIndex = () => {
   const [tournaments, setTournaments] = useState(undefined)
   const [search, setSearch] = useState('')
   const [unhandledContacts, setUnhandledContacts] = useState('...')
+  const [clubsWithoutLogo, setClubsWithoutLogo] = useState('...')
   const accessContext = useContext(AccessContext)
 
   useEffect(() => {
@@ -27,6 +28,13 @@ const AdminIndex = () => {
         setUnhandledContacts(err)
       } else {
         setUnhandledContacts(data.count)
+      }
+    })
+    fetchClubsWithoutLogo(accessContext, (err, data) => {
+      if (err) {
+        setClubsWithoutLogo(err)
+      } else {
+        setClubsWithoutLogo(data.clubs.length)
       }
     })
   }, [accessContext])
@@ -45,7 +53,7 @@ const AdminIndex = () => {
         <Link to="tournaments/new">+ Lisää uusi turnaus</Link>
       </div>
       <div className="tournament-management__section">
-        <Link to="clubs">Seurat</Link>
+        <Link to="clubs">Seurat</Link> ({clubsWithoutLogo})
       </div>
       <div className="tournament-management__section">
         <Link to="contacts">Yhteydenotot</Link> ({unhandledContacts})

@@ -17,6 +17,12 @@ const ClubSelect = forwardRef(({ clubId, clubs, onChange, showNewClub, initialSe
     setShowList(false)
   }, [onChange])
 
+  const closeList = useCallback(() => {
+    const club = clubs.find(c => c.name === search)
+    onChange(club?.id)
+    setShowList(false)
+  }, [clubs, search, onChange])
+
   useEffect(() => {
     if (clubId === CHOOSE_CLUB_ID && initialSearch) {
       setShowList(true)
@@ -28,7 +34,7 @@ const ClubSelect = forwardRef(({ clubId, clubs, onChange, showNewClub, initialSe
 
   return (
     <div className="club-select">
-      {showList && <div className="club-select__background" onClick={() => setShowList(false)} />}
+      {showList && <div className="club-select__background" onClick={closeList} />}
       <input
         onChange={e => setSearch(e.target.value)}
         onFocus={() => setShowList(true)}

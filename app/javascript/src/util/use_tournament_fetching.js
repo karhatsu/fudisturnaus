@@ -7,7 +7,7 @@ const useTournamentFetching = tournamentKey => {
   const [error, setError] = useState(false)
   const [tournament, setTournament] = useState()
   const [subscribed, setSubscribed] = useState(false)
-  const [socketData, setSocketData] = useState()
+  const tournamentId = tournament?.id
 
   const fetchTournamentData = useCallback(() => {
     fetchTournament(tournamentKey, (err, tournament) => {
@@ -33,20 +33,18 @@ const useTournamentFetching = tournamentKey => {
     }
   }, [fetchTournamentData, handleVisibilityChange])
 
-  useEffect(() => {
-    if (tournament && !subscribed) {
-      consumer.subscriptions.create({ channel: 'ResultsChannel', tournament_id: tournament.id }, { received: data => setSocketData(data) })
-      setSubscribed(true)
-    }
-  }, [tournament, subscribed])
+  const handleSocketData = useCallback((socketData) => {
+    setTournament(oldTournament => {
+      return buildTournamentFromSocketData(oldTournament, socketData)
+    })
+  }, [])
 
   useEffect(() => {
-    if (socketData) {
-      const newTournament = buildTournamentFromSocketData(tournament, socketData)
-      setSocketData()
-      setTournament(newTournament)
+    if (tournamentId && !subscribed) {
+      setSubscribed(true)
+      consumer.subscriptions.create({ channel: 'ResultsChannel', tournament_id: tournamentId }, { received: data => handleSocketData(data) })
     }
-  }, [tournament, socketData])
+  }, [tournamentId, subscribed, handleSocketData])
 
   return { error, tournament }
 }

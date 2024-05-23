@@ -14,12 +14,14 @@ const ToastsContext = createContext({})
 
 export const useToasts = () => useContext(ToastsContext)
 
+const findToastIndex = (toasts, type, id) => toasts.findIndex(t => t.match.type === type && t.match.id === id)
+
 export const ToastsContextProvider = ({ children }) => {
   const [toasts, setToasts] = useState([])
 
   const changeToastState = useCallback((type, id, state) => {
     setToasts(prev => {
-      const index = prev.findIndex(t => t.match.type === type && t.match.id === id)
+      const index = findToastIndex(prev, type, id)
       const newToasts = [...prev]
       if (index === -1) return prev
       if (state) {
@@ -36,7 +38,7 @@ export const ToastsContextProvider = ({ children }) => {
 
   const addToast = useCallback(match => {
     setToasts(prev => {
-      const index = prev.findIndex(t => t.match.type === match.type && t.match.id === match.id)
+      const index = findToastIndex(prev, match.type, match.id)
       if (index !== -1) {
         const newToasts = [...prev]
         newToasts[index] = { ...newToasts[index], match }
@@ -48,8 +50,20 @@ export const ToastsContextProvider = ({ children }) => {
     setTimeout(() => changeToastState(match.type, match.id, toastStates.visible), 100)
   }, [changeToastState])
 
+  const closeToast = useCallback((type, id) => {
+    setToasts(prev => {
+      const index = findToastIndex(prev, type, id)
+      const newToasts = [...prev]
+      if (index !== -1) {
+        newToasts.splice(index, 1)
+      }
+      return newToasts
+    })
+  }, [])
+
   const value = {
     addToast,
+    closeToast,
     toasts,
   }
 

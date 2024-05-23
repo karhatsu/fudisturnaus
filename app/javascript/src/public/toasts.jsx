@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { toastStates, useToasts } from './toasts_context'
 import Team from './team'
 
@@ -21,7 +21,10 @@ const staticStyle = {
 const toPx = height => `${height}px`
 
 const Toasts = () => {
-  const { toasts } = useToasts()
+  const { closeToast, toasts } = useToasts()
+
+  const onClick = useCallback((type, id) => () => closeToast(type, id), [closeToast])
+
   return (
     <div className="Toasts">
       {toasts.map((toast, i) => {
@@ -31,7 +34,7 @@ const Toasts = () => {
         const opacity = state === toastStates.disappearing ? 0 : 1
         const style = { ...staticStyle, bottom: y, opacity }
         return (
-          <div key={type + id} className="Toast" style={style}>
+          <div key={type + id} className="Toast" style={style} onClick={onClick(type, id)}>
             <div className="Toast__age-group" style={{ lineHeight: toPx(ageGroupHeight) }}>{ageGroup}</div>
             <div className="Toast__teams" style={{ lineHeight: toPx(teamsHeight) }}>
               <Team club={{ logoUrl: homeClubLogoUrl }} name={homeTeam} />

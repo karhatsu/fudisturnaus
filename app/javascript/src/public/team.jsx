@@ -31,7 +31,7 @@ const Team = props => {
 Team.propTypes = {
   clubId: PropTypes.number,
   club: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.number,
     logoUrl: PropTypes.string,
   }),
   clubs: PropTypes.arrayOf(PropTypes.shape({

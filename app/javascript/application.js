@@ -10,15 +10,20 @@ import { useParams } from 'react-router'
 import TournamentPage, { officialLevels } from './src/public/tournament_page'
 import Match from './src/public/match'
 import './src/styles/application.scss'
+import Toasts from './src/public/toasts'
+import { ToastsContextProvider } from './src/public/toasts_context'
 
 const TournamentPageWrapper = () => {
   const { key } = useParams()
   return (
-    <TournamentPage
-      officialLevel={officialLevels.none}
-      renderMatch={props => <Match {...props}/>}
-      tournamentKey={key}
-    />
+    <ToastsContextProvider>
+      <TournamentPage
+        officialLevel={officialLevels.none}
+        renderMatch={props => <Match {...props}/>}
+        tournamentKey={key}
+      />
+      <Toasts />
+    </ToastsContextProvider>
   )
 }
 

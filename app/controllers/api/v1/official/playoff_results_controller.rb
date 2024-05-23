@@ -34,8 +34,14 @@ class Api::V1::Official::PlayoffResultsController < Api::V1::Official::OfficialB
         "results#{@tournament.id}",
         {
           playoffMatch: {
+            type: 'playoff',
             id: @match.id,
+            ageGroup: @match.age_group.name,
+            homeClubLogoUrl: @match.home_team.club&.logo_url,
+            homeTeam: @match.home_team.name,
             homeGoals: @match.home_goals,
+            awayClubLogoUrl: @match.away_team.club&.logo_url,
+            awayTeam: @match.away_team.name,
             awayGoals: @match.away_goals,
             penalties: @match.penalties,
           },

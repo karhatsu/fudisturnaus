@@ -35,8 +35,14 @@ class Api::V1::Official::GroupStageResultsController < Api::V1::Official::Offici
         "results#{@tournament.id}",
         { groupId: @match.group_id,
           groupStageMatch: {
+            type: 'group',
             id: @match.id,
+            ageGroup: @match.group.age_group.name,
+            homeClubLogoUrl: @match.home_team.club&.logo_url,
+            homeTeam: @match.home_team.name,
             homeGoals: @match.home_goals,
+            awayClubLogoUrl: @match.away_team.club&.logo_url,
+            awayTeam: @match.away_team.name,
             awayGoals: @match.away_goals,
           },
           groupResults: group_results.map do |result|

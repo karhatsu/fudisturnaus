@@ -18,8 +18,13 @@ select.filter {
   padding: 4px 8px;
 }
 
-.filters__reset-link {
-  color: $green;
-  cursor: pointer;
+.filters__links {
   margin-left: auto;
+  display: flex;
+  column-gap: 8px;
+
+  &__link {
+    color: $green;
+    cursor: pointer;
+  }
 }

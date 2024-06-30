@@ -12,7 +12,7 @@ export const defaultFilters = {
   teamId: 0,
 }
 
-const Filters = ({ filters, resetFilters, setFilterValue, tournament }) => {
+const Filters = ({ filters, onGoToGroupTables, resetFilters, setFilterValue, tournament }) => {
   const renderFilter = (key, items, defaultText, selectedText, nameCallback) => {
     if (items.length > 1) {
       const defaultValue = key === 'date' ? '' : 0
@@ -98,8 +98,12 @@ const Filters = ({ filters, resetFilters, setFilterValue, tournament }) => {
 
   const renderResetLink = () => {
     if (Object.keys(filters).some(key => filters[key] !== defaultFilters[key])) {
-      return <div onClick={resetFilters} className="filters__reset-link">Näytä kaikki ottelut</div>
+      return <div onClick={resetFilters} className="filters__links__link">Näytä kaikki ottelut</div>
     }
+  }
+
+  const renderGoToGroupTables = () => {
+    return onGoToGroupTables && <div onClick={onGoToGroupTables} className="filters__links__link">Siirry sarjataulukoihin</div>
   }
 
   return (
@@ -110,7 +114,10 @@ const Filters = ({ filters, resetFilters, setFilterValue, tournament }) => {
       {renderFilter('teamId', resolveTeams(), 'Joukkue', 'Kaikki joukkueet')}
       {renderFilter('date', resolveDays(), 'Päivä', 'Kaikki päivät')}
       {renderFilter('fieldId', resolveFields(), 'Kenttä', 'Kaikki kentät')}
-      {renderResetLink()}
+      <div className="filters__links">
+        {renderResetLink()}
+        {renderGoToGroupTables()}
+      </div>
     </div>
   )
 }
@@ -124,6 +131,7 @@ Filters.propTypes = {
     groupId: PropTypes.number,
     teamId: PropTypes.number,
   }).isRequired,
+  onGoToGroupTables: PropTypes.func,
   resetFilters: PropTypes.func.isRequired,
   setFilterValue: PropTypes.func.isRequired,
   tournament: PropTypes.shape({

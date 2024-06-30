@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import { Link } from 'react-router-dom'
@@ -45,6 +45,30 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
   const navigate = useNavigate()
   const { error, tournament } = useTournamentFetching(tournamentKey)
   const [filters, setFilters] = useState(defaultFilters)
+
+  const isFilterGroup = useCallback(group => {
+    const { ageGroupId, id: groupId, results } = group
+    return results.length
+      && (!filters.ageGroupId || filters.ageGroupId === ageGroupId)
+      && (!filters.groupId || filters.groupId === groupId)
+      && (!filters.clubId || results.findIndex(team => team.clubId === filters.clubId) !== -1)
+      && (!filters.teamId || results.findIndex(team => team.teamId === filters.teamId) !== -1)
+  }, [filters])
+
+  const filteredGroups = useMemo(() => {
+    return tournament?.groups
+      .filter(isFilterGroup)
+      .filter(group => officialLevel !== officialLevels.none || !group.ageGroup.hideGroupTables)
+      .sort((a, b) => {
+        if (a.ageGroup.name !== b.ageGroup.name) return a.ageGroup.name.localeCompare(b.ageGroup.name)
+        return a.name.localeCompare(b.name)
+      })
+  }, [tournament, isFilterGroup, officialLevel])
+
+  const goToGroupTables = useCallback(event => {
+    event.preventDefault()
+    document.getElementById('group-tables-title')?.scrollIntoView({ behavior: 'smooth' })
+  }, [])
 
   useEffect(() => {
     const queryParams = queryString.parse(search)
@@ -164,10 +188,17 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
   const renderMatchContent = () => {
     const groupStageMatches = tournament.groupStageMatches.filter(isFilterGroupStageMatch)
     const filteredPlayoffMatches = tournament.playoffMatches.filter(isFilterPlayoffMatch)
+    const onGoToGroupTables = showGroupTables(filteredGroups) ? goToGroupTables : undefined
     return (
       <div>
         {showTournamentInfo() && <div className="title-2">Ottelut</div>}
-        <Filters filters={filters} resetFilters={resetFilters} setFilterValue={setFilterValue} tournament={tournament}/>
+        <Filters
+          filters={filters}
+          onGoToGroupTables={onGoToGroupTables}
+          resetFilters={resetFilters}
+          setFilterValue={setFilterValue}
+          tournament={tournament}
+        />
         {renderMatches(groupStageMatches, 'Alkulohkojen ottelut', tournament.playoffMatches.length, true)}
         {renderGroupTables()}
         {renderMatches(filteredPlayoffMatches, 'Jatko-ottelut', filteredPlayoffMatches.length)}
@@ -241,23 +272,16 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
       && (!filters.date || filters.date === date)
   }
 
-  const showGroupTables = filteredGroups => {
+  const showGroupTables = groups => {
     const { calculateGroupTables } = tournament
-    return calculateGroupTables && filteredGroups.length && !filters.date && !filters.fieldId
+    return calculateGroupTables && groups.length && !filters.date && !filters.fieldId
   }
 
   const renderGroupTables = () => {
-    const filteredGroups = tournament.groups
-      .filter(isFilterGroup)
-      .filter(group => officialLevel !== officialLevels.none || !group.ageGroup.hideGroupTables)
-      .sort((a, b) => {
-        if (a.ageGroup.name !== b.ageGroup.name) return a.ageGroup.name.localeCompare(b.ageGroup.name)
-        return a.name.localeCompare(b.name)
-      })
     if (showGroupTables(filteredGroups)) {
       return (
         <>
-          <div className="title-2">Sarjataulukot</div>
+          <div className="title-2" id="group-tables-title">Sarjataulukot</div>
           <div className={`group-results group-results--${filteredGroups.length} row`}>
             {filteredGroups.map(group => renderGroup(group, filteredGroups.length, true))}
           </div>
@@ -293,15 +317,6 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
         key={group.id}
       />
     )
-  }
-
-  const isFilterGroup = group => {
-    const { ageGroupId, id: groupId, results } = group
-    return results.length
-      && (!filters.ageGroupId || filters.ageGroupId === ageGroupId)
-      && (!filters.groupId || filters.groupId === groupId)
-      && (!filters.clubId || results.findIndex(team => team.clubId === filters.clubId) !== -1)
-      && (!filters.teamId || results.findIndex(team => team.teamId === filters.teamId) !== -1)
   }
 
   const iconLink = officialLevel === officialLevels.none ? '/' : null

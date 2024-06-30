@@ -143,7 +143,6 @@ GEM
     marcel (1.0.2)
     matrix (0.4.2)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.6)
     minitest (5.22.2)
     msgpack (1.7.2)
     mutex_m (0.2.0)
@@ -157,8 +156,7 @@ GEM
     net-smtp (0.4.0.1)
       net-protocol
     nio4r (2.7.0)
-    nokogiri (1.16.5)
-      mini_portile2 (~> 2.8.2)
+    nokogiri (1.16.5-x86_64-darwin)
       racc (~> 1.4)
     pg (1.5.4)
     psych (5.1.2)
@@ -260,8 +258,7 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
-    sqlite3 (1.7.0)
-      mini_portile2 (~> 2.8.0)
+    sqlite3 (1.7.0-x86_64-darwin)
     stringio (3.1.0)
     strscan (3.1.0)
     terser (1.1.20)
@@ -286,7 +283,7 @@ GEM
     zeitwerk (2.6.13)
 
 PLATFORMS
-  ruby
+  x86_64-darwin-22
 
 DEPENDENCIES
   bootsnap
@@ -314,7 +311,7 @@ DEPENDENCIES
   web-console
 
 RUBY VERSION
-   ruby 3.3.1p55
+   ruby 3.3.3p89
 
 BUNDLED WITH
-   2.5.9
+   2.5.14

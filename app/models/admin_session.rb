@@ -17,9 +17,9 @@ class AdminSession
       redis = Redis.new
       session_key = redis.get(REDIS_KEY)
       redis.close
-      !!session_key
+      session_key == key
     else
-      !!@@session_key
+      @@session_key == key
     end
   end
 

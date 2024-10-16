@@ -14,7 +14,7 @@ class AdminSession
   def self.find_by_key(key)
     return false if key.blank?
     if use_redis?
-      redis = Redis.new
+      redis = connect_to_redis
       session_key = redis.get(REDIS_KEY)
       redis.close
       session_key == key
@@ -25,7 +25,7 @@ class AdminSession
 
   def self.store_session(session_key)
     if use_redis?
-      redis = Redis.new
+      redis = connect_to_redis
       redis.set REDIS_KEY, session_key, ex: 1.hour
       redis.close
     else
@@ -33,7 +33,13 @@ class AdminSession
     end
   end
 
+  private
+
   def self.use_redis?
     Rails.env.production?
+  end
+
+  def self.connect_to_redis
+    Redis.new url: ENV["REDIS_URL"], ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE }
   end
 end

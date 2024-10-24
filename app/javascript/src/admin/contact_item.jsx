@@ -24,10 +24,11 @@ const ContactItem = ({ contact, updateAsHandled }) => {
   }, [id, updateAsHandled])
 
   const fields = [message, tournamentClub, tournamentName, tournamentStartDate, tournamentDays, tournamentLocation]
+  const mailto = `mailto:${email}?subject=${encodeURIComponent(tournamentName)}`
   return (
     <div className="tournament-management__section">
       {handledAt && `✅ ${formatDateTime(handledAt)} | `}
-      {formatDateTime(createdAt)} | {personName} | <a href={`mailto:${email}`}>{email}</a> | {fields.filter(f => f).join(', ')}
+      {formatDateTime(createdAt)} | {personName} | <a href={mailto}>{email}</a> | {fields.filter(f => f).join(', ')}
       {!handledAt && (
         <div>
           <Link to={`/admin/tournaments/new?contact_id=${id}`}>Lisää turnaus</Link>

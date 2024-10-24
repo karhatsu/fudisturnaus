@@ -1,10 +1,9 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import Title from '../components/title'
 import AccessContext from '../util/access_context'
 import { fetchContacts, updateContactHandledAt } from './api_client'
 import FormErrors from '../form/form_errors'
-import { formatDateTime } from '../util/date_util'
+import ContactItem from './contact_item'
 
 const ContactsPage = () => {
   const accessContext = useContext(AccessContext)
@@ -22,8 +21,7 @@ const ContactsPage = () => {
     })
   }, [accessContext])
 
-  const updateAsHandled = useCallback((event, id) => {
-    event.preventDefault()
+  const updateAsHandled = useCallback((id) => {
     updateContactHandledAt(accessContext, id, (err, contact) => {
       if (err) {
         console.error(err)
@@ -46,35 +44,7 @@ const ContactsPage = () => {
           <FormErrors errors={errors} />
         </div>
       )}
-      {contacts?.map(contact => {
-        const {
-          id,
-          handledAt,
-          personName,
-          email,
-          message,
-          tournamentClub,
-          tournamentName,
-          tournamentStartDate,
-          tournamentDays,
-          tournamentLocation,
-          createdAt,
-        } = contact
-        const fields = [message, tournamentClub, tournamentName, tournamentStartDate, tournamentDays, tournamentLocation]
-        return (
-          <div key={id} className="tournament-management__section">
-            {handledAt && `✅ ${formatDateTime(handledAt)} | `}
-            {formatDateTime(createdAt)} | {personName} | <a href={`mailto:${email}`}>{email}</a> | {fields.filter(f => f).join(', ')}
-            {!handledAt && (
-              <div>
-                <Link to={`/admin/tournaments/new?contact_id=${id}`}>Lisää turnaus</Link>
-                {' '}
-                <a href="" onClick={(event) => updateAsHandled(event, id)}>Merkitse käsitellyksi</a>
-              </div>
-            )}
-          </div>
-        )
-      })}
+      {contacts?.map(contact => <ContactItem key={contact.id} contact={contact} updateAsHandled={updateAsHandled} />)}
     </div>
   )
 }

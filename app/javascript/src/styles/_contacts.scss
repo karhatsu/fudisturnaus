@@ -1,0 +1,9 @@
+.contact-item {
+  display: flex;
+  flex-wrap: wrap;
+
+  &__data:not(:last-child)::after {
+    content: '|';
+    margin: 0 6px;
+  }
+}

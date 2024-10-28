@@ -93,7 +93,7 @@ const TournamentFields = props => {
   const renderMultipleEventsCheckbox = () => {
     return (
       <div className="form__field">
-        <div className="label">Monta erillistä tapahtumaa</div>
+        <div className="label">Monta erillistä päivää</div>
         <div>
           <input type="checkbox" onChange={onMultipleEventsChange} checked={parseInt(data.days) === 0} />
         </div>

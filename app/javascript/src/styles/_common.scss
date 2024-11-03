@@ -1,8 +1,8 @@
-@import 'variables';
+@use 'variables';
 
 body {
   background: url("../images/grass.jpg") saddlebrown repeat;
-  color: $white;
+  color: variables.$white;
   font-family: 'Muli', sans-serif;
   font-weight: 400;
   font-size: 14px;
@@ -37,13 +37,13 @@ li {
 }
 
 .error {
-  color: $red;
+  color: variables.$red;
 }
 
 .message {
-  background-color: $white;
+  background-color: variables.$white;
   border-radius: 4px;
-  color: $white;
+  color: variables.$white;
   margin-top: 8px;
   padding: 8px;
 }
@@ -57,15 +57,15 @@ li {
 }
 
 .message--error {
-  background-color: $red-light;
+  background-color: variables.$red-light;
 }
 
 .message--warning {
-  background-color: $yellow;
+  background-color: variables.$yellow;
 }
 
 .message--success {
-  background-color: $green;
+  background-color: variables.$green;
 }
 
 .footer {
@@ -74,14 +74,14 @@ li {
   margin-top: 32px;
   text-align: center;
   a {
-    color: $white;
+    color: variables.$white;
   }
 }
 
 .badge {
-  border: 1px solid $white;
+  border: 1px solid variables.$white;
   border-radius: 2px;
-  color: $white;
+  color: variables.$white;
   display: inline-block;
   font-size: 12px;
   line-height: 12px;
@@ -89,13 +89,13 @@ li {
 }
 
 .badge--0 {
-  background-color: $red-light;
+  background-color: variables.$red-light;
 }
 
 .badge--1 {
-  background-color: $yellow;
+  background-color: variables.$yellow;
 }
 
 .badge--2 {
-  background-color: $green;
+  background-color: variables.$green;
 }

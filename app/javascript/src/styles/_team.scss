@@ -1,12 +1,12 @@
-@import 'variables';
-@import 'shared';
+@use 'variables';
+@use 'shared';
 
 .team {
   display: flex;
   align-items: center;
 
   &--selected {
-    color: $green;
+    color: variables.$green;
   }
 
   &__logo {

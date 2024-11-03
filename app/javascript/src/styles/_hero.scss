@@ -1,7 +1,7 @@
-@import 'variables';
+@use 'variables';
 
 .Hero {
-  background-color: $white-80;
+  background-color: variables.$white-80;
   border-radius: 8px;
   margin: 32px 0;
   padding: 16px;
@@ -42,7 +42,7 @@
   }
 
   &__title {
-    color: $black;
+    color: variables.$black;
     font-size: 24px;
     font-weight: bold;
     max-width: 300px;
@@ -55,16 +55,16 @@
 
   &__button {
     margin-top: 16px;
-    color: $green;
+    color: variables.$green;
     font-size: 16px;
     font-weight: bold;
     padding: 8px 16px;
-    border: 2px solid $green;
+    border: 2px solid variables.$green;
     border-radius: 4px;
 
     &:hover {
-      background-color: $green;
-      color: $white;
+      background-color: variables.$green;
+      color: variables.$white;
       text-decoration: none;
     }
   }

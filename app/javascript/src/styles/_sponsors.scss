@@ -1,8 +1,8 @@
-@import 'variables';
-@import 'shared';
+@use 'variables';
+@use 'shared';
 
 .sponsors {
-  @include white-box(false);
+  @include shared.white-box(false);
   background-color: transparent;
   display: flex;
   flex-wrap: wrap;

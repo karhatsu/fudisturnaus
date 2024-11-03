@@ -1,8 +1,10 @@
-@import 'shared';
+@use 'shared';
+@use "variables";
+
 $inputHeight: 16px;
 
 .login-form {
-  @include white-box();
+  @include shared.white-box();
 }
 
 .form__intro {
@@ -91,7 +93,7 @@ $inputHeight: 16px;
 
 .button {
   background-color: #eee;
-  border: 1px solid $black;
+  border: 1px solid variables.$black;
   border-radius: 2px;
   cursor: pointer;
   padding: 8px 16px;
@@ -103,10 +105,10 @@ $inputHeight: 16px;
   }
 
   &--primary {
-    border: 1px solid $green;
+    border: 1px solid variables.$green;
 
     &:disabled {
-      border: 1px solid $gray;
+      border: 1px solid variables.$gray;
       cursor: not-allowed;
 
       &:hover {
@@ -116,7 +118,7 @@ $inputHeight: 16px;
   }
 
   &--danger {
-    border: 1px solid $red;
+    border: 1px solid variables.$red;
   }
 
   &--small {
@@ -173,7 +175,7 @@ $inputHeight: 16px;
 }
 
 .form-error {
-  color: $red;
+  color: variables.$red;
   font-weight: 600;
 }
 

@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'variables';
 
 .Toasts {
   position: fixed;
@@ -15,12 +15,12 @@
   transition-property: bottom, opacity;
   transition-duration: 200ms;
   background-color: #fff;
-  color: $black;
+  color: variables.$black;
   padding-left: 16px;
   padding-right: 16px;
   border-style: solid;
-  border-color: $gray;
-  box-shadow: $gray 2px 2px 8px 2px;
+  border-color: variables.$gray;
+  box-shadow: variables.$gray 2px 2px 8px 2px;
   border-radius: 4px;
   text-align: center;
   display: flex;
@@ -48,7 +48,7 @@
   }
 
   &__goals {
-    color: $green;
+    color: variables.$green;
     font-size: 18px;
     font-weight: 600;
     display: flex;

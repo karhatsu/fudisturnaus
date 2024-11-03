@@ -1,8 +1,8 @@
-@import 'variables';
-@import 'shared';
+@use 'variables';
+@use 'shared';
 
 .info-box {
-  @include white-box(false, 16px);
+  @include shared.white-box(false, 16px);
 
   &__paragraph {
     margin: 8px 0;
@@ -69,7 +69,7 @@
 }
 
 .info-box__link {
-  color: $green;
+  color: variables.$green;
   cursor: pointer;
 }
 
@@ -99,7 +99,7 @@
   }
 
   &__tournament-name {
-    color: $green;
+    color: variables.$green;
     font-size: 16px;
     font-weight: 600;
   }
@@ -110,17 +110,17 @@
 }
 
 a.tournament-link {
-  @include white-box(true);
+  @include shared.white-box(true);
   & {
     text-decoration: none;
   }
 
   &:hover {
-    background-color: $green;
-    color: $white;
+    background-color: variables.$green;
+    color: variables.$white;
 
     .tournament-link__tournament-name {
-      color: $white;
+      color: variables.$white;
     }
   }
 }

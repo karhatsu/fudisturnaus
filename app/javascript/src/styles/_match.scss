@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'shared';
+@use 'variables';
+@use 'shared';
 
 .matches {
   margin-top: 16px;
@@ -14,7 +14,7 @@
 }
 
 .match {
-  @include white-box(false);
+  @include shared.white-box(false);
 
   &--editable {
     cursor: pointer;
@@ -48,13 +48,13 @@
   }
 
   &__start-time {
-    color: $green;
+    color: variables.$green;
     font-weight: 600;
     margin-right: 4px;
   }
 
   &__result {
-    color: $green;
+    color: variables.$green;
     font-size: 18px;
     font-weight: 600;
     display: flex;
@@ -65,7 +65,7 @@
   }
 
   &__no-result {
-    color: $red;
+    color: variables.$red;
   }
 
   &__result-fields {
@@ -98,6 +98,6 @@
   }
 
   &--editable {
-    @include white-box(true);
+    @include shared.white-box(true);
   }
 }

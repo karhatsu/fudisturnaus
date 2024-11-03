@@ -1,8 +1,8 @@
-@import 'variables';
-@import 'shared';
+@use 'variables';
+@use 'shared';
 
 .filters {
-  @include white-box(false, 16px);
+  @include shared.white-box(false, 16px);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -13,7 +13,7 @@
 }
 
 select.filter {
-  color: $black;
+  color: variables.$black;
   margin: 4px 8px;
   padding: 4px 8px;
 }
@@ -24,7 +24,7 @@ select.filter {
   column-gap: 8px;
 
   &__link {
-    color: $green;
+    color: variables.$green;
     cursor: pointer;
   }
 }

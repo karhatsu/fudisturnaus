@@ -28,6 +28,7 @@ class Tournament < ApplicationRecord
 
   before_create :generate_access_keys
   around_update :check_match_dates
+  after_update :update_tables_on_rules_change
 
   default_scope { order('start_date DESC') }
 
@@ -129,5 +130,14 @@ class Tournament < ApplicationRecord
       end
     end
     dates.uniq.sort
+  end
+
+  def update_tables_on_rules_change
+    return unless saved_change_to_equal_points_rule?
+    age_groups.where(calculate_group_tables: true).each do |age_group|
+      age_group.groups.each do |group|
+        group.populate_first_round_playoff_matches
+      end
+    end
   end
 end

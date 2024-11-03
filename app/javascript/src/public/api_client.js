@@ -5,7 +5,7 @@ export function fetchTournaments(query, callback) {
     .then(response => response.json())
     .then(json => callback(null, json.tournaments))
     .catch(err => {
-      console.error(err) // eslint-disable-line no-console
+      console.error(err)
       callback(true)
     })
 }
@@ -15,7 +15,7 @@ export function fetchTournament(key, callback) {
     .then(response => response.json())
     .then(tournament => callback(null, tournament))
     .catch(err => {
-      console.error(err) // eslint-disable-line no-console
+      console.error(err)
       callback(true)
     })
 }
@@ -35,7 +35,7 @@ export function fetchOrganizers(callback) {
     .then(response => response.json())
     .then(json => callback(null, json.organizers))
     .catch(err => {
-      console.error(err) // eslint-disable-line no-console
+      console.error(err)
       callback(undefined)
     })
 }

@@ -18,8 +18,8 @@ describe 'tournament page', type: :system do
     expect(page.find('.tournament-link__other-info').text).to eql "#{location}, #{formatted_date}"
     click_link name
     expect(page).to have_current_path("/t/#{tournament.slug}")
-    expect(page.find('.title__text').text).to eql name
     expect(page.find('.sub-title').text).to eql "#{location}, #{formatted_date}"
+    expect(page.find('.title__text').text).to eql name # verify this after sub title to make sure new page has loaded
     expect(page.find('.sub-title a').text).to eql location
     expect(page.find('.sub-title a')[:href]).to eql "https://www.google.com/maps/place/#{address.gsub(' ', '+')}"
     expect_message 'warning', 'Turnauksen otteluohjelma julkaistaan myöhemmin'

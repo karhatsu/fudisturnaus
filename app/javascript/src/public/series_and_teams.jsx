@@ -82,7 +82,7 @@ SeriesAndTeams.propTypes = {
     })).isRequired,
     teams: PropTypes.arrayOf(PropTypes.shape({
       ageGroupId: PropTypes.number.isRequired,
-      clubId: PropTypes.number.isRequired,
+      clubId: PropTypes.number,
       groupId: PropTypes.number.isRequired,
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,

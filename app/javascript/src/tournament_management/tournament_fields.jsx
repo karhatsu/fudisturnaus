@@ -16,6 +16,8 @@ const { onlyTitle, teams, all } = visibilityTypes
 
 const TournamentFields = props => {
   const { contactId, clubName, clubs, official, tournament, onCancel, onSave } = props
+  const isNew = !tournament.id
+  const isEditing = !isNew
   const {
     changeValue,
     formOpen,
@@ -26,7 +28,7 @@ const TournamentFields = props => {
     closeForm,
     onFieldChange,
     onCheckboxChange,
-  } = useForm(tournament.id ? undefined : tournament)
+  } = useForm(isNew ? tournament : undefined)
   const [addressSuggestions, setAddressSuggestions] = useState()
   const accessContext = useContext(AccessContext)
 
@@ -68,12 +70,12 @@ const TournamentFields = props => {
         {renderLocationField()}
         {renderAddressSuggestions()}
         {renderTournamentField('Osoite', 'text', 'address', 'Esim. Tanhuantie 4-6, 00940 Helsinki')}
-        {renderTournamentField('Otteluiden välinen aika (min)', 'number', 'matchMinutes')}
-        {renderEqualPointsRuleField()}
-        {renderVisibilityField()}
-        {renderInfoField()}
-        {tournament && renderCheckbox('Peruttu', 'cancelled')}
-        {!tournament && renderCheckbox('Testiturnaus', 'test')}
+        {isEditing && renderTournamentField('Otteluiden välinen aika (min)', 'number', 'matchMinutes')}
+        {isEditing && renderEqualPointsRuleField()}
+        {isEditing && renderVisibilityField()}
+        {isEditing && renderInfoField()}
+        {isEditing && renderCheckbox('Peruttu', 'cancelled')}
+        {isNew && renderCheckbox('Testiturnaus', 'test')}
         <FormErrors errors={errors}/>
         {renderTournamentFormButtons()}
       </form>
@@ -102,7 +104,7 @@ const TournamentFields = props => {
   }
 
   const renderLocationField = () => {
-    const onBlur = tournament.id ? undefined : getAddressSuggestions
+    const onBlur = isNew ? getAddressSuggestions : undefined
     return (
       <TextField
         label="Paikka"

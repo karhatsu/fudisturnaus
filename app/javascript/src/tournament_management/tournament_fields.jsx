@@ -110,7 +110,7 @@ const TournamentFields = props => {
         label="Paikka"
         onBlur={onBlur}
         onChange={onFieldChange('location')}
-        placeholder="Esim. Kontulan tekonurmi"
+        placeholder="Esim. Kontulan urheilupuisto"
         type="text"
         value={data.location}
       />

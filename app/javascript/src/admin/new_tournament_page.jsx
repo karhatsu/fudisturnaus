@@ -18,6 +18,7 @@ const emptyTournament = {
   equalPointsRule: 1,
   visibility: visibilityTypes.teams,
   info: '',
+  test: false,
 }
 
 const NewTournamentPage = () => {

@@ -75,7 +75,7 @@ const TournamentFields = props => {
         {isEditing && renderVisibilityField()}
         {isEditing && renderInfoField()}
         {isEditing && renderCheckbox('Peruttu', 'cancelled')}
-        {isNew && renderCheckbox('Testiturnaus', 'test')}
+        {!official && renderCheckbox('Testiturnaus', 'test')}
         <FormErrors errors={errors}/>
         {renderTournamentFormButtons()}
       </form>
@@ -221,8 +221,8 @@ const TournamentFields = props => {
   }
 
   const onOpenClick = () => {
-    const { name, startDate, days, location, address, matchMinutes, equalPointsRule, visibility, clubId, cancelled, info } = tournament
-    openForm({ name, startDate, days, location, address: address || '', matchMinutes, equalPointsRule, visibility, clubId, cancelled, info })
+    const { name, startDate, days, location, address, matchMinutes, equalPointsRule, visibility, clubId, cancelled, info, test } = tournament
+    openForm({ name, startDate, days, location, address: address || '', matchMinutes, equalPointsRule, visibility, clubId, cancelled, info, test })
   }
 
   const cancel = () => {
@@ -274,6 +274,7 @@ TournamentFields.propTypes = {
     matchMinutes: PropTypes.number.isRequired,
     equalPointsRule: PropTypes.number.isRequired,
     visibility: PropTypes.oneOf([onlyTitle, teams, all]).isRequired,
+    test: PropTypes.bool.isRequired,
   }).isRequired,
 }
 

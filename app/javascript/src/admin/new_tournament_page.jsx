@@ -57,9 +57,15 @@ const NewTournamentPage = () => {
         setClubName(contact.tournamentClub)
       })
     } else {
-      setInitialTournament(emptyTournament)
+      setInitialTournament({
+        ...emptyTournament,
+        clubId: parseInt(searchParams.get('clubId')) || undefined,
+        name: searchParams.get('name') || '',
+        location: searchParams.get('location') || '',
+        address: searchParams.get('address') || '',
+      })
     }
-  }, [accessContext, contactId])
+  }, [accessContext, contactId, searchParams])
 
   const onSave = (data, callback) => {
     createTournament(accessContext, data, contactId, (errors, response) => {

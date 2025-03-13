@@ -71,7 +71,7 @@ const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => 
         <Referees tournament={tournament} tournamentId={getTournamentId()} onItemDelete={onItemDelete} onItemSave={onItemSave} />
         <TournamentLinks tournament={tournament} />
         {!official && <EmailContent tournament={tournament} />}
-        {renderDeleteButton()}
+        {renderAdminActions()}
         {renderBackLink()}
       </div>
     )
@@ -163,18 +163,28 @@ const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => 
     }
   }
 
-  const renderDeleteButton = () => {
+  const renderAdminActions = () => {
     if (!official) {
       return (
         <React.Fragment>
+          <div className="title-2">Kopioi turnaus</div>
+          <div className="tournament-management__section">
+            <Button onClick={copyTournament} label="Kopioi turnaus" type="normal"/>
+          </div>
           <div className="title-2">Poista turnaus</div>
           <div className="tournament-management__section">
-            <FormErrors errors={deleteErrors} />
-            <Button onClick={handleDelete} label="Poista turnaus" type="danger" />
+            <FormErrors errors={deleteErrors}/>
+            <Button onClick={handleDelete} label="Poista turnaus" type="danger"/>
           </div>
         </React.Fragment>
       )
     }
+  }
+
+  const copyTournament = () => {
+    const { clubId, name, location, address } = tournament
+    const params = new URLSearchParams({ clubId, name, location, address })
+    navigate(`/admin/tournaments/new?${params.toString()}`)
   }
 
   const handleDelete = () => {

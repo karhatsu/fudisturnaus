@@ -1,9 +1,6 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from '@cfaester/enzyme-adapter-react-18'
+import { render, screen } from '@testing-library/react'
 import SeriesAndTeams from '../../src/public/series_and_teams'
-
-Enzyme.configure({ adapter: new Adapter() })
 
 describe('SeriesAndTeams', () => {
   let tournament
@@ -16,29 +13,26 @@ describe('SeriesAndTeams', () => {
 
     describe('and the tournament is not cancelled', () => {
       beforeEach(() => {
-        component = shallow(<SeriesAndTeams tournament={tournament}/>)
+        component = render(<SeriesAndTeams tournament={tournament}/>)
       })
 
       it('renders message about matches', () => {
-        const message = component.find('Message')
-        expect(message.prop('type')).toEqual('warning')
-        expect(message.prop('fullPage')).toEqual(true)
-        expect(message.prop('children')).toEqual('Turnauksen otteluohjelma julkaistaan myöhemmin')
+        expect(screen.getByText('Turnauksen otteluohjelma julkaistaan myöhemmin')).toBeInTheDocument()
       })
 
       it('does not render age groups', () => {
-        expect(component.find('.series-and-teams__age-group')).toHaveLength(0)
+        expect(component.container.querySelectorAll('.series-and-teams__age-group')).toHaveLength(0)
       })
     })
 
     describe('and the tournament is cancelled', () => {
       beforeEach(() => {
         tournament.cancelled = true
-        component = shallow(<SeriesAndTeams tournament={tournament}/>)
+        component = render(<SeriesAndTeams tournament={tournament}/>)
       })
 
       it('does not render message about matches', () => {
-        expect(component.find('.message.message--warning')).toHaveLength(0)
+        expect(component.container.querySelectorAll('.message.message--warning')).toHaveLength(0)
       })
     })
   })
@@ -46,15 +40,15 @@ describe('SeriesAndTeams', () => {
   describe('when one age group without teams', () => {
     beforeEach(() => {
       tournament = { ageGroups: [{ id: 1, name: 'T07' }], cancelled: false, clubs: [], groups: [], teams: [] }
-      component = shallow(<SeriesAndTeams tournament={tournament}/>)
+      component = render(<SeriesAndTeams tournament={tournament}/>)
     })
 
     it('renders age group with generic title', () => {
-      expect(component.find('.series-and-teams__age-group .title-2').text()).toEqual('Ilmoittautuneet joukkueet')
+      expect(component.container.querySelector('.series-and-teams__age-group .title-2').textContent).toBe('Ilmoittautuneet joukkueet')
     })
 
     it('renders tournament level message about no teams', () => {
-      expect(component.find('.series-and-teams__no-teams').text()).toEqual('Turnaukseen ei ole ilmoittautunut vielä yhtään joukkuetta')
+      expect(component.container.querySelector('.series-and-teams__no-teams').textContent).toBe('Turnaukseen ei ole ilmoittautunut vielä yhtään joukkuetta')
     })
   })
 
@@ -72,19 +66,19 @@ describe('SeriesAndTeams', () => {
           { ageGroupId: 1, clubId: 100, groupId: 20, id: 11, name: 'SC Team 1' }
         ],
       }
-      component = shallow(<SeriesAndTeams tournament={tournament}/>)
+      component = render(<SeriesAndTeams tournament={tournament}/>)
     })
 
     it('renders age group with generic title', () => {
-      expect(component.find('.series-and-teams__age-group .title-2').text()).toEqual('Ilmoittautuneet joukkueet')
+      expect(component.container.querySelector('.series-and-teams__age-group .title-2').textContent).toBe('Ilmoittautuneet joukkueet')
     })
 
     it('renders teams for the age group without group name', () => {
-      const teams = component.find('.series-and-teams__team')
-      expect(teams.length).toEqual(2)
-      expect(teams.at(0).find('Team').prop('name')).toEqual('FC Team 1')
-      expect(teams.at(1).find('Team').prop('name')).toEqual('SC Team 1')
-      expect(component.find('.series-and-teams__group-title')).toHaveLength(0)
+      const teams = component.container.querySelectorAll('.series-and-teams__team')
+      expect(teams.length).toBe(2)
+      expect(teams[0]).toHaveTextContent('FC Team 1')
+      expect(teams[1]).toHaveTextContent('SC Team 1')
+      expect(component.container.querySelectorAll('.series-and-teams__group-title').length).toBe(0)
     })
   })
 
@@ -108,40 +102,40 @@ describe('SeriesAndTeams', () => {
           { ageGroupId: 5, clubId: 100, groupId: 10, id: 12, name: 'SC Team 2' }
         ],
       }
-      component = shallow(<SeriesAndTeams tournament={tournament}/>)
+      component = render(<SeriesAndTeams tournament={tournament}/>)
     })
 
     it('renders age group names as titles', () => {
-      const ageGroups = component.find('.series-and-teams__age-group')
-      expect(ageGroups.length).toEqual(2)
-      expect(ageGroups.at(0).find('.title-2').text()).toEqual('T07')
-      expect(ageGroups.at(1).find('.title-2').text()).toEqual('T08')
+      const ageGroups = component.container.querySelectorAll('.series-and-teams__age-group')
+      expect(ageGroups.length).toBe(2)
+      expect(ageGroups[0].querySelector('.title-2').textContent).toEqual('T07')
+      expect(ageGroups[1].querySelector('.title-2').textContent).toEqual('T08')
     })
 
     it('renders age group with those groups that have teams', () => {
-      const ageGroupsWithTeams = component.find('.series-and-teams__age-group').at(0)
-      const groups = ageGroupsWithTeams.find('.series-and-teams__group')
+      const ageGroupsWithTeams = component.container.querySelectorAll('.series-and-teams__age-group')[0]
+      const groups = ageGroupsWithTeams.querySelectorAll('.series-and-teams__group')
       expect(groups.length).toEqual(2)
-      expect(groups.at(0).find('.series-and-teams__group-title').text()).toEqual('A')
-      expect(groups.at(1).find('.series-and-teams__group-title').text()).toEqual('B')
+      expect(groups[0].querySelectorAll('.series-and-teams__group-title')[0].textContent).toEqual('A')
+      expect(groups[1].querySelectorAll('.series-and-teams__group-title')[0].textContent).toEqual('B')
     })
 
     it('renders team names inside the groups', () => {
-      const ageGroupsWithTeams = component.find('.series-and-teams__age-group').at(0)
-      const groups = ageGroupsWithTeams.find('.series-and-teams__group')
-      const group1Teams = groups.at(0).find('.series-and-teams__team')
+      const ageGroupsWithTeams = component.container.querySelectorAll('.series-and-teams__age-group')[0]
+      const groups = ageGroupsWithTeams.querySelectorAll('.series-and-teams__group')
+      const group1Teams = groups[0].querySelectorAll('.series-and-teams__team')
       expect(group1Teams.length).toEqual(2)
-      expect(group1Teams.at(0).find('Team').prop('name')).toEqual('FC Team 1')
-      expect(group1Teams.at(1).find('Team').prop('name')).toEqual('SC Team 2')
-      const group2Teams = groups.at(1).find('.series-and-teams__team')
+      expect(group1Teams[0].textContent).toEqual('FC Team 1')
+      expect(group1Teams[1].textContent).toEqual('SC Team 2')
+      const group2Teams = groups[1].querySelectorAll('.series-and-teams__team')
       expect(group2Teams.length).toEqual(1)
-      expect(group2Teams.at(0).find('Team').prop('name')).toEqual('SC Team 1')
+      expect(group2Teams[0].textContent).toEqual('SC Team 1')
     })
 
     it('renders age group level message about no teams', () => {
-      const ageGroupWithoutTeams = component.find('.series-and-teams__age-group').at(1)
+      const ageGroupWithoutTeams = component.container.querySelectorAll('.series-and-teams__age-group')[1]
       const noTeamsMsg = 'Sarjaan ei ole ilmoittautunut vielä yhtään joukkuetta'
-      expect(ageGroupWithoutTeams.find('.series-and-teams__no-teams').text()).toEqual(noTeamsMsg)
+      expect(ageGroupWithoutTeams.querySelectorAll('.series-and-teams__no-teams')[0].textContent).toEqual(noTeamsMsg)
     })
   })
 })

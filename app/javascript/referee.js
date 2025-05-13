@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import { createRoot } from 'react-dom/client'
 import { useParams } from 'react-router'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router'
 import AccessContext from './src/util/access_context'
 import RefereePage from './src/official/referee_page'
 import './src/styles/application.scss'

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router'
 import TournamentFields from '../tournament_management/tournament_fields'
 import { createTournament, fetchClubs, fetchContact } from './api_client'
 import AccessContext from '../util/access_context'

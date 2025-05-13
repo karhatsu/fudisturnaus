@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import { formatDateTime } from '../util/date_util'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 const messageCut = 100
 

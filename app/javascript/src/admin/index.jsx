@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import TournamentList from '../public/tournament_list'
 import { fetchTournaments } from '../public/api_client'
 import { fetchClubsWithoutLogo, fetchUnhandledContactCount } from './api_client'

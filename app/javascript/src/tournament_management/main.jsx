@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useNavigate, useParams } from 'react-router'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { fetchTournament, updateTournament } from './api_client'
 import { deleteTournament } from '../admin/api_client'

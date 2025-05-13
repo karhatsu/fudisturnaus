@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router'
 import AdminLoginPage from './src/admin/login_page'
 import AccessContext from './src/util/access_context'
 import AdminIndex from './src/admin'

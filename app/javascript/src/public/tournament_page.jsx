@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useLocation, useNavigate, useParams } from 'react-router'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import queryString from 'query-string'
 import ReactMarkdown from 'react-markdown'
 

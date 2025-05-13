@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import { createRoot } from 'react-dom/client'
 import { useParams } from 'react-router'

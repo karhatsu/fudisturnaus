@@ -11,6 +11,7 @@ const esbuildConfig = {
   ],
   bundle: true,
   loader: { '.jpg': 'dataurl', '.js': 'jsx' },
+  jsx: 'automatic',
   sourcemap: true,
   outdir: 'app/assets/builds',
   plugins: [sassPlugin()],

@@ -24,6 +24,8 @@ module Fudisturnaus
 
     config.i18n.default_locale = :fi
 
+    config.active_support.to_time_preserves_timezone = :zone
+
     config.generators do |g|
       g.test_framework :rspec
     end

@@ -1,5 +1,4 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import PropTypes from 'prop-types'
 import { addDays, differenceInDays, format, parseISO } from 'date-fns'
 import { fromZonedTime } from 'date-fns-tz'
 import { deletePlayoffMatch, savePlayoffMatch } from './api_client'
@@ -7,7 +6,6 @@ import AccessContext from '../util/access_context'
 import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util/date_util'
 import { getName, resolveSuggestedTime, resolveTournamentItemClasses } from '../util/util'
 import IdNameSelect from '../form/id_name_select'
-import { idNamePropType } from '../util/custom_prop_types'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
 import Button from '../form/button'
@@ -32,7 +30,7 @@ const PlayoffMatch = props => {
     tournamentId,
   } = props
   const accessContext = useContext(AccessContext)
-  const timeField = useRef()
+  const timeField = useRef(undefined)
   const { changeValue, formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, changeValues } = useForm()
   const [timeSuggested, setTimeSuggested] = useState(false)
 
@@ -357,53 +355,6 @@ const PlayoffMatch = props => {
       {!formOpen && renderName()}
     </div>
   )
-}
-
-PlayoffMatch.propTypes = {
-  ageGroups: PropTypes.arrayOf(idNamePropType).isRequired,
-  fields: PropTypes.arrayOf(idNamePropType).isRequired,
-  groups: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    ageGroupId: PropTypes.number.isRequired,
-  })),
-  playoffGroups: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    ageGroupId: PropTypes.number.isRequired,
-  })).isRequired,
-  playoffMatch: PropTypes.shape({
-    ageGroupId: PropTypes.number.isRequired,
-    awayTeamOriginId: PropTypes.number.isRequired,
-    awayTeamOriginType: PropTypes.string.isRequired,
-    awayTeamOriginRule: PropTypes.number.isRequired,
-    fieldId: PropTypes.number.isRequired,
-    homeTeamOriginId: PropTypes.number.isRequired,
-    homeTeamOriginType: PropTypes.string.isRequired,
-    homeTeamOriginRule: PropTypes.number.isRequired,
-    id: PropTypes.number.isRequired,
-    playoffGroupId: PropTypes.number,
-    refereeId: PropTypes.number,
-    startTime: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-  }),
-  playoffMatches: PropTypes.arrayOf(PropTypes.shape({
-    ageGroupId: PropTypes.number.isRequired,
-    fieldId: PropTypes.number.isRequired,
-    startTime: PropTypes.string.isRequired,
-  })).isRequired,
-  onPlayoffMatchDelete: PropTypes.func,
-  onPlayoffMatchSave: PropTypes.func.isRequired,
-  matchMinutes: PropTypes.number.isRequired,
-  referees: PropTypes.array.isRequired,
-  teams: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    groupId: PropTypes.number.isRequired,
-  })).isRequired,
-  tournamentDays: PropTypes.number.isRequired,
-  tournamentId: PropTypes.number.isRequired,
-  tournamentDate: PropTypes.string.isRequired,
 }
 
 export default PlayoffMatch

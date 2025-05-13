@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import GroupStageMatch from './group_stage_match'
 
 const GroupStageMatches = ({ onItemDelete, onItemSave, tournament, tournamentId }) => {
@@ -57,13 +56,6 @@ const GroupStageMatches = ({ onItemDelete, onItemSave, tournament, tournamentId 
       </div>
     </>
   )
-}
-
-GroupStageMatches.propTypes = {
-  onItemDelete: PropTypes.func.isRequired,
-  onItemSave: PropTypes.func.isRequired,
-  tournament: PropTypes.object.isRequired,
-  tournamentId: PropTypes.number.isRequired,
 }
 
 export default GroupStageMatches

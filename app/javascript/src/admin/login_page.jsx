@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import { loginToAdmin } from './api_client'
 import Title from '../components/title'
 import TextField from '../form/text_field'
@@ -53,10 +52,6 @@ const AdminLoginPage = ({ onSuccessfulLogin }) => {
       </div>
     </form>
   )
-}
-
-AdminLoginPage.propTypes = {
-  onSuccessfulLogin: PropTypes.func.isRequired,
 }
 
 export default AdminLoginPage

@@ -1,5 +1,4 @@
 import React, { forwardRef, useCallback, useEffect, useMemo, useState } from 'react'
-import PropTypes from 'prop-types'
 import { getName } from '../util/util'
 import { filterClubs } from '../util/club_util'
 
@@ -60,16 +59,5 @@ const ClubSelect = forwardRef(({ clubId, clubs, onChange, showNewClub, initialSe
 })
 
 ClubSelect.displayName = 'ClubSelect'
-
-ClubSelect.propTypes = {
-  clubId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  clubs: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
-  initialSearch: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-  showNewClub: PropTypes.bool,
-}
 
 export default ClubSelect

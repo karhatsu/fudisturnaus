@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import Team from './team'
 import { getName } from '../util/util'
 
@@ -64,19 +63,6 @@ const Teams = ({ onClubSave, onItemDelete, onItemSave, tournament, tournamentId 
       </div>
     </>
   )
-}
-
-Teams.propTypes = {
-  onClubSave: PropTypes.func.isRequired,
-  onItemDelete: PropTypes.func.isRequired,
-  onItemSave: PropTypes.func.isRequired,
-  tournament: PropTypes.shape({
-    ageGroups: PropTypes.array.isRequired,
-    clubs: PropTypes.array.isRequired,
-    groups: PropTypes.array.isRequired,
-    teams: PropTypes.array.isRequired,
-  }).isRequired,
-  tournamentId: PropTypes.number.isRequired,
 }
 
 export default Teams

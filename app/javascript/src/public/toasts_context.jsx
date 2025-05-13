@@ -1,5 +1,4 @@
 import React, { createContext, useCallback, useContext, useState } from 'react'
-import PropTypes from 'prop-types'
 
 const visibilityMs = 10000
 const fadeOutMs = 300
@@ -68,11 +67,4 @@ export const ToastsContextProvider = ({ children }) => {
   }
 
   return <ToastsContext.Provider value={value}>{children}</ToastsContext.Provider>
-}
-
-ToastsContextProvider.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node
-  ]),
 }

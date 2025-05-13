@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { visibilityTypes } from '../util/enums'
 
 const { onlyTitle, teams, all } = visibilityTypes
@@ -17,10 +16,6 @@ const VisibilityBadge = ({ visibility }) => {
   }
 
   return <div className={`badge badge--${visibility}`}>{resolveText()}</div>
-}
-
-VisibilityBadge.propTypes = {
-  visibility: PropTypes.oneOf([onlyTitle, teams, all]).isRequired,
 }
 
 export default VisibilityBadge

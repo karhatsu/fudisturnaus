@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
 import { useNavigate, useParams } from 'react-router'
 import { Link } from 'react-router'
 
@@ -223,12 +222,6 @@ const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => 
       {renderContent()}
     </div>
   )
-}
-
-TournamentManagementPage.propTypes = {
-  official: PropTypes.bool.isRequired,
-  titleIconLink: PropTypes.string.isRequired,
-  tournamentId: PropTypes.number,
 }
 
 export default TournamentManagementPage

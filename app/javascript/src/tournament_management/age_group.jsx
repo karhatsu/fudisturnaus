@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useRef } from 'react'
-import PropTypes from 'prop-types'
 import { deleteAgeGroup, saveAgeGroup } from './api_client'
 import AccessContext from '../util/access_context'
 import { resolveTournamentItemClasses } from '../util/util'
@@ -10,7 +9,7 @@ import useForm from '../util/use_form'
 
 const AgeGroup = ({ ageGroup, onAgeGroupDelete, onAgeGroupSave, tournamentId }) => {
   const accessContext = useContext(AccessContext)
-  const nameField = useRef()
+  const nameField = useRef(undefined)
   const { formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, onCheckboxChange } = useForm()
 
   useEffect(() => {
@@ -104,18 +103,6 @@ const AgeGroup = ({ ageGroup, onAgeGroupDelete, onAgeGroupSave, tournamentId }) 
       {!formOpen && renderName()}
     </div>
   )
-}
-
-AgeGroup.propTypes = {
-  ageGroup: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    calculateGroupTables: PropTypes.bool.isRequired,
-    hideGroupTables: PropTypes.bool.isRequired,
-  }),
-  onAgeGroupDelete: PropTypes.func,
-  onAgeGroupSave: PropTypes.func.isRequired,
-  tournamentId: PropTypes.number.isRequired,
 }
 
 export default AgeGroup

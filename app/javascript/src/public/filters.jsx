@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { resolveDate, resolveWeekDay } from '../util/date_util'
 import { getName } from '../util/util'
 
@@ -120,30 +119,6 @@ const Filters = ({ filters, onGoToGroupTables, resetFilters, setFilterValue, tou
       </div>
     </div>
   )
-}
-
-Filters.propTypes = {
-  filters: PropTypes.shape({
-    ageGroupId: PropTypes.number,
-    clubId: PropTypes.number,
-    day: PropTypes.number,
-    fieldId: PropTypes.number,
-    groupId: PropTypes.number,
-    teamId: PropTypes.number,
-  }).isRequired,
-  onGoToGroupTables: PropTypes.func,
-  resetFilters: PropTypes.func.isRequired,
-  setFilterValue: PropTypes.func.isRequired,
-  tournament: PropTypes.shape({
-    ageGroups: PropTypes.array.isRequired,
-    clubs: PropTypes.array.isRequired,
-    dates: PropTypes.arrayOf(PropTypes.string).isRequired,
-    days: PropTypes.number.isRequired,
-    fields: PropTypes.array.isRequired,
-    groups: PropTypes.array.isRequired,
-    startDate: PropTypes.string.isRequired,
-    teams: PropTypes.array.isRequired,
-  }).isRequired,
 }
 
 export default Filters

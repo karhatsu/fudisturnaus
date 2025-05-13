@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import PlayoffMatch from './playoff_match'
 
 const PlayoffMatches = ({ onItemDelete, onItemSave, tournament, tournamentId }) => {
@@ -62,13 +61,6 @@ const PlayoffMatches = ({ onItemDelete, onItemSave, tournament, tournamentId }) 
       </div>
     </>
   )
-}
-
-PlayoffMatches.propTypes = {
-  onItemDelete: PropTypes.func.isRequired,
-  onItemSave: PropTypes.func.isRequired,
-  tournament: PropTypes.object.isRequired,
-  tournamentId: PropTypes.number.isRequired,
 }
 
 export default PlayoffMatches

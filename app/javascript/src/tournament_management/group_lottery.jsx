@@ -1,5 +1,4 @@
 import React, { useContext } from 'react'
-import PropTypes from 'prop-types'
 import { getName } from '../util/util'
 import { saveLottery } from './api_client'
 import AccessContext from '../util/access_context'
@@ -97,23 +96,6 @@ const GroupLottery = ({ ageGroups, group, onLotterySave, tournamentId }) => {
       {renderButtons()}
     </form>
   )
-}
-
-GroupLottery.propTypes = {
-  ageGroups: PropTypes.array.isRequired,
-  group: PropTypes.shape({
-    ageGroupId: PropTypes.number.isRequired,
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    results: PropTypes.arrayOf(PropTypes.shape({
-      ranking: PropTypes.number.isRequired,
-      teamId: PropTypes.number.isRequired,
-      teamName: PropTypes.string.isRequired,
-      lot: PropTypes.number,
-    })),
-  }),
-  onLotterySave: PropTypes.func.isRequired,
-  tournamentId: PropTypes.number.isRequired,
 }
 
 export default GroupLottery

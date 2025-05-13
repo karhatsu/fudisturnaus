@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import { createRoot } from 'react-dom/client'
 import { useParams } from 'react-router'
 import { BrowserRouter, Route, Routes } from 'react-router'
@@ -13,12 +12,6 @@ const RefereeApp = ({ tournamentId, refereeId, refereeName }) => {
       <RefereePage tournamentId={tournamentId} refereeId={refereeId} refereeName={refereeName} />
     </AccessContext.Provider>
   )
-}
-
-RefereeApp.propTypes = {
-  tournamentId: PropTypes.number.isRequired,
-  refereeId: PropTypes.number.isRequired,
-  refereeName: PropTypes.string.isRequired,
 }
 
 document.addEventListener('DOMContentLoaded', () => {

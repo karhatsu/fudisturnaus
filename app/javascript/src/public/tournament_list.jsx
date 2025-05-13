@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import PropTypes from 'prop-types'
 import { addDays, endOfDay, endOfWeek, isAfter, isBefore, isSameDay, isToday, isTomorrow, parseISO } from 'date-fns'
 
 import Loading from '../components/loading'
@@ -123,19 +122,6 @@ const TournamentList = props => {
       {renderContent()}
     </div>
   )
-}
-
-TournamentList.propTypes = {
-  buildLink: PropTypes.func.isRequired,
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node
-  ]),
-  search: PropTypes.string,
-  setSearch: PropTypes.func,
-  title: PropTypes.string.isRequired,
-  tournaments: PropTypes.array,
-  tournamentsError: PropTypes.bool.isRequired,
 }
 
 export default TournamentList

@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import { createRoot } from 'react-dom/client'
 import { useParams } from 'react-router'
 import { BrowserRouter, Route, Routes } from 'react-router'
@@ -23,10 +22,6 @@ const OfficialApp = ({ tournamentId }) => {
       </Routes>
     </AccessContext.Provider>
   )
-}
-
-OfficialApp.propTypes = {
-  tournamentId: PropTypes.number.isRequired,
 }
 
 document.addEventListener('DOMContentLoaded', () => {

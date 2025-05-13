@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import * as clipboard from 'clipboard-polyfill'
 import Button from '../form/button'
 import Message from '../components/message'
@@ -36,12 +35,6 @@ const OfficialLinkCopy = ({ description, path, title }) => {
       </div>
     </div>
   )
-}
-
-OfficialLinkCopy.propTypes = {
-  description: PropTypes.string.isRequired,
-  path: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
 }
 
 export default OfficialLinkCopy

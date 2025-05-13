@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react'
-import PropTypes from 'prop-types'
 import { formatDateTime } from '../util/date_util'
 import { Link } from 'react-router'
 
@@ -54,11 +53,6 @@ const ContactItem = ({ contact, updateAsHandled }) => {
       )}
     </div>
   )
-}
-
-ContactItem.propTypes = {
-  contact: PropTypes.object.isRequired,
-  updateAsHandled: PropTypes.func.isRequired,
 }
 
 export default ContactItem

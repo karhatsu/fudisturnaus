@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useRef } from 'react'
-import PropTypes from 'prop-types'
 import { matchTypes } from '../util/enums'
 import { saveResult } from '../tournament_management/api_client'
 import AccessContext from '../util/access_context'
@@ -11,7 +10,7 @@ import { buildGroupTitle } from '../util/util'
 
 const EditableMatch = ({ ageGroups, clubs, fieldsCount, groups, match, selectedClubId, selectedTeamId, tournamentDays, tournamentId }) => {
   const accessContext = useContext(AccessContext)
-  const homeGoalsField = useRef()
+  const homeGoalsField = useRef(undefined)
   const { formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, onCheckboxChange } = useForm()
 
   useEffect(() => {
@@ -171,43 +170,6 @@ const EditableMatch = ({ ageGroups, clubs, fieldsCount, groups, match, selectedC
       {renderErrors()}
     </div>
   )
-}
-
-EditableMatch.propTypes = {
-  ageGroups: PropTypes.array.isRequired,
-  clubs: PropTypes.arrayOf(PropTypes.shape({
-    logoUrl: PropTypes.string,
-  })).isRequired,
-  fieldsCount: PropTypes.number.isRequired,
-  groups: PropTypes.array.isRequired,
-  match: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    type: PropTypes.string.isRequired,
-    startTime: PropTypes.string.isRequired,
-    field: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-    }).isRequired,
-    title: PropTypes.string,
-    homeTeam: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-    }),
-    awayTeam: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-    }),
-    homeGoals: PropTypes.number,
-    awayGoals: PropTypes.number,
-    penalties: PropTypes.bool,
-    ageGroup: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-    }).isRequired,
-    group: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-    }),
-  }).isRequired,
-  selectedClubId: PropTypes.number,
-  selectedTeamId: PropTypes.number,
-  tournamentDays: PropTypes.number.isRequired,
-  tournamentId: PropTypes.number.isRequired,
 }
 
 export default EditableMatch

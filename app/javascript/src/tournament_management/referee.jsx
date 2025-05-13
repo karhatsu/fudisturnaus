@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useRef } from 'react'
-import PropTypes from 'prop-types'
 import { deleteReferee, saveReferee } from './api_client'
 import AccessContext from '../util/access_context'
 import { resolveTournamentItemClasses } from '../util/util'
@@ -11,7 +10,7 @@ import { buildUrl } from '../util/url_util'
 
 const Referee = ({ referee, onRefereeDelete, onRefereeSave, tournamentId }) =>{
   const accessContext = useContext(AccessContext)
-  const nameField = useRef()
+  const nameField = useRef(undefined)
   const { formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange } = useForm()
 
   useEffect(() => {
@@ -90,17 +89,6 @@ const Referee = ({ referee, onRefereeDelete, onRefereeSave, tournamentId }) =>{
       {!formOpen && renderName()}
     </div>
   )
-}
-
-Referee.propTypes = {
-  referee: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    accessKey: PropTypes.string.isRequired,
-  }),
-  onRefereeDelete: PropTypes.func,
-  onRefereeSave: PropTypes.func.isRequired,
-  tournamentId: PropTypes.number.isRequired,
 }
 
 export default Referee

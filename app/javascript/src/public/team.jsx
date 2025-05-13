@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 const Team = props => {
   const { clubId, clubs, name, selected, showAlias } = props
@@ -26,21 +25,6 @@ const Team = props => {
       <span className="team__name">{name}{showAlias && club.alias && ` (${club.alias})`}</span>
     </span>
   )
-}
-
-Team.propTypes = {
-  clubId: PropTypes.number,
-  club: PropTypes.shape({
-    id: PropTypes.number,
-    logoUrl: PropTypes.string,
-  }),
-  clubs: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    logoUrl: PropTypes.string,
-  })),
-  name: PropTypes.string.isRequired,
-  selected: PropTypes.bool,
-  showAlias: PropTypes.bool,
 }
 
 export default Team

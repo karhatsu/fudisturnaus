@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import OfficialLinkCopy from './official_link_copy'
 
 /* eslint-disable max-len */
@@ -41,14 +40,6 @@ const TournamentLinks = ({ tournament }) => {
       />
     </>
   )
-}
-
-TournamentLinks.propTypes = {
-  tournament: PropTypes.shape({
-    accessKey: PropTypes.string.isRequired,
-    resultsAccessKey: PropTypes.string.isRequired,
-    slug: PropTypes.string.isRequired,
-  }).isRequired,
 }
 
 export default TournamentLinks

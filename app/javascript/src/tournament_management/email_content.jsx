@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import * as clipboard from 'clipboard-polyfill'
 import Button from '../form/button'
 import Message from '../components/message'
@@ -37,13 +36,6 @@ Henri`
       </div>
     </>
   )
-}
-
-EmailContent.propTypes = {
-  tournament: PropTypes.shape({
-    accessKey: PropTypes.string.isRequired,
-    slug: PropTypes.string.isRequired,
-  }).isRequired,
 }
 
 export default EmailContent

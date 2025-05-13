@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import Referee from './referee'
 
 const Referees = ({ onItemDelete, onItemSave, tournament, tournamentId }) => {
@@ -39,15 +38,6 @@ const Referees = ({ onItemDelete, onItemSave, tournament, tournamentId }) => {
       </div>
     </>
   )
-}
-
-Referees.propTypes = {
-  onItemDelete: PropTypes.func.isRequired,
-  onItemSave: PropTypes.func.isRequired,
-  tournament: PropTypes.shape({
-    referees: PropTypes.array.isRequired,
-  }).isRequired,
-  tournamentId: PropTypes.number.isRequired,
 }
 
 export default Referees

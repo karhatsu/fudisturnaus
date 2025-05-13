@@ -1,5 +1,4 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import PropTypes from 'prop-types'
 import { addDays, differenceInDays, format, parseISO } from 'date-fns'
 import { fromZonedTime } from 'date-fns-tz'
 import { deleteGroupStageMatch, saveGroupStageMatch } from './api_client'
@@ -7,7 +6,6 @@ import AccessContext from '../util/access_context'
 import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util/date_util'
 import { getName, resolveSuggestedTime, resolveTournamentItemClasses } from '../util/util'
 import IdNameSelect from '../form/id_name_select'
-import { idNamePropType } from '../util/custom_prop_types'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
 import Button from '../form/button'
@@ -30,7 +28,7 @@ const GroupStageMatch = props => {
     tournamentDays,
   } = props
   const accessContext = useContext(AccessContext)
-  const timeField = useRef()
+  const timeField = useRef(undefined)
   const { changeValue, formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, changeValues } = useForm()
   const [timeSuggested, setTimeSuggested] = useState(false)
 
@@ -245,38 +243,6 @@ const GroupStageMatch = props => {
       {!formOpen && renderName()}
     </div>
   )
-}
-
-GroupStageMatch.propTypes = {
-  ageGroups: PropTypes.arrayOf(idNamePropType).isRequired,
-  fields: PropTypes.arrayOf(idNamePropType).isRequired,
-  groups: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    ageGroupId: PropTypes.number.isRequired,
-  })),
-  groupStageMatch: PropTypes.shape({
-    ageGroupId: PropTypes.number.isRequired,
-    awayTeamId: PropTypes.number.isRequired,
-    fieldId: PropTypes.number.isRequired,
-    groupId: PropTypes.number.isRequired,
-    homeTeamId: PropTypes.number.isRequired,
-    id: PropTypes.number.isRequired,
-    refereeId: PropTypes.number,
-    startTime: PropTypes.string.isRequired,
-  }),
-  groupStageMatches: PropTypes.arrayOf(PropTypes.shape({
-    fieldId: PropTypes.number.isRequired,
-    startTime: PropTypes.string.isRequired,
-  })).isRequired,
-  onGroupStageMatchDelete: PropTypes.func,
-  onGroupStageMatchSave: PropTypes.func.isRequired,
-  matchMinutes: PropTypes.number.isRequired,
-  referees: PropTypes.array.isRequired,
-  teams: PropTypes.arrayOf(idNamePropType).isRequired,
-  tournamentDays: PropTypes.number.isRequired,
-  tournamentId: PropTypes.number.isRequired,
-  tournamentDate: PropTypes.string.isRequired,
 }
 
 export default GroupStageMatch

@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 import { formatTournamentDates } from '../util/date_util'
 
@@ -34,22 +33,6 @@ const TournamentLinkBox = ({ to, tournament }) => {
       {renderBadge()}
     </Link>
   )
-}
-
-TournamentLinkBox.propTypes = {
-  to: PropTypes.string.isRequired,
-  tournament: PropTypes.shape({
-    cancelled: PropTypes.bool.isRequired,
-    club: PropTypes.shape({
-      logoUrl: PropTypes.string,
-    }),
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    location: PropTypes.string.isRequired,
-    startDate: PropTypes.string.isRequired,
-    endDate: PropTypes.string.isRequired,
-    test: PropTypes.bool.isRequired,
-  }).isRequired,
 }
 
 export default TournamentLinkBox

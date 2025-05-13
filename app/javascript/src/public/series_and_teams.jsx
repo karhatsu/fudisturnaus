@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import Team from './team'
 import Message from '../components/message'
 
@@ -63,31 +62,6 @@ const SeriesAndTeams = ({ tournament }) => {
       {tournament.ageGroups.map(renderAgeGroup)}
     </div>
   )
-}
-
-SeriesAndTeams.propTypes = {
-  tournament: PropTypes.shape({
-    ageGroups: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    })).isRequired,
-    cancelled: PropTypes.bool.isRequired,
-    clubs: PropTypes.arrayOf(PropTypes.shape({
-      logoUrl: PropTypes.string,
-    })).isRequired,
-    groups: PropTypes.arrayOf(PropTypes.shape({
-      ageGroupId: PropTypes.number.isRequired,
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    })).isRequired,
-    teams: PropTypes.arrayOf(PropTypes.shape({
-      ageGroupId: PropTypes.number.isRequired,
-      clubId: PropTypes.number,
-      groupId: PropTypes.number.isRequired,
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    })).isRequired,
-  }).isRequired,
 }
 
 export default SeriesAndTeams

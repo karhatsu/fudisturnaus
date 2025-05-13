@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { buildGroupTitle, resolveColStyles } from '../util/util'
 import Team from './team'
 
@@ -63,25 +62,6 @@ const GroupResults = ({ ageGroups, clubs, filters, group, groups, visibleGroupsC
       </div>
     </div>
   )
-}
-
-GroupResults.propTypes = {
-  ageGroups: PropTypes.array.isRequired,
-  clubs: PropTypes.array.isRequired,
-  filters: PropTypes.object.isRequired,
-  group: PropTypes.shape({
-    ageGroupId: PropTypes.number.isRequired,
-    ageGroup: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-    }).isRequired,
-    name: PropTypes.string.isRequired,
-    results: PropTypes.arrayOf(PropTypes.shape({
-      teamName: PropTypes.string.isRequired,
-    })).isRequired,
-  }).isRequired,
-  groups: PropTypes.array.isRequired,
-  visibleGroupsCount: PropTypes.number.isRequired,
-  showLottery: PropTypes.bool.isRequired,
 }
 
 export default GroupResults

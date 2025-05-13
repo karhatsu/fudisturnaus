@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import GroupLottery from './group_lottery'
 
 const Lottery = ({ onLotterySave, tournament, tournamentId }) => {
@@ -39,24 +38,6 @@ const Lottery = ({ onLotterySave, tournament, tournamentId }) => {
       </div>
     </>
   )
-}
-
-Lottery.propTypes = {
-  onLotterySave: PropTypes.func.isRequired,
-  tournament: PropTypes.shape({
-    ageGroups: PropTypes.array.isRequired,
-    groups: PropTypes.arrayOf(PropTypes.shape({
-      ageGroupId: PropTypes.number.isRequired,
-      id: PropTypes.number.isRequired,
-      results: PropTypes.arrayOf(PropTypes.shape({
-        ranking: PropTypes.number.isRequired,
-        teamId: PropTypes.number.isRequired,
-        teamName: PropTypes.string.isRequired,
-        lot: PropTypes.number,
-      })),
-    })).isRequired,
-  }).isRequired,
-  tournamentId: PropTypes.number.isRequired,
 }
 
 export default Lottery

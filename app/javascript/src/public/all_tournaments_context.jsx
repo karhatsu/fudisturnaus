@@ -1,5 +1,4 @@
 import React, { createContext, useCallback, useContext, useState } from 'react'
-import PropTypes from 'prop-types'
 import { fetchTournaments } from './api_client'
 
 const AllTournamentsContext = createContext(undefined)
@@ -24,8 +23,4 @@ export const AllTournamentsContextProvider = ({ children }) => {
 
   const value = { fetchAllTournaments, tournaments, error, search, setSearch }
   return <AllTournamentsContext.Provider value={value}>{children}</AllTournamentsContext.Provider>
-}
-
-AllTournamentsContextProvider.propTypes = {
-  children: PropTypes.element.isRequired,
 }

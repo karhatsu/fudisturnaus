@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import Field from './field'
 
 const Fields = ({ fields, onItemDelete, onItemSave, tournamentId }) => {
@@ -24,13 +23,6 @@ const Fields = ({ fields, onItemDelete, onItemSave, tournamentId }) => {
       </div>
     </>
   )
-}
-
-Fields.propTypes = {
-  fields: PropTypes.array.isRequired,
-  onItemDelete: PropTypes.func.isRequired,
-  onItemSave: PropTypes.func.isRequired,
-  tournamentId: PropTypes.number.isRequired,
 }
 
 export default Fields

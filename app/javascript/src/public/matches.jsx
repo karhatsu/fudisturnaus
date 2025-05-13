@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import isSameDay from 'date-fns/isSameDay'
 import { resolveColStyles } from '../util/util'
 import Message from '../components/message'
@@ -65,20 +64,6 @@ const Matches = props => {
       {renderDates(matchesByStartTime)}
     </div>
   )
-}
-
-Matches.propTypes = {
-  ageGroups: PropTypes.array.isRequired,
-  clubs: PropTypes.array.isRequired,
-  fieldsCount: PropTypes.number.isRequired,
-  groups: PropTypes.array.isRequired,
-  matches: PropTypes.array.isRequired,
-  renderMatch: PropTypes.func.isRequired,
-  selectedClubId: PropTypes.number,
-  selectedTeamId: PropTypes.number,
-  showEmptyError: PropTypes.bool,
-  tournamentDays: PropTypes.number.isRequired,
-  tournamentId: PropTypes.number.isRequired,
 }
 
 export default Matches

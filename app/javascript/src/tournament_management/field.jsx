@@ -1,9 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react'
-import PropTypes from 'prop-types'
 import { deleteField, saveField } from './api_client'
 import AccessContext from '../util/access_context'
 import { resolveTournamentItemClasses } from '../util/util'
-import { idNamePropType } from '../util/custom_prop_types'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
 import Button from '../form/button'
@@ -11,7 +9,7 @@ import useForm from '../util/use_form'
 
 const Field = ({ field, onFieldDelete, onFieldSave, tournamentId }) =>{
   const accessContext = useContext(AccessContext)
-  const nameField = useRef()
+  const nameField = useRef(undefined)
   const { formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange } = useForm()
 
   useEffect(() => {
@@ -78,13 +76,6 @@ const Field = ({ field, onFieldDelete, onFieldSave, tournamentId }) =>{
       {!formOpen && renderName()}
     </div>
   )
-}
-
-Field.propTypes = {
-  field: idNamePropType,
-  onFieldDelete: PropTypes.func,
-  onFieldSave: PropTypes.func.isRequired,
-  tournamentId: PropTypes.number.isRequired,
 }
 
 export default Field

@@ -1,5 +1,4 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
 import { formatDateRange } from '../util/date_util'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
@@ -253,29 +252,6 @@ const TournamentFields = props => {
   } else {
     return renderTournamentReadOnlyFields()
   }
-}
-
-TournamentFields.propTypes = {
-  contactId: PropTypes.string,
-  clubName: PropTypes.string,
-  clubs: PropTypes.array.isRequired,
-  official: PropTypes.bool.isRequired,
-  onCancel: PropTypes.func,
-  onSave: PropTypes.func.isRequired,
-  tournament: PropTypes.shape({
-    cancelled: PropTypes.bool.isRequired,
-    clubId: PropTypes.number,
-    id: PropTypes.number,
-    name: PropTypes.string.isRequired,
-    location: PropTypes.string.isRequired,
-    address: PropTypes.string,
-    startDate: PropTypes.string.isRequired,
-    days: PropTypes.number.isRequired,
-    matchMinutes: PropTypes.number.isRequired,
-    equalPointsRule: PropTypes.number.isRequired,
-    visibility: PropTypes.oneOf([onlyTitle, teams, all]).isRequired,
-    test: PropTypes.bool.isRequired,
-  }).isRequired,
 }
 
 export default TournamentFields

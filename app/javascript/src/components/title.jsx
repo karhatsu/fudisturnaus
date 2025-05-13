@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 
 const emoji = '⚽'
@@ -80,17 +79,6 @@ const Title = ({ children, club, iconLink, loading, text, tournament }) => {
       </div>
     </div>
   )
-}
-
-Title.propTypes = {
-  children: PropTypes.element,
-  club: PropTypes.shape({
-    logoUrl: PropTypes.string,
-  }),
-  iconLink: PropTypes.string,
-  loading: PropTypes.bool.isRequired,
-  text: PropTypes.string.isRequired,
-  tournament: PropTypes.object,
 }
 
 export default Title

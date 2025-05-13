@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import PropTypes from 'prop-types'
 
 const Button = ({ disabled, label, onClick, size, type }) => {
   const inputType = () => {
@@ -20,14 +19,6 @@ const Button = ({ disabled, label, onClick, size, type }) => {
   }, [onClick])
 
   return <input type={inputType()} value={label} onClick={handleClick} className={classNames()} disabled={disabled}/>
-}
-
-Button.propTypes = {
-  disabled: PropTypes.bool,
-  onClick: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
-  size: PropTypes.oneOf(['small']),
-  type: PropTypes.oneOf(['primary', 'normal', 'danger']).isRequired,
 }
 
 export default Button

@@ -1,9 +1,7 @@
 import React, { useContext, useRef } from 'react'
-import PropTypes from 'prop-types'
 import { deleteGroup, saveGroup } from './api_client'
 import AccessContext from '../util/access_context'
 import { getName, resolveTournamentItemClasses } from '../util/util'
-import { idNamePropType } from '../util/custom_prop_types'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
 import Button from '../form/button'
@@ -11,7 +9,7 @@ import useForm from '../util/use_form'
 
 const Group = ({ ageGroups, group, onGroupDelete, onGroupSave, tournamentId, type }) => {
   const accessContext = useContext(AccessContext)
-  const nameField = useRef()
+  const nameField = useRef(undefined)
   const { formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, changeValue } = useForm()
 
   const renderName = () => {
@@ -97,19 +95,6 @@ const Group = ({ ageGroups, group, onGroupDelete, onGroupSave, tournamentId, typ
       {!formOpen && renderName()}
     </div>
   )
-}
-
-Group.propTypes = {
-  ageGroups: PropTypes.arrayOf(idNamePropType).isRequired,
-  group: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    ageGroupId: PropTypes.number.isRequired,
-  }),
-  onGroupDelete: PropTypes.func,
-  onGroupSave: PropTypes.func.isRequired,
-  type: PropTypes.oneOf(['group', 'playoffGroup']).isRequired,
-  tournamentId: PropTypes.number.isRequired,
 }
 
 export default Group

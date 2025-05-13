@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import Group from './group'
 
 const PlayoffGroups = ({ onItemDelete, onItemSave, tournament, tournamentId }) => {
@@ -39,16 +38,6 @@ const PlayoffGroups = ({ onItemDelete, onItemSave, tournament, tournamentId }) =
       </div>
     </>
   )
-}
-
-PlayoffGroups.propTypes = {
-  onItemDelete: PropTypes.func.isRequired,
-  onItemSave: PropTypes.func.isRequired,
-  tournament: PropTypes.shape({
-    ageGroups: PropTypes.array.isRequired,
-    playoffGroups: PropTypes.array.isRequired,
-  }).isRequired,
-  tournamentId: PropTypes.number.isRequired,
 }
 
 export default PlayoffGroups

@@ -1,9 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import PropTypes from 'prop-types'
 import { createClub, deleteTeam, saveTeam } from './api_client'
 import AccessContext from '../util/access_context'
 import { getName, resolveTournamentItemClasses } from '../util/util'
-import { idNamePropType } from '../util/custom_prop_types'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
 import Button from '../form/button'
@@ -12,9 +10,9 @@ import ClubSelect, { CHOOSE_CLUB_ID, NEW_CLUB_ID } from '../form/club_select'
 
 const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, team, tournamentId }) => {
   const accessContext = useContext(AccessContext)
-  const nameField = useRef()
-  const clubField = useRef()
-  const clubNameField = useRef()
+  const nameField = useRef(undefined)
+  const clubField = useRef(undefined)
+  const clubNameField = useRef(undefined)
   const { formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, changeValue, changeValues } = useForm()
   const [clubName, setClubName] = useState('')
 
@@ -160,22 +158,6 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
       {data.clubId === NEW_CLUB_ID && renderClubForm()}
     </div>
   )
-}
-
-Team.propTypes = {
-  ageGroups: PropTypes.arrayOf(idNamePropType).isRequired,
-  clubs: PropTypes.arrayOf(idNamePropType).isRequired,
-  groups: PropTypes.arrayOf(idNamePropType).isRequired,
-  team: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    club: idNamePropType,
-    groupId: PropTypes.number.isRequired,
-  }),
-  onClubSave: PropTypes.func.isRequired,
-  onTeamDelete: PropTypes.func,
-  onTeamSave: PropTypes.func.isRequired,
-  tournamentId: PropTypes.number.isRequired,
 }
 
 export default Team

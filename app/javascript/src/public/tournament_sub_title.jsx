@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { formatTournamentDates } from '../util/date_util'
 
 const TournamentSubTitle = ({ tournament }) => {
@@ -12,15 +11,6 @@ const TournamentSubTitle = ({ tournament }) => {
   }
 
   return <div className="sub-title">{renderLocation()}, {formatTournamentDates(startDate, endDate)}</div>
-}
-
-TournamentSubTitle.propTypes = {
-  tournament: PropTypes.shape({
-    address: PropTypes.string,
-    location: PropTypes.string.isRequired,
-    startDate: PropTypes.string.isRequired,
-    endDate: PropTypes.string.isRequired,
-  }),
 }
 
 export default TournamentSubTitle

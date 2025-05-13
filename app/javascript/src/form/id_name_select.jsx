@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 const IdNameSelect = ({ customNameBuild, field, formData, items, label, onChange }) => {
   const renderOptions = () => {
@@ -18,15 +17,6 @@ const IdNameSelect = ({ customNameBuild, field, formData, items, label, onChange
       </select>
     </div>
   )
-}
-
-IdNameSelect.propTypes = {
-  customNameBuild: PropTypes.func,
-  field: PropTypes.string.isRequired,
-  formData: PropTypes.object.isRequired,
-  items: PropTypes.array.isRequired,
-  label: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
 }
 
 export default IdNameSelect

@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { formatMatchTime } from '../util/date_util'
 import Team from './team'
 import { buildGroupTitle } from '../util/util'
@@ -65,43 +64,6 @@ const Match = ({ ageGroups, clubs, fieldsCount, groups, match, selectedClubId, s
       </div>
     </div>
   )
-}
-
-Match.propTypes = {
-  ageGroups: PropTypes.array.isRequired,
-  clubs: PropTypes.arrayOf(PropTypes.shape({
-    logoUrl: PropTypes.string,
-  })).isRequired,
-  fieldsCount: PropTypes.number.isRequired,
-  groups: PropTypes.array.isRequired,
-  match: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    type: PropTypes.string.isRequired,
-    startTime: PropTypes.string.isRequired,
-    field: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-    }).isRequired,
-    title: PropTypes.string,
-    homeTeam: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-    }),
-    awayTeam: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-    }),
-    homeGoals: PropTypes.number,
-    awayGoals: PropTypes.number,
-    penalties: PropTypes.bool,
-    ageGroup: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-    }).isRequired,
-    group: PropTypes.shape({
-      ageGroupId: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    }),
-  }).isRequired,
-  selectedClubId: PropTypes.number,
-  selectedTeamId: PropTypes.number,
-  tournamentDays: PropTypes.number.isRequired,
 }
 
 export default Match

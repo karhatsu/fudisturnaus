@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import Message from '../components/message'
 import { visibilityTypes } from '../util/enums'
 import Matches from '../public/matches'
@@ -70,12 +69,6 @@ const RefereePage = ({ tournamentId, refereeId, refereeName }) => {
       {renderContent()}
     </div>
   )
-}
-
-RefereePage.propTypes = {
-  tournamentId: PropTypes.number.isRequired,
-  refereeId: PropTypes.number.isRequired,
-  refereeName: PropTypes.string.isRequired,
 }
 
 export default RefereePage

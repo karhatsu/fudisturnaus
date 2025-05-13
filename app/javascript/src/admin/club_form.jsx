@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useRef } from 'react'
-import PropTypes from 'prop-types'
 import AccessContext from '../util/access_context'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
@@ -11,7 +10,7 @@ import { resolveTournamentItemClasses } from '../util/util'
 
 const ClubForm = ({ club, onClubDelete, onClubSave }) => {
   const { data, errors, formOpen, openForm, closeForm, onFieldChange, setErrors } = useForm()
-  const nameField = useRef()
+  const nameField = useRef(undefined)
   const accessContext = useContext(AccessContext)
 
   useEffect(() => {
@@ -95,17 +94,6 @@ const ClubForm = ({ club, onClubDelete, onClubSave }) => {
       {!formOpen && renderName()}
     </div>
   )
-}
-
-ClubForm.propTypes = {
-  club: PropTypes.shape({
-    alias: PropTypes.string,
-    id: PropTypes.number.isRequired,
-    logoUrl: PropTypes.string,
-    name: PropTypes.string.isRequired,
-  }),
-  onClubDelete: PropTypes.func,
-  onClubSave: PropTypes.func.isRequired,
 }
 
 export default ClubForm

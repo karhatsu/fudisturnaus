@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import PropTypes from 'prop-types'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import { Link } from 'react-router'
 import queryString from 'query-string'
@@ -333,12 +332,6 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
       {renderContent()}
     </div>
   )
-}
-
-TournamentPage.propTypes = {
-  officialLevel: PropTypes.oneOf([none, results, full]).isRequired,
-  renderMatch: PropTypes.func.isRequired,
-  tournamentKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
 }
 
 export default TournamentPage

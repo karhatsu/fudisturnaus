@@ -48,6 +48,8 @@ export default [
 
       'object-curly-spacing': ['error', 'always'],
       'array-bracket-spacing': 'error',
+
+      'react/prop-types': 'off',
     },
   }
 ]

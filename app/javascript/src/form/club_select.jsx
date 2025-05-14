@@ -50,7 +50,9 @@ const ClubSelect = forwardRef(({ clubId, clubs, onChange, showNewClub, initialSe
           )}
           <div onClick={() => selectClub(null)} className="club-select__option">- Ei virallista seuraa -</div>
           {visibleClubs.map(c => (
-            <div key={c.id} onClick={() => selectClub(c.id)} className="club-select__option" id={`club_${c.id}`}>{c.name}</div>
+            <div key={c.id} onClick={() => selectClub(c.id)} className="club-select__option" id={`club_${c.id}`}>
+              {c.name}{c.alias ? ` (${c.alias})` : ''}
+            </div>
           ))}
         </div>
       )}

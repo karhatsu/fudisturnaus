@@ -51,6 +51,7 @@ group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
   gem 'launchy'
+  gem 'mutex_m'
 end
 
 group :development, :production do

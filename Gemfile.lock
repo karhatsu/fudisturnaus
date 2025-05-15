@@ -149,6 +149,7 @@ GEM
     mini_portile2 (2.8.9)
     minitest (5.25.5)
     msgpack (1.8.0)
+    mutex_m (0.3.0)
     net-imap (0.5.8)
       date
       net-protocol
@@ -308,6 +309,7 @@ DEPENDENCIES
   jsbundling-rails
   launchy
   listen
+  mutex_m
   pg
   puma
   rails (= 8.0.2)

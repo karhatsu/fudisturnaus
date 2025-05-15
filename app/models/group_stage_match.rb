@@ -9,6 +9,7 @@ class GroupStageMatch < ApplicationRecord
   validates :start_time, presence: true
   validate :no_same_teams
 
+  around_save :update_tournament_dates
   before_destroy :check_usage
 
   delegate :age_group, to: :group
@@ -36,6 +37,12 @@ class GroupStageMatch < ApplicationRecord
 
   def no_same_teams
     errors.add :base, 'Koti- ja vierasjoukkue eivät voi olla samoja' if home_team_id && away_team_id && home_team_id == away_team_id
+  end
+
+  def update_tournament_dates
+    old_date = start_time_was&.to_date
+    yield
+    tournament.update_dates if old_date != date && tournament.days == 0
   end
 
   def check_usage

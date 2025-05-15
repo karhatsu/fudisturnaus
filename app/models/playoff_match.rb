@@ -25,6 +25,7 @@ class PlayoffMatch < ApplicationRecord
   validate :teams_are_required
 
   before_save :reassign_home_team, :reassign_away_team
+  around_save :update_tournament_dates
 
   delegate :tournament, to: :age_group
   delegate :tournament_id, to: :age_group
@@ -131,5 +132,11 @@ class PlayoffMatch < ApplicationRecord
         end
       end
     end
+  end
+
+  def update_tournament_dates
+    old_date = start_time_was&.to_date
+    yield
+    tournament.update_dates if old_date != date && tournament.days == 0
   end
 end

@@ -27,6 +27,8 @@ class Tournament < ApplicationRecord
   validates :visibility, inclusion: { in: [VISIBILITY_ONLY_TITLE, VISIBILITY_TEAMS, VISIBILITY_ALL] }
 
   before_create :generate_access_keys
+  before_create :init_dates
+  before_update :check_days_change
   around_update :check_match_dates
   after_update :update_tables_on_rules_change
 
@@ -38,11 +40,6 @@ class Tournament < ApplicationRecord
 
   def clubs
     groups.flat_map {|g| g.teams.flat_map(&:club)}.uniq.select {|c| c}.sort { |a, b| a.name <=> b.name }
-  end
-
-  def dates
-    return find_unique_dates if days == 0
-    days.times.map {|i| start_date + i}
   end
 
   def end_date
@@ -95,6 +92,11 @@ class Tournament < ApplicationRecord
     end
   end
 
+  def update_dates
+    self.dates = find_unique_dates
+    self.save!
+  end
+
   private
 
   def generate_access_keys
@@ -117,7 +119,17 @@ class Tournament < ApplicationRecord
     end
   end
 
+  def init_dates
+    self.dates = find_unique_dates
+  end
+
+  def check_days_change
+    return unless start_date_changed? || days_changed?
+    self.dates = find_unique_dates
+  end
+
   def find_unique_dates
+    return days.times.map {|i| start_date + i} if days > 0
     dates = [start_date]
     age_groups.each do |ag|
       ag.groups.each do |g|

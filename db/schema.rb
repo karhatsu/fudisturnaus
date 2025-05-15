@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_30_094621) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_15_031938) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   create_table "age_groups", force: :cascade do |t|
     t.bigint "tournament_id", null: false
@@ -168,6 +168,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_30_094621) do
     t.bigint "club_id"
     t.string "slug"
     t.text "info"
+    t.jsonb "dates", null: false
     t.index ["club_id"], name: "index_tournaments_on_club_id"
     t.index ["slug"], name: "index_tournaments_on_slug", unique: true
   end

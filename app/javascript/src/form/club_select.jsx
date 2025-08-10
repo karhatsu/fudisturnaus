@@ -14,6 +14,7 @@ const ClubSelect = forwardRef(({ clubId, clubs, onChange, showNewClub, initialSe
   const selectClub = useCallback(clubId => {
     onChange(clubId)
     setShowList(false)
+    if (clubId === null) setSearch('')
   }, [onChange])
 
   const closeList = useCallback(() => {

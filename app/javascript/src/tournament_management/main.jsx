@@ -54,7 +54,7 @@ const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => 
     const { visibility } = tournament
     return (
       <div>
-        {visibility < 2 && <Message type="warning">Kun haluat julkaista otteluohjelman, muokkaa turnauksen perustietoja</Message>}
+        {visibility < 2 && <Message type="warning">Kun haluat julkaista otteluohjelman, vaihda alla olevasta Perustiedot-osiosta Turnauksen näkyvyys -asetusta</Message>}
         <div className="title-2">Perustiedot</div>
         <div className="tournament-management__section tournament-management__section--tournament">
           <TournamentFields clubs={tournament.clubs} onSave={onSave} tournament={tournament} official={official} />

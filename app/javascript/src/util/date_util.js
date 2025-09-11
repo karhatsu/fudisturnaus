@@ -81,3 +81,11 @@ function formatWeekDay(date) {
       return 'su'
   }
 }
+
+export function isDefaultTimeZone() {
+  return getUserTimeZone() === timeZone
+}
+
+export function getUserTimeZone() {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone
+}

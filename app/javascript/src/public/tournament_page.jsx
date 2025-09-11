@@ -18,6 +18,7 @@ import Message from '../components/message'
 import useTournamentFetching from '../util/use_tournament_fetching'
 import CancelledBadge from './cancelled_badge'
 import TournamentSubTitle from './tournament_sub_title'
+import TimezoneWarning from "../components/timezone_warning"
 
 const { onlyTitle, teams, all } = visibilityTypes
 
@@ -198,6 +199,7 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
           setFilterValue={setFilterValue}
           tournament={tournament}
         />
+        <TimezoneWarning />
         {renderMatches(groupStageMatches, 'Alkulohkojen ottelut', tournament.playoffMatches.length, true)}
         {renderGroupTables()}
         {renderMatches(filteredPlayoffMatches, 'Jatko-ottelut', filteredPlayoffMatches.length)}

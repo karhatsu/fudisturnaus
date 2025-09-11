@@ -22,6 +22,7 @@ import PlayoffMatches from './playoff_matches'
 import TournamentLinks from './tournament_links'
 import EmailContent from './email_content'
 import Referees from './referees'
+import TimezoneWarning from "../components/timezone_warning"
 
 const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => {
   const navigate = useNavigate()
@@ -55,6 +56,7 @@ const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => 
     return (
       <div>
         {visibility < 2 && <Message type="warning">Kun haluat julkaista otteluohjelman, vaihda alla olevasta Perustiedot-osiosta Turnauksen näkyvyys -asetusta</Message>}
+        <TimezoneWarning />
         <div className="title-2">Perustiedot</div>
         <div className="tournament-management__section tournament-management__section--tournament">
           <TournamentFields clubs={tournament.clubs} onSave={onSave} tournament={tournament} official={official} />

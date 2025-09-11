@@ -1,5 +1,7 @@
-import { addDays, differenceInCalendarDays, format, parseISO } from 'date-fns'
+import { addDays, differenceInCalendarDays, format } from 'date-fns'
 import { TZDate } from '@date-fns/tz'
+
+const timeZone = 'Europe/Helsinki'
 
 export function formatTournamentDates(startDate, endDate) {
   const dates = [formatDate(startDate)]
@@ -18,47 +20,45 @@ export function formatDateRange(startDate, days = 1) {
 }
 
 export function resolveDate(baseDate, increment) {
-  return format(addDays(parse(baseDate), increment), 'dd.MM.yyyy')
+  return format(addDays(toTzDate(baseDate), increment), 'dd.MM.yyyy')
 }
 
 export function formatDate(date) {
-  return format(parse(date), 'dd.MM.yyyy')
+  return format(toTzDate(date), 'dd.MM.yyyy')
 }
 
 export function formatMatchTime(tournamentDays, time) {
   const formattedTime = formatTime(time)
-  if (tournamentDays > 1) return `${formatWeekDay(parse(time))} ${formattedTime}`
+  if (tournamentDays > 1) return `${formatWeekDay(toTzDate(time))} ${formattedTime}`
   else if (tournamentDays === 1) return formattedTime
   else return `${formatDate(time)} ${formattedTime}`
 }
 
 export function formatTime(time) {
-  return format(parse(time), 'HH:mm')
+  return format(toTzDate(time), 'HH:mm')
 }
 
 export function formatDateTime(date) {
-  return format(parse(date), 'dd.MM.yyyy HH:mm')
+  return format(toTzDate(date), 'dd.MM.yyyy HH:mm')
 }
 
 export function resolveWeekDay(baseDate, increment) {
-  return formatWeekDay(addDays(parse(baseDate), increment))
+  return formatWeekDay(addDays(toTzDate(baseDate), increment))
 }
 
 export function resolveDay(date, time) {
-  return differenceInCalendarDays(parse(time), parse(date)) + 1
+  return differenceInCalendarDays(toTzDate(time), toTzDate(date)) + 1
 }
 
-function parse(date) {
-  if (typeof date === 'string') {
-    return parseISO(date)
-  }
-  return date
+function toTzDate(date) {
+  // works both for date strings and dates
+  return new TZDate(date, timeZone)
 }
 
 export function parseDateAndTime(date, time) {
   const [y, m, d] = date.split('-').map(Number)
   const [h, min] = time.split(':').map(Number)
-  return new Date(TZDate.tz('Europe/Helsinki', y, m - 1, d, h, min, 0))
+  return new Date(TZDate.tz(timeZone, y, m - 1, d, h, min, 0))
 }
 
 function formatWeekDay(date) {

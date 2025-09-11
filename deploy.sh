@@ -3,7 +3,7 @@ set -e
 
 npm run lint
 ./run-tests.sh
-git push heroku master
+git push heroku main
 heroku run rake db:migrate
 
-git push origin master
+git push origin main

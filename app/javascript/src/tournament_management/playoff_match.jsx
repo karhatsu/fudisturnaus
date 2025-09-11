@@ -1,9 +1,8 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { addDays, differenceInDays, format, parseISO } from 'date-fns'
-import { fromZonedTime } from 'date-fns-tz'
 import { deletePlayoffMatch, savePlayoffMatch } from './api_client'
 import AccessContext from '../util/access_context'
-import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util/date_util'
+import { formatMatchTime, formatTime, parseDateAndTime, resolveDay, resolveWeekDay } from '../util/date_util'
 import { getName, resolveSuggestedTime, resolveTournamentItemClasses } from '../util/util'
 import IdNameSelect from '../form/id_name_select'
 import FormErrors from '../form/form_errors'
@@ -297,11 +296,11 @@ const PlayoffMatch = props => {
       homeTeamOriginRule,
       playoffGroupId,
       refereeId,
-      startTime,
+      startTime: startTimeStr,
       title,
     } = data
     const id = playoffMatch ? playoffMatch.id : undefined
-    const finalStartTime = startTime.length === 4 ? `0${startTime}` : startTime
+    const startTime = addDays(parseDateAndTime(tournamentDate, startTimeStr), day - 1)
     const body = {
       ageGroupId,
       awayTeamOriginId: parseOriginId(awayTeamOrigin),
@@ -313,7 +312,7 @@ const PlayoffMatch = props => {
       homeTeamOriginRule,
       playoffGroupId,
       refereeId,
-      startTime: addDays(fromZonedTime(`${tournamentDate} ${finalStartTime}`, 'Europe/Helsinki'), day - 1),
+      startTime,
       title,
     }
     savePlayoffMatch(accessContext, tournamentId, id, body, (errors, data) => {

@@ -1,4 +1,5 @@
 import { addDays, differenceInCalendarDays, format, parseISO } from 'date-fns'
+import { TZDate } from '@date-fns/tz'
 
 export function formatTournamentDates(startDate, endDate) {
   const dates = [formatDate(startDate)]
@@ -52,6 +53,12 @@ function parse(date) {
     return parseISO(date)
   }
   return date
+}
+
+export function parseDateAndTime(date, time) {
+  const [y, m, d] = date.split('-').map(Number)
+  const [h, min] = time.split(':').map(Number)
+  return new Date(TZDate.tz('Europe/Helsinki', y, m - 1, d, h, min, 0))
 }
 
 function formatWeekDay(date) {

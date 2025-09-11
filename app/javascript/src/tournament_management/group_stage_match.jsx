@@ -1,9 +1,8 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { addDays, differenceInDays, format, parseISO } from 'date-fns'
-import { fromZonedTime } from 'date-fns-tz'
 import { deleteGroupStageMatch, saveGroupStageMatch } from './api_client'
 import AccessContext from '../util/access_context'
-import { formatMatchTime, formatTime, resolveDay, resolveWeekDay } from '../util/date_util'
+import { formatMatchTime, formatTime, parseDateAndTime, resolveDay, resolveWeekDay } from '../util/date_util'
 import { getName, resolveSuggestedTime, resolveTournamentItemClasses } from '../util/util'
 import IdNameSelect from '../form/id_name_select'
 import FormErrors from '../form/form_errors'
@@ -211,10 +210,9 @@ const GroupStageMatch = props => {
   }
 
   const submit = () => {
-    const { day, startTime } = data
-    const finalStartTime = startTime.length === 4 ? `0${startTime}` : startTime
-    const isoStartTime = addDays(fromZonedTime(`${tournamentDate} ${finalStartTime}`, 'Europe/Helsinki'), day - 1)
-    const body = { ...data, startTime: isoStartTime, day: undefined }
+    const { day, startTime: startTimeStr } = data
+    const startTime = addDays(parseDateAndTime(tournamentDate, startTimeStr), day - 1)
+    const body = { ...data, startTime, day: undefined }
     const id = groupStageMatch ? groupStageMatch.id : undefined
     saveGroupStageMatch(accessContext, tournamentId, id, body, (errors, data) => {
       if (errors) {

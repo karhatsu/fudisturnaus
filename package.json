@@ -8,10 +8,10 @@
     "build": "node esbuild.js"
   },
   "dependencies": {
+    "@date-fns/tz": "^1.4.1",
     "@rails/actioncable": "^8.0.201",
     "clipboard-polyfill": "^4.1.1",
     "date-fns": "^4.1.0",
-    "date-fns-tz": "^3.2.0",
     "esbuild": "^0.25.9",
     "esbuild-sass-plugin": "^3.3.1",
     "query-string": "^9.3.0",

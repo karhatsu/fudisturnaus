@@ -17,7 +17,7 @@ export function buildTournamentFromSocketData(oldTournament, data) {
     tournament.playoffMatches = updatePlayoffMatches(tournament.playoffMatches, resolvedPlayoffMatches)
   }
   if (playoffGroups) {
-    playoffGroups.forEach(playoffGroup => {
+    playoffGroups.forEach((playoffGroup) => {
       tournament.playoffGroups = updateGroupResults(tournament.playoffGroups, playoffGroup.id, playoffGroup.results)
     })
   }
@@ -26,7 +26,7 @@ export function buildTournamentFromSocketData(oldTournament, data) {
 
 function updateMatchResult(matches, matchId, homeGoals, awayGoals, penalties) {
   const matchesWithResult = [...matches]
-  const matchIndex = matchesWithResult.findIndex(match => match.id === matchId)
+  const matchIndex = matchesWithResult.findIndex((match) => match.id === matchId)
   if (matchIndex !== -1) {
     const match = { ...matchesWithResult[matchIndex], homeGoals, awayGoals, penalties }
     matchesWithResult.splice(matchIndex, 1, match)
@@ -36,7 +36,7 @@ function updateMatchResult(matches, matchId, homeGoals, awayGoals, penalties) {
 
 function updateGroupResults(groups, groupId, groupResults) {
   const updatedGroups = [...groups]
-  const groupIndex = updatedGroups.findIndex(group => group.id === groupId)
+  const groupIndex = updatedGroups.findIndex((group) => group.id === groupId)
   if (groupIndex !== -1) {
     const group = { ...updatedGroups[groupIndex], results: groupResults }
     updatedGroups.splice(groupIndex, 1, group)
@@ -46,8 +46,8 @@ function updateGroupResults(groups, groupId, groupResults) {
 
 function updatePlayoffMatches(originalPlayoffMatches, newPlayoffMatches) {
   const playoffMatches = [...originalPlayoffMatches]
-  newPlayoffMatches.forEach(playoffMatch => {
-    const matchIndex = playoffMatches.findIndex(match => match.id === playoffMatch.id)
+  newPlayoffMatches.forEach((playoffMatch) => {
+    const matchIndex = playoffMatches.findIndex((match) => match.id === playoffMatch.id)
     if (matchIndex !== -1) {
       const newMatch = { ...playoffMatches[matchIndex], ...playoffMatch }
       playoffMatches.splice(matchIndex, 1, newMatch)
@@ -57,7 +57,7 @@ function updatePlayoffMatches(originalPlayoffMatches, newPlayoffMatches) {
 }
 
 export function resolveSuggestedTime(matches, fieldId, matchMinutes, tournamentDate) {
-  const sameFieldMatches = matches.filter(match => match.fieldId === parseInt(fieldId))
+  const sameFieldMatches = matches.filter((match) => match.fieldId === parseInt(fieldId))
   if (sameFieldMatches.length) {
     const previousMatch = sameFieldMatches[sameFieldMatches.length - 1]
     const suggestedDate = addMinutes(parseISO(previousMatch.startTime), matchMinutes)
@@ -72,8 +72,8 @@ export function resolveTournamentItemClasses(existing) {
 }
 
 export function getName(items, id, defaultValue) {
-  const item = items.find(ag => ag.id === id)
-  return item ? item.name : (defaultValue !== undefined ? defaultValue : '-')
+  const item = items.find((ag) => ag.id === id)
+  return item ? item.name : defaultValue !== undefined ? defaultValue : '-'
 }
 
 export function resolveColStyles(count) {
@@ -92,7 +92,7 @@ export function resolveColStyles(count) {
 
 export const buildGroupTitle = (ageGroups, groups, ageGroup, group) => {
   if (!group) return ageGroup.name // playoff match
-  const groupsInAgeGroup = groups.filter(g => g.ageGroupId === group.ageGroupId)
+  const groupsInAgeGroup = groups.filter((g) => g.ageGroupId === group.ageGroupId)
   if (ageGroups.length === 1 && groupsInAgeGroup.length === 1) return undefined // 1 age group, 1 group -> no title needed
   if (groupsInAgeGroup.length === 1) return ageGroup.name // 1 group in this age group -> use age group name as title
   if (ageGroups.length === 1) return group.name // 1 age group, multiple groups -> use group name as title

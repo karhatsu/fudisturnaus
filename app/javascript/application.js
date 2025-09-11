@@ -18,7 +18,7 @@ const TournamentPageWrapper = () => {
     <ToastsContextProvider>
       <TournamentPage
         officialLevel={officialLevels.none}
-        renderMatch={props => <Match {...props}/>}
+        renderMatch={(props) => <Match {...props} />}
         tournamentKey={key}
       />
       <Toasts />
@@ -29,7 +29,7 @@ const TournamentPageWrapper = () => {
 const PublicApp = () => (
   <AllTournamentsContextProvider>
     <Routes>
-      <Route path="info" element={<Info />}/>
+      <Route path="info" element={<Info />} />
       <Route path="t/:key" element={<TournamentPageWrapper />} />
       <Route path="tournaments" element={<TournamentsPage />}>
         <Route path=":key" element={<TournamentPageWrapper />} />
@@ -47,6 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
       <Routes>
         <Route path="*" element={<PublicApp />} />
       </Routes>
-    </BrowserRouter>
+    </BrowserRouter>,
   )
 })

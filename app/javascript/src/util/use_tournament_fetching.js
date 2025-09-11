@@ -4,7 +4,7 @@ import consumer from '../../channels/consumer'
 import { buildTournamentFromSocketData } from './util'
 import { useToasts } from '../public/toasts_context'
 
-const useTournamentFetching = tournamentKey => {
+const useTournamentFetching = (tournamentKey) => {
   const [error, setError] = useState(false)
   const [tournament, setTournament] = useState()
   const [subscribed, setSubscribed] = useState(false)
@@ -35,20 +35,26 @@ const useTournamentFetching = tournamentKey => {
     }
   }, [fetchTournamentData, handleVisibilityChange])
 
-  const handleSocketData = useCallback(socketData => {
-    const match = socketData.groupStageMatch || socketData.playoffMatch
-    if (match && addToast) {
-      addToast(match)
-    }
-    setTournament(oldTournament => {
-      return buildTournamentFromSocketData(oldTournament, socketData)
-    })
-  }, [addToast])
+  const handleSocketData = useCallback(
+    (socketData) => {
+      const match = socketData.groupStageMatch || socketData.playoffMatch
+      if (match && addToast) {
+        addToast(match)
+      }
+      setTournament((oldTournament) => {
+        return buildTournamentFromSocketData(oldTournament, socketData)
+      })
+    },
+    [addToast],
+  )
 
   useEffect(() => {
     if (tournamentId && !subscribed) {
       setSubscribed(true)
-      consumer.subscriptions.create({ channel: 'ResultsChannel', tournament_id: tournamentId }, { received: data => handleSocketData(data) })
+      consumer.subscriptions.create(
+        { channel: 'ResultsChannel', tournament_id: tournamentId },
+        { received: (data) => handleSocketData(data) },
+      )
     }
   }, [tournamentId, subscribed, handleSocketData])
 

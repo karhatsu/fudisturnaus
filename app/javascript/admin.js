@@ -13,12 +13,12 @@ import ContactsPage from './src/admin/contacts_page'
 const AdminApp = () => {
   const [sessionKey, setSessionKey] = useState()
 
-  const onSuccessfulLogin = useCallback(sessionKey => {
+  const onSuccessfulLogin = useCallback((sessionKey) => {
     setSessionKey(sessionKey)
   }, [])
 
   if (!sessionKey) {
-    return <AdminLoginPage onSuccessfulLogin={onSuccessfulLogin}/>
+    return <AdminLoginPage onSuccessfulLogin={onSuccessfulLogin} />
   }
 
   return (
@@ -26,10 +26,10 @@ const AdminApp = () => {
       <Routes>
         <Route path="/" element={<AdminIndex />} />
         <Route path="contacts" element={<ContactsPage />} />
-        <Route path="clubs" element={<ClubsManagementPage />}/>
+        <Route path="clubs" element={<ClubsManagementPage />} />
         <Route path="tournaments">
-          <Route path="new" element={<NewTournamentPage />}/>
-          <Route path=":id" element={<TournamentManagementPage official={false} titleIconLink="/admin"/>} />
+          <Route path="new" element={<NewTournamentPage />} />
+          <Route path=":id" element={<TournamentManagementPage official={false} titleIconLink="/admin" />} />
         </Route>
       </Routes>
     </AccessContext.Provider>
@@ -43,6 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
       <Routes>
         <Route path="/admin/*" element={<AdminApp />} />
       </Routes>
-    </BrowserRouter>
+    </BrowserRouter>,
   )
 })

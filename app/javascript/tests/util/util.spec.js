@@ -24,7 +24,7 @@ describe('util', () => {
             homeTeam: { id: 25, name: 'FC Kontu Sininen', clubId: 1 },
             id: groupStageMatchId,
             startTime: '2019-05-11T05:20:00.000Z',
-          }
+          },
         ],
         groups: [
           {
@@ -38,7 +38,7 @@ describe('util', () => {
             anotherGroup: 'is here',
             id: groupId + 1,
             results: [{ existing: 'result' }],
-          }
+          },
         ],
         playoffMatches: [
           {
@@ -52,7 +52,7 @@ describe('util', () => {
           {
             id: playoffMatch2Id,
             startTime: '13:30',
-          }
+          },
         ],
       }
     })
@@ -78,7 +78,7 @@ describe('util', () => {
           },
           groupResults: [
             { teamName: 'Team 1', points: 6 },
-            { teamName: 'Team 2', points: 3 }
+            { teamName: 'Team 2', points: 3 },
           ],
           resolvedPlayoffMatches: [
             {
@@ -102,7 +102,7 @@ describe('util', () => {
                 id: 234,
                 name: 'Away team 2',
               },
-            }
+            },
           ],
         }
       })
@@ -116,14 +116,14 @@ describe('util', () => {
               ...tournament.groupStageMatches[1],
               homeGoals,
               awayGoals,
-            }
+            },
           ],
           groups: [
             {
               ...tournament.groups[0],
               results: data.groupResults,
             },
-            tournament.groups[1]
+            tournament.groups[1],
           ],
           playoffMatches: [
             {
@@ -134,7 +134,7 @@ describe('util', () => {
             {
               ...tournament.playoffMatches[2],
               ...data.resolvedPlayoffMatches[1],
-            }
+            },
           ],
         })
       })
@@ -165,7 +165,7 @@ describe('util', () => {
                 id: 234,
                 name: 'Away team 1',
               },
-            }
+            },
           ],
         }
       })
@@ -184,7 +184,7 @@ describe('util', () => {
             {
               ...tournament.playoffMatches[2],
               ...data.resolvedPlayoffMatches[0],
-            }
+            },
           ],
         })
       })

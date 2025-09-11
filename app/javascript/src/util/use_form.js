@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react'
 
-const useForm = initialData => {
+const useForm = (initialData) => {
   const [formOpen, setFormOpen] = useState(!!initialData)
   const [data, setData] = useState(initialData || {})
   const [errors, setErrors] = useState([])
 
-  const openForm = useCallback(initialData => {
+  const openForm = useCallback((initialData) => {
     setData(initialData)
     setFormOpen(true)
   }, [])
@@ -16,20 +16,26 @@ const useForm = initialData => {
   }, [])
 
   const changeValue = useCallback((field, value) => {
-    setData(d => ({ ...d, [field]: value }))
+    setData((d) => ({ ...d, [field]: value }))
   }, [])
 
-  const changeValues = useCallback(values => {
-    setData(d => ({ ...d, ...values }))
+  const changeValues = useCallback((values) => {
+    setData((d) => ({ ...d, ...values }))
   }, [])
 
-  const onFieldChange = useCallback(field => event => {
-    setData(d => ({ ...d, [field]: event.target.value }))
-  }, [])
+  const onFieldChange = useCallback(
+    (field) => (event) => {
+      setData((d) => ({ ...d, [field]: event.target.value }))
+    },
+    [],
+  )
 
-  const onCheckboxChange = useCallback(field => event => {
-    setData(d => ({ ...d, [field]: event.target.checked }))
-  }, [])
+  const onCheckboxChange = useCallback(
+    (field) => (event) => {
+      setData((d) => ({ ...d, [field]: event.target.checked }))
+    },
+    [],
+  )
 
   return {
     changeValue,

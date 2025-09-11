@@ -29,6 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
           element={<RefereeApp tournamentId={tournamentId} refereeId={refereeId} refereeName={refereeName} />}
         />
       </Routes>
-    </BrowserRouter>
+    </BrowserRouter>,
   )
 })

@@ -12,7 +12,7 @@ const ResultsApp = ({ tournamentId }) => {
     <AccessContext.Provider value={{ resultsAccessKey }}>
       <TournamentPage
         officialLevel={officialLevels.results}
-        renderMatch={props => <EditableMatch {...props}/>}
+        renderMatch={(props) => <EditableMatch {...props} />}
         tournamentKey={tournamentId}
       />
     </AccessContext.Provider>
@@ -27,8 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
   root.render(
     <BrowserRouter>
       <Routes>
-        <Route path="/results/:resultsAccessKey" element={<ResultsApp tournamentId={tournamentId} />}/>
+        <Route path="/results/:resultsAccessKey" element={<ResultsApp tournamentId={tournamentId} />} />
       </Routes>
-    </BrowserRouter>
+    </BrowserRouter>,
   )
 })

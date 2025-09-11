@@ -13,12 +13,26 @@ const OfficialApp = ({ tournamentId }) => {
   return (
     <AccessContext.Provider value={{ officialAccessKey: accessKey }}>
       <Routes>
-        <Route path="management" element={(
-          <TournamentManagementPage official={true} titleIconLink={`/official/${accessKey}`} tournamentId={tournamentId} />
-        )}/>
-        <Route path="/" element={(
-          <TournamentPage officialLevel={officialLevels.full} renderMatch={props => <EditableMatch {...props}/>} tournamentKey={tournamentId} />
-        )}/>
+        <Route
+          path="management"
+          element={
+            <TournamentManagementPage
+              official={true}
+              titleIconLink={`/official/${accessKey}`}
+              tournamentId={tournamentId}
+            />
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <TournamentPage
+              officialLevel={officialLevels.full}
+              renderMatch={(props) => <EditableMatch {...props} />}
+              tournamentKey={tournamentId}
+            />
+          }
+        />
       </Routes>
     </AccessContext.Provider>
   )
@@ -32,8 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
   root.render(
     <BrowserRouter>
       <Routes>
-        <Route path="/official/:accessKey/*" element={<OfficialApp tournamentId={tournamentId} />}/>
+        <Route path="/official/:accessKey/*" element={<OfficialApp tournamentId={tournamentId} />} />
       </Routes>
-    </BrowserRouter>
+    </BrowserRouter>,
   )
 })

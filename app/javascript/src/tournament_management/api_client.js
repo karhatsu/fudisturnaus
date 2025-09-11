@@ -9,9 +9,11 @@ export function saveResult(accessContext, tournamentId, type, matchId, homeGoals
     body: JSON.stringify({
       match: { homeGoals, awayGoals, penalties },
     }),
-  }).then(response => {
-    handleApiResponse(response, callback)
-  }).catch(() => handleApiConnectionError(callback))
+  })
+    .then((response) => {
+      handleApiResponse(response, callback)
+    })
+    .catch(() => handleApiConnectionError(callback))
 }
 
 export function fetchTournament(accessContext, id, callback) {
@@ -19,8 +21,8 @@ export function fetchTournament(accessContext, id, callback) {
     method: 'GET',
     headers: buildHeaders(accessContext),
   })
-    .then(response => response.json())
-    .then(tournament => callback(null, tournament))
+    .then((response) => response.json())
+    .then((tournament) => callback(null, tournament))
     .catch(() => handleApiConnectionError(callback))
 }
 
@@ -29,9 +31,11 @@ export function updateTournament(accessContext, id, data, callback) {
     method: 'PATCH',
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ tournament: data }),
-  }).then(response => {
-    handleApiResponse(response, callback)
-  }).catch(() => handleApiConnectionError(callback))
+  })
+    .then((response) => {
+      handleApiResponse(response, callback)
+    })
+    .catch(() => handleApiConnectionError(callback))
 }
 
 export function saveField(accessContext, tournamentId, id, name, callback) {
@@ -41,18 +45,22 @@ export function saveField(accessContext, tournamentId, id, name, callback) {
     method,
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ field: { name } }),
-  }).then(response => {
-    handleApiResponse(response, callback)
-  }).catch(() => handleApiConnectionError(callback))
+  })
+    .then((response) => {
+      handleApiResponse(response, callback)
+    })
+    .catch(() => handleApiConnectionError(callback))
 }
 
 export function deleteField(accessContext, tournamentId, id, callback) {
   fetch(`/api/v1/official/tournaments/${tournamentId}/fields/${id}`, {
     method: 'DELETE',
     headers: buildHeaders(accessContext),
-  }).then(response => {
-    handleApiResponse(response, callback)
-  }).catch(() => handleApiConnectionError(callback))
+  })
+    .then((response) => {
+      handleApiResponse(response, callback)
+    })
+    .catch(() => handleApiConnectionError(callback))
 }
 
 export function saveAgeGroup(accessContext, tournamentId, id, data, callback) {
@@ -62,18 +70,22 @@ export function saveAgeGroup(accessContext, tournamentId, id, data, callback) {
     method,
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ ageGroup: data }),
-  }).then(response => {
-    handleApiResponse(response, callback)
-  }).catch(() => handleApiConnectionError(callback))
+  })
+    .then((response) => {
+      handleApiResponse(response, callback)
+    })
+    .catch(() => handleApiConnectionError(callback))
 }
 
 export function deleteAgeGroup(accessContext, tournamentId, id, callback) {
   fetch(`/api/v1/official/tournaments/${tournamentId}/age_groups/${id}`, {
     method: 'DELETE',
     headers: buildHeaders(accessContext),
-  }).then(response => {
-    handleApiResponse(response, callback)
-  }).catch(() => handleApiConnectionError(callback))
+  })
+    .then((response) => {
+      handleApiResponse(response, callback)
+    })
+    .catch(() => handleApiConnectionError(callback))
 }
 
 export function saveGroup(accessContext, pathType, tournamentId, id, data, callback) {
@@ -83,18 +95,22 @@ export function saveGroup(accessContext, pathType, tournamentId, id, data, callb
     method,
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ group: data }),
-  }).then(response => {
-    handleApiResponse(response, callback)
-  }).catch(() => handleApiConnectionError(callback))
+  })
+    .then((response) => {
+      handleApiResponse(response, callback)
+    })
+    .catch(() => handleApiConnectionError(callback))
 }
 
 export function deleteGroup(accessContext, pathType, tournamentId, id, callback) {
   fetch(`/api/v1/official/tournaments/${tournamentId}/${pathType}/${id}`, {
     method: 'DELETE',
     headers: buildHeaders(accessContext),
-  }).then(response => {
-    handleApiResponse(response, callback)
-  }).catch(() => handleApiConnectionError(callback))
+  })
+    .then((response) => {
+      handleApiResponse(response, callback)
+    })
+    .catch(() => handleApiConnectionError(callback))
 }
 
 export function createClub(accessContext, name, callback) {
@@ -103,9 +119,11 @@ export function createClub(accessContext, name, callback) {
     method: 'POST',
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ name }),
-  }).then(response => {
-    handleApiResponse(response, callback)
-  }).catch(() => handleApiConnectionError(callback))
+  })
+    .then((response) => {
+      handleApiResponse(response, callback)
+    })
+    .catch(() => handleApiConnectionError(callback))
 }
 
 export function saveTeam(accessContext, tournamentId, id, data, callback) {
@@ -115,18 +133,22 @@ export function saveTeam(accessContext, tournamentId, id, data, callback) {
     method,
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ team: data }),
-  }).then(response => {
-    handleApiResponse(response, callback)
-  }).catch(() => handleApiConnectionError(callback))
+  })
+    .then((response) => {
+      handleApiResponse(response, callback)
+    })
+    .catch(() => handleApiConnectionError(callback))
 }
 
 export function deleteTeam(accessContext, tournamentId, id, callback) {
   fetch(`/api/v1/official/tournaments/${tournamentId}/teams/${id}`, {
     method: 'DELETE',
     headers: buildHeaders(accessContext),
-  }).then(response => {
-    handleApiResponse(response, callback)
-  }).catch(() => handleApiConnectionError(callback))
+  })
+    .then((response) => {
+      handleApiResponse(response, callback)
+    })
+    .catch(() => handleApiConnectionError(callback))
 }
 
 export function saveGroupStageMatch(accessContext, tournamentId, id, data, callback) {
@@ -136,18 +158,22 @@ export function saveGroupStageMatch(accessContext, tournamentId, id, data, callb
     method,
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ groupStageMatch: data }),
-  }).then(response => {
-    handleApiResponse(response, callback)
-  }).catch(() => handleApiConnectionError(callback))
+  })
+    .then((response) => {
+      handleApiResponse(response, callback)
+    })
+    .catch(() => handleApiConnectionError(callback))
 }
 
 export function deleteGroupStageMatch(accessContext, tournamentId, id, callback) {
   fetch(`/api/v1/official/tournaments/${tournamentId}/group_stage_matches/${id}`, {
     method: 'DELETE',
     headers: buildHeaders(accessContext),
-  }).then(response => {
-    handleApiResponse(response, callback)
-  }).catch(() => handleApiConnectionError(callback))
+  })
+    .then((response) => {
+      handleApiResponse(response, callback)
+    })
+    .catch(() => handleApiConnectionError(callback))
 }
 
 export function savePlayoffMatch(accessContext, tournamentId, id, data, callback) {
@@ -157,18 +183,22 @@ export function savePlayoffMatch(accessContext, tournamentId, id, data, callback
     method,
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ playoffMatch: data }),
-  }).then(response => {
-    handleApiResponse(response, callback)
-  }).catch(() => handleApiConnectionError(callback))
+  })
+    .then((response) => {
+      handleApiResponse(response, callback)
+    })
+    .catch(() => handleApiConnectionError(callback))
 }
 
 export function deletePlayoffMatch(accessContext, tournamentId, id, callback) {
   fetch(`/api/v1/official/tournaments/${tournamentId}/playoff_matches/${id}`, {
     method: 'DELETE',
     headers: buildHeaders(accessContext),
-  }).then(response => {
-    handleApiResponse(response, callback)
-  }).catch(() => handleApiConnectionError(callback))
+  })
+    .then((response) => {
+      handleApiResponse(response, callback)
+    })
+    .catch(() => handleApiConnectionError(callback))
 }
 
 export function saveReferee(accessContext, tournamentId, id, name, callback) {
@@ -178,18 +208,22 @@ export function saveReferee(accessContext, tournamentId, id, name, callback) {
     method,
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ referee: { name } }),
-  }).then(response => {
-    handleApiResponse(response, callback)
-  }).catch(() => handleApiConnectionError(callback))
+  })
+    .then((response) => {
+      handleApiResponse(response, callback)
+    })
+    .catch(() => handleApiConnectionError(callback))
 }
 
 export function deleteReferee(accessContext, tournamentId, id, callback) {
   fetch(`/api/v1/official/tournaments/${tournamentId}/referees/${id}`, {
     method: 'DELETE',
     headers: buildHeaders(accessContext),
-  }).then(response => {
-    handleApiResponse(response, callback)
-  }).catch(() => handleApiConnectionError(callback))
+  })
+    .then((response) => {
+      handleApiResponse(response, callback)
+    })
+    .catch(() => handleApiConnectionError(callback))
 }
 
 export function saveLottery(accessContext, tournamentId, groupId, data, callback) {
@@ -197,17 +231,21 @@ export function saveLottery(accessContext, tournamentId, groupId, data, callback
     method: 'PUT',
     headers: buildHeaders(accessContext),
     body: JSON.stringify({ teams: data }),
-  }).then(response => {
-    handleApiResponse(response, callback)
-  }).catch(() => handleApiConnectionError(callback))
+  })
+    .then((response) => {
+      handleApiResponse(response, callback)
+    })
+    .catch(() => handleApiConnectionError(callback))
 }
 
 export function fetchAddressSuggestions(accessContext, location, callback) {
   fetch(`/api/v1/official/address_suggestions?location=${encodeURIComponent(location)}`, {
     headers: buildHeaders(accessContext),
-  }).then(response => {
-    handleApiResponse(response, callback)
-  }).catch(() => handleApiConnectionError(callback))
+  })
+    .then((response) => {
+      handleApiResponse(response, callback)
+    })
+    .catch(() => handleApiConnectionError(callback))
 }
 
 function buildHeaders(accessContext) {

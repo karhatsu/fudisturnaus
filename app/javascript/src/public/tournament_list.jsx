@@ -14,44 +14,64 @@ const sortByAscendingDate = (a, b) => {
   return a.name.localeCompare(b.name)
 }
 
-const TournamentList = props => {
+const TournamentList = (props) => {
   const { buildLink, search, setSearch, title, tournaments, tournamentsError } = props
 
-  const renderTournament = useCallback(tournament => {
-    const { id } = tournament
-    return (
-      <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3" key={id}>
-        <TournamentLinkBox to={buildLink(tournament)} tournament={tournament}/>
-      </div>
-    )
-  }, [buildLink])
+  const renderTournament = useCallback(
+    (tournament) => {
+      const { id } = tournament
+      return (
+        <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3" key={id}>
+          <TournamentLinkBox to={buildLink(tournament)} tournament={tournament} />
+        </div>
+      )
+    },
+    [buildLink],
+  )
 
-  const matchCaseInsensitive = useCallback(text => new RegExp(search.trim(), 'i').test(text), [search])
+  const matchCaseInsensitive = useCallback((text) => new RegExp(search.trim(), 'i').test(text), [search])
 
   const filterTournaments = useCallback(() => {
     if (!search) return tournaments
-    return tournaments.filter(tournament => {
+    return tournaments.filter((tournament) => {
       const { name, location, club } = tournament
       return matchCaseInsensitive(name) || matchCaseInsensitive(location) || (club && matchCaseInsensitive(club.name))
     })
   }, [search, tournaments, matchCaseInsensitive])
 
-  const groupTournaments = useCallback(tournaments => {
-    const groups = { today: [], tomorrow: [], yesterday: [], thisWeek: [], nextWeek: [], later: [], past: [] }
-    tournaments.forEach(tournament => {
-      const dates = tournament.dates.map(date => parseISO(date))
+  const groupTournaments = useCallback((tournaments) => {
+    const groups = {
+      today: [],
+      tomorrow: [],
+      dayAfterTomorrow: [],
+      yesterday: [],
+      thisWeek: [],
+      nextWeek: [],
+      later: [],
+      past: [],
+    }
+    tournaments.forEach((tournament) => {
+      const dates = tournament.dates.map((date) => parseISO(date))
       const endDate = parseISO(tournament.endDate)
       if (isSameDay(endDate, addDays(new Date(), -1))) {
         groups.yesterday.push(tournament)
       } else if (isBefore(endOfDay(endDate), new Date())) {
         groups.past.push(tournament)
-      } else if (dates.find(date => isToday(date))) {
+      } else if (dates.find((date) => isToday(date))) {
         groups.today.push(tournament)
-      } else if (dates.find(date => isTomorrow(date))) {
+      } else if (dates.find((date) => isTomorrow(date))) {
         groups.tomorrow.push(tournament)
-      } else if (dates.find(date => isAfter(date, new Date()) && isBefore(date, endOfWeek(new Date(), { weekStartsOn: 1 })))) {
+      } else if (dates.find((date) => isSameDay(date, addDays(new Date(), 2)))) {
+        groups.dayAfterTomorrow.push(tournament)
+      } else if (
+        dates.find((date) => isAfter(date, new Date()) && isBefore(date, endOfWeek(new Date(), { weekStartsOn: 1 })))
+      ) {
         groups.thisWeek.push(tournament)
-      } else if (dates.find(date => isAfter(date, new Date()) && isBefore(date, endOfWeek(addDays(new Date(), 7), { weekStartsOn: 1 })))) {
+      } else if (
+        dates.find(
+          (date) => isAfter(date, new Date()) && isBefore(date, endOfWeek(addDays(new Date(), 7), { weekStartsOn: 1 })),
+        )
+      ) {
         groups.nextWeek.push(tournament)
       } else {
         groups.later.push(tournament)
@@ -68,9 +88,7 @@ const TournamentList = props => {
       return (
         <>
           <div className="title-2">{title}</div>
-          <div className="row tournament-links__section">
-            {tournaments.map(renderTournament)}
-          </div>
+          <div className="row tournament-links__section">{tournaments.map(renderTournament)}</div>
         </>
       )
     }
@@ -81,7 +99,12 @@ const TournamentList = props => {
       <div className="form form--vertical form--search">
         <div className="form__field form__field--long">
           <div className="label">Etsi turnaus</div>
-          <input type="text" placeholder="Turnauksen nimi, paikka tai järjestäjä" value={search} onChange={e => setSearch(e.target.value)} />
+          <input
+            type="text"
+            placeholder="Turnauksen nimi, paikka tai järjestäjä"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </div>
       </div>
     )
@@ -89,22 +112,30 @@ const TournamentList = props => {
 
   const renderContent = () => {
     if (tournamentsError) {
-      return <Message type="error">Virhe haettaessa turnauksia. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.</Message>
+      return (
+        <Message type="error">Virhe haettaessa turnauksia. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.</Message>
+      )
     } else if (!tournaments) {
-      return <Loading/>
+      return <Loading />
     } else if (!tournaments.length) {
       return <Message type="error">Ei turnauksia</Message>
     }
     const groups = groupTournaments(filterTournaments())
-    const laterTitle = !groups.today.length && !groups.tomorrow.length && !groups.thisWeek.length && !groups.nextWeek.length
-      ? 'Tulevat turnaukset'
-      : 'Turnaukset myöhemmin'
+    const laterTitle =
+      !groups.today.length &&
+      !groups.tomorrow.length &&
+      !groups.dayAfterTomorrow.length &&
+      !groups.thisWeek.length &&
+      !groups.nextWeek.length
+        ? 'Tulevat turnaukset'
+        : 'Turnaukset myöhemmin'
     return (
       <>
         {setSearch && renderSearchBox()}
         <div className="tournament-links">
           {renderTournaments(groups.today, 'Turnaukset tänään')}
           {renderTournaments(groups.tomorrow, 'Turnaukset huomenna')}
+          {renderTournaments(groups.dayAfterTomorrow, 'Turnaukset ylihuomenna')}
           {renderTournaments(groups.yesterday, 'Eilen pelatut turnaukset')}
           {renderTournaments(groups.thisWeek, 'Turnaukset tällä viikolla')}
           {renderTournaments(groups.nextWeek, 'Turnaukset ensi viikolla')}
@@ -117,7 +148,7 @@ const TournamentList = props => {
 
   return (
     <div>
-      <Title loading={!tournamentsError && !tournaments} text={title}/>
+      <Title loading={!tournamentsError && !tournaments} text={title} />
       {props.children}
       {renderContent()}
     </div>

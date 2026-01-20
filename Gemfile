@@ -61,4 +61,5 @@ end
 group :production do
   gem 'redis'
   gem 'sendgrid-ruby'
+  gem 'image_processing'
 end

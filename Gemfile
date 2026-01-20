@@ -3,7 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.4.8'
 
-gem 'rails', '8.0.2.1'
+gem 'rails', '8.1.1'
 # Use Puma as the app server
 gem 'puma'
 # Use SassC for stylesheets

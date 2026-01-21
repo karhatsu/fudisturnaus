@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen } from '@testing-library/react'
 import SeriesAndTeams from '../../src/public/series_and_teams'
 
@@ -13,7 +12,7 @@ describe('SeriesAndTeams', () => {
 
     describe('and the tournament is not cancelled', () => {
       beforeEach(() => {
-        component = render(<SeriesAndTeams tournament={tournament}/>)
+        component = render(<SeriesAndTeams tournament={tournament} />)
       })
 
       it('renders message about matches', () => {
@@ -28,7 +27,7 @@ describe('SeriesAndTeams', () => {
     describe('and the tournament is cancelled', () => {
       beforeEach(() => {
         tournament.cancelled = true
-        component = render(<SeriesAndTeams tournament={tournament}/>)
+        component = render(<SeriesAndTeams tournament={tournament} />)
       })
 
       it('does not render message about matches', () => {
@@ -40,15 +39,19 @@ describe('SeriesAndTeams', () => {
   describe('when one age group without teams', () => {
     beforeEach(() => {
       tournament = { ageGroups: [{ id: 1, name: 'T07' }], cancelled: false, clubs: [], groups: [], teams: [] }
-      component = render(<SeriesAndTeams tournament={tournament}/>)
+      component = render(<SeriesAndTeams tournament={tournament} />)
     })
 
     it('renders age group with generic title', () => {
-      expect(component.container.querySelector('.series-and-teams__age-group .title-2').textContent).toBe('Ilmoittautuneet joukkueet')
+      expect(component.container.querySelector('.series-and-teams__age-group .title-2').textContent).toBe(
+        'Ilmoittautuneet joukkueet',
+      )
     })
 
     it('renders tournament level message about no teams', () => {
-      expect(component.container.querySelector('.series-and-teams__no-teams').textContent).toBe('Turnaukseen ei ole ilmoittautunut vielä yhtään joukkuetta')
+      expect(component.container.querySelector('.series-and-teams__no-teams').textContent).toBe(
+        'Turnaukseen ei ole ilmoittautunut vielä yhtään joukkuetta',
+      )
     })
   })
 
@@ -58,19 +61,19 @@ describe('SeriesAndTeams', () => {
         ageGroups: [{ id: 1, name: 'T07' }],
         cancelled: false,
         clubs: [],
-        groups: [
-          { ageGroupId: 1, id: 20, name: 'A' }
-        ],
+        groups: [{ ageGroupId: 1, id: 20, name: 'A' }],
         teams: [
           { ageGroupId: 1, clubId: 100, groupId: 20, id: 10, name: 'FC Team 1' },
-          { ageGroupId: 1, clubId: 100, groupId: 20, id: 11, name: 'SC Team 1' }
+          { ageGroupId: 1, clubId: 100, groupId: 20, id: 11, name: 'SC Team 1' },
         ],
       }
-      component = render(<SeriesAndTeams tournament={tournament}/>)
+      component = render(<SeriesAndTeams tournament={tournament} />)
     })
 
     it('renders age group with generic title', () => {
-      expect(component.container.querySelector('.series-and-teams__age-group .title-2').textContent).toBe('Ilmoittautuneet joukkueet')
+      expect(component.container.querySelector('.series-and-teams__age-group .title-2').textContent).toBe(
+        'Ilmoittautuneet joukkueet',
+      )
     })
 
     it('renders teams for the age group without group name', () => {
@@ -87,22 +90,22 @@ describe('SeriesAndTeams', () => {
       tournament = {
         ageGroups: [
           { id: 1, name: 'T07' },
-          { id: 2, name: 'T08' }
+          { id: 2, name: 'T08' },
         ],
         cancelled: false,
         clubs: [],
         groups: [
           { ageGroupId: 1, id: 10, name: 'A' },
           { ageGroupId: 1, id: 11, name: 'B' },
-          { ageGroupId: 1, id: 12, name: 'C' }
+          { ageGroupId: 1, id: 12, name: 'C' },
         ],
         teams: [
           { ageGroupId: 1, clubId: 100, groupId: 10, id: 10, name: 'FC Team 1' },
           { ageGroupId: 1, clubId: 100, groupId: 11, id: 11, name: 'SC Team 1' },
-          { ageGroupId: 5, clubId: 100, groupId: 10, id: 12, name: 'SC Team 2' }
+          { ageGroupId: 5, clubId: 100, groupId: 10, id: 12, name: 'SC Team 2' },
         ],
       }
-      component = render(<SeriesAndTeams tournament={tournament}/>)
+      component = render(<SeriesAndTeams tournament={tournament} />)
     })
 
     it('renders age group names as titles', () => {

@@ -9,17 +9,14 @@ export default [
   pluginJs.configs.recommended,
   pluginReact.configs.flat.recommended,
   pluginReact.configs.flat['jsx-runtime'],
-  pluginPrettierRecommended,
+  pluginReactHooks.configs.flat.recommended,
   {
-    plugins: {
-      react: pluginReact,
-      'react-hooks': pluginReactHooks,
-      jest: pluginJest,
-    },
-
     languageOptions: {
-      globals: { ...globals.browser, ...pluginJest.environments.globals.globals },
+      globals: {
+        ...globals.browser,
+      },
       ecmaVersion: 'latest',
+      sourceType: 'module',
     },
 
     settings: {
@@ -32,4 +29,15 @@ export default [
       'react/prop-types': 'off',
     },
   },
+  {
+    files: ['**/*.{spec,test}.{js,jsx}'],
+    ...pluginJest.configs['flat/recommended'],
+    languageOptions: {
+      globals: {
+        ...pluginJest.environments.globals.globals,
+      },
+    },
+  },
+
+  pluginPrettierRecommended,
 ]

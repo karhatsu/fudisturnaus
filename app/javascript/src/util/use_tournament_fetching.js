@@ -50,7 +50,7 @@ const useTournamentFetching = (tournamentKey) => {
 
   useEffect(() => {
     if (tournamentId && !subscribed) {
-      setSubscribed(true)
+      setSubscribed(true) // eslint-disable-line react-hooks/set-state-in-effect
       consumer.subscriptions.create(
         { channel: 'ResultsChannel', tournament_id: tournamentId },
         { received: (data) => handleSocketData(data) },

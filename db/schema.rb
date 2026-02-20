@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_05_15_031938) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_20_123055) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -164,6 +164,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_15_031938) do
     t.string "location", null: false
     t.integer "match_minutes", default: 45, null: false
     t.string "name", null: false
+    t.boolean "premium"
     t.string "results_access_key"
     t.string "slug"
     t.date "start_date", null: false

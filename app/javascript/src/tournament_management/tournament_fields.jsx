@@ -13,32 +13,29 @@ import AccessContext from '../util/access_context'
 
 const { onlyTitle, teams, all } = visibilityTypes
 
-const TournamentFields = props => {
+const TournamentFields = (props) => {
   const { contactId, clubName, clubs, official, tournament, onCancel, onSave } = props
   const isNew = !tournament.id
   const isEditing = !isNew
-  const {
-    changeValue,
-    formOpen,
-    data,
-    errors,
-    setErrors,
-    openForm,
-    closeForm,
-    onFieldChange,
-    onCheckboxChange,
-  } = useForm(isNew ? tournament : undefined)
+  const { changeValue, formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, onCheckboxChange } =
+    useForm(isNew ? tournament : undefined)
   const [addressSuggestions, setAddressSuggestions] = useState()
   const accessContext = useContext(AccessContext)
 
-  const onMultipleEventsChange = useCallback(event => {
-    const days = event.target.checked ? 0 : 1
-    changeValue('days', days)
-  }, [changeValue])
+  const onMultipleEventsChange = useCallback(
+    (event) => {
+      const days = event.target.checked ? 0 : 1
+      changeValue('days', days)
+    },
+    [changeValue],
+  )
 
-  const onClubIdChange = useCallback(clubId => {
-    changeValue('clubId', clubId)
-  }, [changeValue])
+  const onClubIdChange = useCallback(
+    (clubId) => {
+      changeValue('clubId', clubId)
+    },
+    [changeValue],
+  )
 
   const getAddressSuggestions = useCallback(() => {
     if (!data.location) return
@@ -54,9 +51,12 @@ const TournamentFields = props => {
     }
   }, [contactId, getAddressSuggestions])
 
-  const onAddressSuggestionSelection = useCallback((event) => {
-    if (event.target.value) changeValue('address', event.target.value)
-  }, [changeValue])
+  const onAddressSuggestionSelection = useCallback(
+    (event) => {
+      if (event.target.value) changeValue('address', event.target.value)
+    },
+    [changeValue],
+  )
 
   const renderTournamentForm = () => {
     return (
@@ -73,9 +73,10 @@ const TournamentFields = props => {
         {isEditing && renderEqualPointsRuleField()}
         {isEditing && renderVisibilityField()}
         {isEditing && renderInfoField()}
+        {!official && renderCheckbox('Premium', 'premium')}
         {isEditing && renderCheckbox('Peruttu', 'cancelled')}
         {!official && renderCheckbox('Testiturnaus', 'test')}
-        <FormErrors errors={errors}/>
+        <FormErrors errors={errors} />
         {renderTournamentFormButtons()}
       </form>
     )
@@ -86,7 +87,12 @@ const TournamentFields = props => {
     return (
       <div className="form__field">
         <div className="label">Järjestävä seura</div>
-        <ClubSelect clubId={data.clubId || CHOOSE_CLUB_ID} clubs={clubs} initialSearch={clubName} onChange={onClubIdChange} />
+        <ClubSelect
+          clubId={data.clubId || CHOOSE_CLUB_ID}
+          clubs={clubs}
+          initialSearch={clubName}
+          onChange={onClubIdChange}
+        />
       </div>
     )
   }
@@ -117,7 +123,15 @@ const TournamentFields = props => {
   }
 
   const renderTournamentField = (label, type, field, placeholder) => {
-    return <TextField label={label} onChange={onFieldChange(field)} placeholder={placeholder} type={type} value={data[field]}/>
+    return (
+      <TextField
+        label={label}
+        onChange={onFieldChange(field)}
+        placeholder={placeholder}
+        type={type}
+        value={data[field]}
+      />
+    )
   }
 
   const renderAddressSuggestions = () => {
@@ -128,8 +142,10 @@ const TournamentFields = props => {
         <div>
           <select onChange={onAddressSuggestionSelection}>
             <option value="">- Valitse osoite -</option>
-            {addressSuggestions.map(suggestion => (
-              <option key={suggestion.id} value={suggestion.address}>{suggestion.location} = {suggestion.address}</option>
+            {addressSuggestions.map((suggestion) => (
+              <option key={suggestion.id} value={suggestion.address}>
+                {suggestion.location} = {suggestion.address}
+              </option>
             ))}
           </select>
         </div>
@@ -178,7 +194,11 @@ const TournamentFields = props => {
         )}
       </div>
       <div className="form__field__help">
-        Voit käyttää <a href="https://commonmark.org/help/" target="_blank" rel="noreferrer">markdown-muotoilua</a> esim. linkkien tekemiseen
+        Voit käyttää{' '}
+        <a href="https://commonmark.org/help/" target="_blank" rel="noreferrer">
+          markdown-muotoilua
+        </a>{' '}
+        esim. linkkien tekemiseen
       </div>
     </div>
   )
@@ -197,8 +217,8 @@ const TournamentFields = props => {
   const renderTournamentFormButtons = () => {
     return (
       <div className="form__buttons">
-        <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()}/>
-        <Button label="Peruuta" onClick={cancel} type="normal"/>
+        <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()} />
+        <Button label="Peruuta" onClick={cancel} type="normal" />
       </div>
     )
   }
@@ -209,10 +229,10 @@ const TournamentFields = props => {
     const texts = [name, formatDateRange(startDate, days), location, address || '(ei osoitetta)']
     return (
       <div className="tournament-item">
-        <div className="tournament-item__title tournament-item__title--existing" >
+        <div className="tournament-item__title tournament-item__title--existing">
           <span onClick={onOpenClick} className={showBadge ? 'tournament-item__title--with-badge' : ''}>
             <span>{texts.join(', ')}</span>
-            {showBadge && <VisibilityBadge visibility={visibility}/>}
+            {showBadge && <VisibilityBadge visibility={visibility} />}
           </span>
         </div>
       </div>
@@ -220,8 +240,34 @@ const TournamentFields = props => {
   }
 
   const onOpenClick = () => {
-    const { name, startDate, days, location, address, matchMinutes, equalPointsRule, visibility, clubId, cancelled, info, test } = tournament
-    openForm({ name, startDate, days, location, address: address || '', matchMinutes, equalPointsRule, visibility, clubId, cancelled, info, test })
+    const {
+      name,
+      startDate,
+      days,
+      location,
+      address,
+      matchMinutes,
+      equalPointsRule,
+      visibility,
+      clubId,
+      cancelled,
+      info,
+      test,
+    } = tournament
+    openForm({
+      name,
+      startDate,
+      days,
+      location,
+      address: address || '',
+      matchMinutes,
+      equalPointsRule,
+      visibility,
+      clubId,
+      cancelled,
+      info,
+      test,
+    })
   }
 
   const cancel = () => {
@@ -238,7 +284,7 @@ const TournamentFields = props => {
     trimmedData.name = trimmedData.name.trim()
     trimmedData.location = trimmedData.location.trim()
     trimmedData.address = trimmedData.address.trim()
-    onSave(trimmedData, errors => {
+    onSave(trimmedData, (errors) => {
       if (errors) {
         setErrors(errors)
       } else {

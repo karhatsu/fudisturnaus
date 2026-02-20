@@ -3,7 +3,7 @@ import { Link } from 'react-router'
 
 const emoji = '⚽'
 
-const buildEventJson = tournament => ({
+const buildEventJson = (tournament) => ({
   '@context': 'https://schema.org',
   '@type': 'Event',
   name: tournament.name,
@@ -20,9 +20,7 @@ const buildEventJson = tournament => ({
       addressCountry: 'FI',
     },
   },
-  image: [
-    'https://www.fudisturnaus.com/logo.jpg'
-  ],
+  image: ['https://www.fudisturnaus.com/logo.jpg'],
   description: 'Jalkapalloturnaus',
   organizer: {
     '@type': 'Organization',
@@ -57,7 +55,11 @@ const Title = ({ children, club, iconLink, loading, text, tournament }) => {
     if (!iconLink) {
       return <span className={emojiClasses}>{emoji}</span>
     } else {
-      return <Link to={iconLink} className={emojiClasses}>{emoji}</Link>
+      return (
+        <Link to={iconLink} className={emojiClasses} reloadDocument={tournament?.premium}>
+          {emoji}
+        </Link>
+      )
     }
   }
 
@@ -74,9 +76,7 @@ const Title = ({ children, club, iconLink, loading, text, tournament }) => {
         <span className="title__text">{text}</span>
         {renderClubLogo()}
       </div>
-      <div className="title__extra">
-        {children}
-      </div>
+      <div className="title__extra">{children}</div>
     </div>
   )
 }

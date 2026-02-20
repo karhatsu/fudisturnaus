@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router'
 import { formatTournamentDates } from '../util/date_util'
 
-const TournamentLinkBox = ({ to, tournament }) => {
+const TournamentLinkBox = ({ to, tournament, reloadDocument }) => {
   const { cancelled, club, id, name, location, startDate, endDate, test } = tournament
 
   const renderOrganizerLogo = () => {
@@ -24,11 +24,13 @@ const TournamentLinkBox = ({ to, tournament }) => {
   }
 
   return (
-    <Link to={to} key={id} className="tournament-link">
+    <Link to={to} key={id} className="tournament-link" reloadDocument={reloadDocument}>
       {renderOrganizerLogo()}
       <div className="tournament-link__texts">
         <div className="tournament-link__tournament-name">{name}</div>
-        <div className="tournament-link__other-info">{location}, {formatTournamentDates(startDate, endDate)}</div>
+        <div className="tournament-link__other-info">
+          {location}, {formatTournamentDates(startDate, endDate)}
+        </div>
       </div>
       {renderBadge()}
     </Link>

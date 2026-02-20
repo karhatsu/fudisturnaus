@@ -253,6 +253,7 @@ const TournamentFields = (props) => {
       cancelled,
       info,
       test,
+      premium,
     } = tournament
     openForm({
       name,
@@ -267,6 +268,7 @@ const TournamentFields = (props) => {
       cancelled,
       info,
       test,
+      premium,
     })
   }
 

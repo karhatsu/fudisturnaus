@@ -10,72 +10,73 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_15_031938) do
+ActiveRecord::Schema[8.1].define(version: 2025_05_15_031938) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "pg_stat_statements"
 
   create_table "age_groups", force: :cascade do |t|
-    t.bigint "tournament_id", null: false
-    t.string "name", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
     t.boolean "calculate_group_tables", default: false, null: false
+    t.datetime "created_at", precision: nil, null: false
     t.boolean "hide_group_tables", default: false, null: false
+    t.string "name", null: false
+    t.bigint "tournament_id", null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["tournament_id"], name: "index_age_groups_on_tournament_id"
   end
 
   create_table "clubs", force: :cascade do |t|
-    t.string "name", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.string "logo_url"
     t.string "alias"
+    t.datetime "created_at", precision: nil, null: false
+    t.string "logo_url"
+    t.string "name", null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "contacts", force: :cascade do |t|
-    t.string "person_name", null: false
+    t.datetime "created_at", null: false
     t.string "email", null: false
+    t.datetime "handled_at"
     t.text "message"
+    t.string "person_name", null: false
     t.string "tournament_club"
-    t.string "tournament_name"
-    t.date "tournament_start_date"
     t.integer "tournament_days"
     t.string "tournament_location"
-    t.datetime "handled_at"
-    t.datetime "created_at", null: false
+    t.string "tournament_name"
+    t.date "tournament_start_date"
     t.datetime "updated_at", null: false
   end
 
   create_table "fields", force: :cascade do |t|
-    t.bigint "tournament_id", null: false
-    t.string "name", null: false
     t.datetime "created_at", precision: nil, null: false
+    t.string "name", null: false
+    t.bigint "tournament_id", null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["tournament_id"], name: "index_fields_on_tournament_id"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
+    t.datetime "created_at", precision: nil
+    t.string "scope"
     t.string "slug", null: false
     t.integer "sluggable_id", null: false
     t.string "sluggable_type", limit: 50
-    t.string "scope"
-    t.datetime "created_at", precision: nil
     t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
   end
 
   create_table "group_stage_matches", force: :cascade do |t|
-    t.bigint "group_id", null: false
-    t.bigint "field_id", null: false
-    t.datetime "start_time", precision: nil, null: false
-    t.bigint "home_team_id", null: false
-    t.bigint "away_team_id", null: false
-    t.integer "home_goals"
     t.integer "away_goals"
+    t.bigint "away_team_id", null: false
     t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.bigint "field_id", null: false
+    t.bigint "group_id", null: false
+    t.integer "home_goals"
+    t.bigint "home_team_id", null: false
     t.bigint "referee_id"
+    t.datetime "start_time", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["away_team_id"], name: "index_group_stage_matches_on_away_team_id"
     t.index ["field_id"], name: "index_group_stage_matches_on_field_id"
     t.index ["group_id"], name: "index_group_stage_matches_on_group_id"
@@ -85,40 +86,40 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_15_031938) do
 
   create_table "groups", force: :cascade do |t|
     t.bigint "age_group_id", null: false
-    t.string "name", null: false
     t.datetime "created_at", precision: nil, null: false
+    t.string "name", null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["age_group_id"], name: "index_groups_on_age_group_id"
   end
 
   create_table "playoff_groups", force: :cascade do |t|
     t.bigint "age_group_id", null: false
-    t.string "name", null: false
     t.datetime "created_at", null: false
+    t.string "name", null: false
     t.datetime "updated_at", null: false
     t.index ["age_group_id"], name: "index_playoff_groups_on_age_group_id"
   end
 
   create_table "playoff_matches", force: :cascade do |t|
     t.bigint "age_group_id", null: false
-    t.bigint "field_id", null: false
-    t.string "home_team_origin_type", null: false
-    t.bigint "home_team_origin_id", null: false
-    t.string "away_team_origin_type", null: false
-    t.bigint "away_team_origin_id", null: false
-    t.integer "home_team_origin_rule", null: false
-    t.integer "away_team_origin_rule", null: false
-    t.bigint "home_team_id"
-    t.bigint "away_team_id"
-    t.datetime "start_time", precision: nil, null: false
-    t.string "title", null: false
-    t.integer "home_goals"
     t.integer "away_goals"
-    t.boolean "penalties", default: false, null: false
+    t.bigint "away_team_id"
+    t.bigint "away_team_origin_id", null: false
+    t.integer "away_team_origin_rule", null: false
+    t.string "away_team_origin_type", null: false
     t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.bigint "field_id", null: false
+    t.integer "home_goals"
+    t.bigint "home_team_id"
+    t.bigint "home_team_origin_id", null: false
+    t.integer "home_team_origin_rule", null: false
+    t.string "home_team_origin_type", null: false
+    t.boolean "penalties", default: false, null: false
     t.bigint "playoff_group_id"
     t.bigint "referee_id"
+    t.datetime "start_time", precision: nil, null: false
+    t.string "title", null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["age_group_id"], name: "index_playoff_matches_on_age_group_id"
     t.index ["away_team_id"], name: "index_playoff_matches_on_away_team_id"
     t.index ["away_team_origin_type", "away_team_origin_id"], name: "index_playoff_matches_on_away_team_origin"
@@ -130,45 +131,45 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_15_031938) do
   end
 
   create_table "referees", force: :cascade do |t|
-    t.bigint "tournament_id", null: false
-    t.string "name", null: false
     t.string "access_key", null: false
     t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "tournament_id", null: false
     t.datetime "updated_at", null: false
     t.index ["tournament_id"], name: "index_referees_on_tournament_id"
   end
 
   create_table "teams", force: :cascade do |t|
     t.bigint "club_id"
-    t.bigint "group_id", null: false
-    t.string "name", null: false
-    t.integer "group_stage_number"
     t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.bigint "group_id", null: false
+    t.integer "group_stage_number"
     t.integer "lot"
+    t.string "name", null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["club_id"], name: "index_teams_on_club_id"
     t.index ["group_id"], name: "index_teams_on_group_id"
   end
 
   create_table "tournaments", force: :cascade do |t|
-    t.string "name", null: false
-    t.date "start_date", null: false
-    t.integer "days", default: 1, null: false
-    t.string "location", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
     t.string "access_key"
     t.string "address"
-    t.integer "match_minutes", default: 45, null: false
-    t.integer "equal_points_rule", default: 0, null: false
-    t.string "results_access_key"
-    t.integer "visibility", default: 2, null: false
     t.boolean "cancelled", default: false, null: false
-    t.boolean "test", default: false, null: false
     t.bigint "club_id"
-    t.string "slug"
-    t.text "info"
+    t.datetime "created_at", precision: nil, null: false
     t.jsonb "dates", null: false
+    t.integer "days", default: 1, null: false
+    t.integer "equal_points_rule", default: 0, null: false
+    t.text "info"
+    t.string "location", null: false
+    t.integer "match_minutes", default: 45, null: false
+    t.string "name", null: false
+    t.string "results_access_key"
+    t.string "slug"
+    t.date "start_date", null: false
+    t.boolean "test", default: false, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.integer "visibility", default: 2, null: false
     t.index ["club_id"], name: "index_tournaments_on_club_id"
     t.index ["slug"], name: "index_tournaments_on_slug", unique: true
   end

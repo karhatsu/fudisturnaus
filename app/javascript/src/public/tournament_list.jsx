@@ -15,14 +15,18 @@ const sortByAscendingDate = (a, b) => {
 }
 
 const TournamentList = (props) => {
-  const { buildLink, search, setSearch, title, tournaments, tournamentsError } = props
+  const { buildLink, search, setSearch, title, tournaments, tournamentsError, isPublic } = props
 
   const renderTournament = useCallback(
     (tournament) => {
       const { id } = tournament
       return (
         <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3" key={id}>
-          <TournamentLinkBox to={buildLink(tournament)} tournament={tournament} />
+          <TournamentLinkBox
+            to={buildLink(tournament)}
+            tournament={tournament}
+            reloadDocument={isPublic && tournament.premium}
+          />
         </div>
       )
     },

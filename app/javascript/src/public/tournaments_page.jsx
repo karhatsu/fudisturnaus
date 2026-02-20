@@ -3,7 +3,7 @@ import { useLocation } from 'react-router'
 import TournamentList from './tournament_list'
 import { fetchTournaments } from './api_client'
 
-const buildLink = tournament => `/t/${tournament.slug}`
+const buildLink = (tournament) => `/t/${tournament.slug}`
 
 export default function TournamentsPage() {
   const { search } = useLocation()
@@ -15,7 +15,7 @@ export default function TournamentsPage() {
       if (err) {
         setError(true)
       } else {
-        const tournaments = data.filter(t => !t.test)
+        const tournaments = data.filter((t) => !t.test)
         setTournaments(tournaments)
       }
     })
@@ -27,6 +27,7 @@ export default function TournamentsPage() {
       title="fudisturnaus.com"
       tournaments={tournaments}
       tournamentsError={error}
+      isPublic={true}
     />
   )
 }

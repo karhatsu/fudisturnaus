@@ -13,7 +13,7 @@
     <%= javascript_include_tag 'application', defer: true %>
     <%= stylesheet_link_tag "application", defer: true %>
 
-    <% if Rails.env.production? %>
+    <% if Rails.env.production? && !@tournament&.premium? %>
     <script data-ad-client="ca-pub-3948131044642474" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <% end %>
   </head>

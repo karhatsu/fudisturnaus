@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import TextField from '../form/text_field'
 import Button from '../form/button'
 import { sendContactRequest } from './api_client'
@@ -29,24 +29,21 @@ const ContactForm = () => {
   }
 
   const renderField = (label, field, type, placeholder) => {
-    return <TextField
-      label={label}
-      onChange={setValue(field)}
-      placeholder={placeholder}
-      type={type}
-      value={data[field]}/>
+    return (
+      <TextField label={label} onChange={setValue(field)} placeholder={placeholder} type={type} value={data[field]} />
+    )
   }
 
   const renderMessageField = () => {
     return (
       <div className="form__field">
         <div className="label">Viesti</div>
-        <textarea className="form__field" onChange={setValue('message')} cols={40} rows={10}/>
+        <textarea className="form__field" onChange={setValue('message')} cols={40} rows={10} />
       </div>
     )
   }
 
-  const setValue = field => event => setData({ ...data, [field]: event.target.value })
+  const setValue = (field) => (event) => setData({ ...data, [field]: event.target.value })
 
   const canSubmit = () => {
     const { personName, email } = data
@@ -54,7 +51,7 @@ const ContactForm = () => {
   }
 
   const submit = () => {
-    sendContactRequest(data, errors => {
+    sendContactRequest(data, (errors) => {
       if (errors) {
         return setErrors(errors)
       }
@@ -63,12 +60,16 @@ const ContactForm = () => {
   }
 
   if (submitted) {
-    return <Message type="success" noMargins={true}>Kiitos yhteydenotosta. Palaamme asiaan pian!</Message>
+    return (
+      <Message type="success" noMargins={true}>
+        Kiitos yhteydenotosta. Palaamme asiaan pian!
+      </Message>
+    )
   }
 
   return (
     <form className="form form--vertical">
-      <FormErrors errors={errors}/>
+      <FormErrors errors={errors} />
       {renderIntro(genericIntro)}
       {renderField('Nimi', 'personName', 'text', 'Oma nimesi')}
       {renderField('Sähköposti', 'email', 'email', 'Sähköposti')}
@@ -80,7 +81,7 @@ const ContactForm = () => {
       {renderField('Kesto (pv)', 'tournamentDays', 'number')}
       {renderField('Paikka (kentän nimi)', 'tournamentLocation', 'text')}
       <div className="form__buttons">
-        <Button label="Lähetä" onClick={submit} type="primary" disabled={!canSubmit()}/>
+        <Button label="Lähetä" onClick={submit} type="primary" disabled={!canSubmit()} />
       </div>
     </form>
   )

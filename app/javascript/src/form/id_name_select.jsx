@@ -1,11 +1,13 @@
-import React from 'react'
-
 const IdNameSelect = ({ customNameBuild, field, formData, items, label, onChange }) => {
   const renderOptions = () => {
-    const nameBuild = customNameBuild || (item => item.name)
-    return items.map(item => {
+    const nameBuild = customNameBuild || ((item) => item.name)
+    return items.map((item) => {
       const { id } = item
-      return <option key={id} value={id}>{nameBuild(item)}</option>
+      return (
+        <option key={id} value={id}>
+          {nameBuild(item)}
+        </option>
+      )
     })
   }
 

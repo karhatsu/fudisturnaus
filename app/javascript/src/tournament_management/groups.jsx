@@ -1,4 +1,3 @@
-import React from 'react'
 import Group from './group'
 
 const Groups = ({ onItemDelete, onItemSave, tournament, tournamentId }) => {
@@ -9,16 +8,18 @@ const Groups = ({ onItemDelete, onItemSave, tournament, tournamentId }) => {
   }
 
   const renderGroups = () => {
-    return groups.map(group => {
-      return <Group
-        key={group.id}
-        ageGroups={ageGroups}
-        group={group}
-        onGroupDelete={onItemDelete('groups')}
-        onGroupSave={onItemSave('groups')}
-        tournamentId={tournamentId}
-        type="group"
-      />
+    return groups.map((group) => {
+      return (
+        <Group
+          key={group.id}
+          ageGroups={ageGroups}
+          group={group}
+          onGroupDelete={onItemDelete('groups')}
+          onGroupSave={onItemSave('groups')}
+          tournamentId={tournamentId}
+          type="group"
+        />
+      )
     })
   }
 

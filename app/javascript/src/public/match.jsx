@@ -1,4 +1,3 @@
-import React from 'react'
 import { formatMatchTime } from '../util/date_util'
 import Team from './team'
 import { buildGroupTitle } from '../util/util'
@@ -36,7 +35,7 @@ const Match = ({ ageGroups, clubs, fieldsCount, groups, match, selectedClubId, s
     }
   }
 
-  const renderTeam = team => {
+  const renderTeam = (team) => {
     if (!team) return <span>?</span>
     const selected = team.id === selectedTeamId || team.clubId === selectedClubId
     return <Team clubId={team.clubId} clubs={clubs} name={team.name} selected={selected} />
@@ -52,9 +51,7 @@ const Match = ({ ageGroups, clubs, fieldsCount, groups, match, selectedClubId, s
   const { ageGroup, startTime, field, homeTeam, awayTeam, title, group } = match
   return (
     <div className="match">
-      <div className="match__row">
-        {renderMatchInfo(startTime, field, ageGroup, group)}
-      </div>
+      <div className="match__row">{renderMatchInfo(startTime, field, ageGroup, group)}</div>
       <div className="match__row">
         <div className="match__teams">
           {renderPlayoffMatchTitle(homeTeam, awayTeam, title)}

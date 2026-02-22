@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import * as clipboard from 'clipboard-polyfill'
 import Button from '../form/button'
 import Message from '../components/message'
@@ -19,12 +19,15 @@ ${buildUrl(`/t/${tournament.slug}`)}
 Laita viestiä jos tarvitset lisäohjeita, niin autan mielelläni.
 
 Henri`
-    clipboard.writeText(email).then(() => {
-      setEmailCopied(true)
-      setTimeout(() => {
-        setEmailCopied(false)
-      }, 5000)
-    }).catch(console.error)
+    clipboard
+      .writeText(email)
+      .then(() => {
+        setEmailCopied(true)
+        setTimeout(() => {
+          setEmailCopied(false)
+        }, 5000)
+      })
+      .catch(console.error)
   }
 
   return (

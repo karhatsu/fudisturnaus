@@ -1,4 +1,3 @@
-import React from 'react'
 import Referee from './referee'
 
 const Referees = ({ onItemDelete, onItemSave, tournament, tournamentId }) => {
@@ -15,7 +14,7 @@ const Referees = ({ onItemDelete, onItemSave, tournament, tournamentId }) => {
   }
 
   const renderReferees = () => {
-    return referees.map(referee => {
+    return referees.map((referee) => {
       return (
         <Referee
           key={referee.id}

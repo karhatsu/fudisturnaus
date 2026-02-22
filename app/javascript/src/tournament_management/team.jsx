@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { createClub, deleteTeam, saveTeam } from './api_client'
 import AccessContext from '../util/access_context'
 import { getName, resolveTournamentItemClasses } from '../util/util'
@@ -32,32 +32,51 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
 
   const renderName = () => {
     const text = team ? team.name : '+ Lisää uusi joukkue'
-    return <div className={resolveTournamentItemClasses(team)}><span onClick={editTeam}>{text}</span></div>
+    return (
+      <div className={resolveTournamentItemClasses(team)}>
+        <span onClick={editTeam}>{text}</span>
+      </div>
+    )
   }
 
   const renderForm = () => {
     const { groupId, name } = data
     return (
       <form className="form form--horizontal">
-        <FormErrors errors={errors}/>
+        <FormErrors errors={errors} />
         <div className="tournament-item__form">
           <div className="form__field">
             <select onChange={onFieldChange('groupId')} value={groupId}>
               <option>Lohko</option>
-              {groups.map(group => {
+              {groups.map((group) => {
                 const { id, name, ageGroupId } = group
-                return <option key={id} value={id}>{getName(ageGroups, ageGroupId)} | {name}</option>
+                return (
+                  <option key={id} value={id}>
+                    {getName(ageGroups, ageGroupId)} | {name}
+                  </option>
+                )
               })}
             </select>
           </div>
           <div className="form__field">
-            <ClubSelect clubId={data.clubId} clubs={clubs} onChange={onClubIdChange} showNewClub={true} ref={clubField} />
+            <ClubSelect
+              clubId={data.clubId}
+              clubs={clubs}
+              onChange={onClubIdChange}
+              showNewClub={true}
+              ref={clubField}
+            />
           </div>
-          <TextField ref={nameField} onChange={onFieldChange('name')} placeholder="Esim. FC Kontu Valkoinen" value={name}/>
+          <TextField
+            ref={nameField}
+            onChange={onFieldChange('name')}
+            placeholder="Esim. FC Kontu Valkoinen"
+            value={name}
+          />
           <div className="form__buttons">
-            <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()}/>
-            <Button label="Peruuta" onClick={closeForm} type="normal"/>
-            {!!team && <Button type="danger" label="Poista" onClick={handleDelete}/>}
+            <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()} />
+            <Button label="Peruuta" onClick={closeForm} type="normal" />
+            {!!team && <Button type="danger" label="Poista" onClick={handleDelete} />}
           </div>
         </div>
       </form>
@@ -71,14 +90,14 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
           <input
             ref={clubNameField}
             type="text"
-            onChange={event => setClubName(event.target.value)}
+            onChange={(event) => setClubName(event.target.value)}
             value={clubName}
             placeholder="Seuran nimi (tarkasta oikeinkirjoitus)"
           />
         </div>
         <div className="form__buttons">
-          <input type="submit" value="Lisää uusi seura" onClick={saveClub} className="button button--primary"/>
-          <input type="button" value="Peruuta" onClick={closeClubForm} className="button"/>
+          <input type="submit" value="Lisää uusi seura" onClick={saveClub} className="button button--primary" />
+          <input type="button" value="Peruuta" onClick={closeClubForm} className="button" />
         </div>
       </div>
     )
@@ -86,13 +105,13 @@ const Team = ({ ageGroups, clubs, groups, onClubSave, onTeamDelete, onTeamSave, 
 
   const editTeam = () => {
     openForm({
-      clubId: team ? (team.club?.id || null) : CHOOSE_CLUB_ID,
+      clubId: team ? team.club?.id || null : CHOOSE_CLUB_ID,
       groupId: team ? team.groupId : -1,
       name: team ? team.name : '',
     })
   }
 
-  const onClubIdChange = clubId => {
+  const onClubIdChange = (clubId) => {
     if (!data.name && parseInt(clubId) > 0) {
       const clubName = getName(clubs, parseInt(clubId))
       if (clubName.indexOf('Ei virallista seuraa') === -1) {

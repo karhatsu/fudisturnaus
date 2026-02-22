@@ -1,10 +1,9 @@
-import React from 'react'
 import OfficialLinkCopy from './official_link_copy'
 
-/* eslint-disable max-len */
 const linkTexts = {
   accessKey: {
-    description: 'Tällä linkillä pääsee hallinnoimaan turnauksen kaikkia asetuksia sekä syöttämään tuloksia. Jaa se vain turnauksen toimihenkilöille.',
+    description:
+      'Tällä linkillä pääsee hallinnoimaan turnauksen kaikkia asetuksia sekä syöttämään tuloksia. Jaa se vain turnauksen toimihenkilöille.',
     title: 'Kopioi linkki hallintasivuille',
   },
   resultsAccessKey: {
@@ -12,11 +11,11 @@ const linkTexts = {
     title: 'Kopioi linkki tulosten syöttöön',
   },
   publicLink: {
-    description: 'Tällä linkillä pääsee katsomaan tuloksia. Voit jakaa sen kenelle tahansa, esim. turnaukseen osallistuville joukkueille.',
+    description:
+      'Tällä linkillä pääsee katsomaan tuloksia. Voit jakaa sen kenelle tahansa, esim. turnaukseen osallistuville joukkueille.',
     title: 'Kopioi julkinen linkki',
   },
 }
-/* eslint-enable max-len */
 
 const TournamentLinks = ({ tournament }) => {
   const { accessKey, resultsAccessKey, publicLink } = linkTexts
@@ -33,11 +32,7 @@ const TournamentLinks = ({ tournament }) => {
         path={`/results/${tournament.resultsAccessKey}`}
         title={resultsAccessKey.title}
       />
-      <OfficialLinkCopy
-        description={publicLink.description}
-        path={`/t/${tournament.slug}`}
-        title={publicLink.title}
-      />
+      <OfficialLinkCopy description={publicLink.description} path={`/t/${tournament.slug}`} title={publicLink.title} />
     </>
   )
 }

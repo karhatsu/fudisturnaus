@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { useCallback, useContext, useEffect, useRef } from 'react'
 import { addDays, differenceInDays, format, parseISO } from 'date-fns'
 import { deleteGroupStageMatch, saveGroupStageMatch } from './api_client'
 import AccessContext from '../util/access_context'
@@ -10,7 +10,7 @@ import TextField from '../form/text_field'
 import Button from '../form/button'
 import useForm from '../util/use_form'
 
-const GroupStageMatch = props => {
+const GroupStageMatch = (props) => {
   const {
     ageGroups,
     fields,
@@ -29,20 +29,23 @@ const GroupStageMatch = props => {
   const accessContext = useContext(AccessContext)
   const timeField = useRef(undefined)
   const { changeValue, formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, changeValues } = useForm()
-  const [timeSuggested, setTimeSuggested] = useState(false)
+  const timeSuggestedRef = useRef(false)
 
-  const onDateChange = useCallback(event => {
-    if(event.target.value) {
-      const day = differenceInDays(parseISO(event.target.value), parseISO(tournamentDate)) + 1
-      changeValue('day', day > 1 ? day : 1)
-    } else {
-      changeValue('day', 1)
-    }
-  }, [changeValue, tournamentDate])
+  const onDateChange = useCallback(
+    (event) => {
+      if (event.target.value) {
+        const day = differenceInDays(parseISO(event.target.value), parseISO(tournamentDate)) + 1
+        changeValue('day', day > 1 ? day : 1)
+      } else {
+        changeValue('day', 1)
+      }
+    },
+    [changeValue, tournamentDate],
+  )
 
   useEffect(() => {
-    if (formOpen && !timeSuggested && fields.length === 1 && data.startTime === '') {
-      setTimeSuggested(true)
+    if (formOpen && !timeSuggestedRef.current && fields.length === 1 && data.startTime === '') {
+      timeSuggestedRef.current = true
       let { day, startTime } = data
       const suggestion = resolveSuggestedTime(groupStageMatches, fields[0].id, matchMinutes, tournamentDate)
       if (suggestion) {
@@ -54,7 +57,7 @@ const GroupStageMatch = props => {
         }
       }
     }
-  }, [formOpen, timeSuggested, fields, data, groupStageMatches, matchMinutes, tournamentDate, changeValues])
+  }, [formOpen, fields, data, groupStageMatches, matchMinutes, tournamentDate, changeValues])
 
   const renderName = () => {
     let text = '+ Lisää uusi alkulohkon ottelu'
@@ -73,13 +76,17 @@ const GroupStageMatch = props => {
       }
       text = textElements.join(' | ')
     }
-    return <div className={resolveTournamentItemClasses(groupStageMatch)}><span onClick={onOpenClick}>{text}</span></div>
+    return (
+      <div className={resolveTournamentItemClasses(groupStageMatch)}>
+        <span onClick={onOpenClick}>{text}</span>
+      </div>
+    )
   }
 
   const renderForm = () => {
     return (
       <form className="form form--horizontal">
-        <FormErrors errors={errors}/>
+        <FormErrors errors={errors} />
         <div className="tournament-item__form">
           {buildFieldsDropDown()}
           {buildDaySelection()}
@@ -96,19 +103,19 @@ const GroupStageMatch = props => {
 
   const buildFieldsDropDown = () => {
     if (fields.length > 1) {
-      return <IdNameSelect field="fieldId" formData={data} items={fields} label="- Kenttä -" onChange={setField}/>
+      return <IdNameSelect field="fieldId" formData={data} items={fields} label="- Kenttä -" onChange={setField} />
     }
   }
 
   const buildTeamDropDown = (field, label) => {
     if (data.groupId) {
-      const teams = props.teams.filter(team => team.groupId === parseInt(data.groupId))
-      return <IdNameSelect field={field} formData={data} items={teams} label={label} onChange={onFieldChange(field)}/>
+      const teams = props.teams.filter((team) => team.groupId === parseInt(data.groupId))
+      return <IdNameSelect field={field} formData={data} items={teams} label={label} onChange={onFieldChange(field)} />
     }
   }
 
   const buildGroupDropDown = () => {
-    const customNameBuild = item => `${getName(ageGroups, item.ageGroupId)} | ${item.name}`
+    const customNameBuild = (item) => `${getName(ageGroups, item.ageGroupId)} | ${item.name}`
     return (
       <IdNameSelect
         customNameBuild={customNameBuild}
@@ -129,9 +136,15 @@ const GroupStageMatch = props => {
       return (
         <div className="form__field">
           <select onChange={onFieldChange('day')} value={data.day}>
-            {Array(tournamentDays).fill().map((x, i) => {
-              return <option key={i} value={i + 1}>{resolveWeekDay(tournamentDate, i)}</option>
-            })}
+            {Array(tournamentDays)
+              .fill()
+              .map((x, i) => {
+                return (
+                  <option key={i} value={i + 1}>
+                    {resolveWeekDay(tournamentDate, i)}
+                  </option>
+                )
+              })}
           </select>
         </div>
       )
@@ -153,16 +166,24 @@ const GroupStageMatch = props => {
   const renderButtons = () => {
     return (
       <div className="form__buttons">
-        <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()}/>
-        <Button label="Peruuta" onClick={resetForm} type="normal"/>
-        {!!groupStageMatch && <Button type="danger" label="Poista" onClick={handleDelete}/>}
+        <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()} />
+        <Button label="Peruuta" onClick={resetForm} type="normal" />
+        {!!groupStageMatch && <Button type="danger" label="Poista" onClick={handleDelete} />}
       </div>
     )
   }
 
   const buildRefereesDropDown = () => {
     if (referees.length) {
-      return <IdNameSelect field="refereeId" formData={data} items={referees} label="- Tuomari -" onChange={onFieldChange('refereeId')}/>
+      return (
+        <IdNameSelect
+          field="refereeId"
+          formData={data}
+          items={referees}
+          label="- Tuomari -"
+          onChange={onFieldChange('refereeId')}
+        />
+      )
     }
   }
 
@@ -176,10 +197,10 @@ const GroupStageMatch = props => {
       startTime: groupStageMatch ? formatTime(groupStageMatch.startTime) : '',
       refereeId: groupStageMatch ? groupStageMatch.refereeId : undefined,
     })
-    setTimeSuggested(!!groupStageMatch?.id)
+    timeSuggestedRef.current = !!groupStageMatch?.id
   }
 
-  const setField = event => {
+  const setField = (event) => {
     let { day, startTime } = data
     const fieldId = event.target.value
     if (fieldId && data.startTime === '') {
@@ -197,16 +218,18 @@ const GroupStageMatch = props => {
 
   const canSubmit = () => {
     const { awayTeamId, fieldId, groupId, homeTeamId, startTime } = data
-    return parseInt(awayTeamId) > 0
-      && parseInt(fieldId) > 0
-      && parseInt(groupId) > 0
-      && parseInt(homeTeamId) > 0
-      && startTime.match(/^[012]?\d:[0-5]\d$/)
+    return (
+      parseInt(awayTeamId) > 0 &&
+      parseInt(fieldId) > 0 &&
+      parseInt(groupId) > 0 &&
+      parseInt(homeTeamId) > 0 &&
+      startTime.match(/^[012]?\d:[0-5]\d$/)
+    )
   }
 
   const resetForm = () => {
     closeForm()
-    setTimeSuggested(false)
+    timeSuggestedRef.current = false
   }
 
   const submit = () => {

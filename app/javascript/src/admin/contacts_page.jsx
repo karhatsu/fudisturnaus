@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import Title from '../components/title'
 import AccessContext from '../util/access_context'
 import { fetchContacts, updateContactHandledAt } from './api_client'
@@ -21,20 +21,23 @@ const ContactsPage = () => {
     })
   }, [accessContext])
 
-  const updateAsHandled = useCallback((id) => {
-    updateContactHandledAt(accessContext, id, (err, contact) => {
-      if (err) {
-        console.error(err)
-        return
-      }
-      setContacts(prev => {
-        const newContacts = [...prev]
-        const index = newContacts.findIndex(c => c.id === id)
-        newContacts[index] = contact
-        return newContacts
+  const updateAsHandled = useCallback(
+    (id) => {
+      updateContactHandledAt(accessContext, id, (err, contact) => {
+        if (err) {
+          console.error(err)
+          return
+        }
+        setContacts((prev) => {
+          const newContacts = [...prev]
+          const index = newContacts.findIndex((c) => c.id === id)
+          newContacts[index] = contact
+          return newContacts
+        })
       })
-    })
-  }, [accessContext])
+    },
+    [accessContext],
+  )
 
   return (
     <div>
@@ -44,7 +47,9 @@ const ContactsPage = () => {
           <FormErrors errors={errors} />
         </div>
       )}
-      {contacts?.map(contact => <ContactItem key={contact.id} contact={contact} updateAsHandled={updateAsHandled} />)}
+      {contacts?.map((contact) => (
+        <ContactItem key={contact.id} contact={contact} updateAsHandled={updateAsHandled} />
+      ))}
     </div>
   )
 }

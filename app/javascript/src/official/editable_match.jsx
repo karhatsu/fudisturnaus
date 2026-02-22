@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import { matchTypes } from '../util/enums'
 import { saveResult } from '../tournament_management/api_client'
 import AccessContext from '../util/access_context'
@@ -8,7 +8,17 @@ import Team from '../public/team'
 import useForm from '../util/use_form'
 import { buildGroupTitle } from '../util/util'
 
-const EditableMatch = ({ ageGroups, clubs, fieldsCount, groups, match, selectedClubId, selectedTeamId, tournamentDays, tournamentId }) => {
+const EditableMatch = ({
+  ageGroups,
+  clubs,
+  fieldsCount,
+  groups,
+  match,
+  selectedClubId,
+  selectedTeamId,
+  tournamentDays,
+  tournamentId,
+}) => {
   const accessContext = useContext(AccessContext)
   const homeGoalsField = useRef(undefined)
   const { formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange, onCheckboxChange } = useForm()
@@ -51,7 +61,7 @@ const EditableMatch = ({ ageGroups, clubs, fieldsCount, groups, match, selectedC
     }
   }
 
-  const renderTeam = team => {
+  const renderTeam = (team) => {
     if (!team) return <span>?</span>
     const selected = team.id === selectedTeamId || team.clubId === selectedClubId
     return <Team clubId={team.clubId} clubs={clubs} name={team.name} selected={selected} />
@@ -63,7 +73,12 @@ const EditableMatch = ({ ageGroups, clubs, fieldsCount, groups, match, selectedC
       return renderForm()
     }
     if (homeGoals || homeGoals === 0) {
-      return <span>{homeGoals} - {awayGoals}{penalties ? ' rp' : ''}</span>
+      return (
+        <span>
+          {homeGoals} - {awayGoals}
+          {penalties ? ' rp' : ''}
+        </span>
+      )
     } else if (homeTeam && awayTeam) {
       return <span className="match__no-result">Tulos</span>
     }
@@ -105,7 +120,7 @@ const EditableMatch = ({ ageGroups, clubs, fieldsCount, groups, match, selectedC
     if (match.type === matchTypes.playoff) {
       return (
         <div className="match__penalties">
-          <input type="checkbox" value={true} checked={data.penalties} onChange={onCheckboxChange('penalties')}/> rp
+          <input type="checkbox" value={true} checked={data.penalties} onChange={onCheckboxChange('penalties')} /> rp
         </div>
       )
     }
@@ -131,7 +146,7 @@ const EditableMatch = ({ ageGroups, clubs, fieldsCount, groups, match, selectedC
     }
   }
 
-  const initialValue = value => value !== null ? value.toString() : ''
+  const initialValue = (value) => (value !== null ? value.toString() : '')
 
   const canSubmit = () => {
     const { homeGoals, awayGoals, penalties, initialHomeGoals, initialAwayGoals, initialPenalties } = data
@@ -140,7 +155,7 @@ const EditableMatch = ({ ageGroups, clubs, fieldsCount, groups, match, selectedC
     return changed && both
   }
 
-  const isNumber = value => parseInt(value).toString() === value
+  const isNumber = (value) => parseInt(value).toString() === value
 
   const handleSave = () => {
     const { id, type } = match
@@ -157,9 +172,7 @@ const EditableMatch = ({ ageGroups, clubs, fieldsCount, groups, match, selectedC
   const { startTime, field, homeTeam, awayTeam, title, ageGroup, group } = match
   return (
     <div className="match match--editable" onClick={onClick}>
-      <div className="match__row">
-        {renderMatchInfo(startTime, field, ageGroup, group)}
-      </div>
+      <div className="match__row">{renderMatchInfo(startTime, field, ageGroup, group)}</div>
       <div className="match__row">
         <div className="match__teams">
           {renderPlayoffMatchTitle(homeTeam, awayTeam, title)}

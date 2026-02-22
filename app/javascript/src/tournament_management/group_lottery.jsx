@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import { getName } from '../util/util'
 import { saveLottery } from './api_client'
 import AccessContext from '../util/access_context'
@@ -15,8 +15,8 @@ const GroupLottery = ({ ageGroups, group, onLotterySave, tournamentId }) => {
     if (formOpen) {
       return (
         <div className="form__buttons">
-          <Button label="Tallennan arvonnan tulos" onClick={save} type="primary"/>
-          <Button label="Peruuta" onClick={closeForm} type="normal"/>
+          <Button label="Tallennan arvonnan tulos" onClick={save} type="primary" />
+          <Button label="Peruuta" onClick={closeForm} type="normal" />
         </div>
       )
     }
@@ -34,29 +34,37 @@ const GroupLottery = ({ ageGroups, group, onLotterySave, tournamentId }) => {
     )
   }
 
-  const resolveRankingCounts = results => {
-    return results.map(result => result.ranking).reduce((counts, ranking) => {
-      counts[ranking] = counts[ranking] || 0
-      counts[ranking]++
-      return counts
-    }, {})
+  const resolveRankingCounts = (results) => {
+    return results
+      .map((result) => result.ranking)
+      .reduce((counts, ranking) => {
+        counts[ranking] = counts[ranking] || 0
+        counts[ranking]++
+        return counts
+      }, {})
   }
 
   const renderLotField = (teamId) => {
     if (formOpen) {
-      return <TextField onChange={setLot(teamId)} placeholder="Esim. 0 tai 1" type="number" value={data[teamId] || ''}/>
+      return (
+        <TextField onChange={setLot(teamId)} placeholder="Esim. 0 tai 1" type="number" value={data[teamId] || ''} />
+      )
     }
-    const lot = group.results.find(result => result.teamId === teamId).lot
+    const lot = group.results.find((result) => result.teamId === teamId).lot
     const text = lot || lot === 0 ? `Arpa: ${lot}` : 'Aseta arpa'
-    return <a href="#" onClick={onOpenClick}>{text}</a>
+    return (
+      <a href="#" onClick={onOpenClick}>
+        {text}
+      </a>
+    )
   }
 
-  const setLot = (teamId) => event => changeValue(teamId, event.target.value)
+  const setLot = (teamId) => (event) => changeValue(teamId, event.target.value)
 
-  const onOpenClick = e => {
+  const onOpenClick = (e) => {
     e.preventDefault()
     const lots = {}
-    group.results.forEach(result => {
+    group.results.forEach((result) => {
       lots[result.teamId] = result.lot === 0 ? '0' : result.lot
     })
     openForm(lots)
@@ -77,8 +85,10 @@ const GroupLottery = ({ ageGroups, group, onLotterySave, tournamentId }) => {
   const rankingCounts = resolveRankingCounts(results)
   return (
     <form key={id}>
-      <div className="tournament-management__section-title">{name} ({getName(ageGroups, ageGroupId)})</div>
-      <FormErrors errors={errors}/>
+      <div className="tournament-management__section-title">
+        {name} ({getName(ageGroups, ageGroupId)})
+      </div>
+      <FormErrors errors={errors} />
       <div className="group-results__group">
         <table>
           <thead>
@@ -88,9 +98,7 @@ const GroupLottery = ({ ageGroups, group, onLotterySave, tournamentId }) => {
               <th>Arvonnan tulos</th>
             </tr>
           </thead>
-          <tbody>
-            {results.map((result, index) => renderGroupResultRow(results, result, index, rankingCounts))}
-          </tbody>
+          <tbody>{results.map((result, index) => renderGroupResultRow(results, result, index, rankingCounts))}</tbody>
         </table>
       </div>
       {renderButtons()}

@@ -1,9 +1,7 @@
-import React from 'react'
-
 const isIframe = () => {
   try {
     return window.top !== window.self
-  } catch (err) {
+  } catch {
     return true
   }
 }

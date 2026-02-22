@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import TournamentList from './tournament_list'
 import { useAllTournaments } from './all_tournaments_context'
 import Hero from './hero'

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import { deleteAgeGroup, saveAgeGroup } from './api_client'
 import AccessContext from '../util/access_context'
 import { resolveTournamentItemClasses } from '../util/util'
@@ -21,8 +21,8 @@ const AgeGroup = ({ ageGroup, onAgeGroupDelete, onAgeGroupSave, tournamentId }) 
   const renderInstructions = () => {
     return (
       <div className="tournament-item__instructions">
-        Jos ikäluokan eri tasoilla on omat jatkopelit, lisää jokaiselle tasolle oma sarja (esim. &quot;P07 haaste&quot;).
-        Jos taas ikäluokalla ei ole jatkopelejä, lisää sarja ilman tasoa (esim. &quot;T12&quot;) ja
+        Jos ikäluokan eri tasoilla on omat jatkopelit, lisää jokaiselle tasolle oma sarja (esim. &quot;P07
+        haaste&quot;). Jos taas ikäluokalla ei ole jatkopelejä, lisää sarja ilman tasoa (esim. &quot;T12&quot;) ja
         määritä tasot omiin lohkoihin alempana.
       </div>
     )
@@ -30,30 +30,49 @@ const AgeGroup = ({ ageGroup, onAgeGroupDelete, onAgeGroupSave, tournamentId }) 
 
   const renderName = () => {
     const text = ageGroup ? ageGroup.name : '+ Lisää uusi sarja'
-    return <div className={resolveTournamentItemClasses(ageGroup)}><span onClick={editAgeGroup}>{text}</span></div>
+    return (
+      <div className={resolveTournamentItemClasses(ageGroup)}>
+        <span onClick={editAgeGroup}>{text}</span>
+      </div>
+    )
   }
 
   const renderForm = () => {
     const { calculateGroupTables, hideGroupTables, name } = data
     return (
       <form className="form form--horizontal">
-        <FormErrors errors={errors}/>
+        <FormErrors errors={errors} />
         <div className="tournament-item__form">
-          <TextField ref={nameField} onChange={onFieldChange('name')} placeholder="Esim. P11 tai T09 Haaste" value={name}/>
+          <TextField
+            ref={nameField}
+            onChange={onFieldChange('name')}
+            placeholder="Esim. P11 tai T09 Haaste"
+            value={name}
+          />
           <div className="form__field">
-            <input type="checkbox" onChange={onCheckboxChange('calculateGroupTables')} value={true} checked={!!calculateGroupTables}/>
+            <input
+              type="checkbox"
+              onChange={onCheckboxChange('calculateGroupTables')}
+              value={true}
+              checked={!!calculateGroupTables}
+            />
             Laske sarjataulukot
           </div>
           {calculateGroupTables && (
             <div className="form__field">
-              <input type="checkbox" onChange={onCheckboxChange('hideGroupTables')} value={true} checked={!!hideGroupTables}/>
+              <input
+                type="checkbox"
+                onChange={onCheckboxChange('hideGroupTables')}
+                value={true}
+                checked={!!hideGroupTables}
+              />
               Piilota sarjataulukot
             </div>
           )}
           <div className="form__buttons">
-            <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()}/>
-            <Button label="Peruuta" onClick={closeForm} type="normal"/>
-            {!!ageGroup && <Button type="danger" label="Poista" onClick={handleDelete}/>}
+            <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()} />
+            <Button label="Peruuta" onClick={closeForm} type="normal" />
+            {!!ageGroup && <Button type="danger" label="Poista" onClick={handleDelete} />}
           </div>
         </div>
       </form>

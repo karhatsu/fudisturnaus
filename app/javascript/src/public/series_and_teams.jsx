@@ -1,21 +1,21 @@
-import React from 'react'
 import Team from './team'
 import Message from '../components/message'
 
 const SeriesAndTeams = ({ tournament }) => {
-
   const renderInfo = () => {
     if (!tournament.cancelled) {
       return (
         <div>
           <div className="title-2">Otteluohjelma</div>
-          <Message type="warning" fullPage={true}>Turnauksen otteluohjelma julkaistaan myöhemmin</Message>
+          <Message type="warning" fullPage={true}>
+            Turnauksen otteluohjelma julkaistaan myöhemmin
+          </Message>
         </div>
       )
     }
   }
 
-  const renderAgeGroup = ageGroup => {
+  const renderAgeGroup = (ageGroup) => {
     const { id, name } = ageGroup
     const ageGroupTitle = oneAgeGroup() ? 'Ilmoittautuneet joukkueet' : name
     return (
@@ -26,18 +26,18 @@ const SeriesAndTeams = ({ tournament }) => {
     )
   }
 
-  const renderGroups = ageGroupId => {
-    const ageGroupTeams = tournament.teams.filter(team => team.ageGroupId === ageGroupId)
+  const renderGroups = (ageGroupId) => {
+    const ageGroupTeams = tournament.teams.filter((team) => team.ageGroupId === ageGroupId)
     if (!ageGroupTeams.length) {
       const msg = `${oneAgeGroup() ? 'Turnaukseen' : 'Sarjaan'} ei ole ilmoittautunut vielä yhtään joukkuetta`
       return <div className="series-and-teams__no-teams">{msg}</div>
     }
-    const groups = tournament.groups.filter(group => group.ageGroupId === ageGroupId)
-    return groups.map(group => renderGroup(group, groups.length > 1))
+    const groups = tournament.groups.filter((group) => group.ageGroupId === ageGroupId)
+    return groups.map((group) => renderGroup(group, groups.length > 1))
   }
 
   const renderGroup = (group, multipleGroups) => {
-    const teams = tournament.teams.filter(team => team.groupId === group.id)
+    const teams = tournament.teams.filter((team) => team.groupId === group.id)
     if (!teams.length) return
     return (
       <div className="series-and-teams__group" key={group.id}>
@@ -49,7 +49,11 @@ const SeriesAndTeams = ({ tournament }) => {
 
   const renderTeam = (team) => {
     const { clubId, id, name: teamName } = team
-    return <div className="series-and-teams__team" key={id}><Team clubId={clubId} clubs={tournament.clubs} name={teamName}/></div>
+    return (
+      <div className="series-and-teams__team" key={id}>
+        <Team clubId={clubId} clubs={tournament.clubs} name={teamName} />
+      </div>
+    )
   }
 
   const oneAgeGroup = () => {

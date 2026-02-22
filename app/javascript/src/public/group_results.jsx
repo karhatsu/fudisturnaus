@@ -1,11 +1,10 @@
-import React from 'react'
 import { buildGroupTitle, resolveColStyles } from '../util/util'
 import Team from './team'
 
 const GroupResults = ({ ageGroups, clubs, filters, group, groups, visibleGroupsCount, showLottery }) => {
-
   const renderGroupResultRow = (allResults, teamGroupResults, index) => {
-    const { clubId, ranking, teamName, lot, matches, wins, draws, losses, goalsFor, goalsAgainst, points } = teamGroupResults
+    const { clubId, ranking, teamName, lot, matches, wins, draws, losses, goalsFor, goalsAgainst, points } =
+      teamGroupResults
     const rankingText = index > 0 && ranking === allResults[index - 1].ranking ? '' : `${ranking}.`
     const team = `${teamName}${showLottery && typeof lot === 'number' ? ` (arpa: ${lot})` : ''}`
     return (
@@ -18,13 +17,15 @@ const GroupResults = ({ ageGroups, clubs, filters, group, groups, visibleGroupsC
         <td>{wins}</td>
         <td>{draws}</td>
         <td>{losses}</td>
-        <td>{goalsFor}-{goalsAgainst}</td>
+        <td>
+          {goalsFor}-{goalsAgainst}
+        </td>
         <td>{points}</td>
       </tr>
     )
   }
 
-  const resolveTeamClasses = teamGroupResults => {
+  const resolveTeamClasses = (teamGroupResults) => {
     const filteredTeam = teamGroupResults.clubId === filters.clubId || teamGroupResults.teamId === filters.teamId
     return filteredTeam ? 'group-results__team--active' : ''
   }
@@ -41,11 +42,13 @@ const GroupResults = ({ ageGroups, clubs, filters, group, groups, visibleGroupsC
           <thead>
             {title && (
               <tr>
-                <th colSpan={7} className="group-results__title">{title}</th>
+                <th colSpan={7} className="group-results__title">
+                  {title}
+                </th>
               </tr>
             )}
             <tr>
-              <th/>
+              <th />
               <th className="group-results__team-name">Joukkue</th>
               <th title="Ottelut">O</th>
               <th title="Voitot">V</th>
@@ -55,9 +58,7 @@ const GroupResults = ({ ageGroups, clubs, filters, group, groups, visibleGroupsC
               <th title="Pisteet">P</th>
             </tr>
           </thead>
-          <tbody>
-            {results.map((result, index) => renderGroupResultRow(results, result, index))}
-          </tbody>
+          <tbody>{results.map((result, index) => renderGroupResultRow(results, result, index))}</tbody>
         </table>
       </div>
     </div>

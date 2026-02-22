@@ -1,4 +1,3 @@
-import React from 'react'
 import Group from './group'
 
 const PlayoffGroups = ({ onItemDelete, onItemSave, tournament, tournamentId }) => {
@@ -9,31 +8,38 @@ const PlayoffGroups = ({ onItemDelete, onItemSave, tournament, tournamentId }) =
   }
 
   const renderPlayoffGroups = () => {
-    return playoffGroups.map(playoffGroup => {
-      return <Group
-        key={playoffGroup.id}
-        ageGroups={ageGroups}
-        group={playoffGroup}
-        onGroupDelete={onItemDelete('playoffGroups')}
-        onGroupSave={onItemSave('playoffGroups')}
-        type="playoffGroup"
-        tournamentId={tournamentId}
-      />
+    return playoffGroups.map((playoffGroup) => {
+      return (
+        <Group
+          key={playoffGroup.id}
+          ageGroups={ageGroups}
+          group={playoffGroup}
+          onGroupDelete={onItemDelete('playoffGroups')}
+          onGroupSave={onItemSave('playoffGroups')}
+          type="playoffGroup"
+          tournamentId={tournamentId}
+        />
+      )
     })
   }
 
-  const ageGroupsWithGroupTables = ageGroups.filter(ageGroup => ageGroup.calculateGroupTables)
+  const ageGroupsWithGroupTables = ageGroups.filter((ageGroup) => ageGroup.calculateGroupTables)
   return (
     <>
       <div className="title-2">Jatkolohkot</div>
       <div className="tournament-management__section">
         <div className="tournament-item">
-          Jos jatko-otteluista halutaan laskea sarjataulukot, luo sitä varten jatkolohko.
-          Mikäli jatko-ottelut pelataan playoff-tyyppisesti, ei jatkolohkoja tarvita.
+          Jos jatko-otteluista halutaan laskea sarjataulukot, luo sitä varten jatkolohko. Mikäli jatko-ottelut pelataan
+          playoff-tyyppisesti, ei jatkolohkoja tarvita.
         </div>
         {ageGroupsWithGroupTables.length > 0 ? renderPlayoffGroups() : renderCannotAddPlayoffGroups()}
         {ageGroupsWithGroupTables.length > 0 && (
-          <Group ageGroups={ageGroupsWithGroupTables} onGroupSave={onItemSave('playoffGroups')} tournamentId={tournamentId} type="playoffGroup" />
+          <Group
+            ageGroups={ageGroupsWithGroupTables}
+            onGroupSave={onItemSave('playoffGroups')}
+            tournamentId={tournamentId}
+            type="playoffGroup"
+          />
         )}
       </div>
     </>

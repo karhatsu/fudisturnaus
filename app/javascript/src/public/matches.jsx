@@ -1,9 +1,8 @@
-import React from 'react'
 import isSameDay from 'date-fns/isSameDay'
 import { resolveColStyles } from '../util/util'
 import Message from '../components/message'
 
-const Matches = props => {
+const Matches = (props) => {
   const {
     ageGroups,
     clubs,
@@ -26,10 +25,10 @@ const Matches = props => {
     }, {})
   }
 
-  const renderDates = matchesByStartTime => {
+  const renderDates = (matchesByStartTime) => {
     const dateRows = []
     let previousStartTime = undefined
-    Object.keys(matchesByStartTime).forEach(date => {
+    Object.keys(matchesByStartTime).forEach((date) => {
       const dateChanged = previousStartTime && !isSameDay(new Date(previousStartTime), new Date(date))
       dateRows.push(renderDate(matchesByStartTime, date, dateChanged))
       previousStartTime = date
@@ -46,8 +45,18 @@ const Matches = props => {
     )
   }
 
-  const renderMatchWrapper = match => {
-    const matchProps = { ageGroups, clubs, fieldsCount, groups, match, selectedClubId, selectedTeamId, tournamentDays, tournamentId }
+  const renderMatchWrapper = (match) => {
+    const matchProps = {
+      ageGroups,
+      clubs,
+      fieldsCount,
+      groups,
+      match,
+      selectedClubId,
+      selectedTeamId,
+      tournamentDays,
+      tournamentId,
+    }
     return (
       <div className={resolveColStyles(fieldsCount)} key={match.id}>
         {renderMatch(matchProps)}
@@ -56,14 +65,10 @@ const Matches = props => {
   }
 
   const matchesByStartTime = groupByStartTime()
-  if(Object.keys(matchesByStartTime).length === 0 && showEmptyError) {
+  if (Object.keys(matchesByStartTime).length === 0 && showEmptyError) {
     return <Message type="error">Ei yhtään ottelua, muuta hakuehtoja</Message>
   }
-  return (
-    <div className="matches">
-      {renderDates(matchesByStartTime)}
-    </div>
-  )
+  return <div className="matches">{renderDates(matchesByStartTime)}</div>
 }
 
 export default Matches

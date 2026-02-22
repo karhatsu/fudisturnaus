@@ -1,4 +1,3 @@
-import React from 'react'
 import Message from '../components/message'
 import { visibilityTypes } from '../util/enums'
 import Matches from '../public/matches'
@@ -37,18 +36,26 @@ const RefereePage = ({ tournamentId, refereeId, refereeName }) => {
 
   const renderContent = () => {
     if (error) {
-      return <Message type="error">Virhe haettaessa turnauksen tietoja. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.</Message>
+      return (
+        <Message type="error">
+          Virhe haettaessa turnauksen tietoja. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.
+        </Message>
+      )
     }
     if (!tournament) {
-      return <Loading/>
+      return <Loading />
     }
 
-    const groupStageMatches = tournament.groupStageMatches.filter(match => match.refereeId === refereeId)
-    const playoffMatches = tournament.playoffMatches.filter(match => match.refereeId === refereeId)
+    const groupStageMatches = tournament.groupStageMatches.filter((match) => match.refereeId === refereeId)
+    const playoffMatches = tournament.playoffMatches.filter((match) => match.refereeId === refereeId)
 
     if (tournament.visibility !== all || (!groupStageMatches.length && !playoffMatches.length)) {
       const msg = 'Kun turnauksen otteluohjelma julkaistaan, pääset tällä sivulla tallentamaan otteluittesi tulokset.'
-      return <Message type="warning" fullPage={true}>{msg}</Message>
+      return (
+        <Message type="warning" fullPage={true}>
+          {msg}
+        </Message>
+      )
     }
     return (
       <>

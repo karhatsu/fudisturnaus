@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import { addDays, endOfDay, endOfWeek, isAfter, isBefore, isSameDay, isToday, isTomorrow, parseISO } from 'date-fns'
 
 import Loading from '../components/loading'
@@ -30,7 +30,7 @@ const TournamentList = (props) => {
         </div>
       )
     },
-    [buildLink],
+    [buildLink, isPublic],
   )
 
   const matchCaseInsensitive = useCallback((text) => new RegExp(search.trim(), 'i').test(text), [search])

@@ -1,4 +1,3 @@
-import React from 'react'
 import { resolveDate, resolveWeekDay } from '../util/date_util'
 import { getName } from '../util/util'
 
@@ -19,16 +18,20 @@ const Filters = ({ filters, onGoToGroupTables, resetFilters, setFilterValue, tou
       return (
         <select id={`filter-${key}`} className="filter" onChange={setFilterValue(key)} value={filters[key]}>
           <option value={defaultValue}>{title}</option>
-          {items.map(item => {
+          {items.map((item) => {
             const { id, name } = item
-            return <option key={id} value={id}>{nameCallback ? nameCallback(item) : name}</option>
+            return (
+              <option key={id} value={id}>
+                {nameCallback ? nameCallback(item) : name}
+              </option>
+            )
           })}
         </select>
       )
     }
   }
 
-  const resolveGroupName = group => {
+  const resolveGroupName = (group) => {
     const { ageGroups } = tournament
     const { ageGroupId, name } = group
     if (filters.ageGroupId || ageGroups.length === 1) {
@@ -44,8 +47,8 @@ const Filters = ({ filters, onGoToGroupTables, resetFilters, setFilterValue, tou
     if (groupId > 0 || teamId > 0) {
       return []
     }
-    return ageGroups.filter(ageGroup => {
-      return !clubId || teams.find(team => team.clubId === clubId && team.ageGroupId === ageGroup.id)
+    return ageGroups.filter((ageGroup) => {
+      return !clubId || teams.find((team) => team.clubId === clubId && team.ageGroupId === ageGroup.id)
     })
   }
 
@@ -55,9 +58,11 @@ const Filters = ({ filters, onGoToGroupTables, resetFilters, setFilterValue, tou
     if (teamId > 0) {
       return []
     }
-    return groups.filter(group => {
-      return (!ageGroupId || group.ageGroupId === ageGroupId) &&
-        (!clubId || teams.find(team => team.clubId === clubId && team.groupId === group.id))
+    return groups.filter((group) => {
+      return (
+        (!ageGroupId || group.ageGroupId === ageGroupId) &&
+        (!clubId || teams.find((team) => team.clubId === clubId && team.groupId === group.id))
+      )
     })
   }
 
@@ -67,16 +72,18 @@ const Filters = ({ filters, onGoToGroupTables, resetFilters, setFilterValue, tou
     if (teamId > 0) {
       return []
     }
-    const filterGroup = groupId ? groups.find(group => group.id === groupId) : null
-    return clubs.filter(club => {
-      return (!ageGroupId || teams.find(team => team.clubId === club.id && team.ageGroupId === ageGroupId)) &&
-        (!filterGroup || filterGroup.results.find(team => team.clubId === club.id))
+    const filterGroup = groupId ? groups.find((group) => group.id === groupId) : null
+    return clubs.filter((club) => {
+      return (
+        (!ageGroupId || teams.find((team) => team.clubId === club.id && team.ageGroupId === ageGroupId)) &&
+        (!filterGroup || filterGroup.results.find((team) => team.clubId === club.id))
+      )
     })
   }
 
   const resolveDays = () => {
     const { dates } = tournament
-    return dates.map(date => {
+    return dates.map((date) => {
       return { id: date, name: `${resolveWeekDay(date, 0)} ${resolveDate(date, 0)}` }
     })
   }
@@ -84,10 +91,12 @@ const Filters = ({ filters, onGoToGroupTables, resetFilters, setFilterValue, tou
   const resolveTeams = () => {
     const { ageGroupId, groupId, clubId } = filters
     const { teams } = tournament
-    return teams.filter(team => {
-      return (!ageGroupId || team.ageGroupId === ageGroupId) &&
+    return teams.filter((team) => {
+      return (
+        (!ageGroupId || team.ageGroupId === ageGroupId) &&
         (!groupId || team.groupId === groupId) &&
         (!clubId || team.clubId === clubId)
+      )
     })
   }
 
@@ -96,13 +105,23 @@ const Filters = ({ filters, onGoToGroupTables, resetFilters, setFilterValue, tou
   }
 
   const renderResetLink = () => {
-    if (Object.keys(filters).some(key => filters[key] !== defaultFilters[key])) {
-      return <div onClick={resetFilters} className="filters__links__link">Näytä kaikki ottelut</div>
+    if (Object.keys(filters).some((key) => filters[key] !== defaultFilters[key])) {
+      return (
+        <div onClick={resetFilters} className="filters__links__link">
+          Näytä kaikki ottelut
+        </div>
+      )
     }
   }
 
   const renderGoToGroupTables = () => {
-    return onGoToGroupTables && <div onClick={onGoToGroupTables} className="filters__links__link">Siirry sarjataulukoihin</div>
+    return (
+      onGoToGroupTables && (
+        <div onClick={onGoToGroupTables} className="filters__links__link">
+          Siirry sarjataulukoihin
+        </div>
+      )
+    )
   }
 
   return (

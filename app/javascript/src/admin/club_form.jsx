@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import AccessContext from '../util/access_context'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
@@ -31,15 +31,15 @@ const ClubForm = ({ club, onClubDelete, onClubSave }) => {
   const renderForm = () => {
     return (
       <form className="form form--horizontal">
-        <FormErrors errors={errors}/>
+        <FormErrors errors={errors} />
         <div className="tournament-item__form">
-          <TextField placeholder="Name" ref={nameField} onChange={onFieldChange('name')} value={data.name}/>
-          <TextField placeholder="Logo URL" onChange={onFieldChange('logoUrl')} value={data.logoUrl}/>
-          <TextField placeholder="Alias" onChange={onFieldChange('alias')} value={data.alias}/>
+          <TextField placeholder="Name" ref={nameField} onChange={onFieldChange('name')} value={data.name} />
+          <TextField placeholder="Logo URL" onChange={onFieldChange('logoUrl')} value={data.logoUrl} />
+          <TextField placeholder="Alias" onChange={onFieldChange('alias')} value={data.alias} />
           <div className="form__buttons">
-            <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()}/>
-            <Button label="Peruuta" onClick={closeForm} type="normal"/>
-            {onClubDelete && <Button label="Poista" onClick={handleDelete} type="danger"/>}
+            <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()} />
+            <Button label="Peruuta" onClick={closeForm} type="normal" />
+            {onClubDelete && <Button label="Poista" onClick={handleDelete} type="danger" />}
           </div>
         </div>
       </form>
@@ -47,8 +47,8 @@ const ClubForm = ({ club, onClubDelete, onClubSave }) => {
   }
 
   const onOpenClick = () => {
-    const { alias, logoUrl, name } = (club || {})
-    openForm({ logoUrl: logoUrl || '', name: name || '', alias: alias || ''  })
+    const { alias, logoUrl, name } = club || {}
+    openForm({ logoUrl: logoUrl || '', name: name || '', alias: alias || '' })
   }
 
   const canSubmit = () => {
@@ -79,7 +79,7 @@ const ClubForm = ({ club, onClubDelete, onClubSave }) => {
   }
 
   const handleDelete = () => {
-    deleteClub(accessContext, club.id, errors => {
+    deleteClub(accessContext, club.id, (errors) => {
       if (errors) {
         setErrors(errors)
       } else {

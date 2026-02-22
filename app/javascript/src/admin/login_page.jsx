@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { loginToAdmin } from './api_client'
 import Title from '../components/title'
 import TextField from '../form/text_field'
@@ -16,18 +16,18 @@ const AdminLoginPage = ({ onSuccessfulLogin }) => {
   }
 
   const renderField = (label, field, type) => {
-    return <TextField field={field} label={label} onChange={setValue(field)} type={type} value={data[field]}/>
+    return <TextField field={field} label={label} onChange={setValue(field)} type={type} value={data[field]} />
   }
 
   const renderSubmitButton = () => {
     return (
       <div className="form__buttons">
-        <Button label="Kirjaudu sisään" onClick={submit} type="primary"/>
+        <Button label="Kirjaudu sisään" onClick={submit} type="primary" />
       </div>
     )
   }
 
-  const setValue = field => e => setData({ ...data, [field]: e.target.value })
+  const setValue = (field) => (e) => setData({ ...data, [field]: e.target.value })
 
   const submit = () => {
     if (data.username && data.password) {
@@ -43,7 +43,7 @@ const AdminLoginPage = ({ onSuccessfulLogin }) => {
 
   return (
     <form className="form form--vertical">
-      <Title text="fudisturnaus.com" loading={false}/>
+      <Title text="fudisturnaus.com" loading={false} />
       <div className="login-form">
         {renderError()}
         {renderField('Käyttäjätunnus', 'username', 'text')}

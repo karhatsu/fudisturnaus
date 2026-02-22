@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useState } from 'react'
+import { createContext, useCallback, useContext, useState } from 'react'
 import { fetchTournaments } from './api_client'
 
 const AllTournamentsContext = createContext(undefined)
@@ -15,7 +15,7 @@ export const AllTournamentsContextProvider = ({ children }) => {
       if (err) {
         setError(true)
       } else {
-        const tournaments = data.filter(t => !t.test)
+        const tournaments = data.filter((t) => !t.test)
         setTournaments(tournaments)
       }
     })

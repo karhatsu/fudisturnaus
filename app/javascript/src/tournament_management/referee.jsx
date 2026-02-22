@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import { deleteReferee, saveReferee } from './api_client'
 import AccessContext from '../util/access_context'
 import { resolveTournamentItemClasses } from '../util/util'
@@ -8,7 +8,7 @@ import Button from '../form/button'
 import useForm from '../util/use_form'
 import { buildUrl } from '../util/url_util'
 
-const Referee = ({ referee, onRefereeDelete, onRefereeSave, tournamentId }) =>{
+const Referee = ({ referee, onRefereeDelete, onRefereeSave, tournamentId }) => {
   const accessContext = useContext(AccessContext)
   const nameField = useRef(undefined)
   const { formOpen, data, errors, setErrors, openForm, closeForm, onFieldChange } = useForm()
@@ -30,7 +30,9 @@ const Referee = ({ referee, onRefereeDelete, onRefereeSave, tournamentId }) =>{
             href={buildUrl(`/referees/${referee.accessKey}`)}
             target="_blank"
             rel="noreferrer"
-          >Avaa tuomarin sivu</a>
+          >
+            Avaa tuomarin sivu
+          </a>
         )}
       </div>
     )
@@ -40,13 +42,13 @@ const Referee = ({ referee, onRefereeDelete, onRefereeSave, tournamentId }) =>{
     const placeholder = 'Tuomarin nimi'
     return (
       <form className="form form--horizontal">
-        <FormErrors errors={errors}/>
+        <FormErrors errors={errors} />
         <div className="tournament-item__form">
-          <TextField ref={nameField} onChange={onFieldChange('name')} placeholder={placeholder} value={data.name}/>
+          <TextField ref={nameField} onChange={onFieldChange('name')} placeholder={placeholder} value={data.name} />
           <div className="form__buttons">
-            <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()}/>
-            <Button label="Peruuta" onClick={closeForm} type="normal"/>
-            {!!referee && <Button type="danger" label="Poista" onClick={handleDelete}/>}
+            <Button label="Tallenna" onClick={submit} type="primary" disabled={!canSubmit()} />
+            <Button label="Peruuta" onClick={closeForm} type="normal" />
+            {!!referee && <Button type="danger" label="Poista" onClick={handleDelete} />}
           </div>
         </div>
       </form>

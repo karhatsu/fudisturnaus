@@ -1,4 +1,3 @@
-import React from 'react'
 import { visibilityTypes } from '../util/enums'
 
 const { onlyTitle, teams, all } = visibilityTypes

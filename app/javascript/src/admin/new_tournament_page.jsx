@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useSearchParams } from 'react-router'
 import TournamentFields from '../tournament_management/tournament_fields'
@@ -21,12 +21,20 @@ const emptyTournament = {
   test: false,
 }
 
+const buildInitialTournament = (searchParams) => ({
+  ...emptyTournament,
+  clubId: parseInt(searchParams.get('clubId')) || undefined,
+  name: searchParams.get('name') || '',
+  location: searchParams.get('location') || '',
+  address: searchParams.get('address') || '',
+})
+
 const NewTournamentPage = () => {
   const accessContext = useContext(AccessContext)
   const [clubs, setClubs] = useState()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const [initialTournament, setInitialTournament] = useState()
+  const [initialTournament, setInitialTournament] = useState(() => buildInitialTournament(searchParams))
   const [clubName, setClubName] = useState()
   const contactId = searchParams.get('contact_id')
 
@@ -41,31 +49,22 @@ const NewTournamentPage = () => {
   }, [accessContext])
 
   useEffect(() => {
-    if (contactId) {
-      fetchContact(accessContext, contactId, (err, contact) => {
-        if (err) {
-          console.error(err)
-          return
-        }
-        setInitialTournament({
-          ...emptyTournament,
-          name: contact.tournamentName || '',
-          startDate: contact.tournamentStartDate?.substring(0, 10) || '',
-          days: contact.tournamentDays || 1,
-          location: contact.tournamentLocation || '',
-        })
-        setClubName(contact.tournamentClub)
-      })
-    } else {
+    if (!contactId) return
+    fetchContact(accessContext, contactId, (err, contact) => {
+      if (err) {
+        console.error(err)
+        return
+      }
       setInitialTournament({
         ...emptyTournament,
-        clubId: parseInt(searchParams.get('clubId')) || undefined,
-        name: searchParams.get('name') || '',
-        location: searchParams.get('location') || '',
-        address: searchParams.get('address') || '',
+        name: contact.tournamentName || '',
+        startDate: contact.tournamentStartDate?.substring(0, 10) || '',
+        days: contact.tournamentDays || 1,
+        location: contact.tournamentLocation || '',
       })
-    }
-  }, [accessContext, contactId, searchParams])
+      setClubName(contact.tournamentClub)
+    })
+  }, [accessContext, contactId])
 
   const onSave = (data, callback) => {
     createTournament(accessContext, data, contactId, (errors, response) => {
@@ -77,7 +76,7 @@ const NewTournamentPage = () => {
     })
   }
 
-  const goToTournamentPage = id => {
+  const goToTournamentPage = (id) => {
     navigate(`/admin/tournaments/${id}`)
   }
 

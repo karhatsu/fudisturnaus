@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import { toastStates, useToasts } from './toasts_context'
 import Team from './team'
 
@@ -18,7 +18,7 @@ const staticStyle = {
   marginBottom: toastMargin,
 }
 
-const toPx = height => `${height}px`
+const toPx = (height) => `${height}px`
 
 const Toasts = () => {
   const { closeToast, toasts } = useToasts()
@@ -29,13 +29,26 @@ const Toasts = () => {
     <div className="Toasts">
       {toasts.map((toast, i) => {
         const { match, state } = toast
-        const { ageGroup, homeClubLogoUrl, homeTeam, homeGoals, awayClubLogoUrl, awayTeam, awayGoals, penalties, type, id } = match
+        const {
+          ageGroup,
+          homeClubLogoUrl,
+          homeTeam,
+          homeGoals,
+          awayClubLogoUrl,
+          awayTeam,
+          awayGoals,
+          penalties,
+          type,
+          id,
+        } = match
         const y = state === toastStates.visible ? i * (toastHeight + 2 * toastMargin) : 0
         const opacity = state === toastStates.disappearing ? 0 : 1
         const style = { ...staticStyle, bottom: y, opacity }
         return (
           <div key={type + id} className="Toast" style={style} onClick={onClick(type, id)}>
-            <div className="Toast__age-group" style={{ lineHeight: toPx(ageGroupHeight) }}>{ageGroup}</div>
+            <div className="Toast__age-group" style={{ lineHeight: toPx(ageGroupHeight) }}>
+              {ageGroup}
+            </div>
             <div className="Toast__teams" style={{ lineHeight: toPx(teamsHeight) }}>
               <Team club={{ logoUrl: homeClubLogoUrl }} name={homeTeam} />
               <div className="Toast__separator">–</div>

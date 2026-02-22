@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 
 const Button = ({ disabled, label, onClick, size, type }) => {
   const inputType = () => {
@@ -13,12 +13,15 @@ const Button = ({ disabled, label, onClick, size, type }) => {
     return classes.join(' ')
   }
 
-  const handleClick = useCallback(event => {
-    event.preventDefault()
-    onClick()
-  }, [onClick])
+  const handleClick = useCallback(
+    (event) => {
+      event.preventDefault()
+      onClick()
+    },
+    [onClick],
+  )
 
-  return <input type={inputType()} value={label} onClick={handleClick} className={classNames()} disabled={disabled}/>
+  return <input type={inputType()} value={label} onClick={handleClick} className={classNames()} disabled={disabled} />
 }
 
 export default Button

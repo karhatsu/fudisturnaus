@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import { Link } from 'react-router'
 import queryString from 'query-string'
@@ -18,7 +18,7 @@ import Message from '../components/message'
 import useTournamentFetching from '../util/use_tournament_fetching'
 import CancelledBadge from './cancelled_badge'
 import TournamentSubTitle from './tournament_sub_title'
-import TimezoneWarning from "../components/timezone_warning"
+import TimezoneWarning from '../components/timezone_warning'
 
 const { onlyTitle, teams, all } = visibilityTypes
 
@@ -27,7 +27,6 @@ export const officialLevels = {
   results: 1,
   full: 2,
 }
-const { none, results, full } = officialLevels
 
 const kontuSponsors = [
   { href: 'https://daddygreens.fi', img: 'Daddy_Greens_logo_black_bg_RGB.png' },
@@ -36,7 +35,7 @@ const kontuSponsors = [
   { href: 'https://www.k-ruoka.fi/kauppa/k-market-kivikko', img: 'K-market-Kivikko.png' },
   { href: 'https://getra.fi/', img: 'Getra-Blauw.png' },
   { href: 'https://www.laattabest.com/', img: 'LaattaBest.jpeg' },
-  { href: 'https://www.ahlsell.fi/', img: 'ahlsell.jpeg', className: 'wide' }
+  { href: 'https://www.ahlsell.fi/', img: 'ahlsell.jpeg', className: 'wide' },
 ]
 
 const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
@@ -44,43 +43,47 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
   const { search } = useLocation()
   const navigate = useNavigate()
   const { error, tournament } = useTournamentFetching(tournamentKey)
-  const [filters, setFilters] = useState(defaultFilters)
+  const [filters, setFilters] = useState(() => {
+    const queryParams = queryString.parse(search)
+    Object.keys(queryParams).forEach((queryParam) => {
+      queryParams[queryParam] =
+        defaultFilters[queryParam] === 0 ? parseInt(queryParams[queryParam]) : queryParams[queryParam]
+    })
+    return { ...defaultFilters, ...queryParams }
+  })
 
-  const isFilterGroup = useCallback(group => {
-    const { ageGroupId, id: groupId, results } = group
-    return results.length
-      && (!filters.ageGroupId || filters.ageGroupId === ageGroupId)
-      && (!filters.groupId || filters.groupId === groupId)
-      && (!filters.clubId || results.findIndex(team => team.clubId === filters.clubId) !== -1)
-      && (!filters.teamId || results.findIndex(team => team.teamId === filters.teamId) !== -1)
-  }, [filters])
+  const isFilterGroup = useCallback(
+    (group) => {
+      const { ageGroupId, id: groupId, results } = group
+      return (
+        results.length &&
+        (!filters.ageGroupId || filters.ageGroupId === ageGroupId) &&
+        (!filters.groupId || filters.groupId === groupId) &&
+        (!filters.clubId || results.findIndex((team) => team.clubId === filters.clubId) !== -1) &&
+        (!filters.teamId || results.findIndex((team) => team.teamId === filters.teamId) !== -1)
+      )
+    },
+    [filters],
+  )
 
   const filteredGroups = useMemo(() => {
     return tournament?.groups
       .filter(isFilterGroup)
-      .filter(group => officialLevel !== officialLevels.none || !group.ageGroup.hideGroupTables)
+      .filter((group) => officialLevel !== officialLevels.none || !group.ageGroup.hideGroupTables)
       .sort((a, b) => {
         if (a.ageGroup.name !== b.ageGroup.name) return a.ageGroup.name.localeCompare(b.ageGroup.name)
         return a.name.localeCompare(b.name)
       })
   }, [tournament, isFilterGroup, officialLevel])
 
-  const goToGroupTables = useCallback(event => {
+  const goToGroupTables = useCallback((event) => {
     event.preventDefault()
     document.getElementById('group-tables-title')?.scrollIntoView({ behavior: 'smooth' })
   }, [])
 
-  useEffect(() => {
-    const queryParams = queryString.parse(search)
-    Object.keys(queryParams).forEach(queryParam => {
-      queryParams[queryParam] = defaultFilters[queryParam] === 0 ? parseInt(queryParams[queryParam]) : queryParams[queryParam]
-    })
-    setFilters({ ...defaultFilters, ...queryParams })
-  }, [search])
-
   const renderVisibilityBadge = () => {
     if (tournament && !tournament.cancelled && officialLevel === officialLevels.full) {
-      return <VisibilityBadge visibility={tournament.visibility}/>
+      return <VisibilityBadge visibility={tournament.visibility} />
     }
   }
 
@@ -97,10 +100,14 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
 
   const renderContent = () => {
     if (error) {
-      return <Message type="error">Virhe haettaessa turnauksen tietoja. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.</Message>
+      return (
+        <Message type="error">
+          Virhe haettaessa turnauksen tietoja. Tarkasta verkkoyhteytesi ja lataa sivu uudestaan.
+        </Message>
+      )
     }
     if (!tournament) {
-      return <Loading/>
+      return <Loading />
     }
     switch (officialLevel) {
       case officialLevels.full:
@@ -119,7 +126,9 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
           Turnauksen hallinta
           {renderVisibilityBadge()}
         </div>
-        <div className="management-link"><Link to={`/official/${accessKey}/management`}>Muokkaa turnauksen asetuksia ja otteluohjelmaa</Link></div>
+        <div className="management-link">
+          <Link to={`/official/${accessKey}/management`}>Muokkaa turnauksen asetuksia ja otteluohjelmaa</Link>
+        </div>
         <div className="title-1">Tulosten tallentaminen</div>
         {renderFullOfficialMatchContent()}
       </div>
@@ -140,7 +149,11 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
       return renderMatchContent()
     }
     const msg = 'Kun turnauksen otteluohjelma julkaistaan, pääset tällä sivulla tallentamaan otteluiden tuloksia.'
-    return <Message type="warning" fullPage={true}>{msg}</Message>
+    return (
+      <Message type="warning" fullPage={true}>
+        {msg}
+      </Message>
+    )
   }
 
   const renderPublicContent = () => {
@@ -148,11 +161,13 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
       return (
         <div>
           <div className="title-2">Otteluohjelma</div>
-          <Message type="warning" fullPage={true}>Turnauksen osallistujia ja otteluohjelmaa ei ole vielä julkaistu</Message>
+          <Message type="warning" fullPage={true}>
+            Turnauksen osallistujia ja otteluohjelmaa ei ole vielä julkaistu
+          </Message>
         </div>
       )
     } else if (tournament.visibility === teams || !tournamentHasMatches()) {
-      return <SeriesAndTeams tournament={tournament}/>
+      return <SeriesAndTeams tournament={tournament} />
     } else {
       return (
         <>
@@ -214,16 +229,16 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
     navigate({ search: '' })
   }
 
-  const setFilterValue = key => event => {
+  const setFilterValue = (key) => (event) => {
     const value = key === 'date' ? event.target.value : parseInt(event.target.value)
     const newFilters = { ...filters, [key]: value }
     setFilters(newFilters)
     navigate({ search: buildQueryParams(newFilters) })
   }
 
-  const buildQueryParams = filters => {
+  const buildQueryParams = (filters) => {
     const validFilters = {}
-    Object.keys(filters).forEach(filter => {
+    Object.keys(filters).forEach((filter) => {
       if (filters[filter] !== defaultFilters[filter]) {
         validFilters[filter] = filters[filter]
       }
@@ -253,27 +268,35 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
     )
   }
 
-  const isFilterGroupStageMatch = match => {
+  const isFilterGroupStageMatch = (match) => {
     const { ageGroupId, date, fieldId, groupId, homeTeam, awayTeam } = match
-    return (!filters.ageGroupId || filters.ageGroupId === ageGroupId)
-      && (!filters.fieldId || filters.fieldId === fieldId)
-      && (!filters.groupId || filters.groupId === groupId)
-      && (!filters.clubId || filters.clubId === homeTeam.clubId || filters.clubId === awayTeam.clubId)
-      && (!filters.teamId || filters.teamId === homeTeam.id || filters.teamId === awayTeam.id)
-      && (!filters.date || filters.date === date)
+    return (
+      (!filters.ageGroupId || filters.ageGroupId === ageGroupId) &&
+      (!filters.fieldId || filters.fieldId === fieldId) &&
+      (!filters.groupId || filters.groupId === groupId) &&
+      (!filters.clubId || filters.clubId === homeTeam.clubId || filters.clubId === awayTeam.clubId) &&
+      (!filters.teamId || filters.teamId === homeTeam.id || filters.teamId === awayTeam.id) &&
+      (!filters.date || filters.date === date)
+    )
   }
 
-  const isFilterPlayoffMatch = match => {
+  const isFilterPlayoffMatch = (match) => {
     const { ageGroupId, date, fieldId, homeTeam, awayTeam, homeTeamOriginId, awayTeamOriginId } = match
-    return (!filters.ageGroupId || filters.ageGroupId === ageGroupId)
-      && (!filters.fieldId || filters.fieldId === fieldId)
-      && (!filters.groupId || filters.groupId === homeTeamOriginId || filters.groupId === awayTeamOriginId)
-      && (!filters.clubId || (homeTeam && filters.clubId === homeTeam.clubId) || (awayTeam && filters.clubId === awayTeam.clubId))
-      && (!filters.teamId || (homeTeam && filters.teamId === homeTeam.id) || (awayTeam && filters.teamId === awayTeam.id))
-      && (!filters.date || filters.date === date)
+    return (
+      (!filters.ageGroupId || filters.ageGroupId === ageGroupId) &&
+      (!filters.fieldId || filters.fieldId === fieldId) &&
+      (!filters.groupId || filters.groupId === homeTeamOriginId || filters.groupId === awayTeamOriginId) &&
+      (!filters.clubId ||
+        (homeTeam && filters.clubId === homeTeam.clubId) ||
+        (awayTeam && filters.clubId === awayTeam.clubId)) &&
+      (!filters.teamId ||
+        (homeTeam && filters.teamId === homeTeam.id) ||
+        (awayTeam && filters.teamId === awayTeam.id)) &&
+      (!filters.date || filters.date === date)
+    )
   }
 
-  const showGroupTables = groups => {
+  const showGroupTables = (groups) => {
     const { calculateGroupTables } = tournament
     return calculateGroupTables && groups.length && !filters.date && !filters.fieldId
   }
@@ -282,9 +305,11 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
     if (showGroupTables(filteredGroups)) {
       return (
         <>
-          <div className="title-2" id="group-tables-title">Sarjataulukot</div>
+          <div className="title-2" id="group-tables-title">
+            Sarjataulukot
+          </div>
           <div className={`group-results group-results--${filteredGroups.length} row`}>
-            {filteredGroups.map(group => renderGroup(group, filteredGroups.length, true))}
+            {filteredGroups.map((group) => renderGroup(group, filteredGroups.length, true))}
           </div>
         </>
       )
@@ -293,12 +318,12 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
 
   const renderPlayoffGroupTables = () => {
     const filteredGroups = tournament.playoffGroups.filter(isFilterGroup)
-    if (showGroupTables(filteredGroups)){
+    if (showGroupTables(filteredGroups)) {
       return (
         <>
           <div className="title-2">Jatkolohkot</div>
           <div className={`group-results group-results--${filteredGroups.length} row`}>
-            {filteredGroups.map(group => renderGroup(group, filteredGroups.length, false))}
+            {filteredGroups.map((group) => renderGroup(group, filteredGroups.length, false))}
           </div>
         </>
       )

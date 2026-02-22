@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { formatDateRange } from '../util/date_util'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'

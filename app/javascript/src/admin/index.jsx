@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import TournamentList from '../public/tournament_list'
 import { fetchTournaments } from '../public/api_client'
 import { fetchClubsWithoutLogo, fetchUnhandledContactCount } from './api_client'
 import AccessContext from '../util/access_context'
 
-const buildLink = tournament => `/admin/tournaments/${tournament.id}`
+const buildLink = (tournament) => `/admin/tournaments/${tournament.id}`
 
 const AdminIndex = () => {
   const [error, setError] = useState(false)

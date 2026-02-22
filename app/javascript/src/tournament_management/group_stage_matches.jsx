@@ -1,4 +1,3 @@
-import React from 'react'
 import GroupStageMatch from './group_stage_match'
 
 const GroupStageMatches = ({ onItemDelete, onItemSave, tournament, tournamentId }) => {
@@ -15,23 +14,25 @@ const GroupStageMatches = ({ onItemDelete, onItemSave, tournament, tournamentId 
 
   const renderGroupStageMatches = () => {
     const { ageGroups, days, fields, groups, groupStageMatches, teams, matchMinutes } = tournament
-    return groupStageMatches.map(groupStageMatch => {
-      return <GroupStageMatch
-        key={groupStageMatch.id}
-        ageGroups={ageGroups}
-        fields={fields}
-        groups={groups}
-        groupStageMatch={groupStageMatch}
-        groupStageMatches={groupStageMatches}
-        onGroupStageMatchDelete={onItemDelete('groupStageMatches')}
-        onGroupStageMatchSave={onItemSave('groupStageMatches')}
-        matchMinutes={matchMinutes}
-        referees={referees}
-        teams={teams}
-        tournamentDays={days}
-        tournamentId={tournamentId}
-        tournamentDate={tournament.startDate}
-      />
+    return groupStageMatches.map((groupStageMatch) => {
+      return (
+        <GroupStageMatch
+          key={groupStageMatch.id}
+          ageGroups={ageGroups}
+          fields={fields}
+          groups={groups}
+          groupStageMatch={groupStageMatch}
+          groupStageMatches={groupStageMatches}
+          onGroupStageMatchDelete={onItemDelete('groupStageMatches')}
+          onGroupStageMatchSave={onItemSave('groupStageMatches')}
+          matchMinutes={matchMinutes}
+          referees={referees}
+          teams={teams}
+          tournamentDays={days}
+          tournamentId={tournamentId}
+          tournamentDate={tournament.startDate}
+        />
+      )
     })
   }
 
@@ -40,19 +41,21 @@ const GroupStageMatches = ({ onItemDelete, onItemSave, tournament, tournamentId 
       <div className="title-2">Alkulohkojen ottelut</div>
       <div className="tournament-management__section tournament-management__section--group-stage-matches">
         {canMatches ? renderGroupStageMatches() : renderCannotAddGroupStageMatches()}
-        {canMatches && <GroupStageMatch
-          ageGroups={ageGroups}
-          fields={fields}
-          groups={groups}
-          groupStageMatches={groupStageMatches}
-          onGroupStageMatchSave={onItemSave('groupStageMatches')}
-          matchMinutes={matchMinutes}
-          referees={referees}
-          teams={teams}
-          tournamentDays={days}
-          tournamentId={id}
-          tournamentDate={tournament.startDate}
-        />}
+        {canMatches && (
+          <GroupStageMatch
+            ageGroups={ageGroups}
+            fields={fields}
+            groups={groups}
+            groupStageMatches={groupStageMatches}
+            onGroupStageMatchSave={onItemSave('groupStageMatches')}
+            matchMinutes={matchMinutes}
+            referees={referees}
+            teams={teams}
+            tournamentDays={days}
+            tournamentId={id}
+            tournamentDate={tournament.startDate}
+          />
+        )}
       </div>
     </>
   )

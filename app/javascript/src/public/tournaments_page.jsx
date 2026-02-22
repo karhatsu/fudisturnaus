@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router'
 import TournamentList from './tournament_list'
 import { fetchTournaments } from './api_client'

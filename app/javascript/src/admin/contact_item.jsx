@@ -17,6 +17,7 @@ const ContactItem = ({ contact, updateAsHandled }) => {
     tournamentDays,
     tournamentLocation,
     createdAt,
+    premium,
   } = contact
   const longMessage = message.length > messageCut
   const [fullText, setFullText] = useState(!longMessage)
@@ -35,6 +36,7 @@ const ContactItem = ({ contact, updateAsHandled }) => {
   )
 
   const fields = [tournamentClub, tournamentName, tournamentStartDate, tournamentDays, tournamentLocation]
+  if (premium) fields.push('Premium')
   const mailto = `mailto:${email}?subject=${encodeURIComponent(tournamentName)}`
   return (
     <div className="tournament-management__section contact-item">

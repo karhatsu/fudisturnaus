@@ -6,11 +6,8 @@ import pluginJest from 'eslint-plugin-jest'
 import globals from 'globals'
 
 export default [
-  pluginJs.configs.recommended,
-  pluginReact.configs.flat.recommended,
-  pluginReact.configs.flat['jsx-runtime'],
-  pluginReactHooks.configs.flat.recommended,
   {
+    files: ['**/*.js', '**/*.jsx'],
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -18,13 +15,17 @@ export default [
       ecmaVersion: 'latest',
       sourceType: 'module',
     },
-
+  },
+  pluginJs.configs.recommended,
+  pluginReact.configs.flat.recommended,
+  pluginReact.configs.flat['jsx-runtime'],
+  pluginReactHooks.configs.flat.recommended,
+  {
     settings: {
       react: {
         version: 'detect',
       },
     },
-
     rules: {
       'react/prop-types': 'off',
     },

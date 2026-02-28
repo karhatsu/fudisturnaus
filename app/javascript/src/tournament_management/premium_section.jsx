@@ -2,6 +2,8 @@ import { isAfter, isBefore, startOfDay, subDays } from 'date-fns'
 import { toTzDate } from '../util/date_util'
 import { pricePerTeam } from '../util/util'
 import Button from '../form/button'
+import { useContext } from 'react'
+import AccessContext from '../util/access_context'
 
 const cancelThresholdDays = 2
 
@@ -20,6 +22,7 @@ const resolveDateStatus = (tournament) => {
 }
 
 const PremiumSection = ({ tournament, onSelectPremium, errors }) => {
+  const accessContext = useContext(AccessContext)
   const { premium } = tournament
   const dateStatus = resolveDateStatus(tournament)
 
@@ -38,6 +41,12 @@ const PremiumSection = ({ tournament, onSelectPremium, errors }) => {
     return premiumNotInUse
   }
 
+  const invoice = () => (
+    <a href={`/official/${accessContext.officialAccessKey}/invoice.pdf`} target="_blank" rel="noopener noreferrer">
+      Lataa lasku
+    </a>
+  )
+
   return (
     <div>
       <div className="title-2">Premium</div>
@@ -45,6 +54,7 @@ const PremiumSection = ({ tournament, onSelectPremium, errors }) => {
         {errors && <div className="tournament-item error">{errors.join('. ')}.</div>}
         {canTogglePremium && <div className="tournament-item">{togglePremium()}</div>}
         <div className="tournament-item">{description()}</div>
+        {dateStatus !== 'upcoming' && premium && <div className="tournament-item">{invoice()}</div>}
       </div>
     </div>
   )

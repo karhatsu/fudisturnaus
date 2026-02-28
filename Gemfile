@@ -32,6 +32,7 @@ gem 'friendly_id'
 gem 'rexml'
 
 gem 'wicked_pdf'
+gem 'viitenumero'
 
 group :development, :test do
   gem 'rspec-rails'

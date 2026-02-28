@@ -1,0 +1,71 @@
+<h1>fudisturnaus.com &ndash; LASKU</h1>
+
+<div style="margin-top: 48px;">
+  <h2>Maksaja</h2>
+  <div><%= @tournament.club&.name || @tournament.name %></div>
+</div>
+
+<div style="margin-top: 48px;">
+  Kiitos että käytit fudisturnaus.com palvelua ja sen Premium-versiota!
+</div>
+
+<div style="margin-top: 48px;">
+  <table>
+    <tr>
+      <th class="field-title">Turnaus</th>
+      <td><%= @tournament.name %>, <%= @tournament.location %>, <%= format_dates @tournament %></td>
+    </tr>
+    <tr>
+      <th class="field-title">Joukkueita</th>
+      <td><%= @tournament.team_count %></td>
+    </tr>
+    <tr>
+      <th class="field-title">Hinta / joukkue</th>
+      <td><%= format_price Tournament::PRICE_PER_TEAM %></td>
+    </tr>
+    <tr>
+      <th class="field-title">Laskun summa</th>
+      <td><%= format_price @tournament.invoice_sum %></td>
+    </tr>
+    <tr>
+      <th class="field-title">Sis. ALV <%= @tournament.vat_percentage * 100 %>%</th>
+      <td><%= format_price @tournament.vat %></td>
+    </tr>
+    <tr>
+      <th class="field-title">Arvonlisäveroton hinta</th>
+      <td><%= format_price @tournament.price_without_vat %></td>
+    </tr>
+  </table>
+</div>
+<div style="margin-top: 24px;">
+  <table>
+    <tr>
+      <th class="field-title">Laskun numero</th>
+      <td><%= @tournament.invoice_number %></td>
+    </tr>
+    <tr>
+      <th class="field-title">Viitenumero</th>
+      <td><%= @tournament.reference_number.paper_format %></td>
+    </tr>
+    <tr>
+      <th class="field-title">Laskun päivä</th>
+      <td><%= @tournament.invoice_date.strftime('%d.%m.%Y') %></td>
+    </tr>
+    <tr>
+      <th class="field-title">Eräpäivä</th>
+      <td><%= @tournament.due_date.strftime('%d.%m.%Y') %></td>
+    </tr>
+    <tr>
+      <th class="field-title">Tilinumero</th>
+      <td><%= @tournament.bank_account_number %></td>
+    </tr>
+    <tr>
+      <th class="field-title">Saajan nimi</th>
+      <td>Karhatsu IT Consulting Oy</td>
+    </tr>
+    <tr>
+      <th class="field-title">Y-tunnus</th>
+      <td>2393269-5</td>
+    </tr>
+  </table>
+</div>

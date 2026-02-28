@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Title from '../components/title'
 import ContactForm from './contact_form'
 import { fetchOrganizers } from './api_client'
+import { pricePerTeam } from '../util/util'
 
 const Info = () => {
   const [organizers, setOrganizers] = useState()
@@ -26,7 +27,12 @@ const Info = () => {
         </div>
       </div>
       <div className="title-2">Paljonko palvelun käyttö maksaa?</div>
-      <div className="info-box">Palvelu on ilmainen.</div>
+      <div className="info-box">
+        Palvelusta on tarjolla ilmainen versio, joka sisältää mainoksia.
+        <br />
+        <br />
+        Turnaussivu ilman mainoksia maksaa {pricePerTeam} &euro; / osallistuva joukkue (sis. alv).
+      </div>
       <div className="title-2">Mitkä ovat palvelun tärkeimmät ominaisuudet?</div>
       <div className="info-box">
         <ul>

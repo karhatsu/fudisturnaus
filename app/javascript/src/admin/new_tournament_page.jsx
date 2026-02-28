@@ -18,6 +18,7 @@ const emptyTournament = {
   equalPointsRule: 1,
   visibility: visibilityTypes.teams,
   info: '',
+  premium: false,
   test: false,
 }
 
@@ -61,6 +62,7 @@ const NewTournamentPage = () => {
         startDate: contact.tournamentStartDate?.substring(0, 10) || '',
         days: contact.tournamentDays || 1,
         location: contact.tournamentLocation || '',
+        premium: contact.premium,
       })
       setClubName(contact.tournamentClub)
     })

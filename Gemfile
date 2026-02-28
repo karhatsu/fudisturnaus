@@ -31,10 +31,14 @@ gem 'friendly_id'
 
 gem 'rexml'
 
+gem 'wicked_pdf'
+gem 'viitenumero'
+
 group :development, :test do
   gem 'rspec-rails'
   gem 'factory_bot_rails'
   gem 'dotenv-rails'
+  gem 'wkhtmltopdf-binary'
 end
 
 group :development do
@@ -60,4 +64,5 @@ group :production do
   gem 'redis'
   gem 'sendgrid-ruby'
   gem 'image_processing'
+  gem 'wkhtmltopdf-heroku'
 end

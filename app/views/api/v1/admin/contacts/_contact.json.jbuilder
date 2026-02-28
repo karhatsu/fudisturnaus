@@ -9,5 +9,6 @@ json.(contact,
   :tournament_start_date,
   :tournament_days,
   :tournament_location,
+  :premium,
   :created_at
 )

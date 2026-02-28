@@ -24,6 +24,8 @@ module Fudisturnaus
 
     config.i18n.default_locale = :fi
 
+    config.assets.precompile += %w[pdf.css]
+
     config.generators do |g|
       g.test_framework :rspec
     end

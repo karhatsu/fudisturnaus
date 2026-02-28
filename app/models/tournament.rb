@@ -2,6 +2,7 @@ require 'securerandom'
 
 class Tournament < ApplicationRecord
   extend FriendlyId
+  include Invoicing
 
   EQUAL_POINTS_RULE_ALL_MATCHES_FIRST = 0
   EQUAL_POINTS_RULE_MUTUAL_MATCHES_FIRST = 1

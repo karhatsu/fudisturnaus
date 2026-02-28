@@ -1,5 +1,7 @@
 import { addMinutes, differenceInCalendarDays, format, parseISO } from 'date-fns'
 
+export const pricePerTeam = 3
+
 export function buildTournamentFromSocketData(oldTournament, data) {
   const { groupId, groupStageMatch, playoffMatch, groupResults, resolvedPlayoffMatches, playoffGroups } = data
   const tournament = { ...oldTournament }

@@ -14,6 +14,6 @@ class Api::V1::Public::ContactsController < ApplicationController
   private
 
   def contact_params
-    params.require(:contact).permit(:person_name, :email, :message, :tournament_club, :tournament_name, :tournament_start_date, :tournament_days, :tournament_location)
+    params.require(:contact).permit(:person_name, :email, :message, :tournament_club, :tournament_name, :tournament_start_date, :tournament_days, :tournament_location, :premium)
   end
 end

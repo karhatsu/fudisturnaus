@@ -50,7 +50,7 @@ export function resolveDay(date, time) {
   return differenceInCalendarDays(toTzDate(time), toTzDate(date)) + 1
 }
 
-function toTzDate(date) {
+export function toTzDate(date) {
   // works both for date strings and dates
   return new TZDate(date, timeZone)
 }

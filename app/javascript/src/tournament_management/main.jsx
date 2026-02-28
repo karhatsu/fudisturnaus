@@ -23,6 +23,7 @@ import TournamentLinks from './tournament_links'
 import EmailContent from './email_content'
 import Referees from './referees'
 import TimezoneWarning from '../components/timezone_warning'
+import PremiumSection from './premium_section'
 
 const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => {
   const navigate = useNavigate()
@@ -31,6 +32,7 @@ const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => 
   const [deleteErrors, setDeleteErrors] = useState([])
   const [error, setError] = useState(false)
   const [tournament, setTournament] = useState()
+  const [premiumErrors, setPremiumErrors] = useState()
 
   const getTournamentId = () => {
     return tournamentId || parseInt(params.id)
@@ -113,6 +115,7 @@ const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => 
         <div className="tournament-management__section tournament-management__section--tournament">
           <TournamentFields clubs={tournament.clubs} onSave={onSave} tournament={tournament} official={official} />
         </div>
+        <PremiumSection tournament={tournament} onSelectPremium={onSelectPremium} errors={premiumErrors} />
         <Fields
           fields={tournament.fields}
           tournamentId={getTournamentId()}
@@ -175,6 +178,16 @@ const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => 
     updateTournament(accessContext, getTournamentId(), form, (errors, data) => {
       callback(errors, data)
       fetchTournamentData()
+    })
+  }
+
+  const onSelectPremium = (enabled) => () => {
+    updateTournament(accessContext, getTournamentId(), { premium: enabled }, (errors) => {
+      if (errors) {
+        setPremiumErrors(errors)
+      } else {
+        setTournament((prev) => ({ ...prev, premium: enabled }))
+      }
     })
   }
 

@@ -2,8 +2,6 @@ import { isAfter, isBefore, startOfDay, subDays } from 'date-fns'
 import { toTzDate } from '../util/date_util'
 import { pricePerTeam } from '../util/util'
 import Button from '../form/button'
-import { useContext } from 'react'
-import AccessContext from '../util/access_context'
 
 const cancelThresholdDays = 2
 
@@ -22,8 +20,7 @@ const resolveDateStatus = (tournament) => {
 }
 
 const PremiumSection = ({ tournament, onSelectPremium, errors }) => {
-  const accessContext = useContext(AccessContext)
-  const { premium } = tournament
+  const { accessKey, premium } = tournament
   const dateStatus = resolveDateStatus(tournament)
 
   if (dateStatus === 'past' && !premium) return
@@ -42,7 +39,7 @@ const PremiumSection = ({ tournament, onSelectPremium, errors }) => {
   }
 
   const invoice = () => (
-    <a href={`/official/${accessContext.officialAccessKey}/invoice.pdf`} target="_blank" rel="noopener noreferrer">
+    <a href={`/official/${accessKey}/invoice.pdf`} target="_blank" rel="noopener noreferrer">
       Lataa lasku
     </a>
   )

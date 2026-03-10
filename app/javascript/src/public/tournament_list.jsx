@@ -15,7 +15,8 @@ const sortByAscendingDate = (a, b) => {
 }
 
 const TournamentList = (props) => {
-  const { buildLink, search, setSearch, title, tournaments, tournamentsError, isPublic } = props
+  const { buildLink, search, setSearch, onlyPremium, setOnlyPremium, title, tournaments, tournamentsError, isPublic } =
+    props
 
   const renderTournament = useCallback(
     (tournament) => {
@@ -36,12 +37,13 @@ const TournamentList = (props) => {
   const matchCaseInsensitive = useCallback((text) => new RegExp(search.trim(), 'i').test(text), [search])
 
   const filterTournaments = useCallback(() => {
-    if (!search) return tournaments
+    if (!search && !onlyPremium) return tournaments
     return tournaments.filter((tournament) => {
-      const { name, location, club } = tournament
+      const { name, location, club, premium } = tournament
+      if (onlyPremium && !premium) return false
       return matchCaseInsensitive(name) || matchCaseInsensitive(location) || (club && matchCaseInsensitive(club.name))
     })
-  }, [search, tournaments, matchCaseInsensitive])
+  }, [search, onlyPremium, tournaments, matchCaseInsensitive])
 
   const groupTournaments = useCallback((tournaments) => {
     const groups = {
@@ -110,6 +112,12 @@ const TournamentList = (props) => {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
+        {!!setOnlyPremium && (
+          <div className="form__field form__field--long">
+            <div className="label">Vain premium</div>
+            <input type="checkbox" checked={onlyPremium} onChange={(e) => setOnlyPremium(e.target.checked)} />
+          </div>
+        )}
       </div>
     )
   }

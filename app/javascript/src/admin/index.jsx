@@ -11,6 +11,7 @@ const AdminIndex = () => {
   const [error, setError] = useState(false)
   const [tournaments, setTournaments] = useState(undefined)
   const [search, setSearch] = useState('')
+  const [onlyPremium, setOnlyPremium] = useState(false)
   const [unhandledContacts, setUnhandledContacts] = useState('...')
   const [clubsWithoutLogo, setClubsWithoutLogo] = useState('...')
   const accessContext = useContext(AccessContext)
@@ -44,6 +45,8 @@ const AdminIndex = () => {
       buildLink={buildLink}
       search={search}
       setSearch={setSearch}
+      onlyPremium={onlyPremium}
+      setOnlyPremium={setOnlyPremium}
       title="Admin"
       tournaments={tournaments}
       tournamentsError={error}

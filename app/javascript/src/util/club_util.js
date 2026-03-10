@@ -1,4 +1,4 @@
-const normalize = (str) => str.toLowerCase().replace(/[-\s]/g, '')
+const normalize = (str) => str.toLowerCase().replace(/[-\s()[]/g, '')
 
 export const filterClubs = (clubs, search) => {
   const s = normalize(search)

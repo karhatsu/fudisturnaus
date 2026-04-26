@@ -4,6 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '4.0.2'
 
 gem 'rails', '8.1.3'
+gem 'pg'
 # Use Puma as the app server
 gem 'puma'
 # Use SassC for stylesheets
@@ -48,16 +49,11 @@ group :development do
 end
 
 group :test do
-  gem 'sqlite3'
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara'
   gem 'selenium-webdriver'
   gem 'launchy'
   gem 'mutex_m'
-end
-
-group :development, :production do
-  gem 'pg'
 end
 
 group :production do

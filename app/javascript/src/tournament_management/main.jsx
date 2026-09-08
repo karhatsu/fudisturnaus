@@ -11,7 +11,6 @@ import AccessContext from '../util/access_context'
 import { getName } from '../util/util'
 import Button from '../form/button'
 import FormErrors from '../form/form_errors'
-import Message from '../components/message'
 import Fields from './fields'
 import AgeGroups from './age_groups'
 import Groups from './groups'
@@ -24,6 +23,7 @@ import EmailContent from './email_content'
 import Referees from './referees'
 import TimezoneWarning from '../components/timezone_warning'
 import PremiumSection from './premium_section'
+import TournamentVisibility from './tournament_visibility'
 
 const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => {
   const navigate = useNavigate()
@@ -102,19 +102,14 @@ const TournamentManagementPage = ({ official, titleIconLink, tournamentId }) => 
 
   const renderContent = () => {
     if (!tournament) return null
-    const { visibility } = tournament
     return (
       <div>
-        {visibility < 2 && (
-          <Message type="warning">
-            Kun haluat julkaista otteluohjelman, vaihda alla olevasta Perustiedot-osiosta Turnauksen näkyvyys -asetusta
-          </Message>
-        )}
         <TimezoneWarning />
         <div className="title-2">Perustiedot</div>
         <div className="tournament-management__section tournament-management__section--tournament">
           <TournamentFields clubs={tournament.clubs} onSave={onSave} tournament={tournament} official={official} />
         </div>
+        <TournamentVisibility onSave={onSave} tournament={tournament} />
         <PremiumSection tournament={tournament} onSelectPremium={onSelectPremium} errors={premiumErrors} />
         <Fields
           fields={tournament.fields}

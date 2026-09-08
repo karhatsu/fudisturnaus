@@ -3,15 +3,11 @@ import { formatDateRange } from '../util/date_util'
 import FormErrors from '../form/form_errors'
 import TextField from '../form/text_field'
 import Button from '../form/button'
-import { visibilityTypes } from '../util/enums'
-import VisibilityBadge from './visibility_badge'
 import useForm from '../util/use_form'
 import ReactMarkdown from 'react-markdown'
 import ClubSelect, { CHOOSE_CLUB_ID } from '../form/club_select'
 import { fetchAddressSuggestions } from './api_client'
 import AccessContext from '../util/access_context'
-
-const { onlyTitle, teams, all } = visibilityTypes
 
 const TournamentFields = (props) => {
   const { contactId, clubName, clubs, official, tournament, onCancel, onSave } = props
@@ -171,13 +167,7 @@ const TournamentFields = (props) => {
     return (
       <div className="form__field">
         <div className="label">Turnauksen näkyvyys</div>
-        <div className="">
-          <select onChange={onFieldChange('visibility')} value={data.visibility}>
-            <option value={onlyTitle}>Turnauksen perustiedot</option>
-            <option value={teams}>Turnauksen perustiedot, sarjat ja joukkueet</option>
-            <option value={all}>Turnauksen koko otteluohjelma</option>
-          </select>
-        </div>
+        <div>Turnauksen näkyvyysasetus on siirretty omaan osioon perustietojen alle.</div>
       </div>
     )
   }
@@ -224,15 +214,13 @@ const TournamentFields = (props) => {
   }
 
   const renderTournamentReadOnlyFields = () => {
-    const { name, startDate, days, location, address, visibility } = tournament
-    const showBadge = visibility !== visibilityTypes.all
+    const { name, startDate, days, location, address } = tournament
     const texts = [name, formatDateRange(startDate, days), location, address || '(ei osoitetta)']
     return (
       <div className="tournament-item">
         <div className="tournament-item__title tournament-item__title--existing">
-          <span onClick={onOpenClick} className={showBadge ? 'tournament-item__title--with-badge' : ''}>
+          <span onClick={onOpenClick}>
             <span>{texts.join(', ')}</span>
-            {showBadge && <VisibilityBadge visibility={visibility} />}
           </span>
         </div>
       </div>
@@ -248,7 +236,6 @@ const TournamentFields = (props) => {
       address,
       matchMinutes,
       equalPointsRule,
-      visibility,
       clubId,
       cancelled,
       info,
@@ -263,7 +250,6 @@ const TournamentFields = (props) => {
       address: address || '',
       matchMinutes,
       equalPointsRule,
-      visibility,
       clubId,
       cancelled,
       info,

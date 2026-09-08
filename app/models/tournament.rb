@@ -13,7 +13,7 @@ class Tournament < ApplicationRecord
   friendly_id :name, use: :history
 
   belongs_to :club, optional: true
-  has_many :age_groups, -> {order(:name)}
+  has_many :age_groups, -> {order(:name)}, dependent: :restrict_with_error
   has_many :groups, -> {order(:name)}, through: :age_groups
   has_many :playoff_groups, -> {order(:name)}, through: :age_groups
   has_many :fields, -> {order(:name)}, dependent: :destroy

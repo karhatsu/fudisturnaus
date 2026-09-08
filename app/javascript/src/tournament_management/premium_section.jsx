@@ -7,6 +7,7 @@ const cancelThresholdDays = 2
 
 const cancelInfo = `Premium-version voi peruuttaa ${cancelThresholdDays} päivää ennen turnauksen alkua.`
 const pricingInfo = `Premium-versio maksaa ${pricePerTeam} € / osallistuva joukkue (sis. alv). Laskun eräpäivä on viikko turnauksen jälkeen.`
+const downloadInfo = 'Voit ladata laskun tältä sivulta, kun turnaus on alkanut.'
 const premiumInUse = `Teillä on käytössä palvelun premium-versio, jossa turnaussivulla ei näytetä mainoksia. ${cancelInfo} ${pricingInfo}`
 const premiumNotInUse = `Premium-versiossa turnaussivulla ei näytetä mainoksia. ${cancelInfo} ${pricingInfo}`
 
@@ -34,6 +35,7 @@ const PremiumSection = ({ tournament, onSelectPremium, errors }) => {
 
   const description = () => {
     if (dateStatus === 'past') return pricingInfo
+    if (premium && dateStatus === 'upcoming') return `${premiumInUse} ${downloadInfo}`
     if (premium) return premiumInUse
     return premiumNotInUse
   }

@@ -16,6 +16,8 @@ select.filter {
   color: variables.$black;
   margin: 4px 8px;
   padding: 4px 8px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .filters__links {

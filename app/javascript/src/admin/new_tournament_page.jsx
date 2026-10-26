@@ -5,6 +5,7 @@ import TournamentFields from '../tournament_management/tournament_fields'
 import { createTournament, fetchClubs, fetchContact } from './api_client'
 import AccessContext from '../util/access_context'
 import { visibilityTypes } from '../util/enums'
+import Loading from '../components/loading'
 
 const emptyTournament = {
   cancelled: false,
@@ -22,13 +23,17 @@ const emptyTournament = {
   test: false,
 }
 
-const buildInitialTournament = (searchParams) => ({
-  ...emptyTournament,
-  clubId: parseInt(searchParams.get('clubId')) || undefined,
-  name: searchParams.get('name') || '',
-  location: searchParams.get('location') || '',
-  address: searchParams.get('address') || '',
-})
+const buildInitialTournament = (searchParams) => {
+  const contactId = searchParams.get('contact_id')
+  if (contactId) return
+  return {
+    ...emptyTournament,
+    clubId: parseInt(searchParams.get('clubId')) || undefined,
+    name: searchParams.get('name') || '',
+    location: searchParams.get('location') || '',
+    address: searchParams.get('address') || '',
+  }
+}
 
 const NewTournamentPage = () => {
   const accessContext = useContext(AccessContext)
@@ -86,6 +91,7 @@ const NewTournamentPage = () => {
     navigate('/admin')
   }
 
+  if (!clubs || !initialTournament) return <Loading />
   return (
     <div>
       <div className="title">Uusi turnaus</div>

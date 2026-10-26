@@ -19,6 +19,7 @@ import useTournamentFetching from '../util/use_tournament_fetching'
 import CancelledBadge from './cancelled_badge'
 import TournamentSubTitle from './tournament_sub_title'
 import TimezoneWarning from '../components/timezone_warning'
+import PremiumSection from '../tournament_management/premium_section'
 
 const { onlyTitle, teams, all } = visibilityTypes
 
@@ -129,6 +130,7 @@ const TournamentPage = ({ officialLevel, renderMatch, tournamentKey }) => {
         <div className="management-link">
           <Link to={`/official/${accessKey}/management`}>Muokkaa turnauksen asetuksia ja otteluohjelmaa</Link>
         </div>
+        <PremiumSection tournament={tournament} />
         <div className="title-1">Tulosten tallentaminen</div>
         {renderFullOfficialMatchContent()}
       </div>

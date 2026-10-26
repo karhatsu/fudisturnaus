@@ -2,6 +2,7 @@ import { isAfter, isBefore, startOfDay, subDays } from 'date-fns'
 import { toTzDate } from '../util/date_util'
 import { pricePerTeam } from '../util/util'
 import Button from '../form/button'
+import { useParams } from 'react-router'
 
 const cancelThresholdDays = 2
 
@@ -10,6 +11,7 @@ const pricingInfo = `Premium-versio maksaa ${pricePerTeam} € / osallistuva jou
 const downloadInfo = 'Voit ladata laskun tältä sivulta, kun turnaus on alkanut.'
 const premiumInUse = `Teillä on käytössä palvelun premium-versio, jossa turnaussivulla ei näytetä mainoksia. ${cancelInfo} ${pricingInfo}`
 const premiumNotInUse = `Premium-versiossa turnaussivulla ei näytetä mainoksia. ${cancelInfo} ${pricingInfo}`
+const managePage = 'Voit vaihtaa Premium-asetuksia turnauksen hallintasivulta.'
 
 const resolveDateStatus = (tournament) => {
   const { startDate, endDate } = tournament
@@ -21,12 +23,13 @@ const resolveDateStatus = (tournament) => {
 }
 
 const PremiumSection = ({ tournament, onSelectPremium, errors }) => {
+  const { accessKey: urlAccessKey } = useParams()
   const { accessKey, premium } = tournament
   const dateStatus = resolveDateStatus(tournament)
 
   if (dateStatus === 'past' && !premium) return
 
-  const canTogglePremium = !premium || dateStatus === 'upcoming'
+  const canTogglePremium = (!premium || dateStatus === 'upcoming') && !!onSelectPremium
 
   const togglePremium = () => {
     if (premium) return <Button label="Peruuta premium-tilaus" onClick={onSelectPremium(false)} />
@@ -37,11 +40,11 @@ const PremiumSection = ({ tournament, onSelectPremium, errors }) => {
     if (dateStatus === 'past') return pricingInfo
     if (premium && dateStatus === 'upcoming') return `${premiumInUse} ${downloadInfo}`
     if (premium) return premiumInUse
-    return premiumNotInUse
+    return `${premiumNotInUse} ${managePage}`
   }
 
   const invoice = () => (
-    <a href={`/official/${accessKey}/invoice.pdf`} target="_blank" rel="noopener noreferrer">
+    <a href={`/official/${accessKey || urlAccessKey}/invoice.pdf`} target="_blank" rel="noopener noreferrer">
       Lataa lasku
     </a>
   )
